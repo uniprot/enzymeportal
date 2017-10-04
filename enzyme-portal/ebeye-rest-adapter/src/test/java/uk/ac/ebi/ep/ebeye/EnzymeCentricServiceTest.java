@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -33,6 +34,7 @@ import uk.ac.ebi.ep.ebeye.model.enzyme.FacetValue;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class EnzymeCentricServiceTest {
 
     private static final int MAX_ENTRIES_IN_RESPONSE = 4;

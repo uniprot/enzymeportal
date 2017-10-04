@@ -48,20 +48,19 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     //Example of filter by facet
     //http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_proteins?query=human&facetcount=10&facets=cofactor:18420,OMIM:612740&format=xml
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
-        //String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
-        String ebeyeQueryUrl = "%s?query=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
+        //String ebeyeQueryUrl = "%s?query=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
 
-            // ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
-             //return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
-            ebeyeQueryUrl = "%s?query=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
+            return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+            //ebeyeQueryUrl = "%s?query=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species,disease_name,synonym&sort=_relevance&reverse=true&format=json";
 
-            return String.format(ebeyeQueryUrl, endpoint, query, startPage, pageSize);
-
+            //return String.format(ebeyeQueryUrl, endpoint, query, startPage, pageSize);
         }
-        return String.format(ebeyeQueryUrl, endpoint, query, startPage, pageSize);
-        //return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
+        //return String.format(ebeyeQueryUrl, endpoint, query, startPage, pageSize);
+        return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
     }
 
     /**
@@ -118,6 +117,39 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
         String query = searchTerm + " AND INTENZ:" + ec;
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        return getSearchResult(query, facetCount, facets, startPage, pageSize);
+    }
+
+    public ProteinGroupSearchResult findProteinCentricResultByOmimAndEC(String ec, String omimId, int facetCount, String facets, int startPage, int pageSize) {
+        Preconditions.checkArgument(omimId != null, "omimId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        return getSearchResult(query, facetCount, facets, startPage, pageSize);
+    }
+
+    public ProteinGroupSearchResult findProteinCentricResultByPathwayAndEC(String ec, String pathwayId, int facetCount, String facets, int startPage, int pageSize) {
+        Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        return getSearchResult(query, facetCount, facets, startPage, pageSize);
+    }
+
+    public ProteinGroupSearchResult findProteinCentricResultByTaxIdAndEC(String ec, String taxId, int facetCount, String facets, int startPage, int pageSize) {
+        Preconditions.checkArgument(taxId != null, "taxId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
         if (pageSize > 100) {
             pageSize = 100;
         }

@@ -31,11 +31,15 @@ public class EnzymeCentricService {
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
 
         //String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY,OMIM,compound_type&compound_name&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+        //String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:enzyme_family&start=%d&size=%d&fields=id,name,description,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
             //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            //return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
         return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
@@ -64,9 +68,8 @@ public class EnzymeCentricService {
         query = UrlUtil.encode(query);
         return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
     }
-    
-    
-        private EnzymeSearchResult getEnzymeSearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
+
+    private EnzymeSearchResult getEnzymeSearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
 
         Preconditions.checkArgument(startPage > -1, "startPage can not be less than 0");
         Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
@@ -77,7 +80,7 @@ public class EnzymeCentricService {
         if (facetCount > FACET_COUNT_LIMIT) {
             facetsCount = FACET_COUNT_LIMIT;
         }
-      
+
         return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
     }
 
