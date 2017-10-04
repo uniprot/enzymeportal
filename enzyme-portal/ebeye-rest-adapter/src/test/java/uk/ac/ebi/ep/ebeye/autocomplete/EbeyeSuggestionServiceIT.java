@@ -6,23 +6,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
+import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 
 /**
  * Runs integration tests on the {@link EbeyeSuggestionService} class.
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = {EbeyeConfig.class})
-@Ignore("remote service intermittent timeouts affects build stability")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {EbeyeConfig.class})
+//@Ignore("remote service intermittent timeouts affects build stability")
 public class EbeyeSuggestionServiceIT {
 
     @Autowired
     private EbeyeSuggestionService ebeyeSuggestionService;
 
-    //@Test
-    @Ignore("remote service intermittent timeouts affects build stability")
+    @Test
+    //@Ignore("remote service intermittent timeouts affects build stability")
     public void partial_term_phos_sent_to_Ebeye_autocomplete_search_returns_valid_suggestions() {
         String searchTerm = "phos";
 

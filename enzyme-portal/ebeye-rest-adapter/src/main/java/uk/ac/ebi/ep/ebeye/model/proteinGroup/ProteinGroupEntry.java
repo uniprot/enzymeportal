@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -157,7 +158,7 @@ public class ProteinGroupEntry implements ProteinView {
 
     private List<RelSpecies> buildRelSpecies() {
         Set<RelSpecies> specieList = new LinkedHashSet<>();
-       // List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
+        // List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
         List<String[]> items
                 = fields.getRelatedSpecies()
                 .stream()
@@ -173,30 +174,37 @@ public class ProteinGroupEntry implements ProteinView {
 
         specieList = foo.stream()
                 .map(comma -> comma.split("\\;"))
-                .map(specie -> new RelSpecies(specie[0], specie[1], specie[2]))
+                .map(specie -> new RelSpecies(specie[0], specie[1], specie[2], toInteger(specie[3])))
                 .collect(Collectors.toSet());
 
-       // return specieList.stream().collect(Collectors.toList());
+        // return specieList.stream().collect(Collectors.toList());
         return sortByModelOrganism(specieList);
+    }
+
+    private int toInteger(String data) {
+        return Integer.parseInt(data.trim());
     }
 
     @Override
     public List<String> getSynonym() {
-       return fields.getSynonym().stream().distinct().collect(Collectors.toList());
+        return fields.getSynonym().stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getdiseases() {
         return fields.getDiseaseName();
     }
-    
-   
-    private List<RelSpecies> sortByModelOrganism(Set<RelSpecies> species){
-            Map<Integer, RelSpecies> priorityMapper = new TreeMap<>();
+
+    @Override
+    public List<String> getEc() {
+        return fields.getEc();
+    }
+
+    private List<RelSpecies> sortByModelOrganism(Set<RelSpecies> species) {
+        Map<Integer, RelSpecies> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
         AtomicInteger customKey = new AtomicInteger(6);
         LinkedList<RelSpecies> sortedSpecies = new LinkedList<>();
-
 
         species.stream().forEach((name) -> {
             sortSpecies(name, priorityMapper, customKey, key);
@@ -205,9 +213,15 @@ public class ProteinGroupEntry implements ProteinView {
         priorityMapper.entrySet().stream().forEach(map -> {
             sortedSpecies.add(map.getValue());
         });
-        return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
+        return sortedSpecies
+                .stream()
+                .distinct()
+                .limit(100)
+                //.sorted(Comparator.comparingInt(code -> code.getExpEvidenceCode()))
+                 .sorted(Comparator.comparing(evidence->evidence.getExpEvidenceCode()))
+                .collect(Collectors.toList());
     }
-    
+
     private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
 
         if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
@@ -226,7 +240,5 @@ public class ProteinGroupEntry implements ProteinView {
             priorityMapper.put(key.getAndIncrement(), specie);
         }
     }
-
-
 
 }

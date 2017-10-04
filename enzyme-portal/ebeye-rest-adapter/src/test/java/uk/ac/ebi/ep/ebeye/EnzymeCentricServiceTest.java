@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -34,7 +33,6 @@ import uk.ac.ebi.ep.ebeye.model.enzyme.FacetValue;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-@Ignore
 public class EnzymeCentricServiceTest {
 
     private static final int MAX_ENTRIES_IN_RESPONSE = 4;
@@ -65,12 +63,18 @@ public class EnzymeCentricServiceTest {
     }
 
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
-        
-        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+
+//        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+//
+//        if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
+//            //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
+//            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+//            return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+//        }
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:enzyme_family&start=%d&size=%d&fields=id,name,description,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
-            //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
 

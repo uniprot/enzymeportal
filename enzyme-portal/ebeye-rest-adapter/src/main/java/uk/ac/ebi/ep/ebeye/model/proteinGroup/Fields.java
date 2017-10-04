@@ -54,6 +54,9 @@ public class Fields {
     @JsonProperty("disease_name")
     private List<String> diseaseName = new ArrayList<>();
 
+    @JsonProperty("ec")
+    private List<String> ec = new ArrayList<>();
+
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -229,6 +232,16 @@ public class Fields {
     @JsonProperty("disease_name")
     public void setDiseaseName(List<String> diseaseName) {
         this.diseaseName = diseaseName;
+    }
+
+    @JsonProperty("ec")
+    public List<String> getEc() {
+        return ec;
+    }
+
+    @JsonProperty("ec")
+    public void setEc(List<String> ec) {
+        this.ec = ec;
     }
 
 }

@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
-@Ignore
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {EbeyeConfig.class})
 public class ProteinGroupServiceIT {

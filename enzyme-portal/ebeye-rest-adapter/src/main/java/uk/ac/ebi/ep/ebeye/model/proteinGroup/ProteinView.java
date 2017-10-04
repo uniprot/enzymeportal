@@ -28,4 +28,6 @@ public interface ProteinView {
 
     List<String> getdiseases();
 
+    List<String> getEc();
+
 }
