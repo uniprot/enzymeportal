@@ -76,20 +76,16 @@
                                 </div>
 
                                 <c:forEach var="facet" items="${proteinFacet}">  
+                                    
+                                    <%--
+                                    
                                      <div>
                                          <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
-                                        
-                                         <c:if test="${facet.id eq 'enzyme_family'}">
-                                         <div class="sublevel1">
-                                             <div class="subTitle">Enzyme Family</div>
-                                             <ul>
-                                                 <c:forEach var="v" items="${facet.facetValues}">
-                                                     <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                                 </c:forEach>
-                                             </ul>
-                                         </div>
-                                         </c:if>
                                      </div>
+                                         
+                                     --%> 
+                                 
+                                         
                                          
 <!--                                    NOTE:: this is example (data only) of other facets, please apply css & javascript where applicable     
                                          -->
