@@ -1,3 +1,8 @@
+.box{
+    	background-image: url('../images/species/no-image.png');
+        background-repeat: no-repeat;
+} 
+
 .Aedes_aegypti {
 	background-image: url('../images/species/thumb_Aedes_aegypti.png');
         background-repeat: no-repeat;

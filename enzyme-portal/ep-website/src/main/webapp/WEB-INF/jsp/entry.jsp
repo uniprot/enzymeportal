@@ -79,9 +79,16 @@
 
                     <section>
                         <div class="header row">
-                            <h2><c:out value="${enzymeModel.name}"/></h2>
-                            <div class="large-3 columns"></div>
-                            <div class="large-9 columns entry-buttons">
+                            
+                            
+                            <div class="row" id="title-row">
+                                <section class="large-3 columns">
+                                    <img src="/enzymeportal/resources/images/protein_page_logo2.png">
+                                </section>
+                                <section class="large-9 columns">
+                                    <h2><c:out value="${enzymeModel.name}"/></h2>
+                                    
+                                    <div class="entry-buttons">
                                 <c:if test="${empty basket ||empty basket[epfn:getSummaryBasketId(enzymeModel)]}">
                                     <input type="hidden" id="enzymeId" value="${epfn:getSummaryBasketId(enzymeModel)}"/>
                                     <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
@@ -148,6 +155,16 @@
 
 
                             </div>
+                                    
+                                    
+                                </section>
+                            </div>
+                            
+                            
+                            
+
+                          
+                            
                         </div>
                     </section>
 
