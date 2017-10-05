@@ -29,7 +29,7 @@
              <input type="hidden" name="keywordType" value="KEYWORD"/>
              <fieldset>
                   <div class="input-group margin-bottom-none margin-top-large" >
-                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="35" maxlength="100" type="text" placeholder="search for enzymes">
+                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="30" maxlength="100" type="text" placeholder="search for enzymes">
 
                       <script>
                           var options = {
