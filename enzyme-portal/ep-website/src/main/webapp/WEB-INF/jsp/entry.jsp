@@ -91,7 +91,7 @@
                                     <div class="entry-buttons">
                                 <c:if test="${empty basket ||empty basket[epfn:getSummaryBasketId(enzymeModel)]}">
                                     <input type="hidden" id="enzymeId" value="${epfn:getSummaryBasketId(enzymeModel)}"/>
-                                    <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
+                                    <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b"> Add to Basket</a>
                                     <script>
                                         $('#add-to-basket').click(function () {
                                             ajaxBasket($('#enzymeId').val(), true);

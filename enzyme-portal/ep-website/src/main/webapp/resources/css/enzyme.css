@@ -621,6 +621,13 @@ div#organismList{
     overflow: auto;
 }
 
+div#inhibitorsList, div#diseasesList, div#enzymeList, div#activatorsList, div#cofactorsList{
+    max-height: 300px;
+    overflow: auto;
+}
+
+/* cegvwhqiufgewqyuofcgequwiofgeuwqcgveuwqgcuewg egow egiw vwqigu igu evwi guewi guwegiu ewfhu efwuhg efw hugi   */
+
 #organismsSearch{
     width:80%;
 }

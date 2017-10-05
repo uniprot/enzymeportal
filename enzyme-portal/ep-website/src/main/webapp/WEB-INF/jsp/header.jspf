@@ -103,35 +103,35 @@
                                 <c:when test="${not empty browseVideo}">
                                     <a target="_blank" href="https://www.youtube.com/watch?v=AS7u1L4Bw0U"
                                        class=""  >
-                                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                                        <img style="height: 14px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                                         Video
                                     </a>
                                 </c:when>
                                 <c:when test="${not empty searchVideo}">
                                     <a target="_blank" href="https://www.youtube.com/watch?v=eCHWYLVN230"
                                        class=""  >
-                                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                                        <img style="height: 14px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                                         Video
                                     </a>
                                 </c:when>
                                 <c:when test="${not empty entryVideo}">
                                     <a target="_blank" href="https://www.youtube.com/watch?v=QuyZFNFO1aM"
                                        class=""  >
-                                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                                        <img style="height: 14px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                                         Video
                                     </a>
                                 </c:when>
                                 <c:when test="${not empty sequenceVideo}">
                                     <a target="_blank" href="https://www.youtube.com/watch?v=kUk92ljRuDM"
                                        class=""  >
-                                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                                        <img style="height: 14px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                                         Video
                                     </a>
                                 </c:when>
                                 <c:otherwise>
                                     <a target="_blank" href="https://www.youtube.com/watch?v=Wq273CZrgSM"
                                        class=""   >
-                                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                                        <img style="height: 14px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                                         Video
                                     </a>
                                 </c:otherwise>
