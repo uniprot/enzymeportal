@@ -34,7 +34,7 @@ public class ProteinCentricController extends AbstractController {
     private static final String SEARCH = "/search";
 
     private static final String PROTEIN_CENTRIC_PAGE = "search";
-    private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_0;
+    private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_000;
 
     private static final int PAGE_SIZE = 10;
 
@@ -240,7 +240,7 @@ public class ProteinCentricController extends AbstractController {
             }
             startPage = servicePage - 1;//EBI search paging index starts at 0
         }
-
+        System.out.println("FACETS "+ filters);
         int pageSize = PAGE_SIZE;
         int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
         //int associatedProteinLimit = 7;// ASSOCIATED_PROTEIN_LIMIT;
