@@ -197,7 +197,7 @@ div#local-masthead {
 div#local-masthead ul li a:hover,
 div#local-masthead ul li a:focus,
 div#local-masthead ul li a:active {
-	border-bottom: 3px solid #207A7A;
+	border-bottom: 0px;
 }
 
 /*

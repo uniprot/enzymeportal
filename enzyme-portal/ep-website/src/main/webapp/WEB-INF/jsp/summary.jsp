@@ -338,7 +338,7 @@ enzyme.entryType == entryType
         </div>
     </div>
 
-<%--
+
             <c:if test="${not empty enzyme.ec}">
                <b>EC : </b>
               
@@ -350,7 +350,7 @@ enzyme.entryType == entryType
 
                <br/>
             </c:if>
- --%>
+
 
 <!--            catalytic activities-->
     <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>

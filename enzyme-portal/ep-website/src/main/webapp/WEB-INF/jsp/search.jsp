@@ -39,8 +39,8 @@
                     </section>
 
                     <section class="large-10 columns">
-                        <h2>Protein View Page v2</h2>
-                        <h4>${ebiResult.hitCount} enzymatic activities found for "${searchKey}" with E.C ${ec}</h4>
+                        <h2>Protein Results</h2>
+                        <h4>${ebiResult.hitCount} associated proteins found for "${searchKey}" with E.C ${ec}</h4>
                     </section>
                 </div>
                 

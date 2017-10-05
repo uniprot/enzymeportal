@@ -18,7 +18,7 @@
 
 
             <%--<form:form id="local-search" name="local-search" modelAttribute="searchModel" action="${pageContext.request.contextPath}/enzymes" method="POST">--%>
-            <form id="local-search" name="local-search" action="${pageContext.request.contextPath}/enzymes" method="POST">
+            <form:form id="local-search" name="local-search" action="${pageContext.request.contextPath}/enzymes" method="POST">
 
 
              <%--<form:hidden path="searchparams.previoustext" />--%>
@@ -29,7 +29,7 @@
              <input type="hidden" name="keywordType" value="KEYWORD"/>
              <fieldset>
                   <div class="input-group margin-bottom-none margin-top-large" >
-                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="35" maxlength="100" type="text" placeholder="search for enzymes">
+                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="30" maxlength="100" type="text" placeholder="search for enzymes">
 
                       <script>
                           var options = {
@@ -62,9 +62,11 @@
                                       ,
                                       onClickEvent: function() {
                                           var valueOfClickedItem = $("#local-searchbox").getSelectedItemData().suggestion;
-                                          $("#auto-complete-holder").val(valueOfClickedItem).trigger("change");
-                                          //alert("Fired!");
-                                          $("#local-searchbox").submit();
+                                          var input = jQuery('<input type="hidden" name="searchKey" id="auto-complete-holder">');
+                                          input.val(valueOfClickedItem).trigger("change");
+                                          //alert(valueOfClickedItem);
+                                          jQuery('#local-search').append(input);
+                                          $("#local-search").submit();
                                       }
                                   }
                           };
@@ -72,7 +74,7 @@
 
                       </script>
 
-                      <input id="auto-complete-holder" name="searchKey" type="hidden" />
+                    <!--  <input id="auto-complete-holder" name="searchKey" type="hidden" />  -->
 
 
                           <div class="input-group-button">
@@ -94,7 +96,7 @@
                   </p>
 
               </fieldset>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>
