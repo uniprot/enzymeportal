@@ -35,7 +35,7 @@
                
                 <div class="row" id="title-row">
                     <section class="large-2 columns">
-                        <img src="/enzymeportal/resources/images/protein_page_logo.jpg">
+                        <img src="/enzymeportal/resources/images/protein_page_logo2.png">
                     </section>
 
                     <section class="large-10 columns">
