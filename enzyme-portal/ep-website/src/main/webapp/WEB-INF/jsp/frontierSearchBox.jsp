@@ -64,7 +64,7 @@
                                           var valueOfClickedItem = $("#local-searchbox").getSelectedItemData().suggestion;
                                           var input = jQuery('<input type="hidden" name="searchKey" id="auto-complete-holder">');
                                           input.val(valueOfClickedItem).trigger("change");
-                                          alert(valueOfClickedItem);
+                                          //alert(valueOfClickedItem);
                                           jQuery('#local-search').append(input);
                                           $("#local-search").submit();
                                       }
