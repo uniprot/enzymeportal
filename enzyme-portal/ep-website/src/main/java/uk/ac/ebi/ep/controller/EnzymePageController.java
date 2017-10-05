@@ -18,6 +18,7 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeFields;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
@@ -112,22 +113,22 @@ public class EnzymePageController extends AbstractController {
                 .getEntries()
                 .stream()
                 .findAny()
-                .orElseGet(() -> new EnzymeEntry());
+                .orElseGet(() -> new EnzymeEntry(ecNumber,new EnzymeFields()));
 
     }
 
     private EnzymeSearchResult getEbiSearchResultByEC(String ec) {
         return enzymeCentricService.findEnzymeByEC(ec);
-
+       
     }
 
     private ProteinGroupSearchResult findProteinsByEcNumber(String ecNumber, int limit) {
         int start = 0;
         int pageSize = limit;
         ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
-        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-        }
+//        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//        }
         return result;
     }
 

@@ -210,16 +210,16 @@ public class EnzymeCentricController extends AbstractController {
                 //addProteinEntryToEnzymeView(proteins, entry, enzymeView);
             });
 
-//            if (enzymeView.isEmpty() && !ebiSearchResult.getEntries().isEmpty()) {
-//                logger.error(ebiSearchResult.getEntries().size()
-//                        + " results are found in Enzyme-centric index for query " + searchTerm + " But none in Protein-centric index");
-//                ebiSearchResult = new EnzymeSearchResult();
-//                ebiSearchResult.setFacets(new ArrayList<>());
-//                ebiSearchResult.setHitCount(0);
-//                ebiSearchResult.setEntries(new ArrayList<>());
-//                page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, 0);
-//
-//            }
+            if (enzymeView.isEmpty() && !ebiSearchResult.getEntries().isEmpty()) {
+                logger.error(ebiSearchResult.getEntries().size()
+                        + " results are found in Enzyme-centric index for query " + searchTerm + " But none in Protein-centric index");
+                ebiSearchResult = new EnzymeSearchResult();
+                ebiSearchResult.setFacets(new ArrayList<>());
+                ebiSearchResult.setHitCount(0);
+                ebiSearchResult.setEntries(new ArrayList<>());
+                page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, 0);
+
+            }
             return constructModel(ebiSearchResult, enzymeView, page, filters, searchTerm, searchKey, keywordType, model, searchModel);
 
         }
@@ -390,13 +390,14 @@ public class EnzymeCentricController extends AbstractController {
             entry.setNumEnzymeHits(result.getHitCount());
 
             enzymeView.add(entry);
-        }else{
-             entry.setProteinGroupEntry(new ArrayList<>());
-            entry.setNumProteins(0);
-            entry.setNumEnzymeHits(0);
-
-            enzymeView.add(entry);  
         }
+//        else{
+//             entry.setProteinGroupEntry(new ArrayList<>());
+//            entry.setNumProteins(0);
+//            entry.setNumEnzymeHits(0);
+//
+//            enzymeView.add(entry);  
+//        }
     }
 
     @Deprecated
