@@ -92,7 +92,7 @@ public class ProteinGroupEntry implements ProteinView {
     @Override
     public String getPrimaryOrganism() {
         return fields.getPrimaryOrganism().stream().findFirst().orElse("");
-
+  
     }
 
     @Override
