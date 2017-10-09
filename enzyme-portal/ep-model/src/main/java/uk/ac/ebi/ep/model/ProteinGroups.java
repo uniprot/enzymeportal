@@ -5,14 +5,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,8 +32,6 @@ public class ProteinGroups implements Serializable {
     @Column(name = "ENTRY_TYPE")
     private BigInteger entryType;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "proteinGroups")
-    private PrimaryProtein primaryProtein;
     private static final long serialVersionUID = 1L;
     @Size(max = 4000)
     @Column(name = "PROTEIN_NAME")
@@ -106,13 +102,6 @@ public class ProteinGroups implements Serializable {
         return "uk.ac.ebi.ep.data.domain.ProteinGroups[ proteinGroupId=" + proteinGroupId + " ]";
     }
 
-    public PrimaryProtein getPrimaryProtein() {
-        return primaryProtein;
-    }
-
-    public void setPrimaryProtein(PrimaryProtein primaryProtein) {
-        this.primaryProtein = primaryProtein;
-    }
 
     public BigInteger getEntryType() {
         return entryType;

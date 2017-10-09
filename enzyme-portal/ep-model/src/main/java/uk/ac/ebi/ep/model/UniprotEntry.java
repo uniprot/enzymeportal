@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -130,6 +131,7 @@ public class UniprotEntry implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
+    private static final String PDB = "PDB";
 
     public UniprotEntry() {
     }
@@ -255,6 +257,9 @@ public class UniprotEntry implements Serializable {
     }
 
     public BigInteger getExpEvidenceFlag() {
+       if(expEvidenceFlag == null){
+           expEvidenceFlag = new BigInteger("1");
+       }
         return expEvidenceFlag;
     }
 
@@ -292,6 +297,24 @@ public class UniprotEntry implements Serializable {
 
     public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
         this.uniprotXrefSet = uniprotXrefSet;
+    }
+
+    public List<String> getPdbeaccession() {
+
+        return getPdbCodes(this);
+    }
+
+    private List<String> getPdbCodes(UniprotEntry e) {
+        List<String> pdbcodes = new ArrayList<>();
+
+        e.getUniprotXrefSet()
+                .stream()
+                .filter(x -> x.getSource().equalsIgnoreCase(PDB))
+                .limit(1)
+                .forEach(xref -> pdbcodes.add(xref.getSourceId()));
+
+        return pdbcodes;
+
     }
 
 //    public PrefixNames getPrefixId() {
@@ -394,10 +417,7 @@ public class UniprotEntry implements Serializable {
             return false;
         }
         UniprotEntry other = (UniprotEntry) object;
-        if ((this.accession == null && other.accession != null) || (this.accession != null && !this.accession.equals(other.accession))) {
-            return false;
-        }
-        return true;
+        return !((this.accession == null && other.accession != null) || (this.accession != null && !this.accession.equals(other.accession)));
     }
 
     @Override
@@ -405,11 +425,11 @@ public class UniprotEntry implements Serializable {
         return "uk.ac.ebi.ep.ep.model.UniprotEntry[ accession=" + accession + " ]";
     }
 
-    public List<UniprotEntry> getRelatedspecies() {
+    public List<UniprotEntry> getRelatedspeciesTODO() {
         return relatedProteinsId.getUniprotEntrySet();
     }
 
-    public List<UniprotEntry> getRelatedspeciesTodo() {
+    public List<UniprotEntry> getRelatedspecies() {
 
         final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);

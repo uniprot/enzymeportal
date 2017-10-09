@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,7 +15,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.springframework.util.StringUtils;
 
 /**
  *
@@ -25,29 +25,24 @@ import org.springframework.util.StringUtils;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PrimaryProtein.findAll", query = "SELECT p FROM PrimaryProtein p"),
-    @NamedQuery(name = "PrimaryProtein.findByProteinGroupId", query = "SELECT p FROM PrimaryProtein p WHERE p.proteinGroupId = :proteinGroupId"),
+    @NamedQuery(name = "PrimaryProtein.findByRelatedProteinsId", query = "SELECT p FROM PrimaryProtein p WHERE p.relatedProteinsId = :relatedProteinsId"),
     @NamedQuery(name = "PrimaryProtein.findByAccession", query = "SELECT p FROM PrimaryProtein p WHERE p.accession = :accession"),
     @NamedQuery(name = "PrimaryProtein.findByTaxId", query = "SELECT p FROM PrimaryProtein p WHERE p.taxId = :taxId"),
     @NamedQuery(name = "PrimaryProtein.findByCommonName", query = "SELECT p FROM PrimaryProtein p WHERE p.commonName = :commonName"),
     @NamedQuery(name = "PrimaryProtein.findByScientificName", query = "SELECT p FROM PrimaryProtein p WHERE p.scientificName = :scientificName"),
-    @NamedQuery(name = "PrimaryProtein.findByPriorityCode", query = "SELECT p FROM PrimaryProtein p WHERE p.priorityCode = :priorityCode")})
+    @NamedQuery(name = "PrimaryProtein.findByPriorityCode", query = "SELECT p FROM PrimaryProtein p WHERE p.priorityCode = :priorityCode"),
+    @NamedQuery(name = "PrimaryProtein.findByPdbFlag", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbFlag = :pdbFlag"),
+    @NamedQuery(name = "PrimaryProtein.findByPdbId", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbId = :pdbId"),
+    @NamedQuery(name = "PrimaryProtein.findByFunction", query = "SELECT p FROM PrimaryProtein p WHERE p.function = :function"),
+    @NamedQuery(name = "PrimaryProtein.findByPdbSpecies", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbSpecies = :pdbSpecies")})
 public class PrimaryProtein implements Serializable {
-    @Size(max = 4000)
-    @Column(name = "FUNCTION")
-    private String function;
-    @Column(name = "PDB_FLAG")
-    private Character pdbFlag;
-    @Size(max = 10)
-    @Column(name = "PDB_ID")
-    private String pdbId;
-
     private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "PROTEIN_GROUP_ID")
-    private String proteinGroupId;
+    @Column(name = "RELATED_PROTEINS_ID")
+    private BigDecimal relatedProteinsId;
     @Size(max = 15)
     @Column(name = "ACCESSION")
     private String accession;
@@ -62,24 +57,34 @@ public class PrimaryProtein implements Serializable {
     @Size(max = 3)
     @Column(name = "PRIORITY_CODE")
     private String priorityCode;
-    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID", insertable = false, updatable = false)
+    @Column(name = "PDB_FLAG")
+    private Character pdbFlag;
+    @Size(max = 10)
+    @Column(name = "PDB_ID")
+    private String pdbId;
+    @Size(max = 4000)
+    @Column(name = "FUNCTION")
+    private String function;
+    @Size(max = 255)
+    @Column(name = "PDB_SPECIES")
+    private String pdbSpecies;
+    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private ProteinGroups proteinGroups;
-
+    private RelatedProteins relatedProteins;
 
     public PrimaryProtein() {
     }
 
-    public PrimaryProtein(String proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
+    public PrimaryProtein(BigDecimal relatedProteinsId) {
+        this.relatedProteinsId = relatedProteinsId;
     }
 
-    public String getProteinGroupId() {
-        return proteinGroupId;
+    public BigDecimal getRelatedProteinsId() {
+        return relatedProteinsId;
     }
 
-    public void setProteinGroupsId(String proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
+    public void setRelatedProteinsId(BigDecimal relatedProteinsId) {
+        this.relatedProteinsId = relatedProteinsId;
     }
 
     public String getAccession() {
@@ -99,9 +104,6 @@ public class PrimaryProtein implements Serializable {
     }
 
     public String getCommonName() {
-        if (commonName == null || StringUtils.isEmpty(commonName)) {
-            commonName = scientificName;
-        }
         return commonName;
     }
 
@@ -125,36 +127,6 @@ public class PrimaryProtein implements Serializable {
         this.priorityCode = priorityCode;
     }
 
-    public ProteinGroups getProteinGroups() {
-        return proteinGroups;
-    }
-
-    public void setProteinGroups(ProteinGroups proteinGroups) {
-        this.proteinGroups = proteinGroups;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (proteinGroupId != null ? proteinGroupId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (!(object instanceof PrimaryProtein)) {
-            return false;
-        }
-        PrimaryProtein other = (PrimaryProtein) object;
-        return !((this.proteinGroupId == null && other.proteinGroupId != null) || (this.proteinGroupId != null && !this.proteinGroupId.equals(other.proteinGroupId)));
-    }
-
-    @Override
-    public String toString() {
-        return "PrimaryProtein{" + "proteinGroupsId=" + proteinGroupId + ", accession=" + accession + ", taxId=" + taxId + ", commonName=" + commonName + ", scientificName=" + scientificName + ", priorityCode=" + priorityCode + '}';
-    }
-
     public Character getPdbFlag() {
         return pdbFlag;
     }
@@ -162,7 +134,6 @@ public class PrimaryProtein implements Serializable {
     public void setPdbFlag(Character pdbFlag) {
         this.pdbFlag = pdbFlag;
     }
-
 
     public String getPdbId() {
         return pdbId;
@@ -173,9 +144,6 @@ public class PrimaryProtein implements Serializable {
     }
 
     public String getFunction() {
-        if(function == null){
-            function = "";
-        }
         return function;
     }
 
@@ -183,4 +151,42 @@ public class PrimaryProtein implements Serializable {
         this.function = function;
     }
 
+    public String getPdbSpecies() {
+        return pdbSpecies;
+    }
+
+    public void setPdbSpecies(String pdbSpecies) {
+        this.pdbSpecies = pdbSpecies;
+    }
+
+    public RelatedProteins getRelatedProteins() {
+        return relatedProteins;
+    }
+
+    public void setRelatedProteins(RelatedProteins relatedProteins) {
+        this.relatedProteins = relatedProteins;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (relatedProteinsId != null ? relatedProteinsId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (!(object instanceof PrimaryProtein)) {
+            return false;
+        }
+        PrimaryProtein other = (PrimaryProtein) object;
+        return !((this.relatedProteinsId == null && other.relatedProteinsId != null) || (this.relatedProteinsId != null && !this.relatedProteinsId.equals(other.relatedProteinsId)));
+    }
+
+    @Override
+    public String toString() {
+        return "uk.ac.ebi.ep.model.PrimaryProtein[ relatedProteinsId=" + relatedProteinsId + " ]";
+    }
+    
 }
