@@ -49,4 +49,3 @@
 
 <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
 <script src="${pageContext.request.contextPath}/resources/javascript/enzyme.js"></script>
-
