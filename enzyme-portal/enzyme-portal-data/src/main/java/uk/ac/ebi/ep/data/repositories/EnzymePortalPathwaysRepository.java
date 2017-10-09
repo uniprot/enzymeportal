@@ -16,6 +16,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>, QueryDslPredicateExecutor<EnzymePortalPathways>, EnzymePortalPathwaysRepositoryCustom {
 
     @Query(value = "SELECT * FROM ENZYME_PORTAL_PATHWAYS", nativeQuery = true)
+   //@Query(value = "SELECT * FROM V_ENZYME_PORTAL_PATHWAYS", nativeQuery = true)//select from view
     List<EnzymePortalPathways> findPathways();
 
     EnzymePortalPathways findByPathwayId(Long pathwayId);
