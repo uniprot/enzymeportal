@@ -31,7 +31,7 @@
 
 <div id="wrapper">
     <%@include file="header.jspf" %>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 
     <div id="content" role="main" class="clearfix">
         <h1>Taxonomy</h1>

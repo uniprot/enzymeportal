@@ -216,7 +216,7 @@
 
                                                             <li><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.proteinName} </a> - (${p.primaryOrganism})</li>
                                                             </c:forEach>
-                                                            <c:if test="${enzyme.numProteins >= 0}">
+                                                            <c:if test="${enzyme.numProteins >= 5}">
                                                             <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>
                                                         </c:if>
                                                     </ul>
