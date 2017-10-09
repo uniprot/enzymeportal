@@ -309,12 +309,24 @@ public class XmlTransformer {
 
     private void addPrimarySynonymFields(List<UniprotEntry> entries, String proteinName, Set<Field> fields) {
 
-        Optional<String> synonymNames
+        String synonymNames
                 = entries
                 .stream()
-                .map(e -> e.getSynonymNames()).findAny();
+                .map(e -> e.getSynonymNames())
+                        .filter(s -> s!= null)
+                        .findAny().orElse("");
+        
 
-        computeSynonymsAndBuildFields(synonymNames, proteinName, fields);
+                    Stream.of(synonymNames
+                    .split(";"))
+                    .distinct()
+                    .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
+                    .map(syn -> {
+                        return new Field(FieldName.SYNONYM.getName(), syn);
+
+                    }).forEach(field -> fields.add(field));
+        
+        
 
     }
 
