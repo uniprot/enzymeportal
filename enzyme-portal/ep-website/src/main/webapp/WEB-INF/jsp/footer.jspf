@@ -8,13 +8,7 @@
 
 <footer>
 		<!-- Optional local footer (insert citation / project-specific copyright / etc here -->
-<!--
-		<div id="local-footer">
-			<div class="row">
-				<span class="reference">How to reference this page: ...</span>
-			</div>
-		</div>
--->
+
 		<!-- End optional local footer -->
 
 		<div id="global-footer">
@@ -35,24 +29,12 @@
 
 <!-- JavaScript -->
 
-<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-<!--
-<script>window.jQuery || document.write('<script src="../js/libs/jquery-1.10.2.min.js"><\/script>')</script>
--->
-<%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>--%>
 <!-- Your custom JavaScript file scan go here... change names accordingly -->
-<!--
-<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
-<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>
--->
+
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-<!--    <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>-->
-<!--    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>-->
-	<%--<script src="${pageContext.request.contextPath}/resources/javascript/angularjs/angular.1.5.10.min.js"></script>--%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.4.1/yui/yui-min.js"></script>
 
-     <%-- <script src="${pageContext.request.contextPath}/resources/javascript/angularjs/angular.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/javascript/ui-bootstrap-custom-tpls-0.13.2.min.js"></script> --%>
 
 
 <script defer="defer" src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/cookiebanner.js"></script>
@@ -60,7 +42,6 @@
 <script defer="defer" src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/script.js"></script>
 
 <!-- The Foundation theme JavaScript -->
-<%-- <script src="${pageContext.request.contextPath}/resources/javascript/angular-foundation.min.js"></script> --%>
 <script src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/libraries/foundation-6/js/foundation.js"></script>
 <script src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/foundationExtendEBI.js"></script>
 <script type="text/JavaScript">$(document).foundation();</script>
@@ -69,17 +50,3 @@
 <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
 <script src="${pageContext.request.contextPath}/resources/javascript/enzyme.js"></script>
 
-<!--
- -->
-
-
-<!-- Google Analytics details... -->
-<!-- Change UA-XXXXX-X to be your site's ID -->
-<!--
-<script>
-	window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
-	Modernizr.load({
-		load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-	});
-</script>
--->

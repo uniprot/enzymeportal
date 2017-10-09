@@ -47,10 +47,6 @@
                           }
                         },
 
-//                       http://localhost:8080/enzymeportal/enzymes?searchKey=R-DRE-70895&searchparams.start=0&searchparams.text=Branched-chain%20amino%20acid%20catabolism&keywordType=PATHWAYS&searchId=R-DRE-70895
-
-//                       http://localhost:8080/enzymeportal/enzymes?searchKey=R-70895&searchparams.type=KEYWORD&searchparams.previoustext=Branched-chain%20amino%20acid%20catabolism&searchparams.start=0&searchparams.text=Branched-chain%20amino%20acid%20catabolism&keywordType=PATHWAYS&searchId=R-70895
-
 
                         preparePostData: function(data) {
                           data.name = $("#pathway-input").val();

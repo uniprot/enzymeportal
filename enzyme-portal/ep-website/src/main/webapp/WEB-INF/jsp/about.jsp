@@ -38,17 +38,11 @@
 
         <!-- Suggested layout containers -->
 
-        <!-- <div class="content">
-            <div class="panel-flexible panels-flexible-about_us clearfix" >
-        <div class="panel-flexible-inside panels-flexible-about_us-inside">-->
-        <!--<div class="panels-flexible-row panels-flexible-row-about_us-main-row panels-flexible-row-first clearfix">
-          <div class="inside panels-flexible-row-inside panels-flexible-row-about_us-main-row-inside panels-flexible-row-inside-first clearfix">-->
+
 
         <div class="row">
 
         <section class="large-9 columns">
-            <!--<div class="panels-flexible-region panels-flexible-region-about_us-center panels-flexible-region-first ">
-              <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-center-inside panels-flexible-region-inside-first">-->
 
             <div id="intro" style="background-color: white;">
                 <div class="panel-pane pane-custom pane-3 clearfix">
@@ -81,11 +75,7 @@
                             which contain information about small molecule chemistry and
                             bioactivity
                         </li>
-<!--                        <li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
-                            and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">MACiE</a>
-                            for highly detailed, curated information about cofactors and reaction
-                            mechanisms.
-                        </li>-->
+
                     </ul>
                     The Enzyme Portal brings together lots of diverse
                     information about enzymes and displays it in an organized overview.

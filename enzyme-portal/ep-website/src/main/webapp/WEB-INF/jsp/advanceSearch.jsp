@@ -17,9 +17,6 @@
 <c:set var="pageTitle" value="Enzyme Portal &lt;Advanced Search &lt; EMBL-EBI"/>
 <%@include file="head.jspf" %>
 
- <%--<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>--%>
-
-  <%--<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>--%>
 
     <body class="level2">
 
