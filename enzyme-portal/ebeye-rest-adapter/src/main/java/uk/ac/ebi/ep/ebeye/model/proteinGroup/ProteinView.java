@@ -30,4 +30,6 @@ public interface ProteinView {
 
     List<String> getEc();
 
+    List<String> getCatalyticActivities();
+
 }

@@ -57,6 +57,9 @@ public class Fields {
     @JsonProperty("ec")
     private List<String> ec = new ArrayList<>();
 
+    @JsonProperty("catalytic_activity")
+    private List<String> catalyticActivities = new ArrayList<>();
+
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -242,6 +245,16 @@ public class Fields {
     @JsonProperty("ec")
     public void setEc(List<String> ec) {
         this.ec = ec;
+    }
+
+    @JsonProperty("catalytic_activity")
+    public List<String> getCatalyticActivities() {
+        return catalyticActivities;
+    }
+
+    @JsonProperty("catalytic_activity")
+    public void setCatalyticActivities(List<String> catalyticActivities) {
+        this.catalyticActivities = catalyticActivities;
     }
 
 }

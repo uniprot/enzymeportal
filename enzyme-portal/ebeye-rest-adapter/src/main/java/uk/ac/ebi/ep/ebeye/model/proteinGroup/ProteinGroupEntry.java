@@ -92,7 +92,7 @@ public class ProteinGroupEntry implements ProteinView {
     @Override
     public String getPrimaryOrganism() {
         return fields.getPrimaryOrganism().stream().findFirst().orElse("");
-  
+
     }
 
     @Override
@@ -200,6 +200,11 @@ public class ProteinGroupEntry implements ProteinView {
         return fields.getEc();
     }
 
+    @Override
+    public List<String> getCatalyticActivities() {
+        return fields.getCatalyticActivities();
+    }
+
     private List<RelSpecies> sortByModelOrganism(Set<RelSpecies> species) {
         Map<Integer, RelSpecies> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
@@ -218,7 +223,7 @@ public class ProteinGroupEntry implements ProteinView {
                 .distinct()
                 .limit(100)
                 //.sorted(Comparator.comparingInt(code -> code.getExpEvidenceCode()))
-                 .sorted(Comparator.comparing(evidence->evidence.getExpEvidenceCode()))
+                .sorted(Comparator.comparing(evidence -> evidence.getExpEvidenceCode()))
                 .collect(Collectors.toList());
     }
 
