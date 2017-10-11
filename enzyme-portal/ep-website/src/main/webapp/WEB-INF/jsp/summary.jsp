@@ -353,12 +353,9 @@ enzyme.entryType == entryType
 
 
 <!--            catalytic activities-->
-    <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>
     
-    <%--
-    
-    <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
-        <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>
+    <c:if test="${not empty enzyme.catalyticActivities}">
+        <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.catalyticActivities)}"/>
 
         <c:if test="${enzymeCatalyticActivitySize eq 1}">
            <b>Catalytic Activity: </b>
@@ -368,8 +365,8 @@ enzyme.entryType == entryType
         </c:if>
 
         <ul class="catalytic-activity-list">
-            <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity"  begin="0" end="0">
-                <li class="reaction">${activity.catalyticActivity}</li>
+            <c:forEach items="${enzyme.catalyticActivities}" var="activity"  begin="0" end="0">
+                <li class="reaction">${activity}</li>
             </c:forEach>
             <c:if test="${enzymeCatalyticActivitySize gt 1}">
                 <li><a href="${pageContext.request.contextPath}/search/${primAcc}/reactionsPathways">more...</a></li>
@@ -377,7 +374,6 @@ enzyme.entryType == entryType
         </ul>
     </c:if>
 
-         --%>
           
 </div>
 </div>
