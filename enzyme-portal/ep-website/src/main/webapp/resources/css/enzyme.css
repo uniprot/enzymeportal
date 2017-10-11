@@ -616,17 +616,15 @@ input[type=checkbox], input[type=radio]{
     margin-right: 30px;
 }
 
-div#organismList{
-    height: 300px;
-    overflow: auto;
-}
-
-div#inhibitorsList, div#diseasesList, div#enzymeList, div#activatorsList, div#cofactorsList{
+div#organismList, div#cofactorsList, div#inhibitorsList, div#activatorsList, div#diseasesList, div#enzymeList  {
     max-height: 300px;
     overflow: auto;
 }
 
-/* cegvwhqiufgewqyuofcgequwiofgeuwqcgveuwqgcuewg egow egiw vwqigu igu evwi guewi guwegiu ewfhu efwuhg efw hugi   */
+.facetCount{
+   font-weight: bold;
+   color: #408C8C;
+}
 
 #organismsSearch{
     width:80%;
