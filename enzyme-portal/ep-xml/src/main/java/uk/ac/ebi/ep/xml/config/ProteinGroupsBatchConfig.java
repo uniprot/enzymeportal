@@ -44,6 +44,9 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=10";
 
       // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EJLX47'";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU9G0Q'";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU6OHA'";
+     
     
     
     @Bean

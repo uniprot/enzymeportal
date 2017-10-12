@@ -32,7 +32,7 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         entry.setName(proteinGroups.getProteinName());
         entry.setDescription(proteinGroups.getProteinName());
 
-        addEntryTypeFields(proteinGroups, fields);
+        //addEntryTypeFields(proteinGroups, fields);
         addPrimaryProtein(proteinGroups, fields);
 
         proteinGroups.getUniprotEntryList()
@@ -50,20 +50,20 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         return entry;
     }
 
-    private void addFieldsAndXRefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    private void addFieldsAndXRefs( UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
 
         // addUniprotIdFields(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);
-        
+
         addAccessionXrefs(uniprotEntry, refs);
 
-        
         addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         addEcXrefs(uniprotEntry, refs);
         addPathwaysXrefs(uniprotEntry, refs);
         addTaxonomyXrefs(uniprotEntry, refs);
+
     }
 }

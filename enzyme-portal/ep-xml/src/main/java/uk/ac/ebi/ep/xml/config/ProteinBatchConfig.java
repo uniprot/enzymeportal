@@ -105,7 +105,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         databaseReader.setSaveState(false);
         return databaseReader;
     }
-
+    
     @Bean
     public ItemProcessor<UniprotEntry, Entry> uniProtEntryToEntryConverter() {
         return new UniProtEntryToEntryConverter(xmlConfigParams);

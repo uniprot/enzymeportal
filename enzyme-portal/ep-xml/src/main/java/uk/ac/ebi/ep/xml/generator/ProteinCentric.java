@@ -146,7 +146,7 @@ public class ProteinCentric extends XmlGenerator {
         entry.setName(pg.getProteinName());
         entry.setDescription(pg.getProteinName());
         //addFunctionFields(pg, fields);
-        addEntryTypeFields(pg, fields);
+        //addEntryTypeFields(pg, fields);
 
         pg.getUniprotEntryList()
                 .stream()
