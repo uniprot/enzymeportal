@@ -1,7 +1,7 @@
+
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -34,15 +34,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PrimaryProtein.findByPdbFlag", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbFlag = :pdbFlag"),
     @NamedQuery(name = "PrimaryProtein.findByPdbId", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbId = :pdbId"),
     @NamedQuery(name = "PrimaryProtein.findByFunction", query = "SELECT p FROM PrimaryProtein p WHERE p.function = :function"),
-    @NamedQuery(name = "PrimaryProtein.findByPdbSpecies", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbSpecies = :pdbSpecies")})
+    @NamedQuery(name = "PrimaryProtein.findByPdbSpecies", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbSpecies = :pdbSpecies"),
+    @NamedQuery(name = "PrimaryProtein.findByProteinGroupId", query = "SELECT p FROM PrimaryProtein p WHERE p.proteinGroupId = :proteinGroupId"),
+    @NamedQuery(name = "PrimaryProtein.findByEntryType", query = "SELECT p FROM PrimaryProtein p WHERE p.entryType = :entryType")})
 public class PrimaryProtein implements Serializable {
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "RELATED_PROTEINS_ID")
-    private BigDecimal relatedProteinsId;
+    private long relatedProteinsId;
     @Size(max = 15)
     @Column(name = "ACCESSION")
     private String accession;
@@ -68,22 +66,30 @@ public class PrimaryProtein implements Serializable {
     @Size(max = 255)
     @Column(name = "PDB_SPECIES")
     private String pdbSpecies;
-    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID", insertable = false, updatable = false)
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 10)
+    @Column(name = "PROTEIN_GROUP_ID")
+    private String proteinGroupId;
+    @Column(name = "ENTRY_TYPE")
+    private BigInteger entryType;
+    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private RelatedProteins relatedProteins;
+    private ProteinGroups proteinGroups;
 
     public PrimaryProtein() {
     }
 
-    public PrimaryProtein(BigDecimal relatedProteinsId) {
-        this.relatedProteinsId = relatedProteinsId;
+    public PrimaryProtein(String proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
     }
 
-    public BigDecimal getRelatedProteinsId() {
+    public long getRelatedProteinsId() {
         return relatedProteinsId;
     }
 
-    public void setRelatedProteinsId(BigDecimal relatedProteinsId) {
+    public void setRelatedProteinsId(long relatedProteinsId) {
         this.relatedProteinsId = relatedProteinsId;
     }
 
@@ -159,34 +165,53 @@ public class PrimaryProtein implements Serializable {
         this.pdbSpecies = pdbSpecies;
     }
 
-    public RelatedProteins getRelatedProteins() {
-        return relatedProteins;
+    public String getProteinGroupId() {
+        return proteinGroupId;
     }
 
-    public void setRelatedProteins(RelatedProteins relatedProteins) {
-        this.relatedProteins = relatedProteins;
+    public void setProteinGroupId(String proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
+    }
+
+    public BigInteger getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(BigInteger entryType) {
+        this.entryType = entryType;
+    }
+
+    public ProteinGroups getProteinGroups() {
+        return proteinGroups;
+    }
+
+    public void setProteinGroups(ProteinGroups proteinGroups) {
+        this.proteinGroups = proteinGroups;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (relatedProteinsId != null ? relatedProteinsId.hashCode() : 0);
+        hash += (proteinGroupId != null ? proteinGroupId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-
+        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof PrimaryProtein)) {
             return false;
         }
         PrimaryProtein other = (PrimaryProtein) object;
-        return !((this.relatedProteinsId == null && other.relatedProteinsId != null) || (this.relatedProteinsId != null && !this.relatedProteinsId.equals(other.relatedProteinsId)));
+        if ((this.proteinGroupId == null && other.proteinGroupId != null) || (this.proteinGroupId != null && !this.proteinGroupId.equals(other.proteinGroupId))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.model.PrimaryProtein[ relatedProteinsId=" + relatedProteinsId + " ]";
+        return "uk.ac.ebi.ep.model.PrimaryProtein[ proteinGroupId=" + proteinGroupId + " ]";
     }
     
 }

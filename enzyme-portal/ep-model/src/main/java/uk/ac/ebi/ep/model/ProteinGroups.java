@@ -5,12 +5,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,6 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ProteinGroups.findByProteinName", query = "SELECT p FROM ProteinGroups p WHERE p.proteinName = :proteinName"),
     @NamedQuery(name = "ProteinGroups.findByProteinGroupId", query = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId = :proteinGroupId")})
 public class ProteinGroups implements Serializable {
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "proteinGroups")
+    private PrimaryProtein primaryProtein;
     @Column(name = "ENTRY_TYPE")
     private BigInteger entryType;
 
@@ -102,13 +107,20 @@ public class ProteinGroups implements Serializable {
         return "uk.ac.ebi.ep.data.domain.ProteinGroups[ proteinGroupId=" + proteinGroupId + " ]";
     }
 
-
     public BigInteger getEntryType() {
         return entryType;
     }
 
     public void setEntryType(BigInteger entryType) {
         this.entryType = entryType;
+    }
+
+    public PrimaryProtein getPrimaryProtein() {
+        return primaryProtein;
+    }
+
+    public void setPrimaryProtein(PrimaryProtein primaryProtein) {
+        this.primaryProtein = primaryProtein;
     }
 
 }

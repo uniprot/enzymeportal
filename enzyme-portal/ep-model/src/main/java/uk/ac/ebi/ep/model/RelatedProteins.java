@@ -1,11 +1,9 @@
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,8 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
 public class RelatedProteins implements Serializable {
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "relatedProteins")
-    private PrimaryProtein primaryProtein;
     @Size(max = 4000)
     @Column(name = "PROTEIN_NAME")
     private String proteinName;
@@ -47,7 +42,7 @@ public class RelatedProteins implements Serializable {
     @Column(name = "REL_PROT_INTERNAL_ID")
     //@SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REL_PROT_ID")
    // @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
-    private BigDecimal relProtInternalId;
+    private long relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
     @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
@@ -59,15 +54,15 @@ public class RelatedProteins implements Serializable {
     public RelatedProteins() {
     }
 
-    public RelatedProteins(BigDecimal relProtInternalId) {
+    public RelatedProteins(long relProtInternalId) {
         this.relProtInternalId = relProtInternalId;
     }
 
-    public BigDecimal getRelProtInternalId() {
+    public long getRelProtInternalId() {
         return relProtInternalId;
     }
 
-    public void setRelProtInternalId(BigDecimal relProtInternalId) {
+    public void setRelProtInternalId(long relProtInternalId) {
         this.relProtInternalId = relProtInternalId;
     }
 
@@ -99,22 +94,6 @@ public class RelatedProteins implements Serializable {
         this.uniprotEntrySet = uniprotEntrySet;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (relProtInternalId != null ? relProtInternalId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RelatedProteins)) {
-            return false;
-        }
-        RelatedProteins other = (RelatedProteins) object;
-        return !((this.relProtInternalId == null && other.relProtInternalId != null) || (this.relProtInternalId != null && !this.relProtInternalId.equals(other.relProtInternalId)));
-    }
 
     @Override
     public String toString() {
@@ -129,12 +108,24 @@ public class RelatedProteins implements Serializable {
         this.proteinName = proteinName;
     }
 
-    public PrimaryProtein getPrimaryProtein() {
-        return primaryProtein;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + (int) (this.relProtInternalId ^ (this.relProtInternalId >>> 32));
+        return hash;
     }
 
-    public void setPrimaryProtein(PrimaryProtein primaryProtein) {
-        this.primaryProtein = primaryProtein;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RelatedProteins other = (RelatedProteins) obj;
+        return this.relProtInternalId == other.relProtInternalId;
     }
+
 
 }
