@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -181,8 +182,8 @@ public class ProteinGroupEntry implements ProteinView {
         return sortByModelOrganism(specieList);
     }
 
-    private int toInteger(String data) {
-        return Integer.parseInt(data.trim());
+    private BigInteger toInteger(String data) {
+        return new BigInteger(data.trim());
     }
 
     @Override
@@ -222,8 +223,10 @@ public class ProteinGroupEntry implements ProteinView {
                 .stream()
                 .distinct()
                 .limit(100)
+                .sorted(Comparator.comparing(RelSpecies::getExpEvidenceCode)
+                        .reversed())
                 //.sorted(Comparator.comparingInt(code -> code.getExpEvidenceCode()))
-                .sorted(Comparator.comparing(evidence -> evidence.getExpEvidenceCode()))
+                //.sorted(Comparator.comparing(evidence -> evidence.getExpEvidenceCode()))
                 .collect(Collectors.toList());
     }
 
