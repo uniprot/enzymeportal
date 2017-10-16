@@ -283,11 +283,11 @@ public class XmlTransformer {
             addPrimaryProteinField(primaryProtein, fields);
             addPrimaryImage(primaryProtein, fields);
   
-            addEntryTypeFields(proteinGroups, primaryProtein, fields);
+            addEntryTypeFields( primaryProtein, fields);
             addPrimaryFunctionFields(primaryProtein, fields);
 
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
-            entries.stream()
+            entries.stream().parallel()
                     .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
                     .map(entry -> {
                         addRelatedSpeciesField(entry, fields);
@@ -349,7 +349,7 @@ public class XmlTransformer {
 
     }
 
-    private void addEntryTypeFields(ProteinGroups proteinGroups, PrimaryProtein primaryProtein, Set<Field> fields) {
+    private void addEntryTypeFields( PrimaryProtein primaryProtein, Set<Field> fields) {
 
         BigInteger type = primaryProtein.getEntryType();
 

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -16,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
 public class RelatedProteins implements Serializable {
+
     @Size(max = 4000)
     @Column(name = "PROTEIN_NAME")
     private String proteinName;
@@ -41,13 +43,13 @@ public class RelatedProteins implements Serializable {
     @Basic(optional = false)
     @Column(name = "REL_PROT_INTERNAL_ID")
     //@SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REL_PROT_ID")
-   // @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
+    // @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private long relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "relatedProteinsId")
     //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
-    //@Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     //private Set<UniprotEntry> uniprotEntrySet;
     private List<UniprotEntry> uniprotEntrySet;
 
@@ -82,8 +84,8 @@ public class RelatedProteins implements Serializable {
 //                //.sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag)
 //                       // .reversed())
 //                .collect(Collectors.toList());
-        
-        if(uniprotEntrySet == null){
+
+        if (uniprotEntrySet == null) {
             uniprotEntrySet = new ArrayList<>();
         }
 
@@ -93,7 +95,6 @@ public class RelatedProteins implements Serializable {
     public void setUniprotEntrySet(List<UniprotEntry> uniprotEntrySet) {
         this.uniprotEntrySet = uniprotEntrySet;
     }
-
 
     @Override
     public String toString() {
@@ -126,6 +127,5 @@ public class RelatedProteins implements Serializable {
         final RelatedProteins other = (RelatedProteins) obj;
         return this.relProtInternalId == other.relProtInternalId;
     }
-
 
 }

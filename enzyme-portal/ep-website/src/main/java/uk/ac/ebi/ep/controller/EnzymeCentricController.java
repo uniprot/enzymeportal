@@ -195,9 +195,9 @@ public class EnzymeCentricController extends AbstractController {
                 if (result.getHitCount() == 0) {
                     result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), start, LOWEST_BEST_MATCHED_RESULT_SIZE);
                     //limit asscoated protein result
-//                    if (result.getHitCount() > LOWEST_BEST_MATCHED_RESULT_SIZE) {
-//                        result.setHitCount(LOWEST_BEST_MATCHED_RESULT_SIZE);
-//                    }
+                    if (result.getHitCount() > LOWEST_BEST_MATCHED_RESULT_SIZE) {
+                        result.setHitCount(LOWEST_BEST_MATCHED_RESULT_SIZE);
+                    }
                 }
 
 //                entry.setProteinGroupEntry(result.getEntries());

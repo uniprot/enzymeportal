@@ -37,20 +37,23 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
      
      
       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
-       private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 2000";
+      // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 2000";
      
      
    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
     // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 5";
-//    private static final String NATIVE_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=10\n"
+//    private static final String NATIVE_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1\n"
 //            + "union\n"
-//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=10";
+//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=100";
 
       // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EJLX47'";
     // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU9G0Q'";
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU6OHA'";
+     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU6OHA'";
      
-    
+       private static final String NATIVE_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 \n"
+            + "union\n"
+            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=100000";
+
     
     @Bean
     @Override
