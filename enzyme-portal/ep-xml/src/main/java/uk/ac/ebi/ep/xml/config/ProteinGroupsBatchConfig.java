@@ -33,8 +33,11 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
     private static final String READ_QUERY = "select p from ProteinGroups p";
     private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
     private static final String ROOT_TAG_NAME = "database";
-     private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS";
      
+     
+      private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
+       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 10000";
      
      
    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
