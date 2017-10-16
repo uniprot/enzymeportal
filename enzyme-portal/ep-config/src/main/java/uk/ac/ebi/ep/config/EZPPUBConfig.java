@@ -14,7 +14,7 @@ import org.springframework.core.env.Environment;
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Configuration
-@Prod
+@EZPPUB
 @PropertySource({"classpath:ep-db-ezppub.properties"})
 public class EZPPUBConfig implements EnzymePortalDataConfig {
 

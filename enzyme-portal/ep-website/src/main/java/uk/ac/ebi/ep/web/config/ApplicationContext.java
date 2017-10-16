@@ -32,6 +32,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.config.DevDataConfig;
+import uk.ac.ebi.ep.config.EZPPUBConfig;
 import uk.ac.ebi.ep.config.HHConfig;
 import uk.ac.ebi.ep.config.HXFBConfig;
 import uk.ac.ebi.ep.config.OliverYardConfig;
@@ -47,7 +48,7 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 @ComponentScan(basePackages = {"uk.ac.ebi.ep.config", "uk.ac.ebi.ep.controller", "uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye.config", "uk.ac.ebi.ep.data.service", "uk.ac.ebi.ep.literatureservice.config"})
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, PowerGateConfig.class, OliverYardConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
+@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class,EZPPUBConfig.class, PowerGateConfig.class, OliverYardConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
 @PropertySource("classpath:ep.properties")
 public class ApplicationContext extends WebMvcConfigurerAdapter {
