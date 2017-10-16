@@ -113,6 +113,7 @@ public class UniprotEntry implements Serializable {
     @ManyToOne
     private RelatedProteins relatedProteinsId;
     @OneToMany(mappedBy = "uniprotAccession")
+     @Fetch(FetchMode.JOIN)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
