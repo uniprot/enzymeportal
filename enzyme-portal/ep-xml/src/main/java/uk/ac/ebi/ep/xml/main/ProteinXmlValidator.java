@@ -28,29 +28,30 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public class ProteinXmlValidator {
-    
+
     private static final Logger logger = Logger.getLogger(ProteinXmlValidator.class);
-    
+
     private ProteinXmlValidator() {
-        
+
     }
-    
+
     public static void main(String[] args) throws Exception {
-        
-        String profile = "uzpdev";//validation is meant to be done in development areas hence the default database param.
-        
+
+        String profile = "uzprel";//xml generation is meant to be from Rel hence the default database param.
+
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.getEnvironment().setActiveProfiles(profile);
         context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
         context.scan("uk.ac.ebi.ep.config", "uk.ac.ebi.ep.xml.config");
         context.refresh();
-        
+
         XmlConfigParams xmlConfigParams = context.getBean(XmlConfigParams.class);
+
         String xmlFile = xmlConfigParams.getProteinCentricXmlDir();
         String[] xsdFiles = xmlConfigParams.getEbeyeXSDs().split(",");
-        
+
         EnzymePortalXmlValidator.validateXml(xmlFile, xsdFiles);
         logger.info("Protein-centric XML Validation is complete. Please check the logs.");
-        
+
     }
 }

@@ -2,6 +2,8 @@ package uk.ac.ebi.ep.xml.generator;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -263,48 +265,106 @@ public class XmlTransformer {
         return reactomePathwayId;
     }
 
-    //protein group 
-    //use primary protein entry type
-//    protected void addEntryTypeFields(ProteinGroups proteinGroups, Set<Field> fields) {
-//
-//        BigInteger type = proteinGroups.getEntryType();
-//        if (type != null) {
-//
-//            String entryType = String.valueOf(type);
-//            Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), entryType);
-//
-//            fields.add(entryTypefield);
-//        }
-//
-//    }
-    protected void addPrimaryProtein(ProteinGroups proteinGroups, final Set<Field> fields) {
+    //primary protein for each protein group 
+
+    protected void addPrimaryProtein(ProteinGroups proteinGroups, final Set<Field> fields, Set<Ref> refs) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
             addPrimaryProteinField(primaryProtein, fields);
             addPrimaryImage(primaryProtein, fields);
-  
-            addEntryTypeFields( primaryProtein, fields);
+
+            addEntryTypeFields(primaryProtein, fields);
             addPrimaryFunctionFields(primaryProtein, fields);
 
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
-            entries.stream().parallel()
-                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
-                    .map(entry -> {
-                        addRelatedSpeciesField(entry, fields);
-                        return entry;
-                    }).map(entry -> {
-                        addPrimarySynonymFields(entry, proteinGroups.getProteinName(), fields);
-                        return entry;
-                    }).map(entry -> {
-                        addPrimaryEc(entry, fields);
-                        return entry;
-                    }).map(entry -> {
-                        addPrimaryCatalyticActivityFields(entry, fields);
-                        return entry;
-                    }).forEach(entry -> {
-                        addPrimaryGeneNameFields(entry, fields);
-                    });
 
+            entries.stream().parallel()
+                    .map(uniprotEntry -> {
+                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
+
+                    addRelatedSpeciesField(uniprotEntry, fields);
+
+                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+                    addPrimaryEc(uniprotEntry, fields);
+                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+                    addPrimaryGeneNameFields(uniprotEntry, fields);
+                }
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addScientificNameFields(uniprotEntry, fields);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addCommonNameFields(uniprotEntry, fields);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addAccessionXrefs(uniprotEntry, refs);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addEcXrefs(uniprotEntry, refs);
+                return uniprotEntry;
+            }).map((uniprotEntry) -> {
+                addPathwaysXrefs(uniprotEntry, refs);
+                return uniprotEntry;
+            }).forEach((uniprotEntry) -> {
+                addTaxonomyXrefs(uniprotEntry, refs);
+            });
+
+
+
+
+//            for (UniprotEntry uniprotEntry : entries) {
+//                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
+//
+//                   // if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
+//                    addRelatedSpeciesField(uniprotEntry, fields);
+//                        
+//                    //}
+//                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+//                    addPrimaryEc(uniprotEntry, fields);
+//                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+//                    addPrimaryGeneNameFields(uniprotEntry, fields);
+//                }
+//
+//                addScientificNameFields(uniprotEntry, fields);
+//                addCommonNameFields(uniprotEntry, fields);
+//
+//                addAccessionXrefs(uniprotEntry, refs);
+//
+//                addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+//
+//                addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
+//                addEcXrefs(uniprotEntry, refs);
+//                addPathwaysXrefs(uniprotEntry, refs);
+//                addTaxonomyXrefs(uniprotEntry, refs);
+//            }
+//            entries.stream().parallel()
+//                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
+//                    // .filter(sp->primaryProtein.getRelatedProteinsId()== sp.getRelatedProteinsId().getRelProtInternalId())
+//                    .map(entry -> {
+//                        StopWatch stopWatchr = new StopWatch();
+//                        stopWatchr.start();
+//                        addRelatedSpeciesField(entry, fields);
+//                        stopWatchr.stop();
+//                      
+//                        return entry;
+//                    }).map(entry -> {
+//                        addPrimarySynonymFields(entry, proteinGroups.getProteinName(), fields);
+//                        return entry;
+//                    }).map(entry -> {
+//                        addPrimaryEc(entry, fields);
+//                        return entry;
+//                    }).map(entry -> {
+//                        addPrimaryCatalyticActivityFields(entry, fields);
+//                        return entry;
+//                    }).forEach(entry -> {
+//                        addPrimaryGeneNameFields(entry, fields);
+//                    });
         }
 
     }
@@ -349,7 +409,7 @@ public class XmlTransformer {
 
     }
 
-    private void addEntryTypeFields( PrimaryProtein primaryProtein, Set<Field> fields) {
+    private void addEntryTypeFields(PrimaryProtein primaryProtein, Set<Field> fields) {
 
         BigInteger type = primaryProtein.getEntryType();
 
@@ -358,23 +418,24 @@ public class XmlTransformer {
             Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), entryType);
 
             fields.add(entryTypefield);
-//            BigInteger gType = proteinGroups.getEntryType();
-//
-//            if (gType != null && gType != type) {
-//                logger.error("Entry Type MisMatch " + type + " vs " + gType + " in " + proteinGroups.getProteinGroupId());
-//
-//            }
         }
 
     }
 
     private void addRelatedSpeciesField(UniprotEntry entry, final Set<Field> fields) {
-        List<String> specieList
-                = entry.getRelatedProteinsId().getUniprotEntrySet()
-                .stream()
-                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-                .distinct()
-                .collect(Collectors.toList());
+        List<String> specieList = new ArrayList<>();
+        if (entry.getEntryType().intValue() == 0) {
+            specieList
+                    = entry.getRelatedProteinsId().getUniprotEntrySet()
+                    .stream()
+                    .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
+                    .distinct()
+                    .collect(Collectors.toList());
+        } else {
+            String rel = (entry.getAccession() + ";" + entry.getCommonName() + ";" + entry.getScientificName() + ";" + entry.getExpEvidenceFlag() + ";" + entry.getTaxId());
+
+            specieList = Arrays.asList(rel);
+        }
 
         if (!specieList.isEmpty()) {
             String rs = String.join(" | ", specieList);
@@ -386,24 +447,10 @@ public class XmlTransformer {
         }
     }
 
-    private void addRelatedSpeciesFieldNOTUSED(ProteinGroups proteinGroups, PrimaryProtein primaryProtein, final Set<Field> fields) {
+    @Deprecated
+    private void addRelatedSpeciesField(ProteinGroups proteinGroups, PrimaryProtein primaryProtein, final Set<Field> fields) {
 
-        // List<String> specieList = new ArrayList<>();
-//           Set<UniprotEntry> relatedProteins = new HashSet<>();
-//        for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
-//
-//            if (entry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
-//
-//                relatedProteins = new HashSet<>(entry.getRelatedProteinsId().getUniprotEntrySet());
-//                List<UniprotEntry> relatedSpecies = entry.getRelatedProteinsId().getUniprotEntrySet();
-//                relatedSpecies
-//                        .stream()
-//                        .map((u) -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-//                        .forEach((data) -> {
-//                    specieList.add(data);
-//                });
-//            }
-//        }
+
         List<String> specieList = proteinGroups.getUniprotEntryList()
                 .stream()
                 //.filter(entry -> entry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId())
@@ -413,34 +460,6 @@ public class XmlTransformer {
                 .distinct()
                 .collect(Collectors.toList());
 
-//               Set<RelSpecies> primaries = proteinGroups.getUniprotEntryList()
-//                .stream()
-//                .filter(entry -> entry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId())
-//                .map(relatedSpecies -> relatedSpecies.getRelatedspecies())
-//                .flatMap(entry -> entry.stream())
-//                .map(specie -> new RelSpecies(specie.getAccession(), specie.getCommonName(), specie.getScientificName(), specie.getExpEvidenceFlag()))
-//                //.map((u) -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-//                //.distinct().findFirst().get();
-//                
-//                .collect(Collectors.toSet());
-//               System.out.println("how many primary "+ primaries.size());
-//               
-//            RelSpecies primary =   sortByModelOrganism(primaries).stream().findFirst().get();
-//               
-//               System.out.println(primary.getAccession() + " PRIMARY GUY "+ primary.getCommonName() + " "+ primary.getScientificName());
-//       
-//        for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
-//
-//            if (entry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
-//
-//                relatedProteins = new HashSet<>(entry.getRelatedProteinsId().getUniprotEntrySet());
-//                List<UniprotEntry> relatedSpecies = entry.getRelatedProteinsId().getUniprotEntrySet();
-//                for (UniprotEntry u : relatedSpecies) {
-//                    String data = (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId());
-//                    specieList.add(data);
-//                }
-//            }
-//        }
         if (!specieList.isEmpty()) {
             String rs = String.join(" | ", specieList);
 //                    String rs = relatedSpeciesList
@@ -454,75 +473,7 @@ public class XmlTransformer {
 
     }
 
-//    protected void addPrimaryProteinXXX(ProteinGroups proteinGroups, final Set<Field> fields) {
-//        
-//        List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
-//        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
-//        Set<PrimaryProtein> proteins = new HashSet<>();
-//
-////        for (UniprotEntry e : entries) {
-////
-////            if (e.getProteinGroupId().getProteinGroupId().equals(proteinGroups.getProteinGroupId())) {
-////
-////                PrimaryProtein primaryProtein = e.getRelatedProteinsId().getPrimaryProtein();
-////                proteins.add(primaryProtein);
-////                System.out.println("PROIORITY " + primaryProtein.getPriorityCode());
-////            }
-////
-////        }
-////        Set<PrimaryProtein> primaryProteins = new HashSet<>();
-////        PrimaryProtein primaryProtein = proteins.stream()
-////                .filter(p -> p.getPriorityCode().equalsIgnoreCase("EMO")).findAny().orElse(null);
-//        //.forEach(p ->  primaryProteins.add(p));
-////        PrimaryProtein primaryProtein
-////                = // proteinGroups.getUniprotEntryList()
-////                entries
-////                .stream()
-////                .filter(id -> id.getProteinGroupId().getProteinGroupId().equals(proteinGroups.getProteinGroupId()))
-////                .map(p -> p.getRelatedProteinsId().getPrimaryProtein())
-////                .findAny().orElse(null);
-//        if (primaryProtein != null) {
-//            
-//            Field primaryAccessionfield = new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryProtein.getAccession());
-//            fields.add(primaryAccessionfield);
-//            String commonName = primaryProtein.getCommonName();
-//            if (commonName == null) {
-//                commonName = primaryProtein.getScientificName();
-//            }
-//            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), " " + commonName);
-//            fields.add(primaryOganismfield);
-//            
-//            addPrimaryImage(primaryProtein, fields);
-//            addPrimaryFunctionFields(primaryProtein, fields);
-//
-////            List<UniprotEntry> entries
-////                    = //proteinGroups.getUniprotEntryList()
-////                    entryList
-////                    .stream()
-////                    .filter(entry -> primaryProtein.getAccession().equals(entry.getAccession()))
-////                    .collect(Collectors.toList());
-//            entries.stream().parallel()
-//                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
-//                    .map(entry -> {
-//                        addRelatedSpeciesField(entry, fields);
-//                        return entry;
-//                    }).map(entry -> {
-//                        addPrimarySynonymFields(entry, proteinGroups.getProteinName(), fields);
-//                        return entry;
-//                    }).map(entry -> {
-//                        addPrimaryEc(entry, fields);
-//                        return entry;
-//                    }).map(entry -> {
-//                        addPrimaryCatalyticActivityFields(entry, fields);
-//                        return entry;
-//                    }).forEach(entry -> {
-//                        addPrimaryGeneNameFields(entry, fields);
-//                    });
-//
-//
-//        }
-//        
-//    }
+
     protected void addPrimarySynonymFields(UniprotEntry entry, String proteinName, Set<Field> fields) {
 
         if (entry.getSynonymNames() != null && proteinName != null) {
@@ -532,34 +483,11 @@ public class XmlTransformer {
 
         }
 
-//        String synonymNames
-//                = entries
-//                .stream()
-//                .map(e -> e.getSynonymNames())
-//                        .filter(s -> s!= null)
-//                        .findAny().orElse("");
-//        
-//
-//                    Stream.of(synonymNames
-//                    .split(";"))
-//                    .distinct()
-//                    .filter(s-> !StringUtils.isEmpty(s))
-//                    .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
-//                    .map(syn -> {
-//                        return new Field(FieldName.SYNONYM.getName(), syn);
-//
-//                    }).forEach(field -> fields.add(field));
     }
-
     protected void addPrimaryGeneNameFields(UniprotEntry entry, Set<Field> fields) {
-        // entries.stream()
-        //.filter(id -> proteinGroups.getProteinGroupId().equals(id.getProteinGroupId().getProteinGroupId()))
-        //.filter(p -> primaryProtein.getAccession().equals(p.getAccession()))
-        //.map(e -> e.getEntryToGeneMappingSet())
+ 
         entry.getEntryToGeneMappingSet()
                 .stream()
-                //.flatMap(x -> x.stream())
-                //.findFirst().orElse(new HashSet<>()).stream()
                 .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
                 .forEach(field -> fields.add(field));
 
@@ -568,14 +496,8 @@ public class XmlTransformer {
     protected void addPrimaryCatalyticActivityFields(UniprotEntry entry, Set<Field> fields) {
 
         Set<EnzymeCatalyticActivity> activities
-                = //entries
-                //proteinGroups.getUniprotEntryList()
-                entry.getEnzymeCatalyticActivitySet();
-        //.stream()
-        //.filter(id -> proteinGroups.getProteinGroupId().equals(id.getProteinGroupId().getProteinGroupId()))
-        //.filter(p -> primaryProtein.getAccession().equals(p.getAccession()))
-        //.map(e -> e.getEnzymeCatalyticActivitySet()).findAny().orElse(new HashSet<>());
-
+                =  entry.getEnzymeCatalyticActivitySet();
+ 
         if (!activities.isEmpty()) {
 
             activities.stream().map(activity -> new Field(FieldName.CATALYTIC_ACTIVITY.getName(), activity.getCatalyticActivity()))
@@ -587,60 +509,13 @@ public class XmlTransformer {
 
     protected void addPrimaryEc(UniprotEntry entry, Set<Field> fields) {
 
-        //Set<EnzymePortalEcNumbers> ecNumbers = proteinGroups.getUniprotEntryList()
-        //proteinGroups.getUniprotEntryList()
-        //entries.stream()
-        //.filter(id -> proteinGroups.getProteinGroupId().equals(id.getProteinGroupId().getProteinGroupId()))
-        //.filter(p -> primaryProtein.getAccession().equals(p.getAccession()))
+
         entry.getEnzymePortalEcNumbersSet()
                 .stream()
-                //.map(e -> e.getEnzymePortalEcNumbersSet())
-                //.flatMap(x -> x.stream())
-                //.findFirst().orElse(new HashSet<>()).stream()
+ 
                 .map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber()))
                 .forEach(ecfield -> fields.add(ecfield));
 
-//        if (!ecNumbers.isEmpty()) {
-//            ecNumbers.stream().map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber()))
-//                    .forEach(ecfield ->  fields.add(ecfield));
-//        }
-    }
-
-    private void addRelatedSpeciesFieldOLD(UniprotEntry entries, final Set<Field> fields) {
-
-        List<String> specieList
-                = //proteinGroups.getUniprotEntryList()
-                entries.getRelatedProteinsId().getUniprotEntrySet()
-                .stream()
-                //.filter(id -> id.getProteinGroupId().getProteinGroupId().equals(proteinGroups.getProteinGroupId()))
-                //.map(rel -> rel.getRelatedProteinsId().getUniprotEntrySet())
-                //.flatMap(entry -> entry.stream())
-                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-                .collect(Collectors.toList());
-
-//        List<UniprotEntry> rel = proteinGroups.getUniprotEntryList().stream().findFirst().get()
-//                .getRelatedspecies();
-//        UniprotEntry primaryProtein = rel.stream().findFirst().get();
-//        
-        // if (primaryProtein != null) {
-        //for (UniprotEntry entry : rel) {
-        //if (primaryProtein.getAccession().equalsIgnoreCase(entry.getAccession())) {
-        // primaryProtein = rel.stream().findFirst().get();
-        // LinkedList<String> relatedSpeciesList = new LinkedList<>();
-//        List<String> specieList = rel.stream()
-//                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-//                .collect(Collectors.toList());
-//        //.forEach(related_species -> relatedSpeciesList.offer(related_species)
-        if (!specieList.isEmpty()) {
-            String rs = String.join(" | ", specieList);
-//                    String rs = relatedSpeciesList
-//                            .stream()
-//                            .reduce((k, v) -> k + "" + v).get();
-            String rsField = StringUtils.removeEnd(rs, " | ");
-
-            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
-            fields.add(relatedSpeciesField);
-        }
 
     }
 
