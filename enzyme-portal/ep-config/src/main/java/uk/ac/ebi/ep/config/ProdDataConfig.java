@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
  *
@@ -21,9 +22,9 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
     @Autowired
     private Environment env;
 
-    @Bean
-    @Override
-    public DataSource dataSource() {
+    //@Bean
+    //@Override
+    public DataSource dataSourceXX() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
@@ -36,6 +37,22 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
         config.setPassword(password);
         config.setDriverClassName("oracle.jdbc.OracleDriver");
         HikariDataSource ds = new HikariDataSource(config);
+        return ds;
+    }
+    
+        @Bean
+    @Override
+    public DataSource dataSource() {
+   // public DataSource driverManagerDataSource() {
+        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+
+        String username = env.getRequiredProperty("ep.db.username");
+        String password = env.getRequiredProperty("ep.db.password");
+        DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
+
+        ds.setDriverClassName("oracle.jdbc.OracleDriver");
+
         return ds;
     }
 
