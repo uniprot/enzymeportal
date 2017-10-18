@@ -85,7 +85,8 @@ public abstract class AbstractBatchConfig<T, S> extends DefaultBatchConfigurer {
     }
 
     private String countEntries(String countQuery) {
-        Query query = entityManagerFactory.createEntityManager().createQuery(countQuery);
+       // Query query = entityManagerFactory.createEntityManager().createQuery(countQuery);
+         Query query = entityManagerFactory.createEntityManager().createNativeQuery(countQuery);
         return String.valueOf(query.getSingleResult());
     }
 
