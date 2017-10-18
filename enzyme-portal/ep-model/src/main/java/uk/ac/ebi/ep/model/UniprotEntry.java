@@ -30,8 +30,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.model.common.ModelOrganisms;
 
@@ -113,24 +111,24 @@ public class UniprotEntry implements Serializable {
     @ManyToOne
     private RelatedProteins relatedProteinsId;
     @OneToMany(mappedBy = "uniprotAccession")
-     @Fetch(FetchMode.JOIN)
+     //@Fetch(FetchMode.JOIN)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
     private Set<EnzymePortalSummary> enzymePortalSummarySet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+   // @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     private static final String PDB = "PDB";
 
