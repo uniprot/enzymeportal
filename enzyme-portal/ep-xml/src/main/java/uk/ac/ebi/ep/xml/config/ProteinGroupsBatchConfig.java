@@ -37,7 +37,7 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
 
       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
  
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 10000";
+     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 1000";
     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E142E6'";
     
     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
