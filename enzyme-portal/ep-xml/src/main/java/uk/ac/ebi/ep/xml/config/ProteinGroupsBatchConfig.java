@@ -34,7 +34,8 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
   //  private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
      private static final String COUNT_QUERY = "select count(PROTEIN_GROUP_ID) from PROTEIN_GROUPS";
     private static final String ROOT_TAG_NAME = "database";
-     private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 197156";
+     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 197156";
+ private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 1000";
 
       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
  
@@ -115,7 +116,7 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
         JpaPagingItemReader<ProteinGroups> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
         databaseReader.setPageSize(xmlConfigParams.getChunkSize());
-        //databaseReader.setQueryString(READ_QUERY);//JPQL 
+       // databaseReader.setQueryString(READ_QUERY);//JPQL 
         databaseReader.setQueryProvider(createQueryProvider());//NATIVE QUERY// 
         return databaseReader;
     }

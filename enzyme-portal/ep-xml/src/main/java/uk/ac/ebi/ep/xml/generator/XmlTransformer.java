@@ -278,71 +278,71 @@ public class XmlTransformer {
 
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
 
-            entries.stream().parallel()
-                    .map(uniprotEntry -> {
-                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
-
-                    addRelatedSpeciesField(uniprotEntry, fields);
-
-                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
-                    addPrimaryEc(uniprotEntry, fields);
-                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
-                    addPrimaryGeneNameFields(uniprotEntry, fields);
-                }
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addScientificNameFields(uniprotEntry, fields);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addCommonNameFields(uniprotEntry, fields);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addAccessionXrefs(uniprotEntry, refs);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addEcXrefs(uniprotEntry, refs);
-                return uniprotEntry;
-            }).map((uniprotEntry) -> {
-                addPathwaysXrefs(uniprotEntry, refs);
-                return uniprotEntry;
-            }).forEach((uniprotEntry) -> {
-                addTaxonomyXrefs(uniprotEntry, refs);
-            });
-
-
-
-
-//            for (UniprotEntry uniprotEntry : entries) {
+//            entries.stream().parallel()
+//                    .map(uniprotEntry -> {
 //                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
 //
-//                   // if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
 //                    addRelatedSpeciesField(uniprotEntry, fields);
-//                        
-//                    //}
+//
 //                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
 //                    addPrimaryEc(uniprotEntry, fields);
 //                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
 //                    addPrimaryGeneNameFields(uniprotEntry, fields);
 //                }
-//
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addScientificNameFields(uniprotEntry, fields);
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addCommonNameFields(uniprotEntry, fields);
-//
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addAccessionXrefs(uniprotEntry, refs);
-//
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
-//
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addEcXrefs(uniprotEntry, refs);
+//                return uniprotEntry;
+//            }).map((uniprotEntry) -> {
 //                addPathwaysXrefs(uniprotEntry, refs);
+//                return uniprotEntry;
+//            }).forEach((uniprotEntry) -> {
 //                addTaxonomyXrefs(uniprotEntry, refs);
-//            }
+//            });
+
+
+
+
+            for (UniprotEntry uniprotEntry : entries) {
+                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
+
+                   // if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
+                    addRelatedSpeciesField(uniprotEntry, fields);
+                        
+                    //}
+                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+                    addPrimaryEc(uniprotEntry, fields);
+                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+                    addPrimaryGeneNameFields(uniprotEntry, fields);
+                }
+
+                addScientificNameFields(uniprotEntry, fields);
+                addCommonNameFields(uniprotEntry, fields);
+
+                addAccessionXrefs(uniprotEntry, refs);
+
+                addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+
+                addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
+                addEcXrefs(uniprotEntry, refs);
+                addPathwaysXrefs(uniprotEntry, refs);
+                addTaxonomyXrefs(uniprotEntry, refs);
+            }
 //            entries.stream().parallel()
 //                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
 //                    // .filter(sp->primaryProtein.getRelatedProteinsId()== sp.getRelatedProteinsId().getRelProtInternalId())
