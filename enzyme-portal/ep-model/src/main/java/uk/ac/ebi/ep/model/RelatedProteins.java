@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -45,9 +46,9 @@ public class RelatedProteins implements Serializable {
     private long relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    @OneToMany(mappedBy = "relatedProteinsId")
-    //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
-    //@Fetch(FetchMode.JOIN)
+    //@OneToMany(mappedBy = "relatedProteinsId",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
+   // @Fetch(FetchMode.JOIN)
     //private Set<UniprotEntry> uniprotEntrySet;
     private List<UniprotEntry> uniprotEntrySet;
 

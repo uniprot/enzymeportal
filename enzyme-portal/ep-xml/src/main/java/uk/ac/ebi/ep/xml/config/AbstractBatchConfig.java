@@ -48,7 +48,7 @@ import uk.ac.ebi.ep.xml.util.LogChunkListener;
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public abstract class AbstractBatchConfig<T, S> extends DefaultBatchConfigurer {
 
-    public static final int CHUNK_SIZE = 10;
+    public static final int CHUNK_SIZE = 100;
     private static final String pattern = "MMM_d_yyyy@hh:mma";
     private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
     public static final String READ_DATA_JOB = "READ_DATA_FROM_DB_JOB_" + date;
@@ -85,8 +85,8 @@ public abstract class AbstractBatchConfig<T, S> extends DefaultBatchConfigurer {
     }
 
     private String countEntries(String countQuery) {
-       // Query query = entityManagerFactory.createEntityManager().createQuery(countQuery);
-         Query query = entityManagerFactory.createEntityManager().createNativeQuery(countQuery);
+        Query query = entityManagerFactory.createEntityManager().createQuery(countQuery);
+         //Query query = entityManagerFactory.createEntityManager().createNativeQuery(countQuery);
         return String.valueOf(query.getSingleResult());
     }
 

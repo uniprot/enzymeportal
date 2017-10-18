@@ -266,6 +266,27 @@ public class XmlTransformer {
     }
 
     //primary protein for each protein group 
+    private void addRelatedSpeciesField(List<UniprotEntry> entries, final Set<Field> fields) {
+
+        List<String> specieList
+                = entries
+                .stream()
+                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
+                .distinct()
+                .collect(Collectors.toList());
+//        } else {
+//            String rel = (entry.getAccession() + ";" + entry.getCommonName() + ";" + entry.getScientificName() + ";" + entry.getExpEvidenceFlag() + ";" + entry.getTaxId());
+
+            //specieList = Arrays.asList(rel);
+        if (!specieList.isEmpty()) {
+            String rs = String.join(" | ", specieList);
+
+            String rsField = StringUtils.removeEnd(rs, " | ");
+
+            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+            fields.add(relatedSpeciesField);
+        }
+    }
 
     protected void addPrimaryProtein(ProteinGroups proteinGroups, final Set<Field> fields, Set<Ref> refs) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
@@ -314,17 +335,24 @@ public class XmlTransformer {
 //            }).forEach((uniprotEntry) -> {
 //                addTaxonomyXrefs(uniprotEntry, refs);
 //            });
+            
+            
+            
+            List<UniprotEntry> related = entries.stream()
+                    .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
+                    .distinct()
+                    .collect(Collectors.toList());
 
-
-
+      
+            addRelatedSpeciesField(related, fields);
 
             for (UniprotEntry uniprotEntry : entries) {
                 if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
 
-                   // if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
-                    addRelatedSpeciesField(uniprotEntry, fields);
-                        
-                    //}
+//                    if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
+//                    addRelatedSpeciesField(uniprotEntry, fields);
+//                        
+//                    }
                     addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
                     addPrimaryEc(uniprotEntry, fields);
                     addPrimaryCatalyticActivityFields(uniprotEntry, fields);
@@ -343,6 +371,9 @@ public class XmlTransformer {
                 addPathwaysXrefs(uniprotEntry, refs);
                 addTaxonomyXrefs(uniprotEntry, refs);
             }
+            
+            
+            
 //            entries.stream().parallel()
 //                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
 //                    // .filter(sp->primaryProtein.getRelatedProteinsId()== sp.getRelatedProteinsId().getRelProtInternalId())
@@ -450,7 +481,6 @@ public class XmlTransformer {
     @Deprecated
     private void addRelatedSpeciesField(ProteinGroups proteinGroups, PrimaryProtein primaryProtein, final Set<Field> fields) {
 
-
         List<String> specieList = proteinGroups.getUniprotEntryList()
                 .stream()
                 //.filter(entry -> entry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId())
@@ -473,7 +503,6 @@ public class XmlTransformer {
 
     }
 
-
     protected void addPrimarySynonymFields(UniprotEntry entry, String proteinName, Set<Field> fields) {
 
         if (entry.getSynonymNames() != null && proteinName != null) {
@@ -484,8 +513,9 @@ public class XmlTransformer {
         }
 
     }
+
     protected void addPrimaryGeneNameFields(UniprotEntry entry, Set<Field> fields) {
- 
+
         entry.getEntryToGeneMappingSet()
                 .stream()
                 .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
@@ -496,8 +526,8 @@ public class XmlTransformer {
     protected void addPrimaryCatalyticActivityFields(UniprotEntry entry, Set<Field> fields) {
 
         Set<EnzymeCatalyticActivity> activities
-                =  entry.getEnzymeCatalyticActivitySet();
- 
+                = entry.getEnzymeCatalyticActivitySet();
+
         if (!activities.isEmpty()) {
 
             activities.stream().map(activity -> new Field(FieldName.CATALYTIC_ACTIVITY.getName(), activity.getCatalyticActivity()))
@@ -509,13 +539,10 @@ public class XmlTransformer {
 
     protected void addPrimaryEc(UniprotEntry entry, Set<Field> fields) {
 
-
         entry.getEnzymePortalEcNumbersSet()
                 .stream()
- 
                 .map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber()))
                 .forEach(ecfield -> fields.add(ecfield));
-
 
     }
 

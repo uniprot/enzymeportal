@@ -50,9 +50,9 @@ public class DataConfig {
         properties.setProperty("hibernate.cache.use_second_level_cache", "false");
         properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
 
-        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
-        properties.setProperty("hibernate.max_fetch_depth", "1");
-        properties.setProperty("hibernate.default_batch_fetch_size", "30");
+//        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
+//        properties.setProperty("hibernate.max_fetch_depth", "1");
+//        properties.setProperty("hibernate.default_batch_fetch_size", "30");
 
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setShowSql(false);

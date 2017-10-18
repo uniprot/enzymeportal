@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
@@ -50,7 +51,8 @@ public class ProteinGroups implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
-    @OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.LAZY)
+    //@OneToMany(mappedBy = "proteinGroupId")
+     @OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private List<UniprotEntry> uniprotEntryList;
 

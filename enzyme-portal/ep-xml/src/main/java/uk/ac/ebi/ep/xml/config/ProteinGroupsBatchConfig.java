@@ -31,15 +31,15 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
     protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ProteinGroupsBatchConfig.class);
 
     private static final String READ_QUERY = "select p from ProteinGroups p";
-  //  private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
-     private static final String COUNT_QUERY = "select count(PROTEIN_GROUP_ID) from PROTEIN_GROUPS";
+    private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
+     //private static final String COUNT_QUERY = "select count(PROTEIN_GROUP_ID) from PROTEIN_GROUPS";
     private static final String ROOT_TAG_NAME = "database";
-     private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 197156";
- //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 1000";
+     private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+// private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 500";
 
       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
  
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 1000";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 10000";
     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E142E6'";
     
     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
@@ -48,8 +48,8 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
 //            + "union\n"
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=100";
 
-      // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EJLX47'";
-     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU9G0Q'";
+       //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EJLX47'";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU9G0Q'";
     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU6OHA'";
 //       private static final String NATIVE_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1000 \n"
 //            + "union\n"
@@ -115,12 +115,22 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
 
         JpaPagingItemReader<ProteinGroups> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
-        databaseReader.setPageSize(xmlConfigParams.getChunkSize());
+        //databaseReader.setPageSize(xmlConfigParams.getChunkSize());
+        databaseReader.setPageSize(50);
        // databaseReader.setQueryString(READ_QUERY);//JPQL 
         databaseReader.setQueryProvider(createQueryProvider());//NATIVE QUERY// 
+  
         return databaseReader;
     }
 
+//    @Bean
+//    public SqlPagingQueryProviderFactoryBean sqlPagingQueryProviderFactoryBean(){
+//        SqlPagingQueryProviderFactoryBean factoryBean = new SqlPagingQueryProviderFactoryBean();
+//        factoryBean.setSelectClause("SELECT *");
+//        factoryBean.setFromClause("FROM PROTEIN_GROUPS");
+//        factoryBean.setWhereClause("WHERE ENTRY_TYPE=0 AND ROWNUM <= 10000");
+//        return factoryBean;
+//    }
     private JpaNativeQueryProvider<ProteinGroups> createQueryProvider() {
         JpaNativeQueryProvider<ProteinGroups> queryProvider = new JpaNativeQueryProvider<>();
         queryProvider.setSqlQuery(NATIVE_QUERY);
