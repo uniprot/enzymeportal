@@ -56,7 +56,7 @@
                                             &gt;      
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:set var="webLink" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
+                                                    <c:set var="webLink" value="https://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
                                         <a target="_blank" href="${webLink}${ecNumber}"><c:out value="${ecNumber}"/></a>            
                                                 </c:otherwise>
                                             </c:choose>
@@ -136,7 +136,7 @@
     <div class="provenance">
         <ul>
             <li class="note_0">Data Source:
-                <a href="http://www.ebi.ac.uk/intenz/">${provenance[0]}</a> &AMP; <a href="http://www.uniprot.org/" >${provenance[1]}</a> </li>
+                <a href="https://www.ebi.ac.uk/intenz/">${provenance[0]}</a> &AMP; <a href="http://www.uniprot.org/" >${provenance[1]}</a> </li>
             <li class="note_1">${provenance[2]} </li>
             <li class="note_2">${provenance[3]} </li>
         </ul>

@@ -21,32 +21,6 @@
     });
 </script>
 
-<%--
-proteinName == proteinName
-enzyme.primaryAccession        ==== theSpecies.uniprotaccessions[0]
-enzyme.primaryOrganism === theSpecies.species.commonname
-enzyme.entryType == entryType
-
-     enzyme.List<String> geneName;
-
-     enzyme.PdbImage primaryImage
-             - pdbId ===== theSpecies.pdbeaccession[0]
-             - specie === relSp.species.commonname
-
-
-
-
-
-      enzyme.function == = theSpecies.enzymeFunction
-
-     enzyme.List<RelSpecies> getRelatedSpecies  ==== relatedspecies
-            - accession === accession
-           - commonName === species.commonname
-           - scientificName === species.scientificname
-
---%>
-
-
 
 
 <c:set var="primAcc" value="${enzyme.primaryAccession}"/>
@@ -59,14 +33,7 @@ enzyme.entryType == entryType
                title="Select entry"
                value="${epfn:getBasketId(enzyme)}"/>
     </c:if>
-    <%--  Basket Bingo
-    <c:if test="${showCheckbox != false}">
-        <input type="checkbox" class="forBasket"
-               title="Select entry"
-               value="${epfn:getSummaryBasketId(enzyme)}"/>
-    </c:if>
-    
-    --%>
+
     
     
     <c:if test='${not empty enzyme.proteinName }'>
