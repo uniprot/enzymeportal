@@ -111,6 +111,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
         this.intenzAdapter = intenzAdapter;
     }
 
+    @Deprecated
     private List<EnzymeAccession> relatedSpeciesWithHumanOnTop(EnzymeAccession ea, UniprotEntry e) {
         String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
 
@@ -118,7 +119,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
 
         if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
 
-            relatedSpecies.add(0, ea);
+            relatedSpecies.add(0, e);
 
         } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
             relatedSpecies.add(ea);
@@ -129,30 +130,48 @@ public class EnzymeRetriever {//  extends EnzymeBase {
     }
 
     private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
-
-        List<EnzymeAccession> relatedSpecies = new LinkedList<>();
+        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
+        //List<EnzymeAccession> relatedSpecies = new LinkedList<>();
+        LinkedList<EnzymeAccession> relatedSpecies = new LinkedList<>();
         // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
 
         if (uniprotEntry.getRelatedProteinsId() != null) {
 
-            List<EnzymePortalCompound> compounds = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
+            List<EnzymePortalCompound> compoundList = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
+            List<Compound> compounds = compoundList.stream().distinct().collect(Collectors.toList());
             for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
 
                 EnzymeAccession ea = new EnzymeAccession();
                 //ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-                ea.setCompounds(compounds.stream().distinct().collect(Collectors.toList()));
-                ea.setDiseases(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+                ea.setCompounds(compounds);
+                List<Disease> diseases = e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+                ea.setDiseases(diseases);
 
                 ea.setPdbeaccession(e.getPdbeaccession());
                 ea.getUniprotaccessions().add(e.getAccession());
                 ea.setSpecies(e.getSpecies());
                 ea.setUniprotid(e.getName());
 
-                relatedSpecies.addAll(relatedSpeciesWithHumanOnTop(ea, e));
+                //relatedSpecies.addAll(relatedSpeciesWithHumanOnTop(ea, e));
+                if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+
+                    relatedSpecies.push(ea);
+  
+                } else{
+                    relatedSpecies.add(ea);
+
+                }
+
             }
+            //return removeDuplicates(relatedSpecies);
+             return relatedSpecies.stream().distinct().collect(Collectors.toList());
         }
         return relatedSpecies;
 
+    }
+
+    public static <T> List<T> removeDuplicates(List<T> list) {
+        return list.stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
     }
 
     private EnzymeModel getEnzymeModel(String uniprotAccession) {
