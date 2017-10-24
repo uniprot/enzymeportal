@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.model.IntenzEnzymes;
 import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
 import uk.ac.ebi.ep.xml.model.CrossReferences;
@@ -78,9 +78,10 @@ public class EnzymeCentric extends XmlGenerator {
         Database database = buildDatabaseInfo(entryCount);
 
         List<Entry> entryList = enzymes.stream().map(enzyme -> {
+            System.out.println("ABOUT TO QUERY FOR PROTEINS "+ enzyme.getEcNumber());
             List<UniprotEntry> entries = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
             Entry processedEntry;
-
+            System.out.println("ENTRY SIZE "+ entries.size());
             if (entries.size() <= SEQUENTIAL_THRESHOLD) {
                 Stream<UniprotEntry> sequentialUniProtEntryStream = entries.stream();
 
