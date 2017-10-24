@@ -371,10 +371,29 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 37 * hash + Objects.hashCode(this.proteinName);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final UniprotEntry other = (UniprotEntry) obj;
+//        return Objects.equals(this.proteinName, other.proteinName);
+//    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.proteinName);
+        hash = 53 * hash + Objects.hashCode(this.accession);
         return hash;
     }
 
@@ -387,8 +406,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             return false;
         }
         final UniprotEntry other = (UniprotEntry) obj;
-        return Objects.equals(this.proteinName, other.proteinName);
+        if (!Objects.equals(this.accession, other.accession)) {
+            return false;
+        }
+        return true;
     }
+    
+    
 
     public String getScientificname() {
         return getScientificName();
@@ -603,14 +627,15 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return getRelatedProteinsId()
                 .getUniprotEntrySet()
                 .stream()
+                .distinct()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
                         .reversed())
-                //.limit(SORTED_SPECIES_LIMIT)
+                .limit(SORTED_SPECIES_LIMIT)
                 .collect(Collectors.toList());
     }
 
     @Deprecated
-    public List<EnzymeAccession> getRelatedspecies1() {
+    public List<EnzymeAccession> getRelatedspeciesX() {
 
         final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
@@ -647,7 +672,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         List<EnzymeAccession> sortedSpecies = relatedspecies
                 .stream()
-                //.distinct()
+                .distinct()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
                         .reversed())
                 .collect(Collectors.toList());

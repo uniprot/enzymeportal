@@ -18,7 +18,7 @@ public interface IntenzEnzymesRepository extends JpaRepository<IntenzEnzymes, Lo
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM INTENZ_ENZYMES", nativeQuery = true)
     List<IntenzEnzymes> findIntenzEnzymes();
 
-    @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N' AND ROWNUM <= 1 ORDER BY EC_NUMBER", nativeQuery = true)
+    @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N' ORDER BY EC_NUMBER", nativeQuery = true)
     List<IntenzEnzymes> findNonTransferredEnzymes();
 
     @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE EC_NUMBER = :EC_NUMBER AND TRANSFER_FLAG = 'N'", nativeQuery = true)

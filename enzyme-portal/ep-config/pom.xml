@@ -5,19 +5,19 @@
     <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-        <parent>
+    <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
         <version>1.0.7-SNAPSHOT</version>
     </parent>
     
     <properties>
-             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <oracle.version>11.2.0.3</oracle.version>
-         <querydsl.version>4.1.4</querydsl.version>
+        <querydsl.version>4.1.4</querydsl.version>
     
         <!-- Plugins -->
       
@@ -30,19 +30,19 @@
 
     <dependencies>
         
-<!--   
+        <!--   
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>EnzymePortalTestKit</artifactId>
             <version>1.0.5-SNAPSHOT</version>
             <scope>test</scope>
         </dependency> -->
-         <dependency>
-      <groupId>org.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-      <version>3.4.0</version>
-    </dependency> 
-<!--        <dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.4.0</version>
+        </dependency> 
+        <!--        <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
             <version>0.15</version>
@@ -81,12 +81,12 @@
             <artifactId>spring-data-rest-webmvc</artifactId>
         </dependency>
 
-	<!-- Support for Ehcache and others -->
-	<dependency>
-		<groupId>org.springframework</groupId>
-		<artifactId>spring-context-support</artifactId>
-<!--		<version>4.1.4.RELEASE</version>-->
-	</dependency>
+        <!-- Support for Ehcache and others -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <!--		<version>4.1.4.RELEASE</version>-->
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-<!--            <version>5.2.10.Final</version>-->
+            <!--            <version>5.2.10.Final</version>-->
         </dependency>
 
 
@@ -131,16 +131,16 @@
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
         
-                     <dependency>
-                        <groupId>com.querydsl</groupId>
-                        <artifactId>querydsl-apt</artifactId>
-<!--                        <version>${querydsl.version}</version>-->
-                    </dependency>
-                                     <dependency>
-                        <groupId>com.querydsl</groupId>
-                        <artifactId>querydsl-jpa</artifactId>
-<!--                        <version>${querydsl.version}</version>-->
-                    </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <!--                        <version>${querydsl.version}</version>-->
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <!--                        <version>${querydsl.version}</version>-->
+        </dependency>
         
         <dependency>
             <groupId>com.oracle</groupId>
@@ -208,7 +208,7 @@
     <build>
         <finalName>ep-config</finalName>
         <plugins>
-               <plugin>
+            <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
                 <version>1.1.3</version>
@@ -255,12 +255,14 @@
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
+                    <include>ep-db-ezppub-hh.properties</include>
+                    <include>ep-db-ezppub-hxfb.properties</include>
                     <include>ep-db-uzppub-hh.properties</include>
                     <include>ep-db-uzppub-hxfb.properties</include>
-                    <include>ep-db-uzppub-pg.properties</include>
-                    <include>ep-db-uzppub-oy.properties</include>
+                    <!--                    <include>ep-db-uzppub-pg.properties</include>
+                    <include>ep-db-uzppub-oy.properties</include>-->
                     <include>ep-db-uzprel.properties</include>
-                     <include>ep-db-ezppub.properties</include>
+                    <include>ep-db-ezppub.properties</include>
                     <include>ep-db-uzpdev.properties</include>
                     <include>ep-db-${ep.db.config}.properties</include>
                     <!--                 This contains the BioPortal API key needed for
@@ -297,39 +299,53 @@
                 <ep.db.config>uzprel</ep.db.config>
             </properties>
         </profile>
-                <profile>
+        <profile>
             <!--             Profile to work with the EZP-PUB release database -->
             <id>ezppub</id>
             <properties>
                 <ep.db.config>ezppub</ep.db.config>
             </properties>
         </profile>
-        <profile>
-            <!--             Profile to work with the release database -->
+        <!--        <profile>
+                         Profile to work with the release database 
             <id>uzppub-pg</id>
             <properties>
                 <ep.db.config>uzppub-pg</ep.db.config>
             </properties>
         </profile>
         <profile>
-            <!--             Profile to work with the release database -->
+                         Profile to work with the release database 
             <id>uzppub-oy</id>
             <properties>
                 <ep.db.config>uzppub-oy</ep.db.config>
             </properties>
-        </profile>
+        </profile>-->
         <profile>
-            <!--             Profile to work with the release database -->
+            <!--             Profile to work with the private  release database -->
             <id>uzppub-hh</id>
             <properties>
                 <ep.db.config>uzppub-hh</ep.db.config>
             </properties>
         </profile>
         <profile>
-            <!--             Profile to work with the release database -->
+            <!--             Profile to work with the private release database -->
             <id>uzppub-hxfb</id>
             <properties>
                 <ep.db.config>uzppub-hxfb</ep.db.config>
+            </properties>
+        </profile>
+        <profile>
+            <!--             Profile to work with the public release database -->
+            <id>ezppub-hh</id>
+            <properties>
+                <ep.db.config>ezppub-hh</ep.db.config>
+            </properties>
+        </profile>
+        <profile>
+            <!--             Profile to work with the public release database -->
+            <id>ezppub-hxfb</id>
+            <properties>
+                <ep.db.config>ezppub-hxfb</ep.db.config>
             </properties>
         </profile>
         
