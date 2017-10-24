@@ -1,0 +1,51 @@
+<%--
+    Document   : footer
+    Created on : Aug 20, 2011, 8:44:45 PM
+    Author     : hongcao
+--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+<footer>
+		<!-- Optional local footer (insert citation / project-specific copyright / etc here -->
+
+		<!-- End optional local footer -->
+
+		<div id="global-footer">
+
+			<nav id="global-nav-expanded" class="row">
+				<!-- Footer will be automatically inserted by footer.js -->
+			</nav>
+
+			<section id="ebi-footer-meta" class="row">
+				<!-- Footer meta will be automatically inserted by footer.js -->
+			</section>
+
+		</div>
+
+	</footer>
+</div> <!--! end of #wrapper -->
+
+
+<!-- JavaScript -->
+
+<!-- Your custom JavaScript file scan go here... change names accordingly -->
+
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.4.1/yui/yui-min.js"></script>
+
+
+
+<script defer="defer" src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/cookiebanner.js"></script>
+<script defer="defer" src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/foot.js"></script>
+<script defer="defer" src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/script.js"></script>
+
+<!-- The Foundation theme JavaScript -->
+<script src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/libraries/foundation-6/js/foundation.js"></script>
+<script src="https://www.ebi.ac.uk/web_guidelines/EBI-Framework/v1.1/js/foundationExtendEBI.js"></script>
+<script type="text/JavaScript">$(document).foundation();</script>
+<script type="text/JavaScript">$(document).foundationExtendEBI();</script>
+
+<script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
+<script src="${pageContext.request.contextPath}/resources/javascript/enzyme.js"></script>

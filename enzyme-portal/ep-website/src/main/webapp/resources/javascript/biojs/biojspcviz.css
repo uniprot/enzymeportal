@@ -1,0 +1,18 @@
+/* This style sheet is to adsjut how we display the PCViz widget on the Reactions page */
+
+.grid {
+    border: 5px solid #dee;
+}
+
+.grid td {
+    vertical-align: top;
+}
+
+.grid th {
+    background-color: #dee;
+}
+
+#pcviz-widget {
+    display: none;
+}
+
