@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +127,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
         return relatedSpecies.stream().distinct().collect(Collectors.toList());
     }
 
+    @Deprecated
     private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
         String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
         //List<EnzymeAccession> relatedSpecies = new LinkedList<>();
@@ -137,15 +136,15 @@ public class EnzymeRetriever {//  extends EnzymeBase {
 
         if (uniprotEntry.getRelatedProteinsId() != null) {
 
-            List<EnzymePortalCompound> compoundList = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
-            List<Compound> compounds = compoundList.stream().distinct().collect(Collectors.toList());
+            //List<EnzymePortalCompound> compoundList = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
+            //List<Compound> compounds = compoundList.stream().distinct().collect(Collectors.toList());
             for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
 
                 EnzymeAccession ea = new EnzymeAccession();
                 //ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-                ea.setCompounds(compounds);
-                List<Disease> diseases = e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
-                ea.setDiseases(diseases);
+                //ea.setCompounds(compounds);
+                //List<Disease> diseases = e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+                //ea.setDiseases(diseases);
 
                 ea.setPdbeaccession(e.getPdbeaccession());
                 ea.getUniprotaccessions().add(e.getAccession());
@@ -157,7 +156,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
 
                     relatedSpecies.push(ea);
   
-                } else{
+                } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
                     relatedSpecies.add(ea);
 
                 }
@@ -175,16 +174,16 @@ public class EnzymeRetriever {//  extends EnzymeBase {
     }
 
     private EnzymeModel getEnzymeModel(String uniprotAccession) {
-        final ForkJoinPool executorService = new ForkJoinPool();
+//        final ForkJoinPool executorService = new ForkJoinPool();
+//
+//        CompletableFuture<UniprotEntry> completableFutureUniprotEntry = CompletableFuture
+//                .supplyAsync(() -> enzymePortalService.findByAccession(uniprotAccession), executorService);
+//
+//        CompletableFuture<Set<EnzymePortalEcNumbers>> completableFutureEcNumbers = CompletableFuture
+//                .supplyAsync(() -> enzymePortalService.findByEcNumbersByAccession(uniprotAccession).stream().collect(Collectors.toSet()), executorService);
 
-        CompletableFuture<UniprotEntry> completableFutureUniprotEntry = CompletableFuture
-                .supplyAsync(() -> enzymePortalService.findByAccession(uniprotAccession), executorService);
-
-        CompletableFuture<Set<EnzymePortalEcNumbers>> completableFutureEcNumbers = CompletableFuture
-                .supplyAsync(() -> enzymePortalService.findByEcNumbersByAccession(uniprotAccession).stream().collect(Collectors.toSet()), executorService);
-
-        UniprotEntry uniprotEntry = completableFutureUniprotEntry.join();
-        Set<EnzymePortalEcNumbers> ecNumbers = completableFutureEcNumbers.join();
+        UniprotEntry uniprotEntry = enzymePortalService.findByAccession(uniprotAccession);// completableFutureUniprotEntry.join();
+        Set<EnzymePortalEcNumbers> ecNumbers = enzymePortalService.findByEcNumbersByAccession(uniprotAccession).stream().collect(Collectors.toSet());// completableFutureEcNumbers.join();
 
         EnzymeModel model = new EnzymeModel();
 
@@ -211,7 +210,9 @@ public class EnzymeRetriever {//  extends EnzymeBase {
 
             model.setSynonyms(uniprotEntry.getSynonym());
 
-            model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
+           // model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
+            
+             model.setRelatedspecies(uniprotEntry.getRelatedspecies());
 
             model.setAccession(uniprotEntry.getAccession());
             model.getUniprotaccessions().add(uniprotEntry.getAccession());
@@ -226,7 +227,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
                 model.getEc().add(ec.getEcNumber());
             });
             model.setEnzyme(enzyme);
-            executorService.shutdown();
+           // executorService.shutdown();
             return model;
         }
         return model;
