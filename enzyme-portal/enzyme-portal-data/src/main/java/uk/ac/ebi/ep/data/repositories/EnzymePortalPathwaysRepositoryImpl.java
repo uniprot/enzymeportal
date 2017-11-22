@@ -62,7 +62,6 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
                 .select(Projections.constructor(Pathway.class, $.pathwayGroupId, $.pathwayId, $.pathwayName))
                 .from($)
                 .where($.pathwayName.toLowerCase().like(pathwayName))
-                .distinct()
                 .fetch();
 
     }
