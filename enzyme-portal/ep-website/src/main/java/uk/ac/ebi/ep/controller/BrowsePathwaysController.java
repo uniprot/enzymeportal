@@ -4,6 +4,7 @@ package uk.ac.ebi.ep.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
@@ -159,7 +160,7 @@ public class BrowsePathwaysController extends AbstractController {
     public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
             //name = String.format("%%%s%%", name).toLowerCase();
-            return enzymePortalService.findPathwaysByName(name);//.stream().distinct().collect(Collectors.toList());
+            return enzymePortalService.findPathwaysByName(name).stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();
         }
