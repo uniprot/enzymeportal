@@ -43,7 +43,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 5;
+        int facetCount = 1;
 
         EnzymeSearchResult result = enzymeCentricService.getQuerySearchResult(query, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
@@ -71,7 +71,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 6;
+        int facetCount = 1;
 
         EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
@@ -98,7 +98,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 5;
+        int facetCount = 1;
 
         EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
@@ -124,7 +124,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 5;
+        int facetCount = 1;
 
         EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
@@ -151,7 +151,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 5;
+        int facetCount = 1;
 
         EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();

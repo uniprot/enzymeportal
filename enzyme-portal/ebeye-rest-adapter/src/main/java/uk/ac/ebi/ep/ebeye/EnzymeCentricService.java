@@ -117,7 +117,8 @@ public class EnzymeCentricService {
     public EnzymeSearchResult findEbiSearchResultsByEC(String ec, int startPage, int pageSize, String facets, int facetCount) {
         Preconditions.checkArgument(ec != null, "'ec' must not be null");
 
-        String query = "INTENZ:" + ec;
+        //String query = "INTENZ:" + ec;
+        String query = "id:" + ec;
 
         return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
@@ -129,7 +130,8 @@ public class EnzymeCentricService {
         int facetCount = 0;
         int startPage = 0;
         int pageSize = 1;
-        String query = "INTENZ:" + ec;
+        //String query = "INTENZ:" + ec;
+        String query = "id:" + ec;
 
         return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 

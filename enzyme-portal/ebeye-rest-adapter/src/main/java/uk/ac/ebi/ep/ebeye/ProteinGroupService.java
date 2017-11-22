@@ -113,7 +113,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "'ec' must not be null");
         pageSize = pageSize(pageSize);
 
-        String query = "INTENZ:" + ec;
+        //String query = "INTENZ:" + ec;
+        String query = "ec:" + ec;
 
         return getSearchResult(query, facetCount, facets, startPage, pageSize);
 
@@ -122,7 +123,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     public ProteinGroupSearchResult findProteinCentricResultBySearchTermAndEC(String ec, String searchTerm, int facetCount, String facets, int startPage, int pageSize) {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
-        String query = searchTerm + " AND INTENZ:" + ec;
+        //String query = searchTerm + " AND INTENZ:" + ec;
+        String query = searchTerm + " AND ec:" + ec;
         pageSize = pageSize(pageSize);
         return getSearchResult(query, facetCount, facets, startPage, pageSize);
     }
@@ -131,7 +133,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(omimId != null, "omimId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+       // String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+          String query = "OMIM:" + omimId + " AND ec:" + ec;
         pageSize = pageSize(pageSize);
         return getSearchResult(query, facetCount, facets, startPage, pageSize);
     }
@@ -140,7 +143,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+       // String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+         String query = "REACTOME:" + pathwayId + " AND ec:" + ec;
         pageSize = pageSize(pageSize);
         return getSearchResult(query, facetCount, facets, startPage, pageSize);
     }
@@ -149,7 +153,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(taxId != null, "taxId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+        //String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+         String query = "TAXONOMY:" + taxId + " AND ec:" + ec;
         pageSize = pageSize(pageSize);
         return getSearchResult(query, facetCount, facets, startPage, pageSize);
     }
@@ -159,7 +164,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "'ec' must not be null");
         pageSize = pageSize(pageSize);
 
-        String query = "INTENZ:" + ec;
+       // String query = "INTENZ:" + ec;
+         String query = "ec:" + ec;
 
         return getSearchResult(query, startPage, pageSize);
 
@@ -168,7 +174,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     public ProteinGroupSearchResult findProteinGroupResultBySearchTermAndEC(String ec, String searchTerm, int startPage, int pageSize) {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
-        String query = searchTerm + " AND INTENZ:" + ec;
+        //String query = searchTerm + " AND INTENZ:" + ec;
+         String query = searchTerm + " AND ec:" + ec;
         pageSize = pageSize(pageSize);
         return getSearchResult(query, startPage, pageSize);
     }
@@ -180,7 +187,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         if (limit > 100) {
             limit = 100;
         }
-        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+       // String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+          String query = "OMIM:" + omimId + " AND ec:" + ec;
 
         return getSearchResult(query, startPage, limit);
 
@@ -190,7 +198,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(omimId != null, "omimId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+        //String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+         String query = "OMIM:" + omimId + " AND ec:" + ec;
 
         query = UrlUtil.encode(query);
         return queryForUniquePrimaryAccessions(query, limit);
@@ -201,7 +210,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+       // String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+         String query = "REACTOME:" + pathwayId + " AND ec:" + ec;
         int startPage = 0;
         limit = pageSize(limit);
 
@@ -213,7 +223,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+       // String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+           String query = "REACTOME:" + pathwayId + " AND ec:" + ec;
 
         query = UrlUtil.encode(query);
 
@@ -226,7 +237,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         int startPage = 0;
         limit = pageSize(limit);
-        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+        //String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+         String query = "TAXONOMY:" + taxId + " AND ec:" + ec;
 
         return getSearchResult(query, startPage, limit);
 
@@ -236,7 +248,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(taxId != null, "taxId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+       // String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+         String query = "TAXONOMY:" + taxId + " AND ec:" + ec;
 
         query = UrlUtil.encode(query);
         return queryForUniquePrimaryAccessions(query, limit);
@@ -246,7 +259,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     public List<String> queryForPrimaryAccessionsByEcAndKeyword(String ec, String searchTerm, int limit) {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
-        String query = searchTerm + " AND INTENZ:" + ec;
+        //String query = searchTerm + " AND INTENZ:" + ec;
+         String query = searchTerm + " AND ec:" + ec;
 
         query = UrlUtil.encode(query);
 
@@ -256,7 +270,8 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     public List<String> queryForPrimaryAccessionsByEc(String ec, int limit) {
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "INTENZ:" + ec;
+       // String query = "INTENZ:" + ec;
+         String query = "ec:" + ec;
 
         query = UrlUtil.encode(query);
 

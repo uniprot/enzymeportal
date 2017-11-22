@@ -36,13 +36,13 @@ import uk.ac.ebi.ep.ebeye.model.enzyme.FacetValue;
 public class EnzymeCentricServiceTest {
 
     private static final int MAX_ENTRIES_IN_RESPONSE = 4;
-    private static final String SERVER_URL = "http://www.myserver.com/ebeye";
+    private static final String SERVER_URL = "https://www.myserver.com/ebeye";
 
     private MockRestServiceServer syncRestServerMock;
     private Function<String, EnzymeEntry> entryCreator;
     private Function<String, Facet> facetCreator;
 
-    private static final int FACET_COUNT = 20;
+    private static final int FACET_COUNT = 2;
 
     private EnzymeCentricService enzymeCentricService;
 
@@ -387,7 +387,7 @@ public class EnzymeCentricServiceTest {
         int facetCount = FACET_COUNT;
         String facetsList = "";
         String ec = "1.1.1.1";
-        String query = "INTENZ:" + ec;
+        String query = "id:" + ec;
 
         List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);

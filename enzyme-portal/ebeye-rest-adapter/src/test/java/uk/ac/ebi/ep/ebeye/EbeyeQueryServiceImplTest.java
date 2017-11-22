@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -34,6 +35,7 @@ import uk.ac.ebi.ep.ebeye.protein.model.Protein;
  * class.
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class EbeyeQueryServiceImplTest {
 
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";

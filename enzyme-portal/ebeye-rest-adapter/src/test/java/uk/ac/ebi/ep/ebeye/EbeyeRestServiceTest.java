@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -22,6 +23,7 @@ import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
  * @author joseph
  */
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class EbeyeRestServiceTest extends XCentricSetup {
 
