@@ -13,7 +13,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -30,10 +29,6 @@ import javax.xml.bind.annotation.XmlTransient;
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
 public class RelatedProteins implements Serializable {
-
-    @Size(max = 4000)
-    @Column(name = "PROTEIN_NAME")
-    private String proteinName;
 
     private static final long serialVersionUID = 1L;
 
@@ -98,14 +93,6 @@ public class RelatedProteins implements Serializable {
     @Override
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.RelatedProteins[" + relProtInternalId + " ]";
-    }
-
-    public String getProteinName() {
-        return proteinName;
-    }
-
-    public void setProteinName(String proteinName) {
-        this.proteinName = proteinName;
     }
 
     @Override
