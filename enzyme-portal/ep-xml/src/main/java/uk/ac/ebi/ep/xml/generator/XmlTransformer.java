@@ -338,15 +338,15 @@ public class XmlTransformer {
             
             
             
-            List<UniprotEntry> related = entries.stream()
+            List<UniprotEntry> relatedProteins = entries.stream()
                     .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
                     .distinct()
                     .collect(Collectors.toList());
 
       
-            addRelatedSpeciesField(related, fields);
-
-            for (UniprotEntry uniprotEntry : entries) {
+            addRelatedSpeciesField(relatedProteins, fields);
+            //for (UniprotEntry uniprotEntry : entries) {
+            for (UniprotEntry uniprotEntry : relatedProteins) {
                 if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
 
 //                    if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
