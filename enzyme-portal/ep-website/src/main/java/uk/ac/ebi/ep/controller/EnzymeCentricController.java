@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
-import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
-import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 import uk.ac.ebi.ep.web.utils.KeywordType;
 
 /**
@@ -400,19 +398,19 @@ public class EnzymeCentricController extends AbstractController {
 //        }
     }
 
-    @Deprecated
-    private void addProteinEntryToEnzymeView(List<Protein> proteins, Entry entry, List<Entry> enzymeView) {
-
-        int proteinHits = proteins.size();
-
-        if (proteinHits > 0) {
-            entry.setProteins(proteins);
-            entry.setNumProteins(proteinHits);
-            //entry.setNumEnzymeHits(hitCount);
-            entry.setNumEnzymeHits(proteinHits);
-            enzymeView.add(entry);
-        }
-
-    }
+//    @Deprecated
+//    private void addProteinEntryToEnzymeView(List<Protein> proteins, Entry entry, List<Entry> enzymeView) {
+//
+//        int proteinHits = proteins.size();
+//
+//        if (proteinHits > 0) {
+//            entry.setProteins(proteins);
+//            entry.setNumProteins(proteinHits);
+//            //entry.setNumEnzymeHits(hitCount);
+//            entry.setNumEnzymeHits(proteinHits);
+//            enzymeView.add(entry);
+//        }
+//
+//    }
 
 }

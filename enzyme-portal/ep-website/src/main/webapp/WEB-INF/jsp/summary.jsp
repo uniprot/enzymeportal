@@ -243,14 +243,25 @@
                     <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
                 </c:if>
                 <c:forEach var="i" begin="0" end="${relSpeciesMaxDisplay-1}">
+                      [<a class="popup" href='search/${relspecies[i].accession}/enzyme'>
+                       ${relspecies[i].commonName}<span>${relspecies[i].scientificName}</span></a>]    
                     
-                    
-                        [<a class="popup" href='search/${relspecies[i].accession}/enzyme'>
+
+                         <%--
+                            <c:choose>
+                                <c:when test="${relspecies[i].expEvidenceCode eq 1}">
+                              [<a class="popup" href='search/${relspecies[i].accession}/enzyme'>
+                            <b>${relspecies[i].commonName}</b><span>${relspecies[i].scientificName}</span></a>]
+                                     
+                                </c:when>
+                                <c:otherwise>
+                           [<a class="popup" href='search/${relspecies[i].accession}/enzyme'>
                             ${relspecies[i].commonName}<span>${relspecies[i].scientificName}</span></a>]
+                                  
+                                </c:otherwise>
+                            </c:choose>
                             
-              
-                            
-                    <%--
+                  
                     <c:choose>
                         <c:when test="${empty relspecies[i].species.commonname}">
                             [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
@@ -294,7 +305,7 @@
                                     [<a class="popup" href='search/${relspecies[i].accession}/enzyme'
                                         >${relspecies[i].commonName}<span>${relspecies[i].scientificName}</span></a>
                                     ]
-                            
+                                     
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
