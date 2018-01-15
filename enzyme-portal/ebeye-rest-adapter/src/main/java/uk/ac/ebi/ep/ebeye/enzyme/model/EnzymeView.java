@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupEntry;
-import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 
 /**
  *
@@ -18,9 +17,9 @@ public class EnzymeView {
     private String enzymeFamily;
     private String ec;
     private List<String> catalyticActivities;
-    @Deprecated
-    private List<String> species;
-    private List<Protein> proteins;
+    //@Deprecated
+    //private List<String> species;
+    //private List<Protein> proteins;
     private List<ProteinGroupEntry> proteinGroupEntry;
     private int numProteins;
     private Set<String> intenzCofactors;
@@ -70,30 +69,30 @@ public class EnzymeView {
         this.catalyticActivities = catalyticActivities;
     }
 
-    @Deprecated
-    public List<String> getSpecies() {
-        if (species == null) {
-            species = new ArrayList<>();
-        }
+//    @Deprecated
+//    public List<String> getSpecies() {
+//        if (species == null) {
+//            species = new ArrayList<>();
+//        }
+//
+//        return species;
+//    }
+//
+//    @Deprecated
+//    public void setSpecies(List<String> species) {
+//        this.species = species;
+//    }
 
-        return species;
-    }
-
-    @Deprecated
-    public void setSpecies(List<String> species) {
-        this.species = species;
-    }
-
-    public List<Protein> getProteins() {
-        if (proteins == null) {
-            proteins = new ArrayList<>();
-        }
-        return proteins;
-    }
-
-    public void setProteins(List<Protein> proteins) {
-        this.proteins = proteins;
-    }
+//    public List<Protein> getProteins() {
+//        if (proteins == null) {
+//            proteins = new ArrayList<>();
+//        }
+//        return proteins;
+//    }
+//
+//    public void setProteins(List<Protein> proteins) {
+//        this.proteins = proteins;
+//    }
 
     public List<ProteinGroupEntry> getProteinGroupEntry() {
         if (proteinGroupEntry == null) {

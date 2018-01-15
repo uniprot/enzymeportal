@@ -168,14 +168,14 @@ public class ProteinGroupEntry implements ProteinView {
                 .map(s -> s.split("\\|"))
                 .collect(toList());
 
-        List<String> foo = new LinkedList<>();
+        List<String> species = new LinkedList<>();
         for (String[] item : items) {
-            foo = Arrays.asList(item);
+            species = Arrays.asList(item);
         }
 
-        specieList = foo.stream()
+        specieList = species.stream()
                 .map(comma -> comma.split("\\;"))
-                .map(specie -> new RelSpecies(specie[0], specie[1], specie[2], toInteger(specie[3])))
+                .map(specie -> new RelSpecies(specie[0], specie[1], specie[2], toInteger(specie[3]), specie[4]))
                 .collect(Collectors.toSet());
 
         // return specieList.stream().collect(Collectors.toList());
@@ -209,28 +209,27 @@ public class ProteinGroupEntry implements ProteinView {
     private List<RelSpecies> sortByModelOrganism(Set<RelSpecies> species) {
         Map<Integer, RelSpecies> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
-        AtomicInteger customKey = new AtomicInteger(6);
+        AtomicInteger customKey = new AtomicInteger(7);
         LinkedList<RelSpecies> sortedSpecies = new LinkedList<>();
 
-        species.stream().forEach((name) -> {
-            sortSpecies(name, priorityMapper, customKey, key);
-        });
+        species.stream()
+                .forEach(specie -> sortSpecies(specie, priorityMapper, customKey, key));
 
-        priorityMapper.entrySet().stream().forEach(map -> {
-            sortedSpecies.add(map.getValue());
-        });
+        priorityMapper.entrySet().stream()
+                .forEachOrdered(map -> sortedSpecies.add(map.getValue()));
+
         return sortedSpecies
                 .stream()
                 .distinct()
-                .limit(100)
+                //.limit(100)
                 .sorted(Comparator.comparing(RelSpecies::getExpEvidenceCode)
                         .reversed())
                 //.sorted(Comparator.comparingInt(code -> code.getExpEvidenceCode()))
                 //.sorted(Comparator.comparing(evidence -> evidence.getExpEvidenceCode()))
                 .collect(Collectors.toList());
     }
-
-    private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+    
+        private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
 
         if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
 
@@ -238,9 +237,18 @@ public class ProteinGroupEntry implements ProteinView {
         } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
 
             priorityMapper.put(2, specie);
-        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
-            priorityMapper.put(3, specie);
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getCommonName())) {
 
+            priorityMapper.put(3, specie);
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
+
+            priorityMapper.put(4, specie);
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getCommonName())) {
+            priorityMapper.put(5, specie);
+
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.ECOLI.getCommonName())) {
+
+            priorityMapper.put(6, specie);
         } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
             priorityMapper.put(customKey.getAndIncrement(), specie);
 
@@ -249,4 +257,50 @@ public class ProteinGroupEntry implements ProteinView {
         }
     }
 
+//    private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+//
+//        if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.HUMAN.getTaxId())) {
+//
+//            priorityMapper.put(1, specie);
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.MOUSE.getTaxId())) {
+//
+//            priorityMapper.put(2, specie);
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getTaxId())) {
+//
+//            priorityMapper.put(3, specie);
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getTaxId())) {
+//
+//            priorityMapper.put(4, specie);
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getTaxId())) {
+//            priorityMapper.put(5, specie);
+//
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.ECOLI.getTaxId())) {
+//
+//            priorityMapper.put(6, specie);
+//        } else if (specie.getTaxId().equalsIgnoreCase(ModelOrganisms.RAT.getTaxId())) {
+//            priorityMapper.put(customKey.getAndIncrement(), specie);
+//
+//        } else {
+//            priorityMapper.put(key.getAndIncrement(), specie);
+//        }
+//    }
+
+//    private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+//
+//        if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
+//
+//            priorityMapper.put(1, specie);
+//        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
+//
+//            priorityMapper.put(2, specie);
+//        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
+//            priorityMapper.put(3, specie);
+//
+//        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
+//            priorityMapper.put(customKey.getAndIncrement(), specie);
+//
+//        } else {
+//            priorityMapper.put(key.getAndIncrement(), specie);
+//        }
+//    }
 }

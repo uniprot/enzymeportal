@@ -16,12 +16,14 @@ public class RelSpecies  {
     private String commonName;
     private String scientificName;
     private BigInteger expEvidenceCode;
+    private String taxId;
 
-    public RelSpecies(String accession, String commonName, String scientificName, BigInteger expEvidenceCode) {
+    public RelSpecies(String accession, String commonName, String scientificName, BigInteger expEvidenceCode, String taxId) {
         this.accession = accession;
         this.commonName = commonName;
         this.scientificName = scientificName;
         this.expEvidenceCode = expEvidenceCode;
+        this.taxId = taxId;
     }
 
     public String getAccession() {

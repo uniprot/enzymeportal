@@ -127,20 +127,20 @@ public class EntryTest {
     /**
      * Test of getSpecies method, of class Entry.
      */
-    @Test
-    public void testGetSpecies() {
-        List<String> expResult = new ArrayList<>();
-
-        expResult.add("Human");
-        expResult.add("Mouse");
-        expResult.add("Fruit fly");
-        expResult.add("Rat");
-        expResult.add("Arabidopsis thaliana");
-        expResult.add("Bovine");
-
-        List<String> result = instance.getSpecies();
-        assertEquals(expResult, result);
-
-    }
+//    @Test
+//    public void testGetSpecies() {
+//        List<String> expResult = new ArrayList<>();
+//
+//        expResult.add("Human");
+//        expResult.add("Mouse");
+//        expResult.add("Fruit fly");
+//        expResult.add("Rat");
+//        expResult.add("Arabidopsis thaliana");
+//        expResult.add("Bovine");
+//
+//        List<String> result = instance.getSpecies();
+//        assertEquals(expResult, result);
+//
+//    }
 
 }

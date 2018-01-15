@@ -8,15 +8,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import uk.ac.ebi.ep.ebeye.model.Fields;
-import uk.ac.ebi.ep.ebeye.protein.model.ModelOrganisms;
 
 /**
  * Represents the result object from Enzyme Portal domain in EBI Search service
@@ -156,29 +152,29 @@ public class Entry extends EnzymeView {
         return fields.getAltNames();
     }
 
-    @Deprecated
-    @Override
-    public List<String> getSpecies() {
-        Map<Integer, String> priorityMapper = new TreeMap<>();
-        AtomicInteger key = new AtomicInteger(50);
-        AtomicInteger customKey = new AtomicInteger(6);
-        LinkedList<String> sortedSpecies = new LinkedList<>();
-
-        List<String> species = fields.getCommonName();
-        if (species.isEmpty()) {
-            species = fields.getScientificName();
-        }
-
-        species.stream().forEach((name) -> {
-            sortSpecies(name, priorityMapper, customKey, key);
-        });
-
-        priorityMapper.entrySet().stream().forEach(map -> {
-            sortedSpecies.add(map.getValue());
-        });
-        return sortedSpecies.stream().distinct().collect(Collectors.toList());
-
-    }
+//    @Deprecated
+//    @Override
+//    public List<String> getSpecies() {
+//        Map<Integer, String> priorityMapper = new TreeMap<>();
+//        AtomicInteger key = new AtomicInteger(50);
+//        AtomicInteger customKey = new AtomicInteger(6);
+//        LinkedList<String> sortedSpecies = new LinkedList<>();
+//
+//        List<String> species = fields.getCommonName();
+//        if (species.isEmpty()) {
+//            species = fields.getScientificName();
+//        }
+//
+//        species.stream().forEach((name) -> {
+//            sortSpecies(name, priorityMapper, customKey, key);
+//        });
+//
+//        priorityMapper.entrySet().stream().forEach(map -> {
+//            sortedSpecies.add(map.getValue());
+//        });
+//        return sortedSpecies.stream().distinct().collect(Collectors.toList());
+//
+//    }
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
@@ -190,23 +186,23 @@ public class Entry extends EnzymeView {
         this.additionalProperties.put(name, value);
     }
 
-    private void sortSpecies(String specieName, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
-
-        if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
-
-            priorityMapper.put(1, specieName);
-        } else if (specieName.equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
-
-            priorityMapper.put(2, specieName);
-        } else if (specieName.equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
-            priorityMapper.put(3, specieName);
-
-        } else if (specieName.equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
-            priorityMapper.put(customKey.getAndIncrement(), specieName);
-
-        } else {
-            priorityMapper.put(key.getAndIncrement(), specieName);
-        }
-    }
+//    private void sortSpecies(String specieName, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+//
+//        if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
+//
+//            priorityMapper.put(1, specieName);
+//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
+//
+//            priorityMapper.put(2, specieName);
+//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
+//            priorityMapper.put(3, specieName);
+//
+//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
+//            priorityMapper.put(customKey.getAndIncrement(), specieName);
+//
+//        } else {
+//            priorityMapper.put(key.getAndIncrement(), specieName);
+//        }
+//    }
 
 }

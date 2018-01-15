@@ -44,7 +44,6 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     private ProteinGroupSearchResult getProteinGroupResult(String url) {
 
         logger.info("URL sent to EBI Service " + url);
-        System.out.println("URL " + url);
         ProteinGroupSearchResult results = restTemplate.getForObject(url.trim(), ProteinGroupSearchResult.class);
         return results;
     }
