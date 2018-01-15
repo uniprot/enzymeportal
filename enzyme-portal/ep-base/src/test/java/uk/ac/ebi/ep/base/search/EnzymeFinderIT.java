@@ -39,7 +39,7 @@ public class EnzymeFinderIT extends BaseTest {
     public void testFindAccessionsforSearchTerm() {
         String searchTerm = "sildenafil";
         int limit = 800;
-        int expectedResult = 3;
+        int expectedResult = 1;
 
         List<String> result = enzymeFinder.findAccessionsforSearchTerm(searchTerm, limit);
         assertNotNull(result);
