@@ -77,7 +77,7 @@ public class PDBeRestService {
 
             pdb = getPdbSearchResult(url.trim());
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.error("Error while searching with PDB ID "+pdbId +" : "+ e.getMessage(), e);
         }
 
         return pdb;
