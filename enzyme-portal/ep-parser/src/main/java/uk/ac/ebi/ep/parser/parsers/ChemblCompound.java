@@ -6,20 +6,15 @@
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
-import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
 /**
@@ -53,24 +48,34 @@ public class ChemblCompound {
 
         LOGGER.warn("finished parsing chembl target file : " + chemblTargets.size());
 
-        Stream<Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
+//        Stream<Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
+//
+//        Stream<List<Entry<String, List<String>>>> partitioned = partition(existingStream, 1024, 1);
+//        AtomicInteger count = new AtomicInteger(1);
+//        partitioned.parallel().forEach((chunk) -> {
+//
+//            chunk.stream().forEach((targets) -> {
+//
+//                String protein = targets.getKey();
+//
+//                for (String targetId : targets.getValue()) {
+//                    LOGGER.info("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : " + targetId);
+//                    chemblService.chemblSmallMolecules(targetId, protein);
+//
+//                }
+//
+//            });
+//        });
+        
 
-        Stream<List<Entry<String, List<String>>>> partitioned = partition(existingStream, 1024, 1);
-        AtomicInteger count = new AtomicInteger(1);
-        partitioned.parallel().forEach((chunk) -> {
 
-            chunk.stream().forEach((targets) -> {
+        for (Map.Entry<String, List<String>> targets : chemblTargets.entrySet()) {
+            String protein = targets.getKey();
 
-                String protein = targets.getKey();
-
-                for (String targetId : targets.getValue()) {
-                    LOGGER.info("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : " + targetId);
-                    chemblService.chemblSmallMolecules(targetId, protein);
-
-                }
-
-            });
-        });
+            targets.getValue()
+                    .stream()
+                    .forEach(targetId -> chemblService.chemblSmallMolecules(targetId, protein));
+        }
 
         //sequencial processing .....
 //        AtomicInteger count = new AtomicInteger(0);
@@ -90,7 +95,7 @@ public class ChemblCompound {
 //
 //        }
         List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
-    
+
         //load into database
         if (compounds != null) {
 
@@ -99,9 +104,8 @@ public class ChemblCompound {
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
             compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
-                 parserService.addTempCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+                parserService.addTempCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
             });
-
 
             LOGGER.warn("Finished loading temporal compound table ::::::  ");
             LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
@@ -109,22 +113,21 @@ public class ChemblCompound {
             LOGGER.warn("**********DONE*************** ");
 
             //DELETE LATER AND all system.out.println()
-            List<TempCompoundCompare> activator = new ArrayList<>();
-            List<TempCompoundCompare> inhibitor = new ArrayList<>();
-
-            compounds.stream().map((c) -> {
-                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
-                    inhibitor.add(c);
-                }
-                return c;
-            }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
-                activator.add(c);
-            });
-
-            LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-
-            System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-
+//            List<TempCompoundCompare> activator = new ArrayList<>();
+//            List<TempCompoundCompare> inhibitor = new ArrayList<>();
+//
+//            compounds.stream().map((c) -> {
+//                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
+//                    inhibitor.add(c);
+//                }
+//                return c;
+//            }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
+//                activator.add(c);
+//            });
+//
+//            LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+//
+//            System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
         }
 
     }

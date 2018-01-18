@@ -14,6 +14,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author joseph
  */
+@Deprecated
 public class ChEBIParser {
         public static void main(String... args) throws Exception {
         if (args == null || args.length == 0) {
