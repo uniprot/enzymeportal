@@ -246,6 +246,17 @@ public class XmlTransformer {
         fields.add(field);
     }
 
+    private void addEnzymeFamilyToProteinField(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!uniprotEntry.getEnzymePortalEcNumbersSet().isEmpty()) {
+
+            uniprotEntry.getEnzymePortalEcNumbersSet()
+                    .stream()
+                    .map(ec -> new Field(FieldName.ENZYME_FAMILY.getName(), ec.getFamily()))
+                    .forEach((field) -> fields.add(field));
+
+        }
+    }
+
     protected void addPathwaysXrefs(UniprotEntry uniprotEntry, Set<Ref> refs) {
 
         if (!uniprotEntry.getEnzymePortalPathwaysSet().isEmpty()) {
@@ -277,7 +288,7 @@ public class XmlTransformer {
 //        } else {
 //            String rel = (entry.getAccession() + ";" + entry.getCommonName() + ";" + entry.getScientificName() + ";" + entry.getExpEvidenceFlag() + ";" + entry.getTaxId());
 
-            //specieList = Arrays.asList(rel);
+        //specieList = Arrays.asList(rel);
         if (!specieList.isEmpty()) {
             String rs = String.join(" | ", specieList);
 
@@ -335,15 +346,11 @@ public class XmlTransformer {
 //            }).forEach((uniprotEntry) -> {
 //                addTaxonomyXrefs(uniprotEntry, refs);
 //            });
-            
-            
-            
             List<UniprotEntry> relatedProteins = entries.stream()
                     .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
                     .distinct()
                     .collect(Collectors.toList());
 
-      
             addRelatedSpeciesField(relatedProteins, fields);
             //for (UniprotEntry uniprotEntry : entries) {
             for (UniprotEntry uniprotEntry : relatedProteins) {
@@ -368,12 +375,11 @@ public class XmlTransformer {
 
                 addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
                 addEcXrefs(uniprotEntry, refs);
+                addEnzymeFamilyToProteinField(uniprotEntry, fields);
                 addPathwaysXrefs(uniprotEntry, refs);
                 addTaxonomyXrefs(uniprotEntry, refs);
             }
-            
-            
-            
+
 //            entries.stream().parallel()
 //                    .filter(acc -> primaryProtein.getAccession().equals(acc.getAccession()))
 //                    // .filter(sp->primaryProtein.getRelatedProteinsId()== sp.getRelatedProteinsId().getRelProtInternalId())
