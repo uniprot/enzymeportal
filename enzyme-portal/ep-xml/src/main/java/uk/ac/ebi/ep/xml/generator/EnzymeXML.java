@@ -101,7 +101,7 @@ public class EnzymeXML extends XmlGenerator {
                 .supplyAsync(() -> findAndProcessEnzymesByEcClass(EC_CLASS_6), getForkJoinPool());
 
         CompletableFuture<Stream<Entry>> completableFutureIntenz = CompletableFuture
-                .supplyAsync(() -> processIntenzEnzymes(enzymePortalXmlService.findNonTransferredIntenzEnzymesWithNoAcc(20)), getForkJoinPool());
+                .supplyAsync(() -> processIntenzEnzymes(enzymePortalXmlService.findNonTransferredIntenzEnzymesWithNoAcc()), getForkJoinPool());
 
 //        List<Entry> entryList = Stream.of(completableFutureClass_1, completableFutureClass_2,
 //                completableFutureClass_3, completableFutureClass_4, completableFutureClass_5,
@@ -122,6 +122,8 @@ public class EnzymeXML extends XmlGenerator {
                 .collect(Collectors.toList());
 
         int entryCount = entryList.size();
+        logger.warn("Number of entries processed : " + entryCount);
+        
         Database database = buildDatabaseInfo(entryCount);
         Entries entries = new Entries();
 
@@ -133,8 +135,8 @@ public class EnzymeXML extends XmlGenerator {
     }
 
     private Stream<Entry> findAndProcessEnzymesByEcClass(Integer ecFamily) {
-        int num = 1;
-        List<EnzymePortalEcNumbers> enzymes = enzymePortalXmlService.findEnzymesByEcClass(ecFamily, num);
+        //int num = 1;
+        List<EnzymePortalEcNumbers> enzymes = enzymePortalXmlService.findEnzymesByEcClass(ecFamily);
 
         List<EnzymePortalEcNumbers> uniqueEnzymes = enzymes.stream().distinct().collect(Collectors.toList());
 
@@ -273,25 +275,25 @@ public class EnzymeXML extends XmlGenerator {
         System.out.println("search intenz enzymes ....");
 
         List<IntenzEnzymes> intenzEnzymes
-                = enzymePortalXmlService.findNonTransferredIntenzEnzymesWithNoAcc(20);
+                = enzymePortalXmlService.findNonTransferredIntenzEnzymesWithNoAcc();
         int intenzEntryCount = intenzEnzymes.size();
 
         logger.warn("Number of INTENZ enzymes found : " + intenzEntryCount);
 
-        int num = 1;
+      //int num = 1;
 
         CompletableFuture<List<EnzymePortalEcNumbers>> future1 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_1, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_1), getForkJoinPool());
         CompletableFuture<List<EnzymePortalEcNumbers>> future2 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_2, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_2), getForkJoinPool());
         CompletableFuture<List<EnzymePortalEcNumbers>> future3 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_3, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_3), getForkJoinPool());
         CompletableFuture<List<EnzymePortalEcNumbers>> future4 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_4, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_4), getForkJoinPool());
         CompletableFuture<List<EnzymePortalEcNumbers>> future5 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_5, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_5), getForkJoinPool());
         CompletableFuture<List<EnzymePortalEcNumbers>> future6 = CompletableFuture
-                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_6, num), getForkJoinPool());
+                .supplyAsync(() -> enzymePortalXmlService.findEnzymesByEcClass(EC_CLASS_6), getForkJoinPool());
 
         List<EnzymePortalEcNumbers> enzymes = Stream.of(future1, future2, future3, future4, future5, future6)
                 //.flatMap(Collection::stream)
