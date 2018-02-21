@@ -21,6 +21,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -48,13 +50,19 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
     @NotNull
     @Column(name = "INTERNAL_ID")
     private Long internalId;
+    @Column(name = "ACC_PRESENT")
+    private Character accPresent;
+    @Size(max = 4000)
+    @Column(name = "COFACTOR")
+    private String cofactor;
     @Column(name = "TRANSFER_FLAG")
     private Character transferFlag;
-    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
     //@Fetch(FetchMode.JOIN)
     private Set<IntenzCofactors> intenzCofactorsSet;
-    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
-    //@Fetch(FetchMode.JOIN)
+    //@OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ecNumber")
+    @Fetch(FetchMode.JOIN)
     private Set<IntenzAltNames> intenzAltNamesSet;
     private static final long serialVersionUID = 1L;
     @Size(max = 15)
@@ -133,6 +141,22 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
 
     public void setIntenzAltNamesSet(Set<IntenzAltNames> intenzAltNamesSet) {
         this.intenzAltNamesSet = intenzAltNamesSet;
+    }
+
+    public Character getAccPresent() {
+        return accPresent;
+    }
+
+    public void setAccPresent(Character accPresent) {
+        this.accPresent = accPresent;
+    }
+
+    public String getCofactor() {
+        return cofactor;
+    }
+
+    public void setCofactor(String cofactor) {
+        this.cofactor = cofactor;
     }
 
 }

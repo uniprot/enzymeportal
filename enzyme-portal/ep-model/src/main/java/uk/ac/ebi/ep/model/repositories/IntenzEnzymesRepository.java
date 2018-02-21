@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.model.repositories;
 
 import java.util.List;
@@ -17,6 +16,12 @@ public interface IntenzEnzymesRepository extends JpaRepository<IntenzEnzymes, Lo
     //@Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM INTENZ_ENZYMES", nativeQuery = true)
     List<IntenzEnzymes> findIntenzEnzymes();
+
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N' AND ACC_PRESENT='N' AND ROWNUM<=:LIMIT ORDER BY EC_NUMBER", nativeQuery = true)
+    List<IntenzEnzymes> findNonTransferredEnzymesWithNoAcc(@Param("LIMIT") Integer limit);
+
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N' AND ACC_PRESENT='N' ORDER BY EC_NUMBER", nativeQuery = true)
+    List<IntenzEnzymes> findNonTransferredEnzymesWithNoAcc();
 
     @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N' ORDER BY EC_NUMBER", nativeQuery = true)
     List<IntenzEnzymes> findNonTransferredEnzymes();

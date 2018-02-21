@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.model.service;
 
-
 import com.querydsl.core.types.Predicate;
 import java.util.List;
 import java.util.stream.Stream;
@@ -8,13 +7,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.model.repositories.IntenzEnzymesRepository;
-import uk.ac.ebi.ep.model.repositories.ProteinGroupsRepository;
-import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.model.IntenzEnzymes;
 import uk.ac.ebi.ep.model.ProteinGroups;
 import uk.ac.ebi.ep.model.QUniprotEntry;
 import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalEcNumbersRepository;
+import uk.ac.ebi.ep.model.repositories.IntenzEnzymesRepository;
+import uk.ac.ebi.ep.model.repositories.ProteinGroupsRepository;
+import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 
 /**
  *
@@ -30,6 +31,9 @@ public class EnzymePortalXmlService {
 
     @Autowired
     private ProteinGroupsRepository proteinGroupsRepository;
+
+    @Autowired
+    private EnzymePortalEcNumbersRepository ecNumbersRepository;
 
     private static Predicate swissprotEnzymesByEcNumber(String ecNumber) {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
@@ -86,6 +90,12 @@ public class EnzymePortalXmlService {
 
         return uniprotEntryRepository.findEnzymesByEc(ec);
     }
+    
+        @Transactional(readOnly = true)
+    public Stream<UniprotEntry> streamEnzymesByEcNumber(String ec) {
+
+        return uniprotEntryRepository.streamEnzymesByEc(ec);
+    }
 
     @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntries() {
@@ -96,6 +106,48 @@ public class EnzymePortalXmlService {
     @Transactional(readOnly = true)
     public Long countUniprotEntries() {
         return uniprotEntryRepository.countUniprotEntries();
+    }
+
+    @Transactional(readOnly = true)
+    public Long countEnzymes() {
+
+        return ecNumbersRepository.countEnzymes();
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalEcNumbers> findEnzymes() {
+
+        return ecNumbersRepository.findEnzymePortalEcNumbers();
+    }
+    
+        @Transactional(readOnly = true)
+    public List<EnzymePortalEcNumbers> findEnzymesByEcClass(Integer ecFamily) {
+
+        return ecNumbersRepository.findEnzymesByEcClass(ecFamily);
+    }
+    
+            @Transactional(readOnly = true)
+    public List<EnzymePortalEcNumbers> findEnzymesByEcClass(Integer ecFamily,Integer limit) {
+
+        return ecNumbersRepository.findEnzymesByEcClass(ecFamily, limit);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalEcNumbers> findEnzymes(Integer limit) {
+
+        return ecNumbersRepository.findEnzymePortalEcNumbers(limit);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IntenzEnzymes> findNonTransferredIntenzEnzymesWithNoAcc(Integer limit) {
+
+        return intenzEnzymesRepository.findNonTransferredEnzymesWithNoAcc(limit);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IntenzEnzymes> findNonTransferredIntenzEnzymesWithNoAcc() {
+
+        return intenzEnzymesRepository.findNonTransferredEnzymesWithNoAcc();
     }
 
     //****** TODO ******

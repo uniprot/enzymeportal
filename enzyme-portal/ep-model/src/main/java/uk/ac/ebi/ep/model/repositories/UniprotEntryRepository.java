@@ -3,8 +3,6 @@ package uk.ac.ebi.ep.model.repositories;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
-import javax.persistence.QueryHint;
-import static org.hibernate.jpa.QueryHints.HINT_FETCH_SIZE;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -13,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -56,10 +53,14 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY WHERE ROWNUM < 100", nativeQuery = true)
     List<UniprotEntry> select100UniprotEntries();
 
-    @Transactional(readOnly = true)
+    //@Transactional(readOnly = true)
     //@Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
     @Query(value = "SELECT * FROM UNIPROT_ENTRY u, ENZYME_PORTAL_EC_NUMBERS ec WHERE u.ACCESSION = ec.UNIPROT_ACCESSION AND ec.EC_NUMBER = :EC_NUMBER", nativeQuery = true)
     List<UniprotEntry> findEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
+    
+      @Transactional
+    @Query(value = "SELECT u FROM UniprotEntry u INNER JOIN u.enzymePortalEcNumbersSet e WHERE u.accession = e.uniprotAccession AND e.ecNumber= :ecNumber")
+    Stream<UniprotEntry> streamEnzymesByEc(@Param("ecNumber") String ecNumber);
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT CATALYTIC_ACTIVITY FROM ENZYME_CATALYTIC_ACTIVITY WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
@@ -131,10 +132,10 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY ORDER BY ENTRY_TYPE ASC", nativeQuery = true)
     List<UniprotEntry> findUniprotEntriesOrderedByEntryType();
 
-    @QueryHints(value = {
-        @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
-        @QueryHint(name = HINT_FETCH_SIZE, value = "" + 900)
-    })
+//    @QueryHints(value = {
+//        @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
+//        @QueryHint(name = HINT_FETCH_SIZE, value = "" + 900)
+//    })
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ COUNT(*) FROM UNIPROT_ENTRY", nativeQuery = true)
