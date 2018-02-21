@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Entries {
 
     private List<Entry> entry;
-
+      
     @XmlElement(name = "entry")
     public List<Entry> getEntry() {
         return entry;

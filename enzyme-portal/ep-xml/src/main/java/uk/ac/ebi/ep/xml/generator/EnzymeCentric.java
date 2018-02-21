@@ -118,7 +118,8 @@ public class EnzymeCentric extends XmlGenerator {
         entry.setName(enzyme.getEnzymeName());
         entry.setDescription(enzyme.getCatalyticActivity());
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
-        addIntenzCofactorsField(enzyme, fields);
+       // addIntenzCofactorsField(enzyme, fields);
+        addCofactorsField(enzyme.getCofactor(), fields);
         addAltNamesField(enzyme, fields);
         entries.forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
@@ -155,18 +156,25 @@ public class EnzymeCentric extends XmlGenerator {
             refs.add(xref);
         }
     }
-
-    private void addIntenzCofactorsField(IntenzEnzymes enzyme, Set<Field> fields) {
-
-        if (!enzyme.getIntenzCofactorsSet().isEmpty()) {
-
-            enzyme.getIntenzCofactorsSet()
-                    .stream()
-                    .map(cofactors -> new Field(FieldName.INTENZ_COFACTORS.getName(), cofactors.getCofactor()))
-                    .forEach(field -> fields.add(field));
-
+    
+        protected void addCofactorsField(String cofactor, Set<Field> fields) {
+        if (cofactor != null) {
+            Field field = new Field(FieldName.INTENZ_COFACTORS.getName(), cofactor);
+            fields.add(field);
         }
     }
+
+//    private void addIntenzCofactorsField(IntenzEnzymes enzyme, Set<Field> fields) {
+//
+//        if (!enzyme.getIntenzCofactorsSet().isEmpty()) {
+//
+//            enzyme.getIntenzCofactorsSet()
+//                    .stream()
+//                    .map(cofactors -> new Field(FieldName.INTENZ_COFACTORS.getName(), cofactors.getCofactor()))
+//                    .forEach(field -> fields.add(field));
+//
+//        }
+//    }
 
     private void addAltNamesField(IntenzEnzymes enzyme, Set<Field> fields) {
 

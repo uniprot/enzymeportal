@@ -4,7 +4,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
-import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
+import uk.ac.ebi.ep.xml.generator.EnzymeXML;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 import uk.ac.ebi.ep.xml.util.Preconditions;
 
@@ -31,7 +31,8 @@ public class EnzymeCentricXmlGenerator {
         context.scan("uk.ac.ebi.ep.config");
         context.refresh();
 
-        XmlGenerator xmlGenerator = context.getBean(EnzymeCentric.class);
+        //XmlGenerator xmlGenerator = context.getBean(EnzymeCentric.class);
+        XmlGenerator xmlGenerator = context.getBean(EnzymeXML.class);
         xmlGenerator.generateXmL();
         xmlGenerator.validateXML();
     }

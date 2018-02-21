@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
+import uk.ac.ebi.ep.xml.generator.EnzymeXML;
 import uk.ac.ebi.ep.xml.generator.ProteinCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
@@ -25,10 +26,16 @@ public class XmlConfig {
 
     @Autowired
     private EnzymePortalXmlService enzymePortalXmlService;
-    
+
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Bean(name = "enzymeXML")
+    public XmlGenerator enzymeXML() {
+
+        return new EnzymeXML(enzymePortalXmlService, xmlConfigParams());
+    }
+    
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
         return new EnzymeCentric(enzymePortalXmlService, xmlConfigParams());
@@ -36,7 +43,7 @@ public class XmlConfig {
 
     @Bean(name = "proteinCentric")
     public XmlGenerator proteinCentric() {
-        return new ProteinCentric(enzymePortalXmlService, xmlConfigParams(),sessionFactory);
+        return new ProteinCentric(enzymePortalXmlService, xmlConfigParams(), sessionFactory);
     }
 
     @Bean
