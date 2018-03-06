@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.ac.ebi.ep</groupId>
+    <artifactId>xml-pipeline</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>xml-pipeline</name>
+    <description>XML Generator using Spring Batch</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <oracle.version>11.2.0.3</oracle.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+ 
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-core</artifactId>
+            <version>4.0.0.RELEASE</version>
+            <!--             <version>4.0.0.RELEASE</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-infrastructure</artifactId>
+
+            <version>4.0.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+            <version>5.0.4.RELEASE</version>
+            <!--             <version>4.3.10.RELEASE</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
+        <!--        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version> ${oracle.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.stax-utils</groupId>
+            <artifactId>stax-utils</artifactId>
+            <version>20070216</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>-->
+        
+        <dependency>
+            <groupId>com.bea.xml</groupId>
+            <artifactId>jsr173-ri</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--                <configuration>
+                    <profiles>
+                        <profile>uzprel</profile>
+                        <profile>prod</profile>
+                    </profiles>
+                </configuration>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <!--            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>enzyme-centric-batch</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stream-xml</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>uk.ac.ebi.ep.xml.streaming.XmlStreamingServiceMain</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
+        </plugins>
+    </build>
+    
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <!--     old repo   -->
+        <repository>
+            <releases/>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <!--            http://www.ebi.ac.uk/~maven/m2repo/uk/ac/ebi/ep/  (enzyme portal repo web view)-->
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo</url>-->
+        </repository> 
+        
+        <repository>
+            <id>maven-repo</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <!--        <repository>
+            <id>ibiblio</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+        </repository>-->
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots/>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI maven snapshots repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+            <!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo_snapshots</url>-->
+        </repository>
+        <repository>
+            <id>biobabel-repo</id>
+            <url>${biobabel.maven.repo.url}</url>
+        </repository>
+        <repository>
+            <id>oss.sonatype.org</id>
+            <name>OSS Sonatype Staging</name>
+            <url>https://oss.sonatype.org/content/groups/staging</url>
+        </repository>
+        
+        <repository>
+            <id>java.net-Public</id>
+            <name>Maven Java Net Snapshots and Releases</name>
+            <url>https://maven.java.net/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>maven-nuxeo</id>
+            <name>Maven Nuxeo Repository</name>
+            <url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        
+              
+        
+        <!--     repo ends   -->
+        
+        
+        
+        
+        
+        
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
+</project>
