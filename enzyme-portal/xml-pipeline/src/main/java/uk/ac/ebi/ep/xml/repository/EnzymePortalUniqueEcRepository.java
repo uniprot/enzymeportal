@@ -24,8 +24,11 @@ public interface EnzymePortalUniqueEcRepository extends JpaRepository<EnzymePort
 
     @Query(value = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecNumber= :ecNumber")
     Stream<EnzymePortalUniqueEc> streamEnzymesByEc(@Param("ecNumber") String ecNumber);
-    
-        @Async
+
+    @Query(value = "SELECT e FROM EnzymePortalUniqueEc e")
+    Stream<EnzymePortalUniqueEc> streamEnzymes();
+
+    @Async
     @Query(value = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecFamily = :ecFamily")
     CompletableFuture<EnzymePortalUniqueEc> findCompletableFutureEnzymesByEcClass(@Param("ecFamily") Short ecFamily);
 

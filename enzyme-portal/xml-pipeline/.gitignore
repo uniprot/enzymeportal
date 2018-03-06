@@ -24,3 +24,4 @@ nbdist/
 .nb-gradle/
 
 *.properties
+/ebi/uniprot/production/enzyme_portal/xml4ebies/march/enzyme-portal-enzymes-ebeye.xml

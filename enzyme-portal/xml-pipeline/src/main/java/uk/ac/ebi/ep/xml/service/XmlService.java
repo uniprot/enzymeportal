@@ -14,6 +14,7 @@ public interface XmlService {
     Long countEnzymes();
 
     Stream<EnzymePortalUniqueEc> streamEnzymesByEc(String ecNumber);
+     Stream<EnzymePortalUniqueEc> streamEnzymes();
 
     CompletableFuture<EnzymePortalUniqueEc> findCompletableFutureEnzymesByEcClass(Short ecFamily);
 

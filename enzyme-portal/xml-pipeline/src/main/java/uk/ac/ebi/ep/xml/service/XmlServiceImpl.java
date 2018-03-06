@@ -32,6 +32,12 @@ public class XmlServiceImpl implements XmlService {
     public Long countEnzymes() {
         return enzymePortalUniqueEcRepository.countEnzymes();
     }
+    
+        @Transactional(readOnly = true)
+    @Override
+    public Stream<EnzymePortalUniqueEc> streamEnzymes() {
+        return enzymePortalUniqueEcRepository.streamEnzymes();
+    }
 
     @Transactional(readOnly = true)
     @Override

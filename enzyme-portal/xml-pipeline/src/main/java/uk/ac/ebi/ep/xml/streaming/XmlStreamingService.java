@@ -146,8 +146,8 @@ public class XmlStreamingService extends DataTransformer {
         StaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
 
         String ec = "6.1.2.2";
-        try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymesByEc(ec)) {
-            System.out.println("STREAMING ....");
+        try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymes()) {
+           // System.out.println("STREAMING ....");
             entryStream.forEach(enzyme -> writeEntry(xmlWriter, enzyme));
 
         }
