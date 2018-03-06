@@ -38,8 +38,8 @@ public class EnzymePortalUniqueEcConfiguration {
        // private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE ROWNUM <= 2";
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
     private static final String ROOT_TAG_NAME = "database";
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS";
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1'";
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1'";
 
     protected final EntityManagerFactory entityManagerFactory;
 
