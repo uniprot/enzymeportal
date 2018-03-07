@@ -44,6 +44,13 @@ public class XmlServiceImpl implements XmlService {
     public Stream<EnzymePortalUniqueEc> streamEnzymesByEc(String ecNumber) {
         return enzymePortalUniqueEcRepository.streamEnzymesByEc(ecNumber);
     }
+    
+    
+    @Transactional(readOnly = true)
+    @Override
+    public Stream<EnzymePortalUniqueEc> streamEnzymesByFamily(Short ecFamily) {
+        return enzymePortalUniqueEcRepository.streamEnzymesByFamily(ecFamily);
+    }
 
     @Transactional(readOnly = true)
     @Override

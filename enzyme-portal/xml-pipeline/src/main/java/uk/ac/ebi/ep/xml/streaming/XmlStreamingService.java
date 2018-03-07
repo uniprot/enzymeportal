@@ -146,15 +146,55 @@ public class XmlStreamingService extends DataTransformer {
         StaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
 
         String ec = "6.1.2.2";
-        try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymes()) {
-           // System.out.println("STREAMING ....");
+        try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymesByEc(ec)) {
+            // System.out.println("STREAMING ....");
             entryStream.forEach(enzyme -> writeEntry(xmlWriter, enzyme));
 
         }
+
+//        System.out.println("submit job.....");
+//             try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymesByFamily(EC_CLASS_6)) {
+//            System.out.println("STREAMING ....CLASS ");
+//            entryStream.limit(2).forEach(enzyme -> writeEntry(xmlWriter, enzyme));
+//            //return entryStream;
+//        }
         xmlWriter.close();
     }
 
-    private void writeEntry(StaxEventItemWriter<Entry> xmlWriter, EnzymePortalUniqueEc enzyme) {
+    @Transactional(readOnly = true)
+    public void generateXmL_TODO(String xmlFileLocation) throws JAXBException {
+
+        StaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
+      // List<Short> families = Arrays.asList( EC_CLASS_2, EC_CLASS_3, EC_CLASS_4, EC_CLASS_6);
+        List<Short> families = Arrays.asList(EC_CLASS_1, EC_CLASS_2, EC_CLASS_3, EC_CLASS_4, EC_CLASS_5, EC_CLASS_6);
+
+        families.parallelStream()
+                //.stream()
+                //.parallel()
+                .forEach(family ->  streamByEnzymeFamily(xmlWriter, family));
+
+//        try {
+//            xmlWriter.write(entries);
+//        } catch (XmlMappingException | IOException ex) {
+//            logger.error(ex.getMessage(), ex);
+//        }
+    }
+
+    @Transactional(readOnly = true)
+    private void streamByEnzymeFamily(StaxEventItemWriter<Entry> xmlWriter, Short ecFamily) {
+ 
+        try (Stream<EnzymePortalUniqueEc> entryStream = xmlService.streamEnzymesByFamily(ecFamily)) {
+             System.out.println("STREAMING ....CLASS " + ecFamily);
+   
+            entryStream.limit(1).forEach(enzyme -> writeEntry(xmlWriter, enzyme));
+ 
+        }
+
+
+    }
+
+    
+        private void writeEntry(StaxEventItemWriter<Entry> xmlWriter, EnzymePortalUniqueEc enzyme) {
         final Entry entry = processEntries(enzyme);
 
         try {
