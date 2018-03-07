@@ -26,6 +26,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -54,7 +56,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "UniprotEntry.findByPdbFlag", query = "SELECT u FROM UniprotEntry u WHERE u.pdbFlag = :pdbFlag")})
 public class UniprotEntry implements Serializable {
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -95,11 +98,14 @@ public class UniprotEntry implements Serializable {
     private Character pdbFlag;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
     private Set<UniprotXref> uniprotXrefSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
     @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
     @ManyToOne
@@ -107,9 +113,11 @@ public class UniprotEntry implements Serializable {
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
     @ManyToOne
     private RelatedProteins relatedProteinsId;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
 
     public UniprotEntry() {

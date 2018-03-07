@@ -9,8 +9,8 @@ echo "[INFO] *******************************************************************
 export MAVEN_OPTS="-Xmx64g -Xss512m"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.xml.EnzymeCentricBatchJob" -Dexec.cleanupDaemonThreads=false
-#mvn exec:java@enzyme-centric-batch -Dexec.cleanupDaemonThreads=false
+#mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.xml.EnzymeCentricBatchJob" -Dexec.cleanupDaemonThreads=false
+mvn exec:java@enzyme-centric-batch -Dexec.cleanupDaemonThreads=false
 cd $WD
 echo "[INFO] Finished generating Enzyme-centric XML.  - $(date)"
 

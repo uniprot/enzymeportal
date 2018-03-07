@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -37,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalUniqueEc.findByCofactor", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.cofactor = :cofactor")})
 public class EnzymePortalUniqueEc implements Serializable {
 
-    @OneToMany(mappedBy = "ecNumber")
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<IntenzAltNames> intenzAltNamesSet;
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,7 +57,8 @@ public class EnzymePortalUniqueEc implements Serializable {
     private Character transferFlag;
     @Column(name = "COFACTOR")
     private String cofactor;
-    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
 
     public EnzymePortalUniqueEc() {

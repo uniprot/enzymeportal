@@ -141,18 +141,18 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
                 <configuration>
                     <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass>
                 </configuration>
-            </plugin>
-            <!--            <plugin>
+            </plugin>-->
+                        <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.5.0</version>
+<!--                <version>1.5.0</version>-->
                 <executions>
                     <execution>
                         <id>enzyme-centric-batch</id>
@@ -173,7 +173,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             
             
         </plugins>
