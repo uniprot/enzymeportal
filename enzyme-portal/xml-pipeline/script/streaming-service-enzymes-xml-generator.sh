@@ -1,6 +1,6 @@
 
 
-echo "[INFO] Request to start generating enzyme-centric XML - $(date)"
+echo "[INFO] Request to start generating enzyme-centric XML (Streaming) - $(date)"
 echo "[INFO] *******************************************************************"
 #fine-tune memory for this job.
 export MAVEN_OPTS="-Xmx64g -Xss512m"
