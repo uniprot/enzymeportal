@@ -38,7 +38,6 @@ public class UniqueEcProcessor extends DataTransformer implements ItemProcessor<
 
         enzyme.getEnzymePortalEcNumbersSet()
                 .stream()
-                .parallel()
                 .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
 
         addAltNamesField(enzyme, fields);

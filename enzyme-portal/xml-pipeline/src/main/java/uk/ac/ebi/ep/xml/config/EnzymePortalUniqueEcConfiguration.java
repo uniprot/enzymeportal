@@ -36,10 +36,12 @@ public class EnzymePortalUniqueEcConfiguration {
 
     //private static final String READ_QUERY = "select p from ProteinGroups p";
        // private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE ROWNUM <= 2";
+        //private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_FAMILY=6";
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
     private static final String ROOT_TAG_NAME = "database";
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS";
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1'";
+     private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_EC_NUMBERS";
+   // private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_EC_NUMBERS WHERE EC_FAMILY=6";
+    //private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='1.1.1.1'";
 
     protected final EntityManagerFactory entityManagerFactory;
 
@@ -58,7 +60,7 @@ public class EnzymePortalUniqueEcConfiguration {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(50)
+                //.pageSize(50)
                 .queryProvider(createQueryProvider())
                 .build();
 

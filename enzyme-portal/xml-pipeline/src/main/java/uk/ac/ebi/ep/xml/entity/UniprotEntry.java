@@ -16,8 +16,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -107,12 +105,12 @@ public class UniprotEntry implements Serializable {
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
-    @ManyToOne
-    private ProteinGroups proteinGroupId;
-    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-    @ManyToOne
-    private RelatedProteins relatedProteinsId;
+//    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+//    @ManyToOne
+//    private ProteinGroups proteinGroupId;
+//    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
+//    @ManyToOne
+//    private RelatedProteins relatedProteinsId;
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
@@ -312,21 +310,21 @@ public class UniprotEntry implements Serializable {
         this.enzymePortalCompoundSet = enzymePortalCompoundSet;
     }
 
-    public ProteinGroups getProteinGroupId() {
-        return proteinGroupId;
-    }
-
-    public void setProteinGroupId(ProteinGroups proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
-    }
-
-    public RelatedProteins getRelatedProteinsId() {
-        return relatedProteinsId;
-    }
-
-    public void setRelatedProteinsId(RelatedProteins relatedProteinsId) {
-        this.relatedProteinsId = relatedProteinsId;
-    }
+//    public ProteinGroups getProteinGroupId() {
+//        return proteinGroupId;
+//    }
+//
+//    public void setProteinGroupId(ProteinGroups proteinGroupId) {
+//        this.proteinGroupId = proteinGroupId;
+//    }
+//
+//    public RelatedProteins getRelatedProteinsId() {
+//        return relatedProteinsId;
+//    }
+//
+//    public void setRelatedProteinsId(RelatedProteins relatedProteinsId) {
+//        this.relatedProteinsId = relatedProteinsId;
+//    }
 
     @XmlTransient
     public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
@@ -371,8 +369,10 @@ public class UniprotEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", taxId=" + taxId + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", sequenceLength=" + sequenceLength + ", lastUpdateTimestamp=" + lastUpdateTimestamp + ", function=" + function + ", entryType=" + entryType + ", functionLength=" + functionLength + ", synonymNames=" + synonymNames + ", expEvidenceFlag=" + expEvidenceFlag + ", uncharacterized=" + uncharacterized + ", pdbFlag=" + pdbFlag + ", proteinGroupId=" + proteinGroupId + ", relatedProteinsId=" + relatedProteinsId + '}';
+        return "UniprotEntry{" + "dbentryId=" + dbentryId + ", accession=" + accession + ", name=" + name + ", taxId=" + taxId + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", sequenceLength=" + sequenceLength + ", lastUpdateTimestamp=" + lastUpdateTimestamp + ", function=" + function + ", entryType=" + entryType + ", functionLength=" + functionLength + ", synonymNames=" + synonymNames + ", expEvidenceFlag=" + expEvidenceFlag + ", uncharacterized=" + uncharacterized + ", pdbFlag=" + pdbFlag + '}';
     }
+
+
 
     @XmlTransient
     public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
