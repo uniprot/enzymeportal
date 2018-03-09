@@ -27,7 +27,7 @@ public class EnzymeCentricBatchJob {
 
         ConfigurableApplicationContext context = SpringApplication.run(EnzymeCentricBatchJob.class, args);
 
-        Job xmlJob = context.getBean("xmlJob", Job.class);
+        Job xmlJob = context.getBean("enzymeXmlJob", Job.class);
 
         JobLauncher launcher = context.getBean(JobLauncher.class);
         launcher.run(xmlJob, new JobParameters());

@@ -19,20 +19,20 @@ import uk.ac.ebi.ep.xml.schema.Entry;
  */
 @Configuration
 @EnableBatchProcessing
-public class EzymeBatchConfig {
+public class XmlBatchConfig {
 
     @Autowired
     protected EntityManagerFactory entityManagerFactory;
 
 //    @Bean(name = "xmlJob")
 //    public Job job(JobBuilderFactory jobBuilderFactory,
-//            StepBuilderFactory stepBuilderFactory, EnzymePortalUniqueEcConfiguration ecConfiguration) throws Exception {
+//            StepBuilderFactory stepBuilderFactory, EnzymeCentricConfiguration ecConfig) throws Exception {
 //
 //        Step uniqueEcStep = stepBuilderFactory.get(READ_PROCESS_WRITE_XML_STEP)
 //                .<EnzymePortalUniqueEc, Entry>chunk(CHUNK_SIZE)
-//                .reader(ecConfiguration.databaseReader())
-//                .processor(ecConfiguration.entryProcessor())
-//                .writer(ecConfiguration.xmlWriter())
+//                .reader(ecConfig.databaseReader())
+//                .processor(ecConfig.entryProcessor())
+//                .writer(ecConfig.xmlWriter())
 //                .listener(logChunkListener())
 //                .listener(stepExecutionListener())
 //                .listener(itemReadListener())
@@ -46,33 +46,33 @@ public class EzymeBatchConfig {
 //                .build();
 //
 //    }
-    @Bean(name = "xmlJob")
+    @Bean(name = "enzymeXmlJob")
     public Job job(JobBuilderFactory jobBuilderFactory,
-            StepBuilderFactory stepBuilderFactory, EnzymePortalUniqueEcConfiguration ecConfiguration) throws Exception {
+            StepBuilderFactory stepBuilderFactory, EnzymeCentricConfiguration ecConfig) throws Exception {
 
-        Step uniqueEcStep = stepBuilderFactory.get(EnzymePortalUniqueEcConfiguration.ENZYME_READ_PROCESS_WRITE_XML_STEP)
+        Step uniqueEcStep = stepBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_READ_PROCESS_WRITE_XML_STEP)
                 .<EnzymePortalUniqueEc, Entry>chunk(xmlFileProperties().getChunkSize())
-                .reader(ecConfiguration.databaseReader())
-                .processor(ecConfiguration.entryProcessor())
-                .writer(ecConfiguration.xmlWriter())
-                .listener(ecConfiguration.logChunkListener())
-                .listener(ecConfiguration.stepExecutionListener())
-                .listener(ecConfiguration.itemReadListener())
-                .listener(ecConfiguration.itemProcessListener())
-                .listener(ecConfiguration.itemWriteListener())
+                .reader(ecConfig.databaseReader())
+                .processor(ecConfig.entryProcessor())
+                .writer(ecConfig.xmlWriter())
+                .listener(ecConfig.logChunkListener())
+                .listener(ecConfig.stepExecutionListener())
+                .listener(ecConfig.itemReadListener())
+                .listener(ecConfig.itemProcessListener())
+                .listener(ecConfig.itemWriteListener())
                 .taskExecutor(new SimpleAsyncTaskExecutor())
                 .build();
 
-        return jobBuilderFactory.get(EnzymePortalUniqueEcConfiguration.ENZYME_CENTRIC_XML_JOB)
+        return jobBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_CENTRIC_XML_JOB)
                 .start(uniqueEcStep)
-                .listener(ecConfiguration.jobExecutionListener())
+                .listener(ecConfig.jobExecutionListener())
                 .build();
 
     }
 
     @Bean
-    public EnzymePortalUniqueEcConfiguration enzymePortalUniqueEcConfiguration() {
-        return new EnzymePortalUniqueEcConfiguration(entityManagerFactory, xmlFileProperties());
+    public EnzymeCentricConfiguration enzymePortalUniqueEcConfiguration() {
+        return new EnzymeCentricConfiguration(entityManagerFactory, xmlFileProperties());
     }
 
     @Bean

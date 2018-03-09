@@ -32,9 +32,9 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Configuration
-public class EnzymePortalUniqueEcConfiguration extends AbstractBatchConfig {
+public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
-    protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(EnzymePortalUniqueEcConfiguration.class);
+    protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(EnzymeCentricConfiguration.class);
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
     private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC";
@@ -58,7 +58,7 @@ public class EnzymePortalUniqueEcConfiguration extends AbstractBatchConfig {
     private final XmlFileProperties xmlFileProperties;
 
     @Autowired
-    public EnzymePortalUniqueEcConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
     }

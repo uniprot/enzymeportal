@@ -13,7 +13,7 @@ public class XmlPipelineApplication {
     public static void main(String[] args) throws Exception {
 
         ConfigurableApplicationContext context = SpringApplication.run(XmlPipelineApplication.class, args);
-        Job xmlJob = context.getBean("xmlJob", Job.class);
+        Job xmlJob = context.getBean("enzymeXmlJob", Job.class);
 
         JobLauncher launcher = context.getBean(JobLauncher.class);
         launcher.run(xmlJob, new JobParameters());
