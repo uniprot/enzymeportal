@@ -31,7 +31,7 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 @EnableBatchProcessing
 public class EzymeBatchConfig {
 
-    public static final int CHUNK_SIZE = 1;
+    public static final int CHUNK_SIZE = 100;
     private static final String pattern = "MMM_d_yyyy@hh:mma";
     private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
     public static final String XML_JOB = "XML_JOB_" + date;

@@ -147,7 +147,7 @@ public class EnzymePortalUniqueEc implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.xml.entity.EnzymePortalUniqueEc[ ecNumber=" + ecNumber + " ]";
+        return ecNumber ;
     }
 
     @XmlTransient
