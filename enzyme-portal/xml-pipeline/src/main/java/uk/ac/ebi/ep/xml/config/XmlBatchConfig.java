@@ -71,7 +71,7 @@ public class XmlBatchConfig {
     }
 
     @Bean
-    public EnzymeCentricConfiguration enzymePortalUniqueEcConfiguration() {
+    public EnzymeCentricConfiguration enzymeCentricConfiguration() {
         return new EnzymeCentricConfiguration(entityManagerFactory, xmlFileProperties());
     }
 
