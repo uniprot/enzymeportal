@@ -17,9 +17,9 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
-public class UniqueEcProcessor extends DataTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
+public class EnzymeProcessor extends DataTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
-    public UniqueEcProcessor(XmlFileProperties xmlFileProperties) {
+    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
         super(xmlFileProperties);
     }
 

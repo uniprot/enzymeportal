@@ -45,7 +45,7 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
     public void afterRead(T t) {
         String timeText = printTime(readStartTime);
 
-        logger.error("Time taken to read the entry [" + t + "]: " + timeText);
+       // logger.error("Time taken to read the entry [" + t + "]: " + timeText);
     }
 
     @Override

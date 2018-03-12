@@ -9,7 +9,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
 import uk.ac.ebi.ep.xml.listeners.JobCompletionNotificationListener;
 import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
-import uk.ac.ebi.ep.xml.transformer.UniqueEcProcessor;
+import uk.ac.ebi.ep.xml.transformer.EnzymeProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 
 /**
@@ -34,10 +33,9 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 @Configuration
 public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
-    protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(EnzymeCentricConfiguration.class);
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
-    private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC";
+   // private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC";
     private static final String ROOT_TAG_NAME = "database";
 
     //demo//// delete after use
@@ -45,13 +43,13 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     //private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_FAMILY=6"; 
     // private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_FAMILY=6";
     //private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='1.1.1.1'";
-        //private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='6.1.2.2'";
+        private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='6.1.2.2'";
     ///demo end /////
 
     private static final String pattern = "MMM_d_yyyy@hh:mma";
     private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
     public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + date;
-    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep";
+    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_"+date;
 
     protected final EntityManagerFactory entityManagerFactory;
 
@@ -70,27 +68,28 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .queryProvider(createQueryProvider())
+                .queryProvider(createQueryProvider(NATIVE_READ_QUERY,EnzymePortalUniqueEc.class))
+                 //.queryProvider(createQueryProvider())
                 .build();
 
     }
 
-    private JpaNativeQueryProvider<EnzymePortalUniqueEc> createQueryProvider() {
-        JpaNativeQueryProvider<EnzymePortalUniqueEc> queryProvider = new JpaNativeQueryProvider<>();
-        queryProvider.setSqlQuery(NATIVE_READ_QUERY);
-        queryProvider.setEntityClass(EnzymePortalUniqueEc.class);
-        try {
-            queryProvider.afterPropertiesSet();
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-        return queryProvider;
-    }
+//    private JpaNativeQueryProvider<EnzymePortalUniqueEc> createQueryProvider() {
+//        JpaNativeQueryProvider<EnzymePortalUniqueEc> queryProvider = new JpaNativeQueryProvider<>();
+//        queryProvider.setSqlQuery(NATIVE_READ_QUERY);
+//        queryProvider.setEntityClass(EnzymePortalUniqueEc.class);
+//        try {
+//            queryProvider.afterPropertiesSet();
+//        } catch (Exception ex) {
+//            logger.error(ex.getMessage(), ex);
+//        }
+//        return queryProvider;
+//    }
 
     @Override
     public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new UniqueEcProcessor(xmlFileProperties);
+        return new EnzymeProcessor(xmlFileProperties);
 
     }
 

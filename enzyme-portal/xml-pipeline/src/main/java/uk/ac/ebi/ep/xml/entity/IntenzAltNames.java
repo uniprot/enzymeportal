@@ -40,7 +40,7 @@ public class IntenzAltNames implements Serializable {
     private String altName;
     @JoinColumn(name = "EC_NUMBER", referencedColumnName = "EC_NUMBER")
     @ManyToOne
-    private IntenzEnzymes ecNumber;
+    private EnzymePortalUniqueEc ecNumber;
 
     public IntenzAltNames() {
     }
@@ -65,11 +65,11 @@ public class IntenzAltNames implements Serializable {
         this.altName = altName;
     }
 
-    public IntenzEnzymes getEcNumber() {
+    public EnzymePortalUniqueEc getEcNumber() {
         return ecNumber;
     }
 
-    public void setEcNumber(IntenzEnzymes ecNumber) {
+    public void setEcNumber(EnzymePortalUniqueEc ecNumber) {
         this.ecNumber = ecNumber;
     }
 
@@ -87,15 +87,14 @@ public class IntenzAltNames implements Serializable {
             return false;
         }
         IntenzAltNames other = (IntenzAltNames) object;
-        if ((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId))) {
-            return false;
-        }
-        return true;
+        return !((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId)));
     }
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.xmlpipeline.model.IntenzAltNames[ internalId=" + internalId + " ]";
+        return "IntenzAltNames{" + "altName=" + altName + '}';
     }
+
+
     
 }

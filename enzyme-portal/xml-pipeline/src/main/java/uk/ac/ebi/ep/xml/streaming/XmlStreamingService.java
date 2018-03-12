@@ -60,15 +60,7 @@ public class XmlStreamingService extends DataTransformer {
         this.xmlFileProperties = xmlFileProperties;
     }
     
-//    private void paging(){
-//         final PageRequest pageable = new PageRequest(0, DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "creationDate");
-//
-//         Page page = null;
-//         
-//              int current = page.getNumber() + 1;
-//        int begin = Math.max(1, current - 5);
-//        int end = Math.min(begin + 10, page.getTotalPages());
-//    }
+
 
     private List<EnzymePortalUniqueEc> findEnzymesByClass() {
 

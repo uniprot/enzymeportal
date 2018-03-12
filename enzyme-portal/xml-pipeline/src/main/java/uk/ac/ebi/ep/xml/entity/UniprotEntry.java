@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+
 /**
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
@@ -105,12 +106,6 @@ public class UniprotEntry implements Serializable {
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-//    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
-//    @ManyToOne
-//    private ProteinGroups proteinGroupId;
-//    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-//    @ManyToOne
-//    private RelatedProteins relatedProteinsId;
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
@@ -310,21 +305,7 @@ public class UniprotEntry implements Serializable {
         this.enzymePortalCompoundSet = enzymePortalCompoundSet;
     }
 
-//    public ProteinGroups getProteinGroupId() {
-//        return proteinGroupId;
-//    }
-//
-//    public void setProteinGroupId(ProteinGroups proteinGroupId) {
-//        this.proteinGroupId = proteinGroupId;
-//    }
-//
-//    public RelatedProteins getRelatedProteinsId() {
-//        return relatedProteinsId;
-//    }
-//
-//    public void setRelatedProteinsId(RelatedProteins relatedProteinsId) {
-//        this.relatedProteinsId = relatedProteinsId;
-//    }
+
 
     @XmlTransient
     public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {

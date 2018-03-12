@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.xml.repository"})
 public class DataConfig {
 
-    private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.xml.entity";
+    private static final String  PACKAGES_TO_SCAN = "uk.ac.ebi.ep.xml.entity";
 
     @Bean
     @Primary
@@ -81,7 +81,6 @@ public class DataConfig {
         AbstractJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setShowSql(jpaProperties.isShowSql());
         adapter.setDatabase(jpaProperties.getDatabase());
-        //adapter.setDatabase(Database.ORACLE);
         adapter.setDatabasePlatform(jpaProperties.getDatabasePlatform());
         adapter.setGenerateDdl(jpaProperties.isGenerateDdl());
 
