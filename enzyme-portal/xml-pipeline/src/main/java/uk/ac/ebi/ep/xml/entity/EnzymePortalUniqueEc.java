@@ -58,7 +58,7 @@ public class EnzymePortalUniqueEc implements Serializable {
     @Column(name = "COFACTOR")
     private String cofactor;
   
-    @OneToMany(mappedBy = "ecNumber")
+    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
 
