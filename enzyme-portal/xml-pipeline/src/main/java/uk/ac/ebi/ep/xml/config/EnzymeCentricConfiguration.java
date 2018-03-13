@@ -35,7 +35,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
-    private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC";
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC";
     private static final String ROOT_TAG_NAME = "database";
 
     //demo//// delete after use
@@ -68,6 +68,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
+                .pageSize(5)
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY,EnzymePortalUniqueEc.class))
                  //.queryProvider(createQueryProvider())
                 .build();

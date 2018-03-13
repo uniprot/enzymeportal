@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.xml.config.DataConfig;
 public class EnzymeCentricBatchJob {
 
     public static void main(String[] args) throws Exception {
-
+//xmllint --nocdata --format enzyme-portal-enzymes-ebeye.xml | grep -c '<entry id="2.7.1.1">'
         ConfigurableApplicationContext context = SpringApplication.run(EnzymeCentricBatchJob.class, args);
 
         Job xmlJob = context.getBean("enzymeXmlJob", Job.class);
