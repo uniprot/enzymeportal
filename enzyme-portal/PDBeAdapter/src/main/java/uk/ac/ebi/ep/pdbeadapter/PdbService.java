@@ -112,7 +112,7 @@ public class PdbService {
         pdb.setStructuralDomain(domains);
 
         //provenance
-        pdb.getProvenance().add("Data source: PDBe.");
+        pdb.getProvenance().add("PDBe");
         String info = "EMBL-EBI's Protein Data Bank in Europe (PDBe) is the European resource for the collection, "
                 + "organisation and dissemination of data on biological macromolecular structures. "
                 + "In collaboration with the other worldwide Protein Data Bank (wwPDB) partners we work to collate, "
