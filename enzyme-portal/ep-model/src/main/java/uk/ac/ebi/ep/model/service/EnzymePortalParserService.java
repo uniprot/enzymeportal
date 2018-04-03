@@ -1,11 +1,15 @@
-
 package uk.ac.ebi.ep.model.service;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.ebi.ep.model.ChebiCompound;
+import uk.ac.ebi.ep.model.TempCompoundCompare;
+import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.UniprotXref;
 import uk.ac.ebi.ep.model.repositories.ChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
@@ -13,10 +17,6 @@ import uk.ac.ebi.ep.model.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.model.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotXrefRepository;
-import uk.ac.ebi.ep.model.ChebiCompound;
-import uk.ac.ebi.ep.model.TempCompoundCompare;
-import uk.ac.ebi.ep.model.UniprotEntry;
-import uk.ac.ebi.ep.model.UniprotXref;
 
 /**
  *
@@ -72,6 +72,24 @@ public class EnzymePortalParserService {
     public List<UniprotXref> updatePDB(List<UniprotXref> pdb) {
 
         return xrefRepository.save(pdb);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void addChemblTargets(String chemblId, String componentType, String accession) {
+        compoundRepository.addChemblTargets(chemblId, componentType, accession);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void deleteNonEnzymesTargets() {
+        compoundRepository.deleteNonEnzymesTargets();
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void enableTargetContraints() {
+        compoundRepository.enableTargetContraints();
     }
 
     public void createCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {

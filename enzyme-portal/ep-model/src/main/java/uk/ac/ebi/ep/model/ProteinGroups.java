@@ -8,6 +8,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -48,8 +49,8 @@ public class ProteinGroups implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
-    @OneToMany(mappedBy = "proteinGroupId")
-     //@OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.LAZY)
+    //@OneToMany(mappedBy = "proteinGroupId")
+     @OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
     private List<UniprotEntry> uniprotEntryList;
 
