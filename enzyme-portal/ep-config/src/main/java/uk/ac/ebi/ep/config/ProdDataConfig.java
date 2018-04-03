@@ -41,8 +41,8 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         //new pool config
-//        config.setPoolName("ep-pool");
-//        config.setMaximumPoolSize(1000);
+//        config.setPoolName("ep-website-pool");
+//        config.setMaximumPoolSize(100);
 //        config.setMinimumIdle(1);
 //        config.addDataSourceProperty("useServerPrepStmts", true);
         //end new pool config
