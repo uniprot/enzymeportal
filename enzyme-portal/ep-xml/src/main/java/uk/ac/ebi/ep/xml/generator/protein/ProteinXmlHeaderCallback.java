@@ -13,7 +13,7 @@ import uk.ac.ebi.ep.xml.util.EpXmlRuntimeException;
 import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
- * Adds some meta data to the protein centric XML file: - Database name -
+ * Adds some meta data to the XML file: - Database name -
  * Database description - Generation date - Total number of entries
  *
  * It also adds an entries tag so that the XML conforms to the Ebeye search
