@@ -32,16 +32,16 @@
             <email>joseph@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
-                <role>Developer</role>
+                <role>Lead Developer</role>
             </roles>
         </developer>
            <developer>
             <id>xwatkins</id>
-            <name>Xavier Watkins</name>
-            <email>xwatkins@ebi.ac.uk</email>
+            <name>Mark Bingley</name>
+            <email>mbingley@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
-                <role>Developer</role>
+                <role>Web Developer</role>
             </roles>
         </developer>
         <developer>
@@ -445,7 +445,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <configuration>
+<!--                <configuration>
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -459,21 +459,9 @@
                                 <report>scm</report>
                             </reports>
                         </plugin>
-                        <!-- 
-                       <plugin>
-                           <groupId>org.apache.maven.plugins</groupId>
-                           <artifactId>maven-changes-plugin</artifactId>
-                           <reportSets>
-                               <reportSet>
-                                   <reports>
-                                       <report>changes-report</report>
-                                   </reports>
-                               </reportSet>
-                           </reportSets>
-                       </plugin>
-                        -->
+  
                     </reportPlugins>
-                </configuration>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
@@ -574,6 +562,7 @@
         <module>ep-config</module>
         <module>ep-model</module>
         <module>ep-xml</module>
+        <module>xml-pipeline</module>
         <module>DataAnalysis</module>      
         <module>PDBeAdapter</module>
         <module>centralService</module>
@@ -582,13 +571,13 @@
         <module>enzyme-portal-data</module>
         <!--                <module>epTools</module>-->
         <module>ebeye-rest-adapter</module>
-         <module>chembl-adapter</module>
+        <module>chembl-adapter</module>
         <module>enzymeservices</module>
         <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
         <module>ep-benchmarks</module>
-       
+        
     </modules>
     
     <profiles>
