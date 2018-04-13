@@ -19,8 +19,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
-        <gatling.version>2.1.6</gatling.version>
-        <gatling-plugin.version>2.1.6</gatling-plugin.version>
+        <gatling.version>2.2.4</gatling.version>
+        <gatling-plugin.version>2.2.4</gatling-plugin.version>
     </properties>
     
     
