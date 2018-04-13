@@ -36,7 +36,8 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            disable gatlin-->
+<!--            <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>${gatling-plugin.version}</version>
@@ -51,7 +52,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             
            
             <!--            <plugin>
