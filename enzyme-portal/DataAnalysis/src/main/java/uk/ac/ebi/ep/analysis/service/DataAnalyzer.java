@@ -24,14 +24,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.analysis.config.ServiceUrl;
 import uk.ac.ebi.ep.model.SpEnzymeEvidence;
-import static uk.ac.ebi.ep.model.batch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.model.service.AnalysisService;
 
 
@@ -52,14 +50,14 @@ public class DataAnalyzer {
 
     /**
      *
-     * @param file resource location (http://www.uniprot.org/uniprot/)
+     * @param file resource location (https://www.uniprot.org/uniprot/)
      * @return evidences
      */
     private List<String> downloadAccessionList(String file) {
 
         List<String> accessionList = new CopyOnWriteArrayList<>();
 
-        try (InputStream is = file.startsWith("http://")
+        try (InputStream is = file.startsWith("https://")
                 ? new URL(file).openStream()
                 : new FileInputStream(file)) {
 
@@ -273,17 +271,24 @@ public class DataAnalyzer {
 
     private List<SpEnzymeEvidence> splitOperation(List<String> accessions, String evidenceType, List<String> enzymes) {
         List<SpEnzymeEvidence> evidences = new CopyOnWriteArrayList<>();
-
-        Stream<String> existingStream = accessions.stream();
-        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
-
-        partitioned.parallel().forEach(chunk -> {
-
-            chunk.stream()
-                    .filter(accession -> enzymes.contains(accession))
+        
+        
+        accessions.stream()
+         .filter(accession -> enzymes.contains(accession))
                     .map(accession -> createSpEnzymeEvidence(accession, evidenceType))
                     .forEach(evidence -> evidences.add(evidence));
-        });
+        
+
+//        Stream<String> existingStream = accessions.stream();
+//        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
+//
+//        partitioned.parallel().forEach(chunk -> {
+//
+//            chunk.stream()
+//                    .filter(accession -> enzymes.contains(accession))
+//                    .map(accession -> createSpEnzymeEvidence(accession, evidenceType))
+//                    .forEach(evidence -> evidences.add(evidence));
+//        });
 
         return evidences;
     }
