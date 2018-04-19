@@ -44,6 +44,8 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     // private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_FAMILY=6";
     //private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='1.1.1.1'";
        // private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='6.1.2.2'";
+    
+    //private static final String NATIVE_READ_QUERY = "SELECT /*+ PARALLEL */ * FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='3.6.1.3'";
     ///demo end /////
 
     private static final String pattern = "MMM_d_yyyy@hh:mma";
