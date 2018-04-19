@@ -10,16 +10,15 @@ import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.config.DevDataConfig;
 import uk.ac.ebi.ep.config.ProdDataConfig;
 import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
-import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
+import uk.ac.ebi.ep.parser.parsers.RheaReactionParser;
 
 /**
  *
- * @author joseph
+ * @author Joseph
  */
-@Deprecated
-public class CofactorParser {
+public class RheaParser {
 
-    public static void main(String... args) throws Exception {
+    public static void main(String[] args) {
         if (args == null || args.length == 0) {
             System.out.println("Please provide required parameters");
             System.exit(0);
@@ -27,6 +26,7 @@ public class CofactorParser {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.getEnvironment().setActiveProfiles(args[0]);
+         //context.getEnvironment().setActiveProfiles("uzprel");
         context.register(DataConfig.class);
         context.register(ProdDataConfig.class);
         context.register(DevDataConfig.class);
@@ -34,8 +34,10 @@ public class CofactorParser {
         context.scan("uk.ac.ebi.ep.parser.config");
         context.refresh();
 
-        EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
-        compoundService.loadCofactors();
+        RheaReactionParser reactionParser = context.getBean(RheaReactionParser.class);
+       
+        reactionParser.parseAndLoadRheaReactions(null);
+      
 
     }
 }

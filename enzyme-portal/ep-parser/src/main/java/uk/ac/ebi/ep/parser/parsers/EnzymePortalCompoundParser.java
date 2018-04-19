@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
@@ -71,15 +72,6 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    //@Transactional
-    @Deprecated
-    public void loadChEBICompounds() {
-
-        //ChEBICompounds chebi = new ChEBICompounds(enzymeSummaryRepository, compoundRepository);
-        // chebi.computeAndLoadChEBICompounds();
-        throw new UnsupportedOperationException("Not supported yet... This method is muted for now. Please call loadCofactors() or loadChemblMolecules() for Chembl compounds");
-
-    }
 
     @Transactional
     public void loadCofactors() {
@@ -112,4 +104,21 @@ public class EnzymePortalCompoundParser {
         compoundParser.loadCofactors();
 
     }
+
+    @Transactional
+    @Modifying
+    public void loadChemblTargets() {
+        ChemblCompounds chemblTargets = new ChemblCompounds(chemblService, chemblXmlParser, parserService);
+        chemblTargets.loadChemblTargetsToDB();
+
+    }
+
+    @Transactional
+    @Modifying
+    public void processChemblTargetsAndUpdateDatabase() {
+        ChemblCompounds chemblTargets = new ChemblCompounds(chemblService, chemblXmlParser, parserService);
+        chemblTargets.loadChEMBL();
+
+    }
+
 }

@@ -7,16 +7,19 @@ package uk.ac.ebi.ep.parser.xmlparser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import uk.ac.ebi.ep.parser.model.Targets;
 
 /**
  *
@@ -92,5 +95,56 @@ public class ChemblXmlParser {
         }
 
         return accessionTargetMapping;
+    }
+
+    public Set<Targets> parseChemblTargets() throws FileNotFoundException {
+
+        Optional<Database> database = Optional.empty();
+        try {
+            database = Optional.ofNullable(setupParser());
+        } catch (JAXBException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+
+        Set<Targets> targets = new HashSet<>();
+        if (database.isPresent()) {
+
+            Entries entries = database.get().getEntries();
+
+            List< Entry> entry = entries.getEntry();
+
+            for (Entry e : entry) {
+
+                Targets target = new Targets();
+
+                e.getCross_references()
+                        .stream()
+                        .forEach(cr
+                                -> cr.getRef()
+                                .stream()
+                                .forEach(ref -> target.getChemblId().add(ref.getDbKey())));
+
+                for (AdditionalFields ad : e.getAdditional_fields()) {
+
+                    for (Field f : ad.getField()) {
+
+                        if ("accession".equalsIgnoreCase(f.getName())) {
+
+                            target.setAccession(f.getValue());
+                        }
+                        if ("component_type".equalsIgnoreCase(f.getName())) {
+
+                            target.setComponentType(f.getValue());
+                        }
+                    }
+
+                }
+
+                targets.add(target);
+            }
+            return targets;
+        }
+
+        return targets;
     }
 }

@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
+import uk.ac.ebi.ep.parser.parsers.RheaReactionParser;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
@@ -27,7 +28,7 @@ import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
  * @author joseph
  */
 @Configuration
-@PropertySource({"classpath:chembl.urlConfig","classpath:pdb.urlConfig","classpath:target.location"})
+@PropertySource({"classpath:chembl.urlConfig", "classpath:pdb.urlConfig", "classpath:target.location"})
 public class GlobalDataConfig {
 
     @Autowired
@@ -37,7 +38,6 @@ public class GlobalDataConfig {
 //    public DiseaseParser diseaseParser() {
 //        return new DiseaseParser();
 //    }
-
     @Bean
     public EnzymePortalCompoundParser enzymePortalCompoundParser() {
         return new EnzymePortalCompoundParser();
@@ -98,27 +98,31 @@ public class GlobalDataConfig {
         return new ChemblRestService();
     }
 
-
-       @Bean
+    @Bean
     public ChemblServiceUrl chemblServiceUrl() {
         ChemblServiceUrl serviceUrl = new ChemblServiceUrl();
-        
+
         String mechanismUrl = env.getProperty("chembl.mechanism.url");
         String moleculeUrl = env.getProperty("chembl.molecule.url");
         String assayUrl = env.getProperty("chembl.assay.url");
         String activityUrl = env.getProperty("chembl.activity.url");
-        
+
         serviceUrl.setMechanismUrl(mechanismUrl);
         serviceUrl.setMoleculeUrl(moleculeUrl);
         serviceUrl.setAssayUrl(assayUrl);
         serviceUrl.setActivityUrl(activityUrl);
-        
+
         return serviceUrl;
     }
-    
-        @Bean
+
+    @Bean
     public ChemblService chemblService() {
-        return new ChemblService(chemblRestService(),chemblServiceUrl());
+        return new ChemblService(chemblRestService(), chemblServiceUrl());
+    }
+
+    @Bean
+    public RheaReactionParser rheaReactionParser() {
+        return new RheaReactionParser();
     }
 
 }
