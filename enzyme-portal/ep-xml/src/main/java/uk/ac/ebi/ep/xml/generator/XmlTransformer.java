@@ -439,7 +439,7 @@ public class XmlTransformer {
         Character hasPdbFlag = 'Y';
 
         if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
-            String pdbId = primaryProtein.getPdbId() + "|" + primaryProtein.getPdbSpecies();
+            String pdbId = primaryProtein.getPdbId() + "|" + primaryProtein.getPdbSpecies()+ "|"+primaryProtein.getAccession();
             Field pdbfield = new Field(FieldName.PRIMARY_IMAGE.getName(), pdbId);
             fields.add(pdbfield);
         }
