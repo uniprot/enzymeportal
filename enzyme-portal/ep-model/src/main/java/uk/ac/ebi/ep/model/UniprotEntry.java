@@ -43,10 +43,14 @@ import uk.ac.ebi.ep.model.common.ModelOrganisms;
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
-    @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
-    @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
-    @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
+    @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u")
+    ,
+    @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId")
+    ,
+    @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName")
+    ,
+    @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName")
+    ,
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
 })
 
@@ -112,13 +116,13 @@ public class UniprotEntry implements Serializable {
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
     @ManyToOne
     private RelatedProteins relatedProteinsId;
-    @OneToMany(mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-     @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
@@ -133,6 +137,11 @@ public class UniprotEntry implements Serializable {
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     private static final String PDB = "PDB";
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    private Set<EnzymePortalReaction> enzymePortalReactionSet;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<ChemblTargets> chemblTargetsSet;
 
     public UniprotEntry() {
     }
@@ -258,9 +267,9 @@ public class UniprotEntry implements Serializable {
     }
 
     public BigInteger getExpEvidenceFlag() {
-       if(expEvidenceFlag == null){
-           expEvidenceFlag = new BigInteger("1");
-       }
+        if (expEvidenceFlag == null) {
+            expEvidenceFlag = new BigInteger("1");
+        }
         return expEvidenceFlag;
     }
 
@@ -489,6 +498,24 @@ public class UniprotEntry implements Serializable {
         } else {
             priorityMapper.put(key.getAndIncrement(), entry);
         }
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+        return enzymePortalReactionSet;
+    }
+
+    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+        this.enzymePortalReactionSet = enzymePortalReactionSet;
+    }
+
+    @XmlTransient
+    public Set<ChemblTargets> getChemblTargetsSet() {
+        return chemblTargetsSet;
+    }
+
+    public void setChemblTargetsSet(Set<ChemblTargets> chemblTargetsSet) {
+        this.chemblTargetsSet = chemblTargetsSet;
     }
 
 }

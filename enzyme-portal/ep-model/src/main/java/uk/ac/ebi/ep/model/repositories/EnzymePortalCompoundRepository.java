@@ -37,19 +37,6 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
     @Query(value = "SELECT * FROM ENZYME_PORTAL_COMPOUND WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<EnzymePortalCompound> findCompoundsByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
-    @Modifying(clearAutomatically = true)
-    @Transactional(readOnly = false)
-    @Query(value = "insert into CHEMBL_TARGETS VALUES (seq_chembl_targets_id.nextval,?1,?2,?3)", nativeQuery = true)
-    void addChemblTargets(String chemblId, String componentType, String accession);
 
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value = "delete from CHEMBL_TARGETS where UNIPROT_ACCESSION not in (select accession from UNIPROT_ENTRY)", nativeQuery = true)
-    void deleteNonEnzymesTargets();
-
-    @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value = "ALTER TABLE CHEMBL_TARGETS ENABLE CONSTRAINT CHEMBL_TARGETS_FK1", nativeQuery = true)
-    void enableTargetContraints();
 
 }

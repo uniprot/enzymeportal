@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,14 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,12 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalReaction.findByReactionSource", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionSource = :reactionSource"),
     @NamedQuery(name = "EnzymePortalReaction.findByRelationship", query = "SELECT e FROM EnzymePortalReaction e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalReaction.findByUrl", query = "SELECT e FROM EnzymePortalReaction e WHERE e.url = :url")})
-public class EnzymePortalReaction   implements Serializable {
+public class EnzymePortalReaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-
-        @Id
+    @Id
     @Basic(optional = false)
     @Column(name = "REACTION_INTERNAL_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REACTION_INTERNAL_ID")
@@ -55,12 +51,12 @@ public class EnzymePortalReaction   implements Serializable {
     private String relationship;
     @Column(name = "URL")
     private String url;
+    @Size(max = 20)
+    @Column(name = "KEGG_ID")
+    private String keggId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
-    
-    @ManyToMany(mappedBy = "enzymePortalReactionSet",fetch = FetchType.LAZY)
-    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
 
     public EnzymePortalReaction() {
     }
@@ -150,17 +146,12 @@ public class EnzymePortalReaction   implements Serializable {
         return reactionName;
     }
 
-    @XmlTransient
-    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
-        return enzymePortalCompoundSet;
+    public String getKeggId() {
+        return keggId;
     }
 
-    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
-        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+    public void setKeggId(String keggId) {
+        this.keggId = keggId;
     }
 
-
-
-
-    
 }

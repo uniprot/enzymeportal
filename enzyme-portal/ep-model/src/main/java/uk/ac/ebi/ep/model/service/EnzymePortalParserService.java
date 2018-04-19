@@ -7,13 +7,17 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.model.ChebiCompound;
+import uk.ac.ebi.ep.model.ChemblTargets;
+import uk.ac.ebi.ep.model.EnzymePortalReaction;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.model.UniprotXref;
 import uk.ac.ebi.ep.model.repositories.ChebiCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.ChemblTargetsRepository;
 import uk.ac.ebi.ep.model.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalPathwaysRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.model.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotXrefRepository;
@@ -46,6 +50,30 @@ public class EnzymePortalParserService {
     @Autowired
     private ChebiCompoundRepository chebiCompoundRepository;
 
+    @Autowired
+    private EnzymePortalReactionRepository enzymePortalReactionRepository;
+
+    @Autowired
+    private ChemblTargetsRepository chemblTargetsRepository;
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void addRheaReaction(String rheaId, String reactionName, String reactionSource, String relationship, String accession, String url, String keggId) {
+        enzymePortalReactionRepository.addRheaReaction(rheaId, reactionName, reactionSource, relationship, accession, url, keggId);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void addRheaReaction(EnzymePortalReaction reaction) {
+        enzymePortalReactionRepository.save(reaction);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void addRheaReaction(List<EnzymePortalReaction> reactions) {
+        enzymePortalReactionRepository.save(reactions);
+    }
+
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
 
@@ -73,23 +101,34 @@ public class EnzymePortalParserService {
 
         return xrefRepository.save(pdb);
     }
+    
+        @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void disableTargetContraints() {
+        chemblTargetsRepository.disableTargetContraints();
+    }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
     public void addChemblTargets(String chemblId, String componentType, String accession) {
-        compoundRepository.addChemblTargets(chemblId, componentType, accession);
+        chemblTargetsRepository.addChemblTargets(chemblId, componentType, accession);
     }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
     public void deleteNonEnzymesTargets() {
-        compoundRepository.deleteNonEnzymesTargets();
+        chemblTargetsRepository.deleteNonEnzymesTargets();
     }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
     public void enableTargetContraints() {
-        compoundRepository.enableTargetContraints();
+        chemblTargetsRepository.enableTargetContraints();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChemblTargets> findChemblTargets() {
+        return chemblTargetsRepository.getAllChemblTargets();
     }
 
     public void createCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
