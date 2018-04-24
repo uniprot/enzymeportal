@@ -20,6 +20,7 @@ public class XmlServiceImpl implements XmlService {
     //private final EnzymePortalEcNumbersRepository enzymePortalEcNumbersRepository;
     private final EnzymePortalUniqueEcRepository enzymePortalUniqueEcRepository;
 
+
     @Autowired
     public XmlServiceImpl(EnzymePortalUniqueEcRepository enzymePortalUniqueEcRepository) {
         this.enzymePortalUniqueEcRepository = enzymePortalUniqueEcRepository;
