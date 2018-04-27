@@ -34,7 +34,7 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
 
-    private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC";
+    private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N'";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N'";
     private static final String ROOT_TAG_NAME = "database";
 
