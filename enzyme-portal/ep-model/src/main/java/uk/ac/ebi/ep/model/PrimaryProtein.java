@@ -38,9 +38,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PrimaryProtein.findByProteinGroupId", query = "SELECT p FROM PrimaryProtein p WHERE p.proteinGroupId = :proteinGroupId"),
     @NamedQuery(name = "PrimaryProtein.findByEntryType", query = "SELECT p FROM PrimaryProtein p WHERE p.entryType = :entryType")})
 public class PrimaryProtein implements Serializable {
-    private static final long serialVersionUID = 1L;
+
     @Column(name = "RELATED_PROTEINS_ID")
-    private long relatedProteinsId;
+    private Long relatedProteinsId;
+    @Size(max = 15)
+    @Column(name = "PDB_LINKED_ACC")
+    private String pdbLinkedAcc;
+    private static final long serialVersionUID = 1L;
     @Size(max = 15)
     @Column(name = "ACCESSION")
     private String accession;
@@ -85,11 +89,11 @@ public class PrimaryProtein implements Serializable {
         this.proteinGroupId = proteinGroupId;
     }
 
-    public long getRelatedProteinsId() {
+    public Long getRelatedProteinsId() {
         return relatedProteinsId;
     }
 
-    public void setRelatedProteinsId(long relatedProteinsId) {
+    public void setRelatedProteinsId(Long relatedProteinsId) {
         this.relatedProteinsId = relatedProteinsId;
     }
 
@@ -212,6 +216,14 @@ public class PrimaryProtein implements Serializable {
     @Override
     public String toString() {
         return "uk.ac.ebi.ep.model.PrimaryProtein[ proteinGroupId=" + proteinGroupId + " ]";
+    }
+
+    public String getPdbLinkedAcc() {
+        return pdbLinkedAcc;
+    }
+
+    public void setPdbLinkedAcc(String pdbLinkedAcc) {
+        this.pdbLinkedAcc = pdbLinkedAcc;
     }
     
 }
