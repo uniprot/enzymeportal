@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.base.search;
 
 import java.util.List;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
@@ -27,7 +26,7 @@ public interface EnzymeFinderService {
 
     SearchResults getEnzymesByCompound(SearchParams searchParams) throws EnzymeFinderException;
 
-    List<EnzymePortalDisease> findDiseases();
+   // List<EnzymePortalDisease> findDiseases();
 
     void setSearchParams(SearchParams searchParams); //todo
 

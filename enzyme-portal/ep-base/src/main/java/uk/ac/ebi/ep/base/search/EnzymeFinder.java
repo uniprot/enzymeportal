@@ -22,10 +22,8 @@ import org.springframework.util.StringUtils;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.entry.EnzymePortal;
 import uk.ac.ebi.ep.data.entry.Family;
@@ -46,6 +44,7 @@ import uk.ac.ebi.ep.ebeye.ProteinGroupService;
  *
  * @author joseph
  */
+@Deprecated
 public class EnzymeFinder extends EnzymeBase implements EnzymeFinderService {
 
     private final Logger logger = Logger.getLogger(EnzymeFinder.class);
@@ -520,7 +519,7 @@ public class EnzymeFinder extends EnzymeBase implements EnzymeFinderService {
         return getSearchResults(accessions);
     }
 
-    private static final Comparator<UniprotEntry> SORT_BY_IDENTITY_REVERSE_ORDER = (UniprotEntry key1, UniprotEntry key2) -> -(key1.getRelatedspecies().stream().findFirst().get().getIdentity().compareTo(key2.getRelatedspecies().stream().findFirst().get().getIdentity()));
+    private static final Comparator<UniprotEntry> SORT_BY_IDENTITY_REVERSE_ORDER = null;// (UniprotEntry key1, UniprotEntry key2) -> -(key1.getRelatedspecies().stream().findFirst().get().getIdentity().compareTo(key2.getRelatedspecies().stream().findFirst().get().getIdentity()));
 
     private static final Comparator<UniprotEntry> SORT_BY_IDENTITY = (UniprotEntry o1, UniprotEntry o2) -> {
         if (o1.getIdentity() == null && o2.getIdentity() == null) {
@@ -551,13 +550,13 @@ public class EnzymeFinder extends EnzymeBase implements EnzymeFinderService {
      *
      * @return all diseases
      */
-    @Override
-    public List<EnzymePortalDisease> findDiseases() {
-
-        List<EnzymePortalDisease> diseases = enzymePortalService.findAllDiseases().stream().distinct().collect(Collectors.toList());
-
-        return diseases;
-    }
+//    @Override
+//    public List<EnzymePortalDisease> findDiseases() {
+//
+//        List<EnzymePortalDisease> diseases = enzymePortalService.findAllDiseases().stream().distinct().collect(Collectors.toList());
+//
+//        return diseases;
+//    }
 
     @Override
     public SearchResults computeEnzymeSummariesByOmimNumber(String omimNumber) {
@@ -630,10 +629,10 @@ public class EnzymeFinder extends EnzymeBase implements EnzymeFinderService {
      *
      * @return all reactions
      */
-    public List<EnzymePortalReaction> findAllReactions() {
-
-        return enzymePortalService.findReactions().stream().distinct().collect(Collectors.toList());
-    }
+//    public List<EnzymePortalReaction> findAllReactions() {
+//
+//        return enzymePortalService.findReactions().stream().distinct().collect(Collectors.toList());
+//    }
 
     /**
      *
@@ -642,7 +641,8 @@ public class EnzymeFinder extends EnzymeBase implements EnzymeFinderService {
     @Override
     public List<EnzymePortalPathways> findAllPathways() {
 
-        return enzymePortalService.findPathways().stream().distinct().collect(Collectors.toList());
+       // return enzymePortalService.findPathways().stream().distinct().collect(Collectors.toList());
+        return null;
     }
 
     @Deprecated

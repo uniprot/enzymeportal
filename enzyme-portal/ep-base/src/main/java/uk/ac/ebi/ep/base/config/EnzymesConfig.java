@@ -16,6 +16,10 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
+import uk.ac.ebi.ep.enzymeservices.rhea.IRheaAdapter;
+import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 
 /**
  *
@@ -51,6 +55,30 @@ public class EnzymesConfig {
     public EnzymeFinderService enzymeFinderService() {
 
         return new EnzymeFinder(enzymePortalService, ebeyeRestService, proteinGroupService);
+    }
+    
+        @Bean
+    public IntenzConfig intenzConfig() {
+        IntenzConfig config = new IntenzConfig();
+
+        config.setTimeout(Integer.parseInt(env.getProperty("intenz.ws.timeout")));
+        config.setIntenzXmlUrl(env.getProperty("intenz.xml.url"));
+        config.setEcBaseUrl("https://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
+        return config;
+    }
+
+    @Bean
+    public IntenzAdapter intenzAdapter() {
+        IntenzAdapter intenz = new IntenzAdapter();
+        intenz.setConfig(intenzConfig());
+        return intenz;
+    }
+    
+    @Bean
+    public IRheaAdapter rheaAdapter(){
+        IRheaAdapter rheaAdapter = new RheaWsAdapter();
+        
+        return rheaAdapter;
     }
 
 }

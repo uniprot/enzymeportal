@@ -7,9 +7,6 @@ package uk.ac.ebi.ep.base.common;
 import java.util.Collection;
 import org.apache.commons.collections.Predicate;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.search.model.Compound;
-import uk.ac.ebi.ep.data.search.model.Disease;
-import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 
 
 
@@ -17,7 +14,7 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 /**
  *
  * @author joseph
- */
+ */@Deprecated
 public class DefaultPredicate implements Predicate{
     
         /**
@@ -37,28 +34,28 @@ public class DefaultPredicate implements Predicate{
 		boolean eval = false;
 		if (obj instanceof UniprotEntry){
 			UniprotEntry es = (UniprotEntry) obj;
-			for (EnzymeAccession ea : es.getRelatedspecies()){
-				String sciName = ea.getSpecies().getScientificname();
-                                
-                                if (defaultFilter.contains(sciName)){
-					eval = true;
-					break;
-				}
-                             
-                                for(Disease disease : ea.getDiseases()){
-				if (defaultFilter.contains(disease.getName() )){
-					eval = true;
-					break;
-				}
-                                }
-                                
-                                for(Compound compounds : ea.getCompounds()){
-                                    	if (defaultFilter.contains(compounds.getName())){
-						eval = true;
-						break;
-					}
-                                }
-			}
+//			for (EnzymeAccession ea : es.getRelatedspecies()){
+//				String sciName = ea.getSpecies().getScientificname();
+//                                
+//                                if (defaultFilter.contains(sciName)){
+//					eval = true;
+//					break;
+//				}
+//                             
+//                                for(Disease disease : ea.getDiseases()){
+//				if (defaultFilter.contains(disease.getName() )){
+//					eval = true;
+//					break;
+//				}
+//                                }
+//                                
+//                                for(Compound compounds : ea.getCompounds()){
+//                                    	if (defaultFilter.contains(compounds.getName())){
+//						eval = true;
+//						break;
+//					}
+//                                }
+//			}
 		}
 		return eval;
     }

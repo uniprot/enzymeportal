@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.base.common;
 import java.util.Collection;
 import org.apache.commons.collections.Predicate;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 
 /**
  * Implementation of Predicate which evaluates whether an enzyme summary
@@ -13,6 +12,7 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
  * @author rafa
  *
  */
+@Deprecated
 public class SpeciesPredicate implements Predicate {
 
     /**
@@ -41,13 +41,13 @@ public class SpeciesPredicate implements Predicate {
         boolean eval = false;
         if (obj instanceof UniprotEntry) {
             UniprotEntry es = (UniprotEntry) obj;
-            for (EnzymeAccession ea : es.getRelatedspecies()) {
-                String sciName = ea.getSpecies().getScientificname();
-                if (speciesFilter.contains(sciName)) {
-                    eval = true;
-                    break;
-                }
-            }
+//            for (EnzymeAccession ea : es.getRelatedspecies()) {
+//                String sciName = ea.getSpecies().getScientificname();
+//                if (speciesFilter.contains(sciName)) {
+//                    eval = true;
+//                    break;
+//                }
+//            }
         }
         return eval;
     }

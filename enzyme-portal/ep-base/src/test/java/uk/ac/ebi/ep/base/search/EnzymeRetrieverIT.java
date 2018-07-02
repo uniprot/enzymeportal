@@ -137,17 +137,17 @@ public class EnzymeRetrieverIT extends BaseTest {
      *
      * @throws java.lang.Exception
      */
-    @Test
-    public void testGetReactionsPathways() throws Exception {
-        int expectedNumReactions = 2;
-        int expectedNumPathways = 6;
-        String accession = "O75881";
-        EnzymeModel result = enzymeRetriever.getReactionsPathways(accession);
-        assertNotNull(result);
-        assertNotNull(result.getReactionpathway());
-
-        assertThat(result.getReactionpathway().stream().findAny().get().getReactions(), hasSize(greaterThanOrEqualTo(expectedNumReactions)));
-        assertThat(result.getPathways(), hasSize(greaterThanOrEqualTo(expectedNumPathways)));
-    }
+//    @Test
+//    public void testGetReactionsPathways() throws Exception {
+//        int expectedNumReactions = 2;
+//        int expectedNumPathways = 6;
+//        String accession = "O75881";
+//        EnzymeModel result = enzymeRetriever.getReactionsPathways(accession);
+//        assertNotNull(result);
+//        assertNotNull(result.getReactionpathway());
+//
+//        assertThat(result.getReactionpathway().stream().findAny().get().getReactions(), hasSize(greaterThanOrEqualTo(expectedNumReactions)));
+//        assertThat(result.getPathways(), hasSize(greaterThanOrEqualTo(expectedNumPathways)));
+//    }
 
 }
