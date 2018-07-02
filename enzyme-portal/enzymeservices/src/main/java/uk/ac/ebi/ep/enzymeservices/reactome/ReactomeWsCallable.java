@@ -21,7 +21,7 @@ import uk.ac.ebi.rhea.domain.Database;
 
 /**
  * Class to retrieve reactions and pathways from Reactome REST web services.
- * @author rafa
+ * @author joseph
  */
 public class ReactomeWsCallable implements Callable<Pathway> {
 
@@ -35,7 +35,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
     // Hrefs within descriptions have to be made absolute:
     private static final String AHREF_PATTERN = "<a href='/";
     private static final String AHREF_REPLACEMENT =
-    		"<a href='http://www.reactome.org/";
+    		"<a href='https://www.reactome.org/";
     
     // XPaths for the SAX parser:
     private static final String DISPLAYNAME = "//{reactomeClass}/displayName";
@@ -49,8 +49,8 @@ public class ReactomeWsCallable implements Callable<Pathway> {
         Reaction, Pathway, Summation
     }
     
-    private ReactomeConfig config;
-    private String pathwayId;
+    private final ReactomeConfig config;
+    private final String pathwayId;
 
     /**
      * Constructs a new callable.
@@ -63,6 +63,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
         this.pathwayId = pathwayId;
     }
 
+    @Override
     public Pathway call() throws Exception {
     	return getPathway(pathwayId);
     }
@@ -82,9 +83,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
 		EnzymeReaction reaction = new EnzymeReaction();
 		reaction.setId(reactionId);
 		reaction.setUrl(Database.REACTOME.getEntryUrl(reactionId));
-        StringBuilder sb = new StringBuilder(config.getWsBaseUrl())
-				.append(ReactomeClass.Reaction.name()).append('/')
-				.append(reactionId);
+        String sb = config.getWsBaseUrl() + ReactomeClass.Reaction.name() + '/' + reactionId;
         InputStream is = null;
         final String nameXpath = DISPLAYNAME.replace(
         		"{reactomeClass}", ReactomeClass.Reaction.name().toLowerCase());
@@ -95,7 +94,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
             XPathSAXHandler handler =
             		new XPathSAXHandler(nameXpath, summIdXpath);
             xr.setContentHandler(handler);    		
-            URL url = new URL(sb.toString());
+            URL url = new URL(sb);
             URLConnection urlCon = config.getUseProxy()
                     ? url.openConnection()
                     : url.openConnection(Proxy.NO_PROXY);
@@ -113,9 +112,9 @@ public class ReactomeWsCallable implements Callable<Pathway> {
 				reaction.setDescription(getDescription(summId));
             }
         } catch (MalformedURLException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (IOException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (SAXException e) {
             throw new ReactomeFetchDataException(e);
 		} finally {
@@ -220,12 +219,10 @@ public class ReactomeWsCallable implements Callable<Pathway> {
     protected String getDescription(String summaryId)
 	throws ReactomeConnectionException, ReactomeFetchDataException{
     	String desc = null;
-		StringBuilder sb = new StringBuilder(config.getWsBaseUrl())
-				.append(ReactomeClass.Summation.name()).append('/')
-				.append(summaryId);
+		String sb = config.getWsBaseUrl() + ReactomeClass.Summation.name() + '/' + summaryId;
 		InputStream is = null;
 		try {
-			URL url = new URL(sb.toString());
+			URL url = new URL(sb);
 			URLConnection urlCon = config.getUseProxy()?
 					url.openConnection():
 			        url.openConnection(Proxy.NO_PROXY);
@@ -243,9 +240,9 @@ public class ReactomeWsCallable implements Callable<Pathway> {
 						.replaceAll(AHREF_PATTERN, AHREF_REPLACEMENT);
 			}
         } catch (MalformedURLException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (IOException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (SAXException e) {
             throw new ReactomeFetchDataException(e);
 		} finally {
@@ -262,6 +259,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
 
 	/**
      * Retrieves the description for a Reactome object (reaction or pathway).
+     * @param reactomeClass
      * @param reactomeId the Reactome <b>stable</b> ID
      * @return a description for the object.
      * @throws ReactomeServiceException if there is any problem with the web
