@@ -6,119 +6,75 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.ebi.ep.data.search.model.Compound;
 
 /**
  *
- * @author joseph
+ * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Entity
-//@BatchSize(size = 20)
 @Table(name = "ENZYME_PORTAL_COMPOUND")
 @XmlRootElement
-
-@NamedEntityGraph(name = "CompoundEntityGraph", attributeNodes = {
-    @NamedAttributeNode("uniprotAccession")
-})
-
-@SqlResultSetMapping(
-        name = "compoundMapping",
-        classes = {
-            @ConstructorResult(
-                    targetClass = Compound.class,
-                    columns = {
-                        @ColumnResult(name = "COMPOUND_ID"),
-                        @ColumnResult(name = "COMPOUND_NAME"),
-                        @ColumnResult(name = "URL"),
-                        @ColumnResult(name = "COMPOUND_ROLE")
-                    }
-            )
-        }
-)
-
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundId = :compoundId"),
-    // @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
+    @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource"),
     @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
-    @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
+    @NamedQuery(name = "EnzymePortalCompound.findByUrl", query = "SELECT e FROM EnzymePortalCompound e WHERE e.url = :url"),
+    @NamedQuery(name = "EnzymePortalCompound.findByCompoundRole", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundRole = :compoundRole"),
+    @NamedQuery(name = "EnzymePortalCompound.findByNote", query = "SELECT e FROM EnzymePortalCompound e WHERE e.note = :note")})
 public class EnzymePortalCompound extends Compound implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Id
     @Basic(optional = false)
+    @NotNull
     @Column(name = "COMPOUND_INTERNAL_ID")
-    @SequenceGenerator(allocationSize = 10, name = "seqGenerator", sequenceName = "SEQ_COMPOUND_INTERNAL_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private Long compoundInternalId;
+    @Size(max = 30)
     @Column(name = "COMPOUND_ID")
     private String compoundId;
+    @Size(max = 4000)
     @Column(name = "COMPOUND_NAME")
     private String compoundName;
+    @Size(max = 30)
     @Column(name = "COMPOUND_SOURCE")
     private String compoundSource;
+    @Size(max = 30)
     @Column(name = "RELATIONSHIP")
     private String relationship;
-
-    @Column(name = "COMPOUND_ROLE")
-    private String compoundRole;
-
+    @Size(max = 255)
     @Column(name = "URL")
     private String url;
-
-    @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private UniprotEntry uniprotAccession;
-
-    @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
-        @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<EnzymePortalReaction> enzymePortalReactionSet;
-
+    @Size(max = 30)
+    @Column(name = "COMPOUND_ROLE")
+    private String compoundRole;
+    @Size(max = 4000)
     @Column(name = "NOTE")
     private String note;
+    @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
+    @ManyToOne
+    private UniprotEntry uniprotAccession;
 
     public EnzymePortalCompound() {
     }
 
     public EnzymePortalCompound(Long compoundInternalId) {
-        this.compoundInternalId = compoundInternalId;
-    }
-
-    public Long getCompoundInternalId() {
-        return compoundInternalId;
-    }
-
-    public void setCompoundInternalId(Long compoundInternalId) {
         this.compoundInternalId = compoundInternalId;
     }
 
@@ -139,6 +95,14 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.url = url;
         this.uniprotAccession = uniprotAccession;
         this.note = note;
+    }
+
+    public Long getCompoundInternalId() {
+        return compoundInternalId;
+    }
+
+    public void setCompoundInternalId(Long compoundInternalId) {
+        this.compoundInternalId = compoundInternalId;
     }
 
     public String getCompoundId() {
@@ -174,33 +138,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.compoundId);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-        return Objects.equals(this.compoundId, other.compoundId);
-    }
-
-    public UniprotEntry getUniprotAccession() {
-        return uniprotAccession;
-    }
-
-    public void setUniprotAccession(UniprotEntry uniprotAccession) {
-        this.uniprotAccession = uniprotAccession;
-    }
-
-    @Override
     public String getUrl() {
         return url;
     }
@@ -217,19 +154,47 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.compoundRole = compoundRole;
     }
 
-    @XmlTransient
-    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-        if (enzymePortalReactionSet == null) {
-            enzymePortalReactionSet = new HashSet<>();
-        }
-        return this.enzymePortalReactionSet;
+    public String getNote() {
+        return note;
     }
 
-    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
-        this.enzymePortalReactionSet = enzymePortalReactionSet;
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
     }
 
     @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (compoundInternalId != null ? compoundInternalId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EnzymePortalCompound)) {
+            return false;
+        }
+        EnzymePortalCompound other = (EnzymePortalCompound) object;
+        return !((this.compoundInternalId == null && other.compoundInternalId != null) || (this.compoundInternalId != null && !this.compoundInternalId.equals(other.compoundInternalId)));
+    }
+
+    @Override
+    public String toString() {
+        return "EnzymePortalCompound{" + "compoundName=" + compoundName + ", compoundRole=" + compoundRole + '}';
+    }
+
+
+    
+       @Override
     public String getId() {
         return compoundId;
     }
@@ -248,19 +213,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     @Override
     public boolean isSelected() {
         return selected;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    @Override
-    public String toString() {
-        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
 
 }

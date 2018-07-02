@@ -30,17 +30,17 @@ public class UniprotXrefRepositoryImplTest {
     /**
      * Test of findPDBcodesByAccession method, of class UniprotXrefRepositoryImpl.
      */
-    @Test
-    public void testFindPDBcodesByAccession() {
-        System.out.println("findPDBcodesByAccession");
-        String accession = "";
-        UniprotXrefRepositoryImpl instance = new UniprotXrefRepositoryImpl();
-        List<UniprotXref> expResult = null;
-        List<UniprotXref> result = instance.findPDBcodesByAccession(accession);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+//    @Test
+//    public void testFindPDBcodesByAccession() {
+//        System.out.println("findPDBcodesByAccession");
+//        String accession = "";
+//        UniprotXrefRepositoryImpl instance = new UniprotXrefRepositoryImpl();
+//        List<UniprotXref> expResult = null;
+//        List<UniprotXref> result = instance.findPodesByAccession(accession);
+//        assertEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
 
     /**
      * Test of findPdbCodesWithNoNames method, of class UniprotXrefRepositoryImpl.

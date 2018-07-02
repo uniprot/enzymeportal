@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.data.domain.UniprotXref;
 @NoRepositoryBean
 public interface UniprotXrefRepositoryCustom {
 
-    List<UniprotXref> findPDBcodesByAccession(String accession);
+    //List<UniprotXref> findPDBcodesByAccession(String accession);
     
     List<UniprotXref> findPDBcodes();
     List<String> findPdbCodesWithNoNames();

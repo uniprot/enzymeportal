@@ -184,10 +184,17 @@ public class Pathway
         return this;
     }
 
+//    @Override
+//    public String toString() {
+//        return pathwayName;
+//    }
+
     @Override
     public String toString() {
-        return pathwayName;
+        return "Pathway{" + "pathwayId=" + pathwayId + ", pathwayName=" + pathwayName + ", pathwayGroupId=" + pathwayGroupId + '}';
     }
+    
+    
 
     @Override
     public int hashCode() {

@@ -1,18 +1,13 @@
 package uk.ac.ebi.ep.data.domain;
 
-import com.querydsl.core.annotations.QueryEntity;
-import com.querydsl.core.annotations.QueryInit;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,8 +17,6 @@ import java.util.stream.Stream;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -33,219 +26,166 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
-import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.Species;
-import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
  *
- * @author joseph
+ * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Entity
-@QueryEntity
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 
 @NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
-    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
+    // @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
     @NamedAttributeNode("enzymePortalPathwaysSet"),
-    @NamedAttributeNode("enzymePortalReactionSet"),
-    //@NamedAttributeNode("enzymePortalSummarySet"),
+
     @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
     @NamedAttributeNode("enzymePortalDiseaseSet"),
     @NamedAttributeNode("uniprotXrefSet"),
     @NamedAttributeNode("enzymePortalEcNumbersSet"),
     @NamedAttributeNode("enzymeCatalyticActivitySet")
-},
-        subgraphs = {
-            @NamedSubgraph(
-                    name = "relatedProteinsId",
-                    attributeNodes = {
-                        @NamedAttributeNode(value = "uniprotEntrySet", subgraph = "enzymePortalCompoundSet")}
-            )
-        }
+}
 )
+
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
+    //@NamedQuery(name = "UniprotEntry.findByAccession", query = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession"),
+    @NamedQuery(name = "UniprotEntry.findByName", query = "SELECT u FROM UniprotEntry u WHERE u.name = :name"),
+    @NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
     @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
     @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
-    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
-
-})
-
-@SqlResultSetMappings({
-    @SqlResultSetMapping(
-            name = "browseTaxonomy",
-            classes = {
-                @ConstructorResult(
-                        targetClass = Taxonomy.class,
-                        columns = {
-                            @ColumnResult(name = "tax_Id", type = Long.class),
-                            @ColumnResult(name = "scientific_Name"),
-                            @ColumnResult(name = "common_Name"),
-                            @ColumnResult(name = "numEnzymes", type = Long.class)
-                        }
-                )
-            }
-    ),
-    @SqlResultSetMapping(
-            name = "associatedProteins",
-            classes = {
-                @ConstructorResult(
-                        targetClass = AssociatedProtein.class,
-                        columns = {
-                            @ColumnResult(name = "PROTEIN_NAME"),
-                            @ColumnResult(name = "ACCESSION"),
-                            @ColumnResult(name = "COMMON_NAME")
-
-                        }
-                )
-            }
-    )
-
-})
-
+    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName"),
+    @NamedQuery(name = "UniprotEntry.findBySequenceLength", query = "SELECT u FROM UniprotEntry u WHERE u.sequenceLength = :sequenceLength"),
+    @NamedQuery(name = "UniprotEntry.findByLastUpdateTimestamp", query = "SELECT u FROM UniprotEntry u WHERE u.lastUpdateTimestamp = :lastUpdateTimestamp"),
+    @NamedQuery(name = "UniprotEntry.findByFunction", query = "SELECT u FROM UniprotEntry u WHERE u.function = :function"),
+    @NamedQuery(name = "UniprotEntry.findByEntryType", query = "SELECT u FROM UniprotEntry u WHERE u.entryType = :entryType"),
+    @NamedQuery(name = "UniprotEntry.findByFunctionLength", query = "SELECT u FROM UniprotEntry u WHERE u.functionLength = :functionLength"),
+    @NamedQuery(name = "UniprotEntry.findBySynonymNames", query = "SELECT u FROM UniprotEntry u WHERE u.synonymNames = :synonymNames"),
+    @NamedQuery(name = "UniprotEntry.findByExpEvidenceFlag", query = "SELECT u FROM UniprotEntry u WHERE u.expEvidenceFlag = :expEvidenceFlag"),
+    @NamedQuery(name = "UniprotEntry.findByUncharacterized", query = "SELECT u FROM UniprotEntry u WHERE u.uncharacterized = :uncharacterized"),
+    @NamedQuery(name = "UniprotEntry.findByPdbFlag", query = "SELECT u FROM UniprotEntry u WHERE u.pdbFlag = :pdbFlag")})
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
-//    @JoinColumn(name = "PREFIX_ID", referencedColumnName = "PREFIX_ID")
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    private PrefixNames prefixId;
-//
-//    @Column(name = "UNCHARACTERIZED")
-//    private BigInteger uncharacterized;
-//    @Size(max = 15)
-//    @Column(name = "NAME_PREFIX")
-//    private String namePrefix;
-
-//    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private ProteinGroups proteinGroupId;
-    @Column(name = "PDB_FLAG")
-    private Character pdbFlag;
-
-//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-//    @Fetch(FetchMode.JOIN)
-//    private Set<EntryToGeneMapping> entryToGeneMappingSet;
-
-    @Column(name = "FUNCTION_LENGTH")
-    private BigInteger functionLength;
-    @Column(name = "EXP_EVIDENCE_FLAG")
-    private BigInteger expEvidenceFlag;
-
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
+    @OneToMany(mappedBy = "uniprotAccession")
+    private Set<EnzymePortalReaction> enzymePortalReactionSet;
 
     private static final long serialVersionUID = 1L;
-
-    @Column(name = "ENTRY_TYPE")
-    private Short entryType;
-    @Column(name = "FUNCTION")
-    private String function;
-    @Column(name = "LAST_UPDATE_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateTimestamp;
-
-    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-    //@ManyToOne(fetch = FetchType.EAGER)
-    @ManyToOne
-    //@BatchSize(size = 10)
-    //@Fetch(FetchMode.JOIN)
-    private RelatedProteins relatedProteinsId;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    //@BatchSize(size = 10)
-    @Fetch(FetchMode.JOIN)
-    @QueryInit("enzymePortalEcNumbersSet")
-    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
-    @Column(name = "SEQUENCE_LENGTH")
-    private Integer sequenceLength;
-
-    //@Lob
-    @Column(name = "SYNONYM_NAMES")
-    private String synonymNames;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
     @Id
     @Basic(optional = false)
-    @Column(name = "ACCESSION", unique = true)
+    @NotNull
+    @Size(min = 1, max = 15)
+    @Column(name = "ACCESSION")
     private String accession;
+    @Size(max = 30)
     @Column(name = "NAME")
     private String name;
     @Column(name = "TAX_ID")
     private Long taxId;
-    @Column(name = "PROTEIN_NAME", unique = true)
+    @Size(max = 4000)
+    @Column(name = "PROTEIN_NAME")
     private String proteinName;
+    @Size(max = 255)
     @Column(name = "SCIENTIFIC_NAME")
     private String scientificName;
+    @Size(max = 255)
     @Column(name = "COMMON_NAME")
     private String commonName;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
+    @Column(name = "SEQUENCE_LENGTH")
+    private Integer sequenceLength;
+    @Column(name = "LAST_UPDATE_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateTimestamp;
+    @Size(max = 4000)
+    @Column(name = "FUNCTION")
+    private String function;
+    @Column(name = "ENTRY_TYPE")
+    private Short entryType;
+    @Column(name = "FUNCTION_LENGTH")
+    private BigInteger functionLength;
+    @Size(max = 4000)
+    @Column(name = "SYNONYM_NAMES")
+    private String synonymNames;
+    @Column(name = "EXP_EVIDENCE_FLAG")
+    private BigInteger expEvidenceFlag;
+    @Column(name = "UNCHARACTERIZED")
+    private BigInteger uncharacterized;
+    @Column(name = "PDB_FLAG")
+    private Character pdbFlag;
+    @OneToMany(mappedBy = "uniprotAccession")
     @Fetch(FetchMode.JOIN)
-    private Set<UniprotXref> uniprotXrefSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    private Set<EnzymePortalReaction> enzymePortalReactionSet;
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-//    private List<EnzymePortalSummary> enzymePortalSummarySet;
-
+    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    //@BatchSize(size = 10)
-    @Fetch(FetchMode.JOIN)
-    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    //@BatchSize(size = 20)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
+    @Fetch(FetchMode.JOIN)
+    private Set<UniprotXref> uniprotXrefSet;
+    @OneToMany(mappedBy = "uniprotAccession")
+    @Fetch(FetchMode.JOIN)
+    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
+    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+    @ManyToOne
+    private ProteinGroups proteinGroupId;
+    @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
+    @ManyToOne
+    private RelatedProteins relatedProteinsId;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
+    @OneToMany(mappedBy = "uniprotAccession")
+    private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
 
+//    @Transient
+//    protected String PDB_SOURCE = "PDB";
+//    @Transient
+//    protected int PDB_CODE_LIMIT = 500;
+//    @Transient
+//    protected int SORTED_SPECIES_LIMIT = 100;
+//    @Transient
+//    private Boolean expEvidence;
+//    @Transient
+//    private Species species;
+//    @Transient
+//    protected transient List<String> pdbeaccession;
+//    @Transient
+//    protected transient List<Compound> compounds;
+//    @Transient
+//    protected transient List<Disease> diseases;
+//    @Transient
+//    protected Boolean scoring = Boolean.FALSE;
+//    @Transient
+//    protected Float identity = 0.0f;
+//    @Transient
+//    protected Integer score = 0;
     public UniprotEntry() {
     }
 
     public UniprotEntry(String accession) {
-        Assert.notNull(accession, "Accession must not be null");
         this.accession = accession;
     }
 
     public UniprotEntry(String accession, long dbentryId) {
         this.accession = accession;
         this.dbentryId = dbentryId;
-    }
-
-    public UniprotEntry(String accession, String name, String proteinName, String scientificName, String commonName) {
-
-        this.accession = accession;
-        this.name = name;
-        this.proteinName = proteinName;
-        this.scientificName = scientificName;
-        this.commonName = commonName;
-
-    }
-
-    public UniprotEntry(String accession, Set<EnzymePortalDisease> enzymePortalDiseaseSet) {
-        this.accession = accession;
-        this.enzymePortalDiseaseSet = enzymePortalDiseaseSet;
     }
 
     public long getDbentryId() {
@@ -272,7 +212,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.name = name;
     }
 
-    @Override
     public Long getTaxId() {
         return taxId;
     }
@@ -298,15 +237,92 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public String getCommonName() {
-        if (commonName == null || StringUtils.isEmpty(commonName)) {
-            commonName = scientificName;
-        }
-
         return commonName;
     }
 
     public void setCommonName(String commonName) {
         this.commonName = commonName;
+    }
+
+    public Integer getSequenceLength() {
+        return sequenceLength;
+    }
+
+    public void setSequenceLength(Integer sequenceLength) {
+        this.sequenceLength = sequenceLength;
+    }
+
+    public Date getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
+    }
+
+    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public Short getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(Short entryType) {
+        this.entryType = entryType;
+    }
+
+    public BigInteger getFunctionLength() {
+        return functionLength;
+    }
+
+    public void setFunctionLength(BigInteger functionLength) {
+        this.functionLength = functionLength;
+    }
+
+    public String getSynonymNames() {
+        return synonymNames;
+    }
+
+    public void setSynonymNames(String synonymNames) {
+        this.synonymNames = synonymNames;
+    }
+
+    public BigInteger getExpEvidenceFlag() {
+        return expEvidenceFlag;
+    }
+
+    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
+        this.expEvidenceFlag = expEvidenceFlag;
+    }
+
+    public BigInteger getUncharacterized() {
+        return uncharacterized;
+    }
+
+    public void setUncharacterized(BigInteger uncharacterized) {
+        this.uncharacterized = uncharacterized;
+    }
+
+    public Character getPdbFlag() {
+        return pdbFlag;
+    }
+
+    public void setPdbFlag(Character pdbFlag) {
+        this.pdbFlag = pdbFlag;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
+        return enzymePortalEcNumbersSet;
+    }
+
+    public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {
+        this.enzymePortalEcNumbersSet = enzymePortalEcNumbersSet;
     }
 
     @XmlTransient
@@ -319,22 +335,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     @XmlTransient
-    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-        return enzymePortalReactionSet;
+    public Set<UniprotXref> getUniprotXrefSet() {
+        return uniprotXrefSet;
     }
 
-    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
-        this.enzymePortalReactionSet = enzymePortalReactionSet;
+    public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
+        this.uniprotXrefSet = uniprotXrefSet;
     }
-
-//    @XmlTransient
-//    public List<EnzymePortalSummary> getEnzymePortalSummarySet() {
-//        return enzymePortalSummarySet;
-//    }
-//
-//    public void setEnzymePortalSummarySet(List<EnzymePortalSummary> enzymePortalSummarySet) {
-//        this.enzymePortalSummarySet = enzymePortalSummarySet;
-//    }
 
     @XmlTransient
     public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
@@ -345,13 +352,29 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.enzymePortalCompoundSet = enzymePortalCompoundSet;
     }
 
-    @XmlTransient
-    public Set<UniprotXref> getUniprotXrefSet() {
-        return uniprotXrefSet;
+    public ProteinGroups getProteinGroupId() {
+        return proteinGroupId;
     }
 
-    public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
-        this.uniprotXrefSet = uniprotXrefSet;
+    public void setProteinGroupId(ProteinGroups proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
+    }
+
+    public RelatedProteins getRelatedProteinsId() {
+        return relatedProteinsId;
+    }
+
+    public void setRelatedProteinsId(RelatedProteins relatedProteinsId) {
+        this.relatedProteinsId = relatedProteinsId;
+    }
+
+    @XmlTransient
+    public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
+        return enzymeCatalyticActivitySet;
+    }
+
+    public void setEnzymeCatalyticActivitySet(Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet) {
+        this.enzymeCatalyticActivitySet = enzymeCatalyticActivitySet;
     }
 
     @XmlTransient
@@ -363,136 +386,43 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.enzymePortalPathwaysSet = enzymePortalPathwaysSet;
     }
 
-    public String getSynonymNames() {
-        return synonymNames;
-    }
-
-    public void setSynonymNames(String synonymNames) {
-        this.synonymNames = synonymNames;
-    }
-
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 37 * hash + Objects.hashCode(this.proteinName);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final UniprotEntry other = (UniprotEntry) obj;
-//        return Objects.equals(this.proteinName, other.proteinName);
-//    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.accession);
+        int hash = 0;
+        hash += (accession != null ? accession.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UniprotEntry)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final UniprotEntry other = (UniprotEntry) obj;
-        if (!Objects.equals(this.accession, other.accession)) {
-            return false;
-        }
-        return true;
-    }
-    
-    
-
-    public String getScientificname() {
-        return getScientificName();
-    }
-
-    public String getCommonname() {
-        return getCommonName();
+        UniprotEntry other = (UniprotEntry) object;
+        return !((this.accession == null && other.accession != null) || (this.accession != null && !this.accession.equals(other.accession)));
     }
 
     @Override
-    public Species getSpecies() {
-        Species specie = new Species();
-        specie.setCommonname(this.getCommonName());
-        specie.setScientificname(this.getScientificName());
-        specie.setSelected(false);
-        specie.setTaxId(this.getTaxId());
+    public int compareTo(UniprotEntry o) {
+        return this.entryType.compareTo(o.getEntryType());
 
-        return specie;
-    }
-
-    public Integer getSequenceLength() {
-        return sequenceLength;
-    }
-
-    public void setSequenceLength(Integer sequenceLength) {
-        this.sequenceLength = sequenceLength;
-    }
-
-    @XmlTransient
-    public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
-        if (enzymePortalEcNumbersSet == null) {
-            enzymePortalEcNumbersSet = new HashSet<>();
-        }
-        return enzymePortalEcNumbersSet;
-    }
-
-    public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {
-        this.enzymePortalEcNumbersSet = enzymePortalEcNumbersSet;
-    }
-
-    public RelatedProteins getRelatedProteinsId() {
-        return relatedProteinsId;
-    }
-
-    public void setRelatedProteinsId(RelatedProteins relatedProteinsId) {
-        this.relatedProteinsId = relatedProteinsId;
     }
 
     @Override
-    public List<String> getPdbeaccession() {
-
-        return getPdbCodes(this);
-    }
-
-    private List<String> getPdbCodes(UniprotEntry e) {
-        List<String> pdbcodes = new ArrayList<>();
-//        
-//       return  e.getUniprotXrefSet()
-//                 .stream()
-//                 .filter(code -> PDB_SOURCE.equalsIgnoreCase(code.getSource()))
-//                 .map(xref->xref.getSourceId())
-//                 .limit(PDB_CODE_LIMIT)
-//                 .collect(Collectors.toList());
-
-        e.getUniprotXrefSet()
-                .stream()
-                .filter(x -> PDB_SOURCE.equalsIgnoreCase(x.getSource()))
-                .limit(PDB_CODE_LIMIT)
-                .forEach(xref -> pdbcodes.add(xref.getSourceId()));
-
-        return pdbcodes;
-
-    }
-
-    public Date getLastUpdateTimestamp() {
-        return lastUpdateTimestamp;
-    }
-
-    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
-        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("UniprotEntry{");
+        sb.append("entryType=").append(entryType);
+        sb.append(", accession=").append(accession);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", taxId='").append(taxId).append('\'');
+        sb.append(", proteinName=").append(proteinName);
+        sb.append(", scientificName=").append(scientificName);
+        sb.append(", commonName=").append(commonName);
+        sb.append(", expEvidenceFlag=").append(expEvidenceFlag);
+        // sb.append(", RelatedSpecies=").append(getRelatedspecies());
+        sb.append('}');
+        return sb.toString();
     }
 
     public List<String> getSynonym() {
@@ -504,7 +434,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         if (synonymName.isPresent()) {
 
             synonym = Stream.of(synonymName.get().split(";"))
-                    .distinct()
+                    //.distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(getProteinName().trim())))
                     .collect(Collectors.toList());
 
@@ -513,129 +443,120 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return synonym;
     }
 
-    public List<String> parseNameSynonyms(String namesColumn) {
-        List<String> nameSynonyms = new ArrayList<>();
-        if (namesColumn != null) {
-            final int sepIndex = namesColumn.indexOf(" (");
+    public List<String> getPdbeaccession() {
 
-            if (sepIndex == -1) {
-                // no synonyms, just recommended name:
+        return getPdbCodes(this);
+    }
 
-                nameSynonyms.add(namesColumn);
+    private List<String> getPdbCodes(UniprotEntry e) {
+        List<String> pdbcodes = new ArrayList<>();
+        e.getUniprotXrefSet()
+                .stream()
+                .filter(x -> PDB_SOURCE.equalsIgnoreCase(x.getSource()))
+                .limit(PDB_CODE_LIMIT)
+                .forEach(xref -> pdbcodes.add(xref.getSourceId()));
+
+        return pdbcodes;
+    }
+
+    public Boolean getExpEvidence() {
+        expEvidence = false;
+        if (expEvidenceFlag != null) {
+            if (expEvidenceFlag.equals(BigInteger.ONE)) {
+                expEvidence = Boolean.TRUE;
             } else {
-                // Recommended name:
-                nameSynonyms.add(namesColumn.substring(0, sepIndex));
-                // take out starting and ending parentheses
-                String[] synonyms = namesColumn.substring(sepIndex + 2, namesColumn.length() - 1).split("\\) \\(");
-                nameSynonyms.addAll(Arrays.asList(synonyms));
+                expEvidence = Boolean.FALSE;
             }
-            return nameSynonyms
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toList());
         }
-        return nameSynonyms;
+
+        return expEvidence;
+    }
+
+    public Species getSpecies() {
+        species = new Species();
+        species.setCommonname(this.getCommonName());
+        species.setScientificname(this.getScientificName());
+        species.setSelected(false);
+        species.setTaxId(this.getTaxId());
+
+        return species;
+    }
+
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+
+    public List<Compound> getCompounds() {
+        compounds = getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
+        return compounds;
+    }
+
+    public void setCompounds(List<Compound> compounds) {
+        this.compounds = compounds;
+    }
+
+    public List<Disease> getDiseases() {
+        diseases = getEnzymePortalDiseaseSet().stream().collect(Collectors.toList());
+        return diseases;
+    }
+
+    public void setDiseases(List<Disease> diseases) {
+        this.diseases = diseases;
+    }
+
+    public Boolean getScoring() {
+        return scoring;
+    }
+
+    public void setScoring(Boolean scoring) {
+        this.scoring = scoring;
+    }
+
+    public Float getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(Float identity) {
+        this.identity = identity;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getEnzymeFunction() {
+        return getFunction();
+    }
+
+    public String getUniprotid() {
+        return name;
+    }
+
+    public List<String> getUniprotaccessions() {
+
+        return Stream.of(getAccession()).collect(Collectors.toList());
+
     }
 
     public List<String> getEc() {
 
         List<String> ec = new ArrayList<>();
-        if (!getEnzymePortalEcNumbersSet().isEmpty()) {
+        if (getEnzymePortalEcNumbersSet() != null) {
             this.getEnzymePortalEcNumbersSet()
                     .stream()
                     .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
-//            return  this.getEnzymePortalEcNumbersSet()
-//                    .stream()
-//                    .map(e->e.getEcNumber())
-//                    .collect(Collectors.toList());
             return ec;
         }
 
         return ec;
-        //return new ArrayList<>();
-    }
-
-    public String getFunction() {
-        return function;
-    }
-
-    @Override
-    public List<Compound> getCompounds() {
-
-        if (this.getEnzymePortalCompoundSet() != null) {
-            return this.getEnzymePortalCompoundSet()
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<Disease> getDiseases() {
-        if (this.getEnzymePortalDiseaseSet() != null) {
-
-            return this.getEnzymePortalDiseaseSet()
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
-    }
-
-//    public List<RelatedSpecies> getRelatedspecie() {
-//        return prefixId.getRelatedSpeciesSet()
-//                .stream()
-//                .sorted(Comparator.comparing(RelatedSpecies::getRanking))
-//                .collect(Collectors.toList());
-//    }
-    public List<EnzymeAccession> getRelatedspeciesOLD() {
-
-//        return prefixId.getRelatedSpeciesSet()
-//                .stream()
-//                .map(sp -> buildRelatedSpecie(sp))
-//                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
-//                        .reversed())
-//                .collect(Collectors.toList());
-        return null;
 
     }
-
-//    private EnzymeAccession buildRelatedSpecie(RelatedSpecies rel) {
-//        Species sp = new Species(rel.getScientificName(), rel.getCommonName(), rel.getTaxId());
-//        sp.setSelected(false);
-//        EnzymeAccession ea = new EnzymeAccession();
-//        ea.setSpecies(sp);
-//        ea.setUniprotaccession(rel.getAccession());
-//        ea.getUniprotaccessions().add(rel.getAccession());
-//        Optional<BigInteger> evidence = Optional.ofNullable(rel.getExpEvidenceFlag());
-//
-//        if (evidence.isPresent()) {
-//            if (evidence.get().equals(BigInteger.ONE)) {
-//                ea.setExpEvidence(Boolean.TRUE);
-//            } else {
-//                ea.setExpEvidence(Boolean.FALSE);
-//            }
-//        }
-//
-//        return ea;
-//    }
 
     public List<EnzymeAccession> getRelatedspecies() {
-
-        return getRelatedProteinsId()
-                .getUniprotEntrySet()
-                .stream()
-                .distinct()
-                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
-                        .reversed())
-                .limit(SORTED_SPECIES_LIMIT)
-                .collect(Collectors.toList());
-    }
-
-    @Deprecated
-    public List<EnzymeAccession> getRelatedspeciesX() {
 
         final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
@@ -644,30 +565,29 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         LinkedHashSet<EnzymeAccession> relatedspecies = new LinkedHashSet<>();
 
         if (getRelatedProteinsId() != null) {
-
             getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
-                Species sp = buildSpeciesFromEntry(entry);
-                entry.setSpecies(sp);
-
-                Optional<BigInteger> evidence = Optional.ofNullable(entry.getExpEvidenceFlag());
-
-                if (evidence.isPresent()) {
-                    if (evidence.get().equals(BigInteger.ONE)) {
-                        entry.setExpEvidence(Boolean.TRUE);
-                    } else {
-                        entry.setExpEvidence(Boolean.FALSE);
-                    }
-                }
-
-                sortSpecies(sp, entry, priorityMapper, customKey, key);
+                sortSpecies(entry.getSpecies(), entry, priorityMapper, customKey, key);
 
                 // relatedspecies.add(entry);
             });
         }
 
         priorityMapper.entrySet().stream().forEach(map -> {
-            relatedspecies.add(map.getValue());
+            UniprotEntry protein = map.getValue();
+            EnzymeAccession ea = new EnzymeAccession();
+            ea.setSpecies(protein.getSpecies());
+            ea.setExpEvidence(protein.getExpEvidence());
+            ea.getUniprotaccessions().add(protein.getAccession());
+            ea.setAccession(protein.getAccession());
+            ea.setUniprotid(protein.getName());
+            ea.setCompounds(protein.getCompounds());
+            ea.setDiseases(protein.getDiseases());
+            ea.setEnzymeFunction(protein.getEnzymeFunction());
+            ea.setPdbeaccession(protein.getPdbeaccession());
+            
+            relatedspecies.add(ea);
+
         });
 
         List<EnzymeAccession> sortedSpecies = relatedspecies
@@ -680,22 +600,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return sortedSpecies
                 .stream()
                 //.distinct()
-                .limit(SORTED_SPECIES_LIMIT)
+                //.limit(SORTED_SPECIES_LIMIT)
                 .collect(Collectors.toList());
 
-    }
-
-    private Species buildSpeciesFromEntry(UniprotEntry entry) {
-//        Species sp = new Species(entry.getScientificName(), entry.getCommonName(), entry.getTaxId());
-//        sp.setSelected(false);
-
-        Species sp = entry.getSpecies();
-        sp.setSelected(false);
-        return sp;
-    }
-
-    public Boolean humanOnTop() {
-        return this.getTaxId().equals(ModelOrganisms.HUMAN.getTaxId());
     }
 
     private void sortSpecies(Species sp, UniprotEntry entry, Map<Integer, UniprotEntry> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
@@ -726,166 +633,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         }
     }
 
-    @Override
-    public int compareTo(UniprotEntry o) {
-        return this.entryType.compareTo(o.getEntryType());
-
-    }
-
-    @Override
-    public String getUniprotid() {
-        return name;
-    }
-
-    public void setFunction(String function) {
-        this.function = function;
-    }
-
-    public Short getEntryType() {
-        return entryType;
-    }
-
-    public void setEntryType(Short entryType) {
-        this.entryType = entryType;
-    }
-
-    @Override
-    public List<String> getUniprotaccessions() {
-        //return Collections.singletonList(getAccession());
-        return Stream.of(getAccession()).collect(Collectors.toList());
-
-    }
-
     @XmlTransient
-    public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
-        return enzymeCatalyticActivitySet;
+    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+        return enzymePortalReactionSet;
     }
 
-    public void setEnzymeCatalyticActivitySet(Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet) {
-        this.enzymeCatalyticActivitySet = enzymeCatalyticActivitySet;
+    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+        this.enzymePortalReactionSet = enzymePortalReactionSet;
     }
-
-    @Override
-    public Boolean getScoring() {
-        return scoring;
-    }
-
-    @Override
-    public void setScoring(Boolean value) {
-        this.scoring = value;
-    }
-
-    public BigInteger getFunctionLength() {
-        return functionLength;
-    }
-
-    public void setFunctionLength(BigInteger functionLength) {
-        this.functionLength = functionLength;
-    }
-
-    public BigInteger getExpEvidenceFlag() {
-        if (expEvidenceFlag != null) {
-            if (expEvidenceFlag.equals(BigInteger.ONE)) {
-                this.setExpEvidence(Boolean.TRUE);
-            } else {
-                this.setExpEvidence(Boolean.FALSE);
-            }
-        }
-
-        return expEvidenceFlag;
-    }
-
-    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
-        this.expEvidenceFlag = expEvidenceFlag;
-    }
-
-    @Override
-    public String getUniprotaccession() {
-        return this.getAccession();
-    }
-
-    @Override
-    public String getEnzymeFunction() {
-        return getFunction();
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("UniprotEntry{");
-        sb.append("entryType=").append(entryType);
-        sb.append(", accession=").append(accession);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", taxId='").append(taxId).append('\'');
-        sb.append(", proteinName=").append(proteinName);
-        sb.append(", scientificName=").append(scientificName);
-        sb.append(", commonName=").append(commonName);
-        sb.append(", expEvidenceFlag=").append(expEvidenceFlag);
-       // sb.append(", RelatedSpecies=").append(getRelatedspecies());
-        sb.append('}');
-        return sb.toString();
-    }
-
-//    @XmlTransient
-//    public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
-//        return entryToGeneMappingSet;
-//    }
-//
-//    public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
-//        this.entryToGeneMappingSet = entryToGeneMappingSet;
-//    }
-
-    @Override
-    public Boolean getExpEvidence() {
-        expEvidence = false;
-        if (expEvidenceFlag != null) {
-            if (expEvidenceFlag.equals(BigInteger.ONE)) {
-                expEvidence = Boolean.TRUE;
-            } else {
-                expEvidence = Boolean.FALSE;
-            }
-        }
-
-        return expEvidence;
-    }
-
-    public Character getPdbFlag() {
-        return pdbFlag;
-    }
-
-    public void setPdbFlag(Character pdbFlag) {
-        this.pdbFlag = pdbFlag;
-    }
-//
-//    public ProteinGroups getProteinGroupId() {
-//        return proteinGroupId;
-//    }
-//
-//    public void setProteinGroupId(ProteinGroups proteinGroupId) {
-//        this.proteinGroupId = proteinGroupId;
-//    }
-
-//    public BigInteger getUncharacterized() {
-//        return uncharacterized;
-//    }
-//
-//    public void setUncharacterized(BigInteger uncharacterized) {
-//        this.uncharacterized = uncharacterized;
-//    }
-//
-//    public String getNamePrefix() {
-//        return namePrefix;
-//    }
-//
-//    public void setNamePrefix(String namePrefix) {
-//        this.namePrefix = namePrefix;
-//    }
-//
-//    public PrefixNames getPrefixId() {
-//        return prefixId;
-//    }
-//
-//    public void setPrefixId(PrefixNames prefixId) {
-//        this.prefixId = prefixId;
-//    }
 
 }

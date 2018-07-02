@@ -28,7 +28,7 @@ public class ReactionPathway
     protected transient List<String> provenance;
 
     protected transient List<EnzymeReaction> reactions;
-
+    
 
     public List<EnzymeReaction> getReactions() {
         if (reactions == null) {

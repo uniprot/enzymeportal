@@ -15,48 +15,27 @@ import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.view.DiseaseViews;
 
 /**
  *
- * @author joseph
+ * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Entity
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
-
-@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
-    @NamedAttributeNode("uniprotAccession")
-})
-
-   @SqlResultSetMapping(
-       name="diseaseMapping",
-       classes={
-          @ConstructorResult(
-               targetClass=Disease.class,
-                 columns={
-                    @ColumnResult(name="OMIM_NUMBER"),
-                    @ColumnResult(name="DISEASE_NAME"),
-                    @ColumnResult(name="URL")
-                   
-                    }
-          )
-       }
-      )
-
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),
     @NamedQuery(name = "EnzymePortalDisease.findByDiseaseId", query = "SELECT e FROM EnzymePortalDisease e WHERE e.diseaseId = :diseaseId"),
@@ -68,34 +47,57 @@ import uk.ac.ebi.ep.data.search.model.Disease;
     @NamedQuery(name = "EnzymePortalDisease.findByDefinition", query = "SELECT e FROM EnzymePortalDisease e WHERE e.definition = :definition"),
     @NamedQuery(name = "EnzymePortalDisease.findByScore", query = "SELECT e FROM EnzymePortalDisease e WHERE e.score = :score"),
     @NamedQuery(name = "EnzymePortalDisease.findByUrl", query = "SELECT e FROM EnzymePortalDisease e WHERE e.url = :url")})
+
+@SqlResultSetMappings({
+    @SqlResultSetMapping(
+            name = "browseDiseases",
+            classes = {
+                @ConstructorResult(
+                        targetClass = DiseaseViews.class,
+                        columns = {
+                            @ColumnResult(name = "OMIM_NUMBER"),
+                            @ColumnResult(name = "DISEASE_NAME")
+
+                        }
+                )
+            }
+    )
+
+})
+
 public class EnzymePortalDisease extends Disease implements Serializable, Comparable<EnzymePortalDisease> {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-
     @Id
     @Basic(optional = false)
+    @NotNull
     @Column(name = "DISEASE_ID")
-    @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_DISEASE_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private Long diseaseId;
+    @Size(max = 30)
     @Column(name = "OMIM_NUMBER")
     private String omimNumber;
+    @Size(max = 30)
     @Column(name = "MESH_ID")
     private String meshId;
+    @Size(max = 30)
     @Column(name = "EFO_ID")
     private String efoId;
+    @Size(max = 150)
     @Column(name = "DISEASE_NAME")
     private String diseaseName;
+    @Size(max = 4000)
     @Column(name = "EVIDENCE")
     private String evidence;
+    @Size(max = 4000)
     @Column(name = "DEFINITION")
     private String definition;
+    @Size(max = 150)
     @Column(name = "SCORE")
     private String score;
+    @Size(max = 255)
     @Column(name = "URL")
     private String url;
-
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
@@ -140,7 +142,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     }
 
     public String getDiseaseName() {
-        return diseaseName.replaceAll(",", "").split("\\(")[0];
+        return diseaseName;
     }
 
     public void setDiseaseName(String diseaseName) {
@@ -180,11 +182,6 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
         this.url = url;
     }
 
-    @Override
-    public String toString() {
-        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", omimNumber=" + omimNumber + ", meshId=" + meshId + ", diseaseName=" + diseaseName + '}';
-    }
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -196,7 +193,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.diseaseName);
+        hash = 89 * hash + Objects.hashCode(this.omimNumber);
         return hash;
     }
 
@@ -209,7 +206,15 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
             return false;
         }
         final EnzymePortalDisease other = (EnzymePortalDisease) obj;
-        return Objects.equals(this.diseaseName, other.diseaseName);
+        if (!Objects.equals(this.omimNumber, other.omimNumber)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "uk.ac.ebi.ep.data.domain.EnzymePortalDisease[ diseaseId=" + diseaseId + " ]";
     }
 
     @Override
@@ -240,7 +245,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
 
     @Override
     public String getName() {
-  
+
         return diseaseName.replaceAll(",", "").split("\\(")[0];
     }
 
@@ -268,5 +273,5 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     public int getNumEnzyme() {
         return numEnzyme;
     }
-    
+
 }

@@ -56,7 +56,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
-        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+        eGraph.addAttributeNodes("enzymePortalPathwaysSet",
                 "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
                 "uniprotXrefSet", "enzymePortalEcNumbersSet");
 

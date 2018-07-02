@@ -11,7 +11,6 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,13 +101,13 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     @Override
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
-        EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
-        eGraph.addAttributeNodes("uniprotAccession");
+        //EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+       // eGraph.addAttributeNodes("uniprotAccession");
 
         // JPAQuery query = new JPAQuery(entityManager);
         JPAQuery query = new JPAQueryFactory(entityManager).query();
         //JPAQueryFactory query = new JPAQueryFactory(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
+        //query.setHint("javax.persistence.fetchgraph", eGraph);
         return query.from($).fetch();
 
     }

@@ -6,18 +6,25 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.view.PathwayView;
 
 /**
  *
  * @author joseph
  */
+@RepositoryRestResource(excerptProjection = PathwayView.class)
 public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>, QueryDslPredicateExecutor<EnzymePortalPathways>, EnzymePortalPathwaysRepositoryCustom {
 
-    @Query(value = "SELECT * FROM ENZYME_PORTAL_PATHWAYS", nativeQuery = true)
-   //@Query(value = "SELECT * FROM V_ENZYME_PORTAL_PATHWAYS", nativeQuery = true)//select from view
-    List<EnzymePortalPathways> findPathways();
+//    @Query(value = "SELECT * FROM ENZYME_PORTAL_PATHWAYS", nativeQuery = true)
+//   //@Query(value = "SELECT * FROM V_ENZYME_PORTAL_PATHWAYS", nativeQuery = true)//select from view
+//    List<EnzymePortalPathways> findAllPathways();
+      
+    
+     @Query(value = "select p.pathwayGroupId as pathwayGroupId,p.pathwayName as pathwayName from EnzymePortalPathways p group by p.pathwayGroupId, p.pathwayName")
+    List<PathwayView> findPathways();
 
     EnzymePortalPathways findByPathwayId(Long pathwayId);
 

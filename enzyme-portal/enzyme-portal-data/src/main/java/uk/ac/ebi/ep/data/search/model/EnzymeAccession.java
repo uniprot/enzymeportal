@@ -28,7 +28,7 @@ public class EnzymeAccession implements Serializable {
     protected String uniprotid;
 
     protected Boolean expEvidence;
-    protected String uniprotaccession;
+    protected String accession;
     protected String enzymeFunction;
 
     protected String PDB_SOURCE = "PDB";
@@ -337,13 +337,15 @@ public class EnzymeAccession implements Serializable {
         this.expEvidence = expEvidence;
     }
 
-    public String getUniprotaccession() {
-        return uniprotaccession;
+    public String getAccession() {
+        return accession;
     }
 
-    public void setUniprotaccession(String uniprotaccession) {
-        this.uniprotaccession = uniprotaccession;
+    public void setAccession(String accession) {
+        this.accession = accession;
     }
+
+
 
     public String getEnzymeFunction() {
         return enzymeFunction;
@@ -359,7 +361,7 @@ public class EnzymeAccession implements Serializable {
 
     @Override
     public String toString() {
-        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + ", uniprotaccession=" + uniprotaccession + '}';
+        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + ", uniprotaccession=" + accession + '}';
     }
 
     @Override

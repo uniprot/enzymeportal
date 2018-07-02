@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.StringExpression;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -49,6 +50,8 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
+import uk.ac.ebi.ep.data.view.DiseaseView;
+import uk.ac.ebi.ep.data.view.PathwayView;
 
 /**
  *
@@ -67,7 +70,7 @@ public class EnzymePortalService {
     private EnzymePortalCompoundRepository enzymePortalCompoundRepository;
 
     @Autowired
-    private EnzymePortalReactionRepository reactionRepository;
+    private EnzymePortalReactionRepository enzymePortalReactionRepository;
 
     @Autowired
     private UniprotXrefRepository xrefRepository;
@@ -112,6 +115,10 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymeByAccession(accession);
     }
 
+    public List<UniprotEntry> findUniprotEntriesByRelatedProteinId(BigDecimal relProtId) {
+        return uniprotEntryRepository.findByRelatedProteinId(relProtId);
+    }
+
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
 
@@ -125,9 +132,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findAllDiseases() {
+    public List<DiseaseView> findAllDiseases() {
 
-        return diseaseRepository.findAll();
+        return diseaseRepository.findAllDiseases();
     }
 
     //******global methods for the web apps******************
@@ -170,7 +177,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<UniprotXref> findPDBcodesByAccession(String accession) {
 
-        return xrefRepository.findPDBcodesByAccession(accession).stream().sorted().collect(Collectors.toList());
+        return xrefRepository.findPdbCodesByAccession(accession);
     }
 
     @Transactional(readOnly = true)
@@ -180,7 +187,7 @@ public class EnzymePortalService {
         if (enzymePortalPathways != null) {
             List<Pathway> pathways = new ArrayList<>();
 
-            enzymePortalPathways.stream().map(ep -> new Pathway(ep.getPathwayId(), ep.getPathwayName())).forEach(pathway -> {
+            enzymePortalPathways.stream().map(ep -> new Pathway(ep.getPathwayGroupId(), ep.getPathwayId(), ep.getPathwayName())).forEach(pathway -> {
                 pathways.add(pathway);
             });
 
@@ -240,37 +247,45 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalReaction> findReactions() {
+    public Set<EnzymePortalEcNumbers> findEcNumbersByAccession(String accession) {
 
-        return reactionRepository.findAll();
+        return ecNumbersRepository.findEcNumbersByAccession(accession);
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalPathways> findPathways() {
+    public List<PathwayView> findPathways() {
 
-        return pathwaysRepository.findPathways()
-                .stream()
-                .distinct()
-                .parallel()
-                .collect(Collectors.toList());
+        return pathwaysRepository.findPathways();
+
     }
 
-    @Transactional(readOnly = true)
-    public List<String> findAccessionsByReactionId(String reactionId) {
-
-        return reactionRepository.findAccessionsByReactionId(reactionId);
-    }
-
+//        @Transactional(readOnly = true)
+//    public List<EnzymePortalPathways> findAllPathways() {
+//        return pathwaysRepository.findAllPathways();
+//}
+//    @Transactional(readOnly = true)
+//    public List<EnzymePortalPathways> findPathways() {
+//
+//        return pathwaysRepository.findPathways()
+//                .stream()
+//                .distinct()
+//                .parallel()
+//                .collect(Collectors.toList());
+//    }
+//    @Transactional(readOnly = true)
+//    public List<String> findAccessionsByReactionId(String reactionId) {
+//
+//        return reactionRepository.findAccessionsByReactionId(reactionId);
+//    }
     @Transactional(readOnly = true)
     public List<EnzymeReaction> findReactionsByAccession(String accession) {
 
         //return reactionRepository.findReactionsByAccession(accession);
-        List<EnzymePortalReaction> enzreactions = reactionRepository.findReactionsByAccession(accession);
+        List<EnzymePortalReaction> enzreactions = enzymePortalReactionRepository.findReactionsByAccession(accession);
         List<EnzymeReaction> reactions = new ArrayList<>();
         if (enzreactions != null) {
-            enzreactions.stream().map(r -> new EnzymeReaction(r.getReactionId(), r.getReactionName())).forEach(er -> {
-                reactions.add(er);
-            });
+            enzreactions.stream().map(r -> new EnzymeReaction("RHEA:"+r.getReactionId(), r.getKeggId()))
+                    .forEach(er -> reactions.add(er));
 
             return reactions;
         }
@@ -870,20 +885,18 @@ public class EnzymePortalService {
     }
 
     //updated repository queries
-    
     //species by accession
-    
-        @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Species> findSpeciesInAccessions(List<String> accessions) {
         return uniprotEntryRepository.findSpeciesInAccessions(accessions);
     }
-    
+
     //compounds by accession
     @Transactional(readOnly = true)
     public List<Compound> findCompoundsInAccessions(List<String> accessions) {
         return enzymePortalCompoundRepository.findCompoundsInAccessions(accessions);
     }
-      //diseases by accession
+    //diseases by accession
 
     @Transactional(readOnly = true)
     public List<Disease> findDiseasesInAccessions(List<String> accessions) {
@@ -895,16 +908,15 @@ public class EnzymePortalService {
     public List<EcNumber> findEcNumberInAccessions(List<String> accessions) {
         return ecNumbersRepository.findEcNumberInAccessions(accessions);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesWithAccessions(List<String> accessions, Pageable pageable) {
-       // return uniprotEntryRepository.findSummariesByAccessions(accessions, pageable);
-         //return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable,uniprotEntryRepository);
-         // return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable);
-         
+        // return uniprotEntryRepository.findSummariesByAccessions(accessions, pageable);
+        //return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable,uniprotEntryRepository);
+        // return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable);
+
         return uniprotEntryRepository.findDistinctByAccessionIn(accessions, pageable);
     }
-
 
     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesWithFilter(List<String> accessions, List<String> taxIds, List<String> compoundIds, List<String> omimNumbers, List<Integer> ecNumbers, Pageable pageable) {
@@ -915,46 +927,45 @@ public class EnzymePortalService {
     private static Predicate filterFacets(List<String> accessions, List<String> taxIds, List<String> compoundIds, List<String> omimNumbers, List<Integer> ecNumbers) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-       // Predicate sp = enzyme.taxId.in(taxIds);
-        
-      Predicate sp = enzyme.scientificName.in(taxIds);//use tax id after fixing js
-  
-  
-    
+        // Predicate sp = enzyme.taxId.in(taxIds);
+
+        Predicate sp = enzyme.scientificName.in(taxIds);//use tax id after fixing js
+
 //// 
 //      JPAExpressions.selectFrom(enzyme).innerJoin(qepc)
 //              .where(qepc.compoundId.in(compoundIds));
-   
-        Predicate compound =   enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundIds);
-        
-     
-        
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundIds);
+
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumbers);
-        
-  
-        Predicate ec =  enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecNumbers);
 
+        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecNumbers);
 
-       // Predicate protein = enzyme.accession.in(accessions);
+        // Predicate protein = enzyme.accession.in(accessions);
         //Predicate filter = ExpressionUtils.allOf(protein,sp, compound, disease, ec);
-         //Predicate filter = ExpressionUtils.anyOf(protein, sp, compound, disease,ec);
-          //BooleanBuilder builder = new BooleanBuilder();
-          //builder.andAnyOf(ec,sp);
-         // Expressions.allOf(ec);
-       // return  enzyme.accession.in(accessions).and(builder.andAnyOf(ec,sp).getValue());
+        //Predicate filter = ExpressionUtils.anyOf(protein, sp, compound, disease,ec);
+        //BooleanBuilder builder = new BooleanBuilder();
+        //builder.andAnyOf(ec,sp);
+        // Expressions.allOf(ec);
+        // return  enzyme.accession.in(accessions).and(builder.andAnyOf(ec,sp).getValue());
         //return filter;
         //return enzyme.accession.in(accessions).andAnyOf(sp,ec,compound, disease);//23.246s
-        return enzyme.accession.in(accessions).andAnyOf(ExpressionUtils.anyOf( sp,ec, compound, disease));
+        return enzyme.accession.in(accessions).andAnyOf(ExpressionUtils.anyOf(sp, ec, compound, disease));
     }
-    
-    
-         private final Set<String> sortedParams = new HashSet<>(
+
+    private final Set<String> sortedParams = new HashSet<>(
             Arrays.asList("ENTRY_TYPE"));
-      /** Define page request with paging and sorting. **/
+
+    /**
+     * Define page request with paging and sorting. *
+     * @param sortType
+     * @param sortProperty
+     * @param page
+     * @param pageSize
+     * @return 
+     */
     public PageRequest getPageRequest(String sortType, String sortProperty, int page, int pageSize) {
-       
- 
+
         //return new PageRequest(page, pageSize, new Sort(new Sort.Order(sortProperty)));
-        return new PageRequest(page, pageSize, Sort.Direction.ASC,sortProperty);
+        return new PageRequest(page, pageSize, Sort.Direction.ASC, sortProperty);
     }
 }

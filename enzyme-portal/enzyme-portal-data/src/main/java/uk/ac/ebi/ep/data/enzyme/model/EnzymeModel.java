@@ -2,16 +2,11 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
-import uk.ac.ebi.ep.data.search.model.Species;
 
 /**
  * <p>
@@ -42,6 +37,20 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
     transient List<String> synonyms;
 
     transient List<String> catalyticActivities;
+    
+    List<String> ec;
+     protected transient int numReactions;
+
+    public int getNumReactions() {
+        return numReactions;
+    }
+
+    public void setNumReactions(int numReactions) {
+        this.numReactions = numReactions;
+    }
+     
+     
+     
 
     public List<String> getCatalyticActivities() {
         if (catalyticActivities == null) {
@@ -71,14 +80,14 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
         if (pathways == null) {
             pathways = new ArrayList<>();
         }
-        return pathways.stream().distinct().collect(Collectors.toList());
+        return pathways;//.stream().distinct().collect(Collectors.toList());
     }
 
     public void setPathways(List<Pathway> pathways) {
         this.pathways = pathways;
     }
 
-    @Override
+     @Override
     public List<EnzymeAccession> getRelatedspecies() {
         if (relatedspecies == null) {
             relatedspecies = new ArrayList<>();
@@ -96,7 +105,7 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
         this.relatedspecies = relatedspecies;
     }
 
-    @Override
+    // @Override
     public List<String> getPdbeaccession() {
         if (pdbeaccession == null) {
             pdbeaccession = new ArrayList<>();
@@ -245,7 +254,7 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
      * {@link uk.ac.ebi.ep.data.enzyme.model.Disease }
      *
      *
-     * @return 
+     * @return
      */
     public List<Disease> getDisease() {
         if (disease == null) {
@@ -274,7 +283,7 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
      * Objects of the following type(s) are allowed in the list {@link Object }
      *
      *
-     * @return 
+     * @return
      */
     public List<Object> getLiterature() {
         if (literature == null) {
@@ -283,233 +292,231 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
         return this.literature;
     }
 
-    public EnzymeModel withEnzyme(Enzyme value) {
-        setEnzyme(value);
-        return this;
-    }
-
-    public EnzymeModel withProteinstructure(ProteinStructure... values) {
-        if (values != null) {
-            for (ProteinStructure value : values) {
-                getProteinstructure().add(value);
-            }
-        }
-        return this;
-    }
-
-    public EnzymeModel withProteinstructure(Collection<ProteinStructure> values) {
-        if (values != null) {
-            getProteinstructure().addAll(values);
-        }
-        return this;
-    }
-
-    public EnzymeModel withReactionpathway(ReactionPathway... values) {
-        if (values != null) {
-            for (ReactionPathway value : values) {
-                getReactionpathway().add(value);
-            }
-        }
-        return this;
-    }
-
-    public EnzymeModel withReactionpathway(Collection<ReactionPathway> values) {
-        if (values != null) {
-            getReactionpathway().addAll(values);
-        }
-        return this;
-    }
-
-    public EnzymeModel withRequestedfield(String value) {
-        setRequestedfield(value);
-        return this;
-    }
-
-    public EnzymeModel withMolecule(ChemicalEntity value) {
-        setMolecule(value);
-        return this;
-    }
-
-    public EnzymeModel withDisease(Disease... values) {
-        if (values != null) {
-            getDisease().addAll(Arrays.asList(values));
-        }
-        return this;
-    }
-
-    public EnzymeModel withDisease(Collection<Disease> values) {
-        if (values != null) {
-            getDisease().addAll(values);
-        }
-        return this;
-    }
-
-    public EnzymeModel withLiterature(Object... values) {
-        if (values != null) {
-            getLiterature().addAll(Arrays.asList(values));
-        }
-        return this;
-    }
-
-    public EnzymeModel withLiterature(Collection<Object> values) {
-        if (values != null) {
-            getLiterature().addAll(values);
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withEc(String... values) {
-        if (values != null) {
-            getEc().addAll(Arrays.asList(values));
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withEc(Collection<String> values) {
-        if (values != null) {
-            getEc().addAll(values);
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withName(String value) {
-        setName(value);
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withFunction(String value) {
-        setFunction(value);
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withSynonym(String... values) {
-        if (values != null) {
-            getSynonym().addAll(Arrays.asList(values));
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withSynonym(Collection<String> values) {
-        if (values != null) {
-            getSynonym().addAll(values);
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withUniprotid(String value) {
-        setUniprotid(value);
-        return this;
-    }
-
-    // @Override
-    public EnzymeModel withRelatedspecies(EnzymeAccession... values) {
-        if (values != null) {
-            for (EnzymeAccession value : values) {
-                getRelatedspecies().add(value);
-            }
-        }
-        return this;
-    }
-
-    //@Override
-    public EnzymeModel withRelatedspecies(Collection<EnzymeAccession> values) {
-        if (values != null) {
-            getRelatedspecies().addAll(values);
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withUniprotaccessions(String... values) {
-        if (values != null) {
-            for (String value : values) {
-                getUniprotaccessions().add(value);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withUniprotaccessions(Collection<String> values) {
-        if (values != null) {
-            getUniprotaccessions().addAll(values);
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withSpecies(Species value) {
-        setSpecies(value);
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withPdbeaccession(String... values) {
-        if (values != null) {
-            for (String value : values) {
-                getPdbeaccession().add(value);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withPdbeaccession(Collection<String> values) {
-        if (values != null) {
-            getPdbeaccession().addAll(values);
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withCompounds(Compound... values) {
-        if (values != null) {
-            for (Compound value : values) {
-                getCompounds().add(value);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withCompounds(Collection<Compound> values) {
-        if (values != null) {
-            getCompounds().addAll(values);
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withDiseases(Disease... values) {
-        if (values != null) {
-            for (Disease value : values) {
-                getDiseases().add(value);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withDiseases(Collection<Disease> values) {
-        if (values != null) {
-            getDiseases().addAll(values);
-        }
-        return this;
-    }
-
-    @Override
-    public EnzymeModel withScoring(Boolean value) {
-        setScoring(value);
-        return this;
-    }
-
+//    public EnzymeModel withEnzyme(Enzyme value) {
+//        setEnzyme(value);
+//        return this;
+//    }
+//
+//    public EnzymeModel withProteinstructure(ProteinStructure... values) {
+//        if (values != null) {
+//            for (ProteinStructure value : values) {
+//                getProteinstructure().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withProteinstructure(Collection<ProteinStructure> values) {
+//        if (values != null) {
+//            getProteinstructure().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withReactionpathway(ReactionPathway... values) {
+//        if (values != null) {
+//            for (ReactionPathway value : values) {
+//                getReactionpathway().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withReactionpathway(Collection<ReactionPathway> values) {
+//        if (values != null) {
+//            getReactionpathway().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withRequestedfield(String value) {
+//        setRequestedfield(value);
+//        return this;
+//    }
+//
+//    public EnzymeModel withMolecule(ChemicalEntity value) {
+//        setMolecule(value);
+//        return this;
+//    }
+//
+//    public EnzymeModel withDisease(Disease... values) {
+//        if (values != null) {
+//            getDisease().addAll(Arrays.asList(values));
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withDisease(Collection<Disease> values) {
+//        if (values != null) {
+//            getDisease().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withLiterature(Object... values) {
+//        if (values != null) {
+//            getLiterature().addAll(Arrays.asList(values));
+//        }
+//        return this;
+//    }
+//
+//    public EnzymeModel withLiterature(Collection<Object> values) {
+//        if (values != null) {
+//            getLiterature().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withEc(String... values) {
+//        if (values != null) {
+//            //getEc().addAll(Arrays.asList(values));
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withEc(Collection<String> values) {
+//        if (values != null) {
+//           // getEc().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withName(String value) {
+//        //setName(value);
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withFunction(String value) {
+//        //setFunction(value);
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withSynonym(String... values) {
+//        if (values != null) {
+//           // getSynonym().addAll(Arrays.asList(values));
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withSynonym(Collection<String> values) {
+//        if (values != null) {
+//            //getSynonym().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withUniprotid(String value) {
+//        //setUniprotid(value);
+//        return this;
+//    }
+//
+//    // @Override
+//    public EnzymeModel withRelatedspecies(EnzymeAccession... values) {
+//        if (values != null) {
+//            for (EnzymeAccession value : values) {
+//                getRelatedspecies().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    //@Override
+//    public EnzymeModel withRelatedspecies(Collection<EnzymeAccession> values) {
+//        if (values != null) {
+//            getRelatedspecies().addAll(values);
+//        }
+//        return this;
+//    }
+//    @Override
+//    public EnzymeModel withUniprotaccessions(String... values) {
+//        if (values != null) {
+//            for (String value : values) {
+//                getUniprotaccessions().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withUniprotaccessions(Collection<String> values) {
+//        if (values != null) {
+//            getUniprotaccessions().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withSpecies(Species value) {
+//        setSpecies(value);
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withPdbeaccession(String... values) {
+//        if (values != null) {
+//            for (String value : values) {
+//                getPdbeaccession().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withPdbeaccession(Collection<String> values) {
+//        if (values != null) {
+//            getPdbeaccession().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withCompounds(Compound... values) {
+//        if (values != null) {
+//            for (Compound value : values) {
+//                getCompounds().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withCompounds(Collection<Compound> values) {
+//        if (values != null) {
+//            getCompounds().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withDiseases(Disease... values) {
+//        if (values != null) {
+//            for (Disease value : values) {
+//                getDiseases().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withDiseases(Collection<Disease> values) {
+//        if (values != null) {
+//            getDiseases().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    @Override
+//    public EnzymeModel withScoring(Boolean value) {
+//        setScoring(value);
+//        return this;
+//    }
     /**
      * Sets the value of the proteinstructure property.
      *
@@ -543,5 +550,145 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
     public void setLiterature(List<Object> literature) {
         this.literature = literature;
     }
+
+    /////refactoring starts here
+//    public List<String> getUniprotaccessions() {
+//        if (uniprotaccessions == null) {
+//            uniprotaccessions = new ArrayList<>();
+//        }
+//
+//        return uniprotaccessions;
+//    }
+//
+//    public void setUniprotaccessions(List<String> uniprotaccessions) {
+//        this.uniprotaccessions = uniprotaccessions;
+//    }
+//
+//    public Species getSpecies() {
+//        return species;
+//    }
+//
+//    public void setSpecies(Species species) {
+//        this.species = species;
+//    }
+//
+//    public BigInteger getExpEvidenceFlag() {
+//        return expEvidenceFlag;
+//    }
+//
+//    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
+//        this.expEvidenceFlag = expEvidenceFlag;
+//    }
+//
+//    public String getFunction() {
+//        return function;
+//    }
+//
+//    public void setFunction(String function) {
+//        this.function = function;
+//    }
+//
+//    public String getSynonymNames() {
+//        return synonymNames;
+//    }
+//
+//    public void setSynonymNames(String synonymNames) {
+//        this.synonymNames = synonymNames;
+//    }
+//
+//    public String getAccession() {
+//        return accession;
+//    }
+//
+//    public void setAccession(String accession) {
+//        this.accession = accession;
+//    }
+//
+//    public Long getTaxId() {
+//        return taxId;
+//    }
+//
+//    public void setTaxId(Long taxId) {
+//        this.taxId = taxId;
+//    }
+//
+//    public String getProteinName() {
+//        return proteinName;
+//    }
+//
+//    public void setProteinName(String proteinName) {
+//        this.proteinName = proteinName;
+//    }
+//
+//    public String getScientificName() {
+//        return scientificName;
+//    }
+//
+//    public void setScientificName(String scientificName) {
+//        this.scientificName = scientificName;
+//    }
+//
+//    public String getCommonName() {
+//        return commonName;
+//    }
+//
+//    public void setCommonName(String commonName) {
+//        this.commonName = commonName;
+//    }
+//
+//    public String getUniprotid() {
+//
+//        return uniprotid;
+//    }
+//
+//    public void setUniprotid(String uniprotid) {
+//        this.uniprotid = uniprotid;
+//    }
+//
+//    public List<String> getEc() {
+//        if (ec == null) {
+//            ec = new ArrayList<>();
+//        }
+//
+//        return ec;
+//    }
+//
+//    public void setEc(List<String> ec) {
+//        this.ec = ec;
+//    }
+//
+//    public BigInteger getFunctionLength() {
+//        return functionLength;
+//    }
+//
+//    public void setFunctionLength(BigInteger functionLength) {
+//        this.functionLength = functionLength;
+//    }
+//
+//    public String getEnzymeFunction() {
+//        return enzymeFunction;
+//    }
+//
+//    public void setEnzymeFunction(String enzymeFunction) {
+//        this.enzymeFunction = enzymeFunction;
+//    }
+//
+//    public Short getEntryType() {
+//        return entryType;
+//    }
+//
+//    public void setEntryType(Short entryType) {
+//        this.entryType = entryType;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//    
+    
 
 }

@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * <p>
@@ -16,15 +17,38 @@ public class EnzymeReaction
         implements Serializable {
 
     protected Equation equation;
+    private String rheadId;
+    private String keggId;
 
     public EnzymeReaction() {
     }
-    
-   
 
-    public EnzymeReaction(String id, String name) {
+    public EnzymeReaction(String id) {
         this.id = id;
-        this.name = name;
+        this.rheadId = id;
+
+    }
+
+    public EnzymeReaction(String rheadId, String keggId) {
+        this.rheadId = rheadId;
+        this.keggId = keggId;
+        this.id = rheadId;
+    }
+
+    public String getRheadId() {
+        return rheadId;
+    }
+
+    public void setRheadId(String rheadId) {
+        this.rheadId = rheadId;
+    }
+
+    public String getKeggId() {
+        return keggId;
+    }
+
+    public void setKeggId(String keggId) {
+        this.keggId = keggId;
     }
 
     /**
@@ -112,7 +136,36 @@ public class EnzymeReaction
         return this;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.rheadId);
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymeReaction other = (EnzymeReaction) obj;
+        if (!Objects.equals(this.rheadId, other.rheadId)) {
+            return false;
+        }
+        return true;
+    }
     
+    
+
+    @Override
+    public String toString() {
+        return "EnzymeReaction{" + "keggId=" + keggId + ", rheadId=" + rheadId + '}';
+    }
 
 }

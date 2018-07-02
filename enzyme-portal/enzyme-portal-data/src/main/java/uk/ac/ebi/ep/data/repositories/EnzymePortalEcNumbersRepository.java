@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
@@ -26,6 +27,9 @@ public interface EnzymePortalEcNumbersRepository extends JpaRepository<EnzymePor
     @Transactional(readOnly = true)
     @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_EC_NUMBERS WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<EnzymePortalEcNumbers> findByEcNumbersByAccession(@Param("UNIPROT_ACCESSION") String ecNumber);
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    Set<EnzymePortalEcNumbers> findEcNumbersByAccession(@Param("UNIPROT_ACCESSION") String ecNumber);
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */  DISTINCT(UNIPROT_ACCESSION) FROM ENZYME_PORTAL_EC_NUMBERS WHERE EC_NUMBER = :EC_NUMBER", nativeQuery = true)

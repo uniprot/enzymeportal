@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -6,21 +11,19 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author joseph
+ * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Entity
 @Table(name = "ENZYME_PORTAL_PATHWAYS")
@@ -28,44 +31,49 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalPathways.findAll", query = "SELECT e FROM EnzymePortalPathways e"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayInternalId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayInternalId = :pathwayInternalId"),
-    //@NamedQuery(name = "EnzymePortalPathways.findByPathwayId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayId = :pathwayId"),
+    @NamedQuery(name = "EnzymePortalPathways.findByPathwayId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayId = :pathwayId"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayUrl", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayUrl = :pathwayUrl"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayName", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayName = :pathwayName"),
     @NamedQuery(name = "EnzymePortalPathways.findByStatus", query = "SELECT e FROM EnzymePortalPathways e WHERE e.status = :status"),
-    @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species")})
-public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePortalPathways> {
-    @Size(max = 15)
-    @Column(name = "PATHWAY_GROUP_ID")
-    private String pathwayGroupId;
+    @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species"),
+    @NamedQuery(name = "EnzymePortalPathways.findByPathwayGroupId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayGroupId = :pathwayGroupId")})
+public class EnzymePortalPathways implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @Column(name = "PATHWAY_INTERNAL_ID") 
-     @SequenceGenerator(allocationSize = 10, name = "seqGenerator", sequenceName = "SEQ_PATHWAY_INTERNAL_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    @NotNull
+    @Column(name = "PATHWAY_INTERNAL_ID")
     private Long pathwayInternalId;
+    @Size(max = 15)
     @Column(name = "PATHWAY_ID")
     private String pathwayId;
+    @Size(max = 255)
     @Column(name = "PATHWAY_URL")
     private String pathwayUrl;
+    @Size(max = 4000)
     @Column(name = "PATHWAY_NAME")
     private String pathwayName;
+    @Size(max = 5)
     @Column(name = "STATUS")
     private String status;
+    @Size(max = 255)
     @Column(name = "SPECIES")
     private String species;
+    @Size(max = 15)
+    @Column(name = "PATHWAY_GROUP_ID")
+    private String pathwayGroupId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
-    
+
     public EnzymePortalPathways() {
     }
 
     public EnzymePortalPathways(Long pathwayInternalId) {
         this.pathwayInternalId = pathwayInternalId;
     }
-  
+
     public Long getPathwayInternalId() {
         return pathwayInternalId;
     }
@@ -114,6 +122,14 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
         this.species = species;
     }
 
+    public String getPathwayGroupId() {
+        return pathwayGroupId;
+    }
+
+    public void setPathwayGroupId(String pathwayGroupId) {
+        this.pathwayGroupId = pathwayGroupId;
+    }
+
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -125,7 +141,7 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.pathwayName);
+        hash = 37 * hash + Objects.hashCode(this.pathwayGroupId);
         return hash;
     }
 
@@ -138,32 +154,16 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
             return false;
         }
         final EnzymePortalPathways other = (EnzymePortalPathways) obj;
-        return Objects.equals(this.pathwayName, other.pathwayName);
+        return Objects.equals(this.pathwayGroupId, other.pathwayGroupId);
     }
-
-
 
     @Override
     public String toString() {
-        return "EnzymePortalPathways{" + "pathwayGroupId=" + pathwayGroupId + ", pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
+        return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayName=" + pathwayName + ", pathwayGroupId=" + pathwayGroupId + '}';
     }
 
 
 
-    @Override
-    public int compareTo(EnzymePortalPathways o) {
-     return this.pathwayName.compareToIgnoreCase(o.getPathwayName());
-    }
 
-    public String getPathwayGroupId() {
-        return pathwayGroupId;
-    }
-
-    public void setPathwayGroupId(String pathwayGroupId) {
-        this.pathwayGroupId = pathwayGroupId;
-    }
-
-   
-    
     
 }
