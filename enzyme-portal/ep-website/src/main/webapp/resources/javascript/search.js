@@ -130,7 +130,7 @@ $(document).ready(function () {
             $("#ecname").val(ecname);
             pageClicked = true;
             document.forms.filtersForm.submit();
-        }else  
+        } else
         if (clickedId === "nextButton") {
             $("#filtersFormStart").val(nextStart);
             $("#pageNumber").val(nextStart);
@@ -139,7 +139,7 @@ $(document).ready(function () {
             $("#ecname").val(ecname);
             pageClicked = true;
             document.forms['filtersForm'].submit();
-        } 
+        }
 //         if (clickedId === "currentIndexButton") {
 //          
 //            $("#filtersFormStart").val(currentPage);
@@ -778,34 +778,77 @@ function ajaxBasket(id, checked) {
 }
 
 function openDownload() {
-	updateDownloadUrl();
-	$('#download-dropdown').toggle();
+    updateDownloadUrl();
+    $('#download-dropdown').toggle();
 }
 
 function updateDownloadUrl() {
-	var ids = [];
-	$('input.forBasket').each(function (index, elem) {
-		if (elem.checked === true) {
-			ids.push(elem.value.replace(/[\[\]']/g,''));
-		}
-	});
-	$('#download-count').text(ids.length);
-	if(ids.length <= 0) {
-		$('#download-submit').attr('href', '#');
-		return;
-	}
-	var url = 'http://www.uniprot.org/uniprot/?query='
-		+ ids
-		+ '&columns=id%2Ccomment(FUNCTION)%2Ccomment(COFACTOR)%2Ccomment(ENZYME%20REGULATION)%2Ccomment(CATALYTIC%20ACTIVITY)&compress='
-		+ yesOrNo($('#compress-download').is(':checked'))
-		+ '&format='
-		+ $('#download-format').val();
-	$('#download-submit').attr('href', url);
-	$('#download-count').text(ids.length);
+    var ids = [];
+    $('input.forBasket').each(function (index, elem) {
+        if (elem.checked === true) {
+            ids.push(elem.value.replace(/[\[\]']/g, ''));
+        }
+    });
+    $('#download-count').text(ids.length);
+    if (ids.length <= 0) {
+        $('#download-submit').attr('href', '#');
+        return;
+    }
+    var url = 'https://www.uniprot.org/uniprot/?query='
+            + ids
+            + '&columns=id%2Ccomment(FUNCTION)%2Ccomment(COFACTOR)%2Ccomment(ENZYME%20REGULATION)%2Ccomment(CATALYTIC%20ACTIVITY)&compress='
+            + yesOrNo($('#compress-download').is(':checked'))
+            + '&format='
+            + $('#download-format').val();
+    $('#download-submit').attr('href', url);
+    $('#download-count').text(ids.length);
 }
 
 function yesOrNo(input) {
-	return (input === true) ? 'yes' : 'no';
+    return (input === true) ? 'yes' : 'no';
+}
+
+
+function openEnzymeDownload() {
+    updateEnzymeDownloadUrl();
+    $('#download-dropdown').toggle();
+}
+
+function updateEnzymeDownloadUrl() {
+    var ids = [];
+    $('input.forBasket').each(function (index, elem) {
+        if (elem.checked === true) {
+            ids.push(elem.value.replace(/[\[\]']/g, ''));
+        }
+    });
+    $('#download-count').text(ids.length);
+    if (ids.length <= 0) {
+        $('#download-submit').attr('href', '#');
+        return;
+    }
+
+
+
+    var url = 'enzymes/download?entries='
+            + ids
+            + '&compress='
+            + yesOrNo($('#compress-download').is(':checked'))
+            + '&format='
+            + $('#download-format').val();
+
+    var format = $('#download-format').val();
+
+    if (format === 'xml') {
+        url = 'enzymes/download/xml?entries='
+                + ids
+                + '&compress='
+                + yesOrNo($('#compress-download').is(':checked'))
+                + '&format='
+                + $('#download-format').val();
+    }
+
+    $('#download-submit').attr('href', url);
+    $('#download-count').text(ids.length);
 }
 
 /**
@@ -817,7 +860,7 @@ function updateCompareButton() {
     var all = 0, sel = 0;
     $('select.toCompare').each(function () {
         all++;
-        if (this.value != '')
+        if (this.value !== '')
             sel++;
     });
     if (all === 0) {

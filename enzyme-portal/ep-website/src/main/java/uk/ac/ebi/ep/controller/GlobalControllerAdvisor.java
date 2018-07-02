@@ -22,9 +22,10 @@ public class GlobalControllerAdvisor {
 
     private static final Logger logger = Logger.getLogger(GlobalControllerAdvisor.class);
 
-    //@ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public String handleException(HttpServletRequest request, Exception ex) {
         logger.error("Exception Occured while requesting this url = " + request.getRequestURL() + " : exception is :: " + ex);
+      request.setAttribute("errorParam", request.getRequestURI());
         return "error";
     }
 

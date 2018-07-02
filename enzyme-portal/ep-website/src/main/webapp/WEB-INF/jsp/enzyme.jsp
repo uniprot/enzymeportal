@@ -8,7 +8,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+<%--
+<%@ taglib prefix="xchars" uri="https://www.ebi.ac.uk/xchars"%>
+--%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div id="enzymeContent" class="summary">
@@ -123,21 +125,21 @@
                  <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
             </c:when>
             <c:otherwise>
-           <p><a target="_blank" href="http://www.uniprot.org/uniprot/${accession}#${accession}-details" > View Sequence in UniProt</a></p>       
+           <p><a target="_blank" href="https://www.uniprot.org/uniprot/${accession}#${accession}-details" > View Sequence in UniProt</a></p>       
             </c:otherwise>
         </c:choose>
        
       
     </dl>
 
-<!--                        uncomment when feature viewer is fixed-->
-<!--	<div id="feature-viewer"></div>-->
+
+	<div id="feature-viewer"></div>
 
     <c:set var="provenance" value="${enzyme.provenance}"/>
     <div class="provenance">
         <ul>
             <li class="note_0">Data Source:
-                <a href="https://www.ebi.ac.uk/intenz/">${provenance[0]}</a> &AMP; <a href="http://www.uniprot.org/" >${provenance[1]}</a> </li>
+                <a href="https://www.ebi.ac.uk/intenz/query?cmd=Search&q=${ecNumber}">${provenance[0]}</a> &AMP; <a href="https://www.uniprot.org/uniprot/${enzymeModel.accession}" >${provenance[1]}</a> </li>
             <li class="note_1">${provenance[2]} </li>
             <li class="note_2">${provenance[3]} </li>
         </ul>
@@ -145,12 +147,16 @@
 
 </div>
 <%-- Javascript at the bottom for faster loading --%>
-<!--<script>
-	window.onload = function() {
-		var biojs_vis_proteinFeaturesViewer = require('biojs-vis-proteinfeaturesviewer');
-		var featureViewer = new biojs_vis_proteinFeaturesViewer({
-			el: '#feature-viewer',
-			uniprotacc : '${accession}'
-		});
-	}
-</script>-->
+
+<script>
+    window.onload = function() {
+        var fvrDiv = document.getElementById('feature-viewer');
+        var ProtVista = require('ProtVista');
+        var instance = new ProtVista({
+            el: fvrDiv,
+            uniprotacc: '${enzymeModel.accession}'
+        });
+    };
+</script>
+
+

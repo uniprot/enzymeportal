@@ -85,7 +85,7 @@
                 <div class="provenance">
                     <ul>
                         <li class="note_0">Data Source:
-                            <a href="http://www.ebi.ac.uk/chebi/">${provenance[0]}</a> &AMP; <a href="https://www.ebi.ac.uk/chembl/" >${provenance[1]}</a> </li>
+                            <a href="https://www.ebi.ac.uk/chebi/">${provenance[0]}</a> &AMP; <a href="https://www.ebi.ac.uk/chembl/" >${provenance[1]}</a> </li>
                         <li class="note_1">${provenance[2]} </li>
                         <li class="note_2">${provenance[3]} </li>
                     </ul>

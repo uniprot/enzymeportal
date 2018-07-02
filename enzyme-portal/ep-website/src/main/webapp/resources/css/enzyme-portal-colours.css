@@ -99,6 +99,11 @@ a.special:active {
 
 a:link { color: #0C4452; }
 
+/*.data-protection-banner a:link, .data-protection-banner a, .data-protection-banner a:visited  {
+    color: #FFFFFF;
+    text-decoration: underline;
+}*/
+
 a:hover,
 a:focus,
 a:active { color: #0B5448; }

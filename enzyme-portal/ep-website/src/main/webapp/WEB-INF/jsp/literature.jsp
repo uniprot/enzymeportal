@@ -263,7 +263,7 @@ function filterCitations(){
 <div class="provenance">
 	<ul>
 		<li class="note_0">Data Source:
-			<a href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}">Europe PMC</a></li>
+			<a href="https://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}" target="_blank">Europe PMC</a></li>
 		<li class="note_1">Europe PubMed Central (Europe PMC) offers free access
 		    to biomedical literature resources.</li>
 	</ul>

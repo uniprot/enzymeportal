@@ -301,10 +301,10 @@ public class SearchController extends AbstractController {
             // See if it is already there, perhaps we are paginating:
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
-            System.out.println("SEARCH PARAM IN MODEL " + searchModel.getSearchparams().getText());
+
             String modelSearchKey = getSearchKey(searchModel.getSearchparams());
-            System.out.println("MODEL SEARCH KEY " + modelSearchKey);
-            System.out.println("DATA " + searchTerm + " ID " + searchId + " type" + keywordType);
+         
+
             searchKey = Jsoup.clean(modelSearchKey, Whitelist.basic());
             results = prevSearches.get(searchKey);
             if (results == null) {

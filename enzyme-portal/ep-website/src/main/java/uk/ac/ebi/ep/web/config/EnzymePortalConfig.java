@@ -109,7 +109,7 @@ public class EnzymePortalConfig {
         rc.setTimeout(Integer.parseInt(env.getProperty("reactome.ws.timeout")));
         rc.setUseProxy(Boolean.parseBoolean(env.getProperty("reactome.ws.proxy")));
         rc.setWsBaseUrl(env.getProperty("reactome.ws.url"));
-        rc.setEventBaseUrl("http://www.reactome.org/content/detail/");
+        rc.setEventBaseUrl("https://www.reactome.org/content/detail/");
 
         return rc;
     }

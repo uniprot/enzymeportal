@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
+import uk.ac.ebi.ep.data.view.DiseaseView;
 
 /**
  * This controller is for browse Enzymes By disease
@@ -45,15 +46,18 @@ public class BrowseDiseasesController extends AbstractController {
     @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
     public String showDiseases(Model model) {
 
-        diseaseList = enzymeFinderService.findDiseases();
-        SearchModel searchModelForm = searchform();
+      List<DiseaseView>  diseases = enzymePortalService.findAllDiseases().stream().distinct().collect(Collectors.toList());
+        
+      
+      SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-        model.addAttribute("diseaseList", diseaseList);
+        model.addAttribute("diseaseList", diseases);
         model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
 
         return BROWSE;
     }
 
+    @Deprecated
     @RequestMapping(value = BROWSE_DISEASE + "/{startsWith}", method = RequestMethod.GET)
     public String showDiseasesLike(@PathVariable(value = "startsWith") String startsWith, Model model) {
 

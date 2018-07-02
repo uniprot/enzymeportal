@@ -6,7 +6,7 @@
 $(document).ready(function() {
         // This is going to be our UniProt ID
         var uid = $('#pcviz-widget').attr("data-uid");
-        var orgUrl = 'http://www.pathwaycommons.org/pcviz/#neighborhood/'+ uid;
+        var orgUrl = 'https://www.pathwaycommons.org/pcviz/#neighborhood/'+ uid;
 
         // This requires BioJS-PCViz library
         var biojspcviz = require('biojs-pcviz');
@@ -17,18 +17,19 @@ $(document).ready(function() {
         // Create an instance of PCViz
         var pcviz = new biojspcviz({
             el: $('#pcviz-widget-container'),
-            baseurl: "http://sanderlab.org/pcviz/",
+            //baseurl: "http://sanderlab.org/pcviz/",
+            baseurl: "https://www.pathwaycommons.org/pcviz/",
             query: uid,
             onLoad: function(msg) {
                 // Show overall stats
                 var myContent = "Pathway neighborhood of <b>" + uid + "</b> contains <b>" + msg.numberOfNodes +
                     " genes</b> and <b>" + msg.numberOfEdges + " interactions</b>. " +
                     " Click on any of the genes or interactions to see more information. <br><br>" +
-                    "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
+                    "Information provided by <a href='https://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
 
                 if(msg.numberOfNodes<=1) {
                     var myContent = "No interactions found<br><br>" +
-                        "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
+                        "Information provided by <a href='https://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
                     $('#pcviz-widget').hide();
                 } else if(msg.numberOfNodes>100) {
                     $('#pcviz-widget > table').remove();
@@ -47,7 +48,7 @@ $(document).ready(function() {
                     "<tr><th>Gene</th><td>" + msg.id + "</td></tr>" +
                     "<tr><th>Aliases</th><td>" + annotation.geneAliases.replace(/:/g, ", ") + "</td></tr>" +
                     "<tr><th>Desciption</th><td>" + summary + "</td></tr>" +
-                    "<tr><th>Uniprot ID</th><td><a target='_blank' href='http://www.ebi.ac.uk/enzymeportal/search/" + uniprotId + "/enzyme'>" + uniprotId + "</a></td></tr>" +
+                    "<tr><th>Uniprot ID</th><td><a target='_blank' href='https://www.ebi.ac.uk/enzymeportal/search/" + uniprotId + "/enzyme'>" + uniprotId + "</a></td></tr>" +
                     "</table>";
 
                 pcvizDescEl.html( myContent );

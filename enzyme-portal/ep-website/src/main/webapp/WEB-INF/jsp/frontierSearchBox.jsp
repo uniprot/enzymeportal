@@ -89,10 +89,13 @@
                       Examples:
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil&keywordType=KEYWORD">sildenafil</a>,
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=mTOR&keywordType=KEYWORD">mTOR</a>,
+                        <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=abl&keywordType=KEYWORD">abl</a>,
+                          <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=acetylation&keywordType=KEYWORD">acetylation</a>,
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=cathepsin&keywordType=KEYWORD">cathepsin</a>,
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=P27361&keywordType=KEYWORD">P27361</a>,
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=pyruvate kinase&keywordType=KEYWORD">pyruvate kinase</a>
-                      <span class="adv"><a href="http://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span>
+<!--                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=acetylcholinesterase&keywordType=KEYWORD">acetylcholinesterase</a>-->
+                      <span class="adv"><a href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span>
                   </p>
 
               </fieldset>

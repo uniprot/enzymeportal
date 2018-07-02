@@ -433,7 +433,8 @@
 .references {
 	float:right;
 	width: 400px;
-	border: 1px solid rgb(167, 184, 193);
+/*	border: 1px solid rgb(167, 184, 193);*/
+        border: 0px solid rgb(167, 184, 193);
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -443,16 +444,24 @@
 
 .references .button {
 	padding: 2px 4px;
-	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;
-	border: 1px solid rgb(167, 184, 193);
+/*	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;*/
+background: 99% 50% url('../images/down-arrow-small.png') no-repeat rgb(0,124,130);
+/*	border: 1px solid rgb(167, 184, 193);*/
+        border: 0px solid rgb(167, 184, 193);
 	border-radius: 6px;
-	color: #333;
+/*	color: #333;*/
 	font-weight: bold;
 	cursor: pointer;
+/*        new*/
+        display: block;
+        text-align: justify;
+        font-size: 1rem;
 }
 
 .references .button:hover {
 	background-color: #FFD98F;
+/*        new*/
+        color:rgb(0,124,130);
 }
 
 

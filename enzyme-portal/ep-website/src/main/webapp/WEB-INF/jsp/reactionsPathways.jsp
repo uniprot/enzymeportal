@@ -6,8 +6,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%--
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+--%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 
@@ -28,9 +31,9 @@
        <h5>Catalytic Activity</h5>
   </c:if>
   <c:if test="${fn:length(enzymeModel.catalyticActivities) > 1}">
-       <h5>Catalytic Activities</h5>
+       <h5>Catalytic Activities</h5>   
   </c:if>
-   
+
                 <ul style="list-style-type: square">
                     <c:forEach items="${enzymeModel.catalyticActivities}" var="activity" >
                         <li class="reaction"><b>${activity}</b></li>   
@@ -48,12 +51,23 @@
                 this enzyme.</p>
             </c:when>
             <c:otherwise>
+            
+            <%--
                 <c:if test="${fn:length(reactionpathways) > 1}">
                 <div class="main_link"><b>${fn:length(reactionpathways)} reactions found</b></div>  
             </c:if>
             <c:if test="${fn:length(reactionpathways) == 1}">
                 <div class="main_link"><b>${fn:length(reactionpathways)} reaction found</b></div>  
             </c:if>
+                --%>
+                   <c:if test="${enzymeModel.numReactions > 1}">
+                <div class="main_link"><b>${enzymeModel.numReactions} reactions found</b></div>  
+            </c:if>
+            <c:if test="${enzymeModel.numReactions == 1}">
+                <div class="main_link"><b>${enzymeModel.numReactions} reaction found</b></div>  
+            </c:if>    
+                
+                
             <c:forEach items="${reactionpathways}" var="reactionpathway"
                        varStatus="rpVs">
 
@@ -76,14 +90,14 @@
                             <c:out value="${reaction.name}" escapeXml="false"/> 
                         </b>
                         <br/>
-                        <div id="bjs_${rpVs.count}" style="margin-top: 10px">
+                        <div id="bjs_${loop.count}" style="margin-top: 10px">
                          
                         </div>
                         
                         <script>
                             $(document).ready(function() {
                                 new Biojs.Rheaction({
-                                    target: 'bjs_${rpVs.count}',
+                                    target: 'bjs_${loop.count}',
                                     id:'${reaction.id}',
                                     proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
                                 });
@@ -105,6 +119,13 @@
                                     <a target="blank" href="${rheaEntryUrl}">
                                         <spring:message code="label.entry.reactionsPathways.link.rhea"/>
                                     </a>
+                                  
+                                </div>
+                           <div class="rhea inlineLinks">
+                                    <a target="blank" href="http://www.genome.jp/dbget-bin/www_bget?rn:${reaction.keggId}">
+                                       View Reaction In Kegg
+                                    </a>
+                                   
                                 </div>
                             </c:if>
                             <c:set var="macielinks" value="${reactionpathway.mechanism}"/>
@@ -156,7 +177,7 @@
                                 <td width="30%">
                                     <div id="pcviz-description">
                                         <center>
-                                            Loading pathway information from <a href="http://www.pathwaycommons.org/pc2/" target="_blank">Pathway Commons 2</a>...
+                                            Loading pathway information from <a href="https://www.pathwaycommons.org/pc2/" target="_blank">Pathway Commons 2</a>...
                                         </center>
                                     </div>
                                 </td>
@@ -165,8 +186,8 @@
 
                     </div>
                     <!-- PCViz Widget template code end -->
-                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.js"></script>
-                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.custom.js"></script>
+<!--                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.js"></script>
+                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.custom.js"></script>-->
                 </c:if>
 
                 <div style="margin-top: 10px"></div>
@@ -177,9 +198,9 @@
                         <c:if test="${reactionpathways != null}">
                             <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
                         </c:if>
-                        <div id="pathways-${rpVs.index}">
+                        <div id="pathways-${rpVs.index}">                       
                                  <c:forEach var="pathway" items="${pathways}">
-                               
+                                   
                                 <div id="pathway-${rpVs.index}-${pathway.id}">
                                     <fieldset>
                                         <legend>Loading pathway (${pathway.id})...</legend>
@@ -208,7 +229,7 @@
             <div class="provenance">
                 <ul>
                     <li class="note_0">Data Source:
-                        <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html">Reactome</a> &AMP; <a href="http://www.ebi.ac.uk/rhea/" >Rhea</a> &AMP; <a href="http://www.pathwaycommons.org/">Pathway Commons</a></li>
+                        <a href="https://reactome.org/content/query?q=${enzymeModel.accession}">Reactome</a> &AMP; <a href="https://www.rhea-db.org/searchresults?q=${enzymeModel.accession}" >Rhea</a> &AMP; <a href="https://www.pathwaycommons.org/pcviz/#neighborhood/${enzymeModel.accession}">Pathway Commons</a></li>
                     <li class="note_1">Reactome is an open-source, open access, manually curated and peer-reviewed pathway database. </li>
                     <li class="note_2">Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use. </li>
                     <li class="note_2">Pathway Commons is a network biology resource and acts as a convenient point of access to biological pathway information collected from public pathway databases, which you can search, visualize and download. All data is freely available, under the license terms of each contributing database.</li>

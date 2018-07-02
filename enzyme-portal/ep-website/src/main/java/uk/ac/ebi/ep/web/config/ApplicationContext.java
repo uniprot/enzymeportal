@@ -22,6 +22,7 @@ import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -39,6 +40,7 @@ import uk.ac.ebi.ep.config.HHConfig;
 import uk.ac.ebi.ep.config.HXFBConfig;
 import uk.ac.ebi.ep.config.ProdDataConfig;
 import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
+import uk.ac.ebi.ep.converters.StringToEnzymeEntry;
 
 /**
  *
@@ -57,6 +59,11 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.setUseSuffixPatternMatch(false);
+    }
+    
+      @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 
     /**
@@ -135,6 +142,10 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         registrar.setFormatter(new DateFormatter("EEE, d MMM yyyy"));
         registrar.setFormatter(new DateFormatter("d MMMMM yyyy"));
         registrar.setFormatter(new DateFormatter("dd MMMMM yyyy - HH:mm"));
+        
+        
+        //add entry conversion
+        conversionService.addConverter(new StringToEnzymeEntry());
 
         registrar.registerFormatters(conversionService);
 

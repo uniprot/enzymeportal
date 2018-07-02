@@ -75,7 +75,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String SUBCLASSES = "subclasses";
     private static final String SUBSUBCLASSES = "subsubclasses";
     private static final String ENTRIES = "entries";
-    private static final String INTENZ_URL = "http://www.ebi.ac.uk/intenz/ws/EC";
+    private static final String INTENZ_URL = "https://www.ebi.ac.uk/intenz/ws/EC";
     private static final String ROOT = "ROOT";
     private static final String SUBCLASS = "SUBCLASS";
     private static final String SUBSUBCLASS = "SUBSUBCLASS";

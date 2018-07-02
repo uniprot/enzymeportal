@@ -2,19 +2,22 @@
     Document   : enzymes
     Created on : May 6, 2016, 11:39:04 AM
     Author     : Joseph <joseph@ebi.ac.uk>
---%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars" %>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
 <%@taglib prefix="ep" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
+--%>
+
+
 <!DOCTYPE html>
 <html>
-    
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <c:set var="pageTitle" value="Enzymes"/>
     <%@include file="head.jspf" %>
 
@@ -40,12 +43,28 @@
 
                     <section class="large-10 columns">
                         <h2>Enzyme Results</h2>
-                        <h4>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h4>
+                           <h4>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h4>
+                           <%--     
+                        <c:choose>
+                            <c:when test="${ebiResult.hitCount gt 10}">
+                                 <h4>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h4>   
+                            </c:when>
+                            <c:otherwise>
+                                <h4>${fn:length(enzymeView)} enzymatic activities found for "${searchKey}"</h4>   
+                            </c:otherwise>
+                        </c:choose>
+                    --%>
                     </section>
                 </div>
+                    <div class="row">  
 
-                <section class="pagination-container">
-
+        <section>
+<!--                <section class="pagination-container large-9 columns">-->
+                    <%--  
+                     <div class="action-buttons pull-left">
+                            <%@include file="enzyme-basket-buttons.jsp" %>
+                     </div> 
+                    --%>
                     <c:if test="${page.totalElements gt page.size}">
                         <nav class="paginationContainer">
                             <ul class="pagination" role="navigation" aria-label="Pagination">
@@ -64,7 +83,7 @@
                         </nav>
                     </c:if>
                 </section>
-
+                </div> 
                 <div class="row">
 
                     <section id="search-filters" class="large-3 columns">
@@ -152,10 +171,11 @@
                     </section>
 
                     <section class="large-9 columns" id="search-results">
-                        <c:if test="${not empty enzymeView}">
+                      <c:if test="${ not empty enzymeView}">
                             <div>
                                 <table id="enzymeResults" cellpadding="60" cellspacing="60">
                                     <tr>
+<!--                                         <th width="20%">No:</th>-->
                                         <th width="20%">Name</th>
                                         <th>Alternative Names</th>
                                         <th width="5%">Protein Hits</th>
@@ -166,12 +186,23 @@
                                     </tr>
                                     <c:forEach var="enzyme" items="${enzymeView}" varStatus="theIndex">
                                         <tr class="enzymeRow">
-                                            <c:choose>
+                                            <%--   
+                                            <td>
+                                               
+                                            <c:if test="${showCheckbox != false}">
+                                        <input type="checkbox" class="forBasket"
+                                               title="Select entry"
+                                               value="${enzyme}"/>
+                                            </c:if>
+                                                   
+                                            </td>
+                                          --%>
+                                         <c:choose>
                                                 <c:when test='${enzyme.numProteins > 0}'>
-                                                    <td data-toggle="proteinList${theIndex.index}" class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                                                    <td data-toggle="proteinList${theIndex.index}" class="enzymeName sideTwizzle">${enzyme.enzymeName} </td>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <td>${enzyme.enzymeName}</td>
+                                                    <td> <a href="search/ec/${enzyme.ec}?enzymeName=${enzyme.enzymeName}">${enzyme.enzymeName}</a></td>
                                                 </c:otherwise>
                                             </c:choose>
                                             <td>
@@ -195,6 +226,7 @@
                                                 </ul>
                                             </td>
                                         </tr>
+                                        <c:if test='${enzyme.numProteins > 0}'>
                                         <tr id="proteinList${theIndex.index}" data-toggler data-animate="hinge-in-from-top hinge-out-from-top" style="display: none">
                                             <td colspan="7">
                                                 <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
@@ -223,6 +255,7 @@
                                                 </form:form>
                                             </td>
                                         </tr>
+                                        </c:if>
                                     </c:forEach>
                                 </table>
                             </div>

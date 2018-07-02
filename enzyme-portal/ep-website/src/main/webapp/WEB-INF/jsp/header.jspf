@@ -138,7 +138,7 @@
                             </c:choose>
                         </li>
                         <li class="functional ">
-                            <a target="_blank" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
+                            <a target="_blank" href="https://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=https://www.ebi.ac.uk/enzymeportal/"
                                class="icon icon-static" data-icon="f">Feedback</a>
                         </li>
                         <li class="functional

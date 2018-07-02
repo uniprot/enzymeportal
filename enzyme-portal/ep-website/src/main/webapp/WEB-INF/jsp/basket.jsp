@@ -90,7 +90,12 @@
                 </div>
             </c:forEach>
 </div>
-            <script>updateCompareButton();</script>
+<!--            <script>updateCompareButton();</script>-->
+           <script>
+                    $(document).ready(function () {
+                      updateCompareButton();  
+                    });
+            </script>
 
             </form>
 

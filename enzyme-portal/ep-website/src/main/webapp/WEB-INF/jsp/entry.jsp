@@ -8,8 +8,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%--
+<%@ taglib prefix="form" uri="https://www.springframework.org/tags/form"%>
+
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+--%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -34,24 +37,28 @@
 
 
                 <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
-                    <!--<c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>-->
+                    <!--<c:set var="chebiImageBaseUrl" value="https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>-->
                     <c:set var="chebiImageBaseUrl"
-                           value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId="/>
+                           value="https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId="/>
                     <c:set var="chebiImageParams"
                            value="&dimensions=200&scaleMolecule=true"/>
                     <c:set var="chebiEntryBaseUrl"
-                           value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
+                           value="https://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
                     <c:set var="chebiEntryBaseUrlParam" value=""/>
+                    <%--
                     <c:set var="rheaEntryBaseUrl"
                            value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
+                    --%>
+                       <c:set var="rheaEntryBaseUrl"
+                           value="https://www.rhea-db.org/reaction?id="/>
                     <c:set var="intenzEntryBaseUrl"
                            value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
                     <c:set var="chemblImageBaseUrl"
                            value="https://www.ebi.ac.uk/chembldb/compound/displayimage/"/>
                     <c:set var="reactomeBaseUrl"
-                           value="http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID="/>
+                           value="https://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID="/>
                     <c:set var="reactomeImageBaseUrl"
-                           value="http://www.reactome.org/"/>
+                           value="https://www.reactome.org/"/>
 
                     <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
                     <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
@@ -89,8 +96,8 @@
                                     <h2><c:out value="${enzymeModel.name}"/></h2>
                                     
                                     <div class="entry-buttons">
-                                <c:if test="${empty basket ||empty basket[epfn:getSummaryBasketId(enzymeModel)]}">
-                                    <input type="hidden" id="enzymeId" value="${epfn:getSummaryBasketId(enzymeModel)}"/>
+                                <c:if test="${empty basket ||empty basket[enzymeModel.accession]}">
+                                    <input type="hidden" id="enzymeId" value="${enzymeModel.accession}"/>
                                     <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b"> Add to Basket</a>
                                     <script>
                                         $('#add-to-basket').click(function () {

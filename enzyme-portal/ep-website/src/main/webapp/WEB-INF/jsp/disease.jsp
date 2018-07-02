@@ -54,8 +54,8 @@
         <div class="provenance">
             <ul>
                 <li class="note_0">Data Sources:
-                	<a href="http://omim.org/">OMIM</a> and
-                    <a href="http://www.uniprot.org">UniProt</a></li>
+                	<a href="https://omim.org/" target="_blank">OMIM</a> and
+                    <a href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#pathology_and_biotech" target="_blank">UniProt</a></li>
                 <li class="note_1">The mission of UniProt is to provide the
                     scientific community with a comprehensive, high-quality and freely
                     accessible resource of protein sequence and functional information</li>

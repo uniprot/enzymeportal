@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.base.search.EnzymeFinderService;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
+import uk.ac.ebi.ep.data.view.PathwayView;
 
 /**
  *
@@ -39,12 +39,14 @@ public class BrowsePathwaysController extends AbstractController {
 
     private static final String FIND_PATHWAYS_BY_NAME = "/service/pathways";
 
-    private List<EnzymePortalPathways> pathwayList = new ArrayList<>();
+    //private List<EnzymePortalPathways> pathwayList = new ArrayList<>();
 
     @RequestMapping(value = BROWSE_PATHWAYS, method = RequestMethod.GET)
     public String showPathways(Model model) {
       
-        pathwayList = enzymePortalService.findPathways();//.stream().distinct().collect(Collectors.toList());
+       // List<EnzymePortalPathways> pathwayList = enzymePortalService.findAllPathways();//.stream().distinct().collect(Collectors.toList());
+        
+        List<PathwayView> pathwayList=enzymePortalService.findPathways().stream().distinct().collect(Collectors.toList());
         String msg = String.format("Number of pathways found : %s", pathwayList.size());
         logger.debug(msg);
 

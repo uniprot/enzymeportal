@@ -99,9 +99,9 @@
                     --%>
                                         <c:set var="imgLink"
                            value="http://www.ebi.ac.uk/pdbe/static/entry/${fn:toLowerCase(imgFile)}_deposited_chain_front_image-200x200.png"/>
-                    <a class="noLine" style="border-bottom-style: none" target="_blank" href="${pageContext.request.contextPath}/search/${specieWithImage}/proteinStructure">
+                    <a class="noLine" style="border-bottom-style: none" target="_blank" href="${pageContext.request.contextPath}/search/${enzyme.primaryImage.accession}/proteinStructure">
                         <img src="${imgLink}"
-                             alt="PDB ${imgFile}" onerror="noImage(this);"/>
+                             alt="PDB ${imgFile}" onerrorX="noImage(this);"/>
                     </a>
                     <div class="imgFooter">${imgFooter}</div>
                 </c:otherwise>

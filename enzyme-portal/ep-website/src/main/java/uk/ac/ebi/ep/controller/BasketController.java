@@ -223,6 +223,7 @@ public class BasketController extends AbstractController {
             enzymeRetriever.setLiteratureService(literatureService);
             enzymeRetriever.setIntenzAdapter(intenzAdapter);
             enzymeRetriever.setChebiAdapter(chebiAdapter);
+            enzymeRetriever.setRheaAdapter(rheaAdapter);
 
             return enzymeRetriever.getWholeModel(acc);
 

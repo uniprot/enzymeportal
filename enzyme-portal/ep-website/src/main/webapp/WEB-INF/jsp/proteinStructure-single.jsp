@@ -43,8 +43,9 @@
         <div class="provenance">
              <c:set var="provenance" value="${proteinStructure.provenance}"/>
             <ul>
-                <li class="note_0">
-                    <a href="http://www.ebi.ac.uk/pdbe/">${provenance[0]}</a> </li>
+                <li class="note_0">Data Source:
+                    <a href="https://www.ebi.ac.uk/pdbe/entry/pdb/${proteinStructure.id}">${provenance[0]}</a> 
+                </li>
                 <li class="note_1">${provenance[1]} </li>
                 <li class="note_2">${provenance[2]} </li>
             </ul>
