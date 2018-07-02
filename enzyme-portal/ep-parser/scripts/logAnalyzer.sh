@@ -1,10 +1,11 @@
 #!/bin/bash
 
-#LOG_INPUT_DATA=/ebi/uniprot/production/enzyme_portal/tools/enzymeportal.log
-#LOG_OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/tools/
+LOG_INPUT_DATA=/ebi/uniprot/production/enzyme_portal/tools/enzymeportal.log
+LOG_OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/tools/
 
-LOG_INPUT_DATA=/Users/joseph/ep-logs/2018/enzymeportal.log
-LOG_OUTPUT_DIR=/Users/joseph/ep-logs/2018/
+#note example used locally. 
+#LOG_INPUT_DATA=/Users/joseph/ep-logs/2018/enzymeportal.log
+#LOG_OUTPUT_DIR=/Users/joseph/ep-logs/2018/
 
 echo
 echo "**************************** W A R N I N G ****************************"
