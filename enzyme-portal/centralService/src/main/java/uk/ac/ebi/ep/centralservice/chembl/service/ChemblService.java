@@ -85,7 +85,7 @@ public class ChemblService {
 
                 if (chemblActivity.isPresent() && !chemblActivity.get().getActivities().isEmpty()) {
 
-                    for (Activity activity : chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList())) {
+                    for (Activity activity : chemblActivity.get().getActivities()) {
                         moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
                     }
 
@@ -97,7 +97,10 @@ public class ChemblService {
 
                 if (chemblic50Activity.isPresent() && !chemblic50Activity.get().getActivities().isEmpty()) {
 
-                    chemblic50Activity.get().getActivities().stream().distinct().collect(Collectors.toList()).stream()
+                    chemblic50Activity
+                            .get()
+                            .getActivities()
+                            .stream()
                             .forEach((activity) -> moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId()));
 
                     computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, chemblCompounds, protein);
@@ -143,7 +146,9 @@ public class ChemblService {
 
         if (!moleculeChemblIdsInhibitors.isEmpty()) {
 
-            moleculeChemblIdsInhibitors.stream().map((moleculeId) -> chemblServiceUrl.getMoleculeUrl() + moleculeId)
+            moleculeChemblIdsInhibitors
+                    .stream()
+                    .map((moleculeId) -> chemblServiceUrl.getMoleculeUrl() + moleculeId)
                     .forEach((prefNameUrl) -> computeChemblInhibitors(prefNameUrl, protein, compounds));
 
         }

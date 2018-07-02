@@ -10,73 +10,74 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import uk.ac.ebi.ep.centralservice.chembl.service.PageMeta;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"activities",
-"page_meta"
+    "activities",
+    "page_meta"
 })
 /**
  *
  * @author joseph
  */
 public class ChemblActivity {
+
     @JsonProperty("activities")
-private List<Activity> activities = new ArrayList<>();
-@JsonProperty("page_meta")
-private PageMeta pageMeta;
-@JsonIgnore
-private final Map<String, Object> additionalProperties = new HashMap<>();
+    private List<Activity> activities = new ArrayList<>();
+    @JsonProperty("page_meta")
+    private PageMeta pageMeta;
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The activities
-*/
-@JsonProperty("activities")
-public List<Activity> getActivities() {
-return activities;
-}
+    /**
+     *
+     * @return The activities
+     */
+    @JsonProperty("activities")
+    public List<Activity> getActivities() {
+        return activities
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
-/**
-* 
-* @param activities
-* The activities
-*/
-@JsonProperty("activities")
-public void setActivities(List<Activity> activities) {
-this.activities = activities;
-}
+    /**
+     *
+     * @param activities The activities
+     */
+    @JsonProperty("activities")
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
 
-/**
-* 
-* @return
-* The pageMeta
-*/
-@JsonProperty("page_meta")
-public PageMeta getPageMeta() {
-return pageMeta;
-}
+    /**
+     *
+     * @return The pageMeta
+     */
+    @JsonProperty("page_meta")
+    public PageMeta getPageMeta() {
+        return pageMeta;
+    }
 
-/**
-* 
-* @param pageMeta
-* The page_meta
-*/
-@JsonProperty("page_meta")
-public void setPageMeta(PageMeta pageMeta) {
-this.pageMeta = pageMeta;
-}
+    /**
+     *
+     * @param pageMeta The page_meta
+     */
+    @JsonProperty("page_meta")
+    public void setPageMeta(PageMeta pageMeta) {
+        this.pageMeta = pageMeta;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }
