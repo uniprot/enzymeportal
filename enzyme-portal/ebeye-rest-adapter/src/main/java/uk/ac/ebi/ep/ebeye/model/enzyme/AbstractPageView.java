@@ -17,7 +17,6 @@ public abstract class AbstractPageView {
     private int numProteins;
     private List<ProteinGroupEntry> proteinGroupEntry;
 
-
     public List<ProteinGroupEntry> getProteinGroupEntry() {
         if (proteinGroupEntry == null) {
             proteinGroupEntry = new ArrayList<>();
@@ -27,6 +26,30 @@ public abstract class AbstractPageView {
 
     public void setProteinGroupEntry(List<ProteinGroupEntry> proteinGroupEntry) {
         this.proteinGroupEntry = proteinGroupEntry;
+    }
+
+    public String getEnzymeName() {
+        return enzymeName;
+    }
+
+    public void setEnzymeName(String enzymeName) {
+        this.enzymeName = enzymeName;
+    }
+
+    public long getNumEnzymeHits() {
+        return numEnzymeHits;
+    }
+
+    public void setNumEnzymeHits(long numEnzymeHits) {
+        this.numEnzymeHits = numEnzymeHits;
+    }
+
+    public int getNumProteins() {
+        return numProteins;
+    }
+
+    public void setNumProteins(int numProteins) {
+        this.numProteins = numProteins;
     }
 
 }

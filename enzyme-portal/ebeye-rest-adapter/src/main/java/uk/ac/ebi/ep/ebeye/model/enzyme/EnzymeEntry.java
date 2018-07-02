@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,10 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
     public EnzymeEntry() {
 
     }
+
+//    public EnzymeEntry(String id) {
+//        this.id = id;
+//    }
 
     /**
      *
@@ -147,6 +152,31 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
     @Override
     public Set<String> getAltNames() {
         return fields.getAltNames();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymeEntry other = (EnzymeEntry) obj;
+        return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public String toString() {
+         return "EnzymeEntry{" + "id=" + id + ", fields=" + fields + '}';
+       // return id;
     }
 
 }

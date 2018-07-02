@@ -34,5 +34,29 @@ public class RelSpecies  {
         this.accession = accession;
     }
 
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
+
+    public BigInteger getExpEvidenceCode() {
+        return expEvidenceCode;
+    }
+
+    public void setExpEvidenceCode(BigInteger expEvidenceCode) {
+        this.expEvidenceCode = expEvidenceCode;
+    }
+
+    public String getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(String taxId) {
+        this.taxId = taxId;
+    }
+
 
 }
