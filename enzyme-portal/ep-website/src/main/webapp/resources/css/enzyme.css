@@ -144,7 +144,8 @@ img.molecule {
 /****************** Basket ******************************/
 
 .icon-generic[data-icon="b"]:before {
-    color: orange;
+    /* color: orange; */
+    margin-right: 5px;
 }
 
 .basket{
@@ -254,7 +255,154 @@ button.comparison {
 }
 
 
-/* XAV CSS */
+/* Homepage CSS */
+
+
+#wrapper{
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+#homepage-search{
+  background-color: red;
+}
+
+#homepage-search #search-bar{
+  float: left;
+}
+
+#homepage-search input#local-searchbox{
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  width: 98%;
+}
+
+
+.highlight-panel{
+  background-color: #f1f1f1;
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin: 30px 0 30px 0;
+}
+
+.highlight-panel a{
+  border: 0;
+}
+
+.primary-tile{
+  width: 230px;
+  height: 215px;
+  margin: 30px;
+  display: inline-block;
+  vertical-align: bottom;
+  position: relative;
+  background-color: #ccc;
+}
+.primary-tile h2{
+  color: #fff;
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+  padding: 5px 3px 5px 3px;
+  background-color: #57A5B2;
+  margin: 10px;
+}
+
+.primary-tile div.tile-text{
+  position: absolute;
+  bottom: 0;
+  padding: 20px 5px 20px 5px;
+  width: 100%;
+
+}
+
+.browse-section .primary-tile{
+  width: 230px;
+  height: 200px;
+  display: inline-block;
+  vertical-align: bottom;
+  position: relative;
+  background-color: #A2B8BC;
+  text-align: center;
+}
+.browse-section .primary-tile{
+    vertical-align: middle;
+}
+.browse-section .primary-tile h2{
+  color: #000;
+  font-size: 24px;
+  font-weight: 400;
+  padding: 5px 3px 5px 3px;
+  background-color: #EBEBEB;
+  margin: 10px;
+  min-height: 100px;
+}
+
+.technical-tile{
+  width: 26%;
+  margin: 10px 30px 10px 30px;
+  display: inline-block;
+  vertical-align: text-top;
+  height: 400px;
+}
+.technical-tile h1{
+  padding: 5px 3px 5px 3px;
+  margin: 10px;
+  text-align: left;
+  line-height: 3rem;
+}
+.technical-tile div.tile-text{
+  padding: 5px 5px 20px 5px;
+  width: 100%;
+  text-align: left;
+
+}
+
+
+
+div#global-footer {
+	border-top: 0;
+	height: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #browse-box-container {
     margin: 3em auto;
     width:100%;
