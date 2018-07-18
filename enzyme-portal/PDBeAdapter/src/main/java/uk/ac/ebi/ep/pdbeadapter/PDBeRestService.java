@@ -14,9 +14,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.pdbeadapter.cofactor.PdbCofactor;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiments;
+import uk.ac.ebi.ep.pdbeadapter.ligand.PdbLigand;
 import uk.ac.ebi.ep.pdbeadapter.molecule.PDBmolecules;
 import uk.ac.ebi.ep.pdbeadapter.publication.PDBePublications;
 import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
@@ -71,13 +74,16 @@ public class PDBeRestService {
     public PdbSearchResult getPdbSummaryResults(String pdbId) {
 
         String url = pDBeUrl.getSummaryUrl() + pdbId;
+        if (pDBeUrl.getSummaryUrl() == null) {
+            url = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/summary/" + pdbId;
+        }
         PdbSearchResult pdb = null;
 
         try {
 
             pdb = getPdbSearchResult(url.trim());
         } catch (Exception e) {
-            LOGGER.error("Error while searching with PDB ID "+pdbId +" : "+ e.getMessage(), e);
+            LOGGER.error("Error while searching with PDB ID " + pdbId + " : " + e.getMessage(), e);
         }
 
         return pdb;
@@ -137,7 +143,7 @@ public class PDBeRestService {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-            return molecules;
+        return molecules;
     }
 
     /**
@@ -164,6 +170,39 @@ public class PDBeRestService {
             LOGGER.error(ex.getMessage(), ex);
         }
         return "";
+    }
+
+    public PdbLigand findPdbLigand(String pdbId) {
+
+        String url = pDBeUrl.getLigandUrl() + pdbId;
+
+        if (pDBeUrl.getLigandUrl() == null) {
+            url = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/ligand_monomers/" + pdbId;
+        }
+
+        try {
+            return restTemplate.getForObject(url.trim(), PdbLigand.class);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    public PdbCofactor findPdbCofactor(String pdbId) {
+
+        String url = pDBeUrl.getCofactorUrl() + pdbId;
+        if (pDBeUrl.getCofactorUrl() == null) {
+            url = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/cofactor/" + pdbId;
+        }
+
+        try {
+            return restTemplate.getForObject(url.trim(), PdbCofactor.class);
+        } catch (RestClientException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        return null;
     }
 
 }

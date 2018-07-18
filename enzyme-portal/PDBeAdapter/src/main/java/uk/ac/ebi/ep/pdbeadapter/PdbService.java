@@ -7,14 +7,19 @@ package uk.ac.ebi.ep.pdbeadapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.ep.pdbeadapter.cofactor.Cofactor;
+import uk.ac.ebi.ep.pdbeadapter.cofactor.PdbCofactor;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiment;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiments;
+import uk.ac.ebi.ep.pdbeadapter.ligand.Ligand;
+import uk.ac.ebi.ep.pdbeadapter.ligand.PdbLigand;
 import uk.ac.ebi.ep.pdbeadapter.molecule.Molecule;
 import uk.ac.ebi.ep.pdbeadapter.molecule.PDBmolecules;
 import uk.ac.ebi.ep.pdbeadapter.molecule.Source;
@@ -40,6 +45,106 @@ public class PdbService {
 
         return pdbeRestService.getPdbSummaryResults(pdbId);
 
+    }
+
+    public List<String> pdbCofactors(String pdbId) {
+        PdbCofactor pdbCofactors = pdbeRestService.findPdbCofactor(pdbId);
+        List<Cofactor> cofactorList = new ArrayList<>();
+        if (pdbCofactors != null) {
+            cofactorList = pdbCofactors.get(pdbId);
+        }
+
+        return cofactorList
+                .stream()
+                .map(c -> c.getChemCompId())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> pdbLigands(String pdbId) {
+        PdbLigand pdbLigands = pdbeRestService.findPdbLigand(pdbId);
+
+        List<Ligand> ligands = new ArrayList<>();
+        if (pdbLigands != null) {
+            ligands = pdbLigands.get(pdbId);
+        }
+        return ligands
+                .stream()
+                .map(ligand -> ligand.getChemCompId())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private String addResolution(String pdbId) {
+
+        PDBexperiments pdbExperiments = pdbeRestService.getPDBexperimentResults(pdbId);
+
+        List<PDBexperiment> experiments = new ArrayList<>();
+        if (pdbExperiments != null) {
+            experiments = pdbExperiments.get(pdbId);
+        }
+
+        return experiments
+                .stream()
+                .findAny()
+                .orElse(new PDBexperiment())
+                .getResolution() + "";// + "Å";
+    }
+
+    private List<PDBe> addPdbSummary(String pdbId) {
+        PdbSearchResult pdbResult = pdbeRestService.getPdbSummaryResults(pdbId);
+
+        if (pdbResult != null) {
+            return pdbResult.get(pdbId);
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * build a concrete PDB information for summaries, experiments,
+     * molecules,publications and structural domain
+     *
+     * @param pdbId pdbe id
+     * @return a concrete PDB object with relevant information
+     */
+    public PDB findProteinStructure(final String pdbId) {
+
+       final List<String> cofactors = pdbCofactors(pdbId);
+
+        List<String> ligands = pdbLigands(pdbId);
+
+        ligands.removeIf(x -> cofactors.contains(x));
+
+        final String resolution = addResolution(pdbId);
+
+        List<PDBe> pdbSummary = addPdbSummary(pdbId);
+        return pdbSummary
+                .stream()
+                .map(s -> buildPDB(pdbId, resolution, cofactors, ligands, s))
+                .findAny()
+                .orElse(new PDB());
+
+    }
+
+    private PDB buildPDB(String pdbId, String resolution, final List<String> cofactors, final List<String> ligands, PDBe p) {
+        List<String> provenance = new ArrayList<>();
+        provenance.add("PDBe");
+        String info = "EMBL-EBI's Protein Data Bank in Europe (PDBe) is the European resource for the collection, "
+                + "organisation and dissemination of data on biological macromolecular structures. "
+                + "In collaboration with the other worldwide Protein Data Bank (wwPDB) partners we work to collate, "
+                + "maintain and provide access to the global repository of macromolecular structure data (PDB).";
+        provenance.add(info);
+
+        return PDB
+                .builder()
+                .id(pdbId)
+                .title(p.getTitle())
+                .experimentMethod(p.getExperimentalMethod())
+                .provenance(provenance)
+                .resolution(resolution)
+                .cofactors(cofactors)
+                .ligands(ligands)
+                .build();
     }
 
     /**
@@ -68,7 +173,7 @@ public class PdbService {
         }
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
-         if (molecules != null) {
+        if (molecules != null) {
             List<Molecule> mol = molecules.get(pdbId);
 
             if (mol != null && !mol.isEmpty()) {

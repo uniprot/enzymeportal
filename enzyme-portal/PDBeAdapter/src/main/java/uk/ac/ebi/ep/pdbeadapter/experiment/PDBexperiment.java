@@ -420,6 +420,6 @@ public class PDBexperiment {
         return "PDBexperiment{" + "rFactor=" + rFactor + ", rFree=" + rFree + ", experimentalMethod=" + experimentalMethod + '}';
     }
 
-    
-    
+
+  
 }

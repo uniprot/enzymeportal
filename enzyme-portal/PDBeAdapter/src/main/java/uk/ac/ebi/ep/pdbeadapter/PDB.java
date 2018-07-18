@@ -1,25 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.pdbeadapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
+import lombok.ToString;
 import uk.ac.ebi.ep.pdbeadapter.publication.AuthorList;
 
 /**
  *
  * @author joseph
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class PDB {
-
 
     private String id;
     private String title;
     private List<String> experimentMethod;
+    @Singular
+    private List<String> cofactors;
+    @Singular
+    private List<String> ligands;
     private String depositionDate;
     private String revisionDate;
     private String releaseDate;
@@ -27,23 +34,18 @@ public class PDB {
     private List<AuthorList> entryAuthors;
     private String primaryCitation;
     private String primaryCitationInfo;
-    
-    
+
     private String resolution;
     private String rFactor;
     private String rFree;
     private String spacegroup;
-    
-    
+
     private List<Polypeptide> polypeptides;
     private List<SmallMoleculeLigand> smallMoleculeLigands;
-    
-    
-    private String structuralDomain;
-    
-    private List<String> provenance;
-   
 
+    private String structuralDomain;
+
+    private List<String> provenance;
 
     public String getTitle() {
         return title;
@@ -62,8 +64,7 @@ public class PDB {
     }
 
     public String getDepositionDate() {
-      
-        
+
         return depositionDate;
     }
 
@@ -88,7 +89,10 @@ public class PDB {
     }
 
     public List<AuthorList> getEntryAuthors() {
-        return entryAuthors.stream().distinct().sorted().collect(Collectors.toList());
+        if (entryAuthors != null) {
+            return entryAuthors.stream().distinct().sorted().collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     public void setEntryAuthors(List<AuthorList> entryAuthors) {
@@ -110,8 +114,6 @@ public class PDB {
     public void setPrimaryCitationInfo(String primaryCitationInfo) {
         this.primaryCitationInfo = primaryCitationInfo;
     }
-
-
 
     public String getId() {
         return id;
@@ -152,8 +154,6 @@ public class PDB {
     public void setSpacegroup(String spacegroup) {
         this.spacegroup = spacegroup;
     }
-    
-    
 
     public String getStructuralDomain() {
         return structuralDomain;
@@ -164,10 +164,10 @@ public class PDB {
     }
 
     public List<String> getProvenance() {
-        if(provenance == null){
+        if (provenance == null) {
             provenance = new ArrayList<>();
         }
-        
+
         return provenance;
     }
 
@@ -191,12 +191,23 @@ public class PDB {
         this.smallMoleculeLigands = smallMoleculeLigands;
     }
 
+    public List<String> getCofactors() {
+        return cofactors;
+    }
+
+    public void setCofactors(List<String> cofactors) {
+        this.cofactors = cofactors;
+    }
+
+    public List<String> getLigands() {
+        return ligands;
+    }
+
+    public void setLigands(List<String> ligands) {
+        this.ligands = ligands;
+    }
 
 
-
-
-    
-    
     
     
 

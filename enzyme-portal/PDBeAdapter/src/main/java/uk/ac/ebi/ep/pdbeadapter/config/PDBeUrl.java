@@ -1,22 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.pdbeadapter.config;
+
+import lombok.Data;
 
 /**
  *
  * @author joseph
  */
+@Data
 public class PDBeUrl {
-    
-    
+
     private String summaryUrl;
     private String experimentUrl;
     private String publicationsUrl;
     private String moleculesUrl;
     private String structuralDomainUrl;
+    private String ligandUrl;
+    private String cofactorUrl;
 
     public String getSummaryUrl() {
         return summaryUrl;
@@ -57,8 +56,24 @@ public class PDBeUrl {
     public void setStructuralDomainUrl(String structuralDomainUrl) {
         this.structuralDomainUrl = structuralDomainUrl;
     }
+
+    public String getLigandUrl() {
+        return ligandUrl;
+    }
+
+    public void setLigandUrl(String ligandUrl) {
+        this.ligandUrl = ligandUrl;
+    }
+
+    public String getCofactorUrl() {
+        return cofactorUrl;
+    }
+
+    public void setCofactorUrl(String cofactorUrl) {
+        this.cofactorUrl = cofactorUrl;
+    }
     
     
-    
-    
+
+
 }

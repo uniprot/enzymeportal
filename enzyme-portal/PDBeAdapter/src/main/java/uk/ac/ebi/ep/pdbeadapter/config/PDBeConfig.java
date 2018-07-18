@@ -35,7 +35,7 @@ public class PDBeConfig {
         
         return new PDBeRestService(pDBeUrl());
     }
-      
+    
     @Bean
     public PDBeUrl pDBeUrl() {
         PDBeUrl pdBeUrl = new PDBeUrl();
@@ -45,12 +45,16 @@ public class PDBeConfig {
         String publicationsUrl = env.getProperty("pdb.publications.url");
         String moleculesUrl = env.getProperty("pdb.molecules.url");
         String structuralDomainUrl = env.getProperty("pdb.structuralDomain.url");
+        String ligandUrl = env.getProperty("pdb.ligands.url");
+        String cofactorurl = env.getProperty("pdb.cofactor.url");
         
         pdBeUrl.setSummaryUrl(summaryUrl);
         pdBeUrl.setExperimentUrl(experimentUrl);
         pdBeUrl.setPublicationsUrl(publicationsUrl);
         pdBeUrl.setMoleculesUrl(moleculesUrl);
         pdBeUrl.setStructuralDomainUrl(structuralDomainUrl);
+        pdBeUrl.setLigandUrl(ligandUrl);
+        pdBeUrl.setCofactorUrl(cofactorurl);
         return pdBeUrl;
     }
 }

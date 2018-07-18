@@ -5,15 +5,10 @@
  */
 package uk.ac.ebi.ep.pdbeadapter.summary;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -21,115 +16,81 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"preferred",
-"form",
-"name",
-"assembly_id"
+    "assembly_id",
+    "form",
+    "preferred",
+    "name"
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Assembly {
-   @JsonProperty("preferred")
-private Boolean preferred;
-@JsonProperty("form")
-private String form;
-@JsonProperty("name")
-private String name;
-@JsonProperty("assembly_id")
-private String assemblyId;
-@JsonIgnore
-private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The preferred
-*/
-@JsonProperty("preferred")
-public Boolean getPreferred() {
-return preferred;
-}
+    @JsonProperty("assembly_id")
+    private String assemblyId;
+    @JsonProperty("form")
+    private String form;
+    @JsonProperty("preferred")
+    private Boolean preferred;
+    @JsonProperty("name")
+    private String name;
 
-/**
-* 
-* @param preferred
-* The preferred
-*/
-@JsonProperty("preferred")
-public void setPreferred(Boolean preferred) {
-this.preferred = preferred;
-}
+    @JsonProperty("assembly_id")
+    public String getAssemblyId() {
+        return assemblyId;
+    }
 
-/**
-* 
-* @return
-* The form
-*/
-@JsonProperty("form")
-public String getForm() {
-return form;
-}
+    @JsonProperty("assembly_id")
+    public void setAssemblyId(String assemblyId) {
+        this.assemblyId = assemblyId;
+    }
 
-/**
-* 
-* @param form
-* The form
-*/
-@JsonProperty("form")
-public void setForm(String form) {
-this.form = form;
-}
+    public Assembly withAssemblyId(String assemblyId) {
+        this.assemblyId = assemblyId;
+        return this;
+    }
 
-/**
-* 
-* @return
-* The name
-*/
-@JsonProperty("name")
-public String getName() {
-return name;
-}
+    @JsonProperty("form")
+    public String getForm() {
+        return form;
+    }
 
-/**
-* 
-* @param name
-* The name
-*/
-@JsonProperty("name")
-public void setName(String name) {
-this.name = name;
-}
+    @JsonProperty("form")
+    public void setForm(String form) {
+        this.form = form;
+    }
 
-/**
-* 
-* @return
-* The assemblyId
-*/
-@JsonProperty("assembly_id")
-public String getAssemblyId() {
-return assemblyId;
-}
+    public Assembly withForm(String form) {
+        this.form = form;
+        return this;
+    }
 
-/**
-* 
-* @param assemblyId
-* The assembly_id
-*/
-@JsonProperty("assembly_id")
-public void setAssemblyId(String assemblyId) {
-this.assemblyId = assemblyId;
-}
+    @JsonProperty("preferred")
+    public Boolean getPreferred() {
+        return preferred;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    @JsonProperty("preferred")
+    public void setPreferred(Boolean preferred) {
+        this.preferred = preferred;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    public Assembly withPreferred(Boolean preferred) {
+        this.preferred = preferred;
+        return this;
+    }
 
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
 
-     
-     
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Assembly withName(String name) {
+        this.name = name;
+        return this;
+    }
+
 }
