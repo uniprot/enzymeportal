@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +14,29 @@ import uk.ac.ebi.ep.pdbeadapter.PdbService;
  */
 @Controller
 public class PDBeRestController {
-    
- 
+
     @Autowired
     private PdbService pdbService;
-    
-    @RequestMapping(value = "/ajax/pdbe/{pdbId}")
-    protected  String getStructure(Model model, @PathVariable String pdbId) {
-        String retValue = "pdb";
-      
-     
-        PDB structure = pdbService.computeProteinStructure(pdbId.toLowerCase());
-        
-        
-         model.addAttribute("proteinStructure", structure);
 
+    @RequestMapping(value = "/ajax/pdbe/{pdbId}")
+    protected String getStructure(Model model, @PathVariable String pdbId) {
+        String retValue = "pdbe";
+        // PDB structure = pdbService.computeProteinStructure(pdbId.toLowerCase());
+
+        PDB structure = pdbService.findProteinStructure(pdbId.toLowerCase());
+        model.addAttribute("proteinStructure", structure);
 
         return retValue;
     }
-    
-    
 
+//    public static void main(String[] args) {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(PDBeRestController.class);
+//
+//        PdbService pdbService = context.getBean(PdbService.class);
+//        String pdbId = "5hht";
+//        PDB structure = pdbService.findProteinStructure(pdbId.toLowerCase());
+//        System.out.println("All "+ structure);
+//        System.out.println("DATA " + structure.getCofactors());
+//        System.out.println("DATAAAA " + structure.getLigands());
+//    }
 }
-
-

@@ -39,8 +39,8 @@ import uk.ac.ebi.ep.config.EZPPUBHXFBConfig;
 import uk.ac.ebi.ep.config.HHConfig;
 import uk.ac.ebi.ep.config.HXFBConfig;
 import uk.ac.ebi.ep.config.ProdDataConfig;
-import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 import uk.ac.ebi.ep.converters.StringToEnzymeEntry;
+import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 
 /**
  *
@@ -50,7 +50,7 @@ import uk.ac.ebi.ep.converters.StringToEnzymeEntry;
 @ComponentScan(basePackages = {"uk.ac.ebi.ep.config", "uk.ac.ebi.ep.controller", "uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye.config", "uk.ac.ebi.ep.data.service", "uk.ac.ebi.ep.literatureservice.config"})
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class,EZPPUBConfig.class, EZPPUBHHConfig.class, EZPPUBHXFBConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
+@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, EZPPUBConfig.class, EZPPUBHHConfig.class, EZPPUBHXFBConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
 //@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class,EZPPUBConfig.class, PowerGateConfig.class, OliverYardConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
 @PropertySource("classpath:ep.properties")
@@ -60,10 +60,18 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.setUseSuffixPatternMatch(false);
     }
-    
-      @Override
+
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        //registry.addMapping("/**");
+        registry.addMapping("/**").allowedOrigins("http://localhost:8080");
+
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://domain2.com")
+                .allowedMethods("PUT", "DELETE")
+                .allowedHeaders("header1", "header2", "header3")
+                .exposedHeaders("header1", "header2")
+                .allowCredentials(false).maxAge(3600);
     }
 
     /**
@@ -78,7 +86,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 //        registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
 //
 //    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
@@ -142,8 +149,7 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         registrar.setFormatter(new DateFormatter("EEE, d MMM yyyy"));
         registrar.setFormatter(new DateFormatter("d MMMMM yyyy"));
         registrar.setFormatter(new DateFormatter("dd MMMMM yyyy - HH:mm"));
-        
-        
+
         //add entry conversion
         conversionService.addConverter(new StringToEnzymeEntry());
 
