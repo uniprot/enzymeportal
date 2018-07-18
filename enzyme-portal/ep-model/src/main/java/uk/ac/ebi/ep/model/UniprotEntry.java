@@ -19,6 +19,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -55,6 +56,9 @@ import uk.ac.ebi.ep.model.common.ModelOrganisms;
 })
 
 public class UniprotEntry implements Serializable {
+
+    @ManyToMany(mappedBy = "uniprotEntrySet")
+    private Set<ReactionMechanism> reactionMechanismSet;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -516,6 +520,15 @@ public class UniprotEntry implements Serializable {
 
     public void setChemblTargetsSet(Set<ChemblTargets> chemblTargetsSet) {
         this.chemblTargetsSet = chemblTargetsSet;
+    }
+
+    @XmlTransient
+    public Set<ReactionMechanism> getReactionMechanismSet() {
+        return reactionMechanismSet;
+    }
+
+    public void setReactionMechanismSet(Set<ReactionMechanism> reactionMechanismSet) {
+        this.reactionMechanismSet = reactionMechanismSet;
     }
 
 }
