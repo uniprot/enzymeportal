@@ -172,6 +172,10 @@ button#basketDeselectAll, button#basketSelectAll {
     font-size: smaller;
 }
 
+#basketEmptyMsg{
+  text-align: center;
+}
+
 /****************** Comparing enzymes *******************/
 
 #comparison-outline {
@@ -264,8 +268,8 @@ button.comparison {
   margin: auto;
 }
 
-#homepage-search{
-  background-color: red;
+#homepage-search fieldset{
+  margin-top: 0px;
 }
 
 #homepage-search #search-bar{
@@ -285,6 +289,13 @@ button.comparison {
   max-width: 1200px;
   text-align: center;
   margin: 30px 0 30px 0;
+}
+.search-panel{
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin: 30px 0 30px 0;
+  height: 220px;
 }
 
 .highlight-panel a{

@@ -188,11 +188,11 @@ div.box { border: 10px solid #72C0B3; }
 */
 div#local-masthead {
 	background-color: #08a1b1;
-	background-image: -moz-linear-gradient(top, #08a1b1, #84d0d8);
+	/* background-image: -moz-linear-gradient(top, #08a1b1, #84d0d8);
 	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #08a1b1),color-stop(1, #84d0d8));
 	background-image: -webkit-linear-gradient(#08a1b1, #84d0d8);
 	background-image: linear-gradient(top, #08a1b1, #84d0d8);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#08a1b1', EndColorStr='#84d0d8');
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#08a1b1', EndColorStr='#84d0d8'); */
 
 }
 
