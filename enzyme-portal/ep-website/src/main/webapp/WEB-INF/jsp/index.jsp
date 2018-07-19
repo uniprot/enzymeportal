@@ -13,75 +13,173 @@
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+    <!--<![endif]-->
 
-<c:set var="pageTitle" value="Home &lt; Enzyme Portal &lt; EMBL-EBI"/>
-<%@include file="head.jspf" %>
+    <c:set var="pageTitle" value="Home &lt; Enzyme Portal &lt; EMBL-EBI"/>
+    <%@include file="head.jspf" %>
 
-<body class="level2" ><!-- add any of your classes or IDs -->
-    <%@include file="skipto.jspf" %>
+    <body class="level2">
+        <!-- add any of your classes or IDs -->
+        <%@include file="skipto.jspf" %>
 
+        <div id="wrapper" class="">
 
-    <div id="wrapper" class="">
+            <%@include file="header-home.jspf" %>
 
-    <%@include file="header.jspf" %>
+            <div id="wrapper" class="container_24">
+                <div id="content" role="main" class="clearfix">
 
-    <div id="content" role="main" class="row">
+                    <div class="row">
+                        <div class="large-2 columns">
+                            <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg"></div>
 
-        <section>
-            <div id="browse-box-container">
-                <a href="browse/disease" class="browse-box disease-box large-2 ">
-                    <h4>Diseases<br />&nbsp;</h4>
-                    <span class="icon icon-generic" data-icon="B"></span>
-                </a>
-                <a href="browse/enzymes"  class="browse-box enzyme-box large-2 ">
-                    <h4>Enzyme<br />Classification</h4>
-                    <span class="icon icon-conceptual" data-icon="b"></span>
-                </a>
-                <a href="browse/taxonomy"  class="browse-box taxonomy-box large-2 ">
-                    <h4>Taxonomy<br />&nbsp;</h4>
-                    <span class="icon icon-conceptual" data-icon="o"></span>
-                </a>
-                <a href="browse/pathways"  class="browse-box gene-box large-2 ">
-                    <h4>Pathways<br />&nbsp;</h4>
-                    <span class="icon icon-conceptual" data-icon="y"></span>
-                </a>
-            </div>
-        </section>
+                            <section class="large-10 columns">
+                                <h1>Search Enzymes</h1>
+                                <p>Enzyme Portal integrates publicaly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds</p>
 
-        <section class="row home-page-descriptions">
-            <div class="large-3 columns">
-                <h4>About Enzyme Portal</h4>
-                <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.
-                See walk-through <a target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">videos</a> to learn more</p>
-                <p><a href="about">more...</a></p>
-            </div>
-            <div class="large-3 columns">
-                <h4>Enzyme Portal Resources</h4>
-                <p>To build its reports, the Enzyme Portal uses data from <a href="http://www.uniprot.org" target="_blank">UniProtKb</a>,
-                    <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>, <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
-                    <a href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>, <a href="http://www.reactome.org/" target="_blank">REACTOME</a>,
-                    <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>, <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a> and many more resources.</p>
-                <p><a href="about">more...</a></p>
-            </div>
-            <div class="large-3 columns">
-                <h4>Technical documents</h4>
-                <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>, an online project hosting service.</p>
-                <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
-            </div>
-            <div class="large-3 columns">
-                <h4>Tools</h4>
-                <p><strong>Protein sequence search:</strong> search Enzyme Portal with a sequence by clicking on the <a href="http://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal"> Sequence search link </a> in the search area.</p>
-                <p><strong>Compare enzymes:</strong> the Enzyme Portal basket provides a tool for comparing two enzymes. Select your enzymes from search results and add them to your basket to access the tool.</p>
-            </div>
-        </section>
+                                <div id="homepage-search" class="large-12">
+                                    <c:if test="${not fn:containsIgnoreCase(pageTitle, 'Advanced Search')}">
+                                        <%@ include file="frontierSearchBox.jsp" %>
+                                    </c:if>
+                                </div>
+                            </section>
 
-    <%@include file="footer.jspf" %>
+                        </div>
 
-  </div> <!--! end of #wrapper -->
-    </div>
-  <script src="resources/javascript/search.js" type="text/javascript"></script>
-  <%--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>--%>
+                        <div class="row highlight-panel large-12">
+                            <h1>Analyse data</h1>
+                            <a href="#">
+                                <div class="primary-tile">
+                                    <h2>Transform-MinER</h2>
+                                    <div>
+                                        <img src="/enzymeportal/resources/images/transform.png"><br/>
+                                            <div class="tile-text">
+                                                Transforms molecules to find enzyme matches for novel substrate
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#">
+                                    <div class="primary-tile">
+                                        <h2>Compare enzymes</h2>
+                                        <div>
+                                            <img src="/enzymeportal/resources/images/compare.png"><br/>
+                                                <div class="tile-text">
+                                                    Compare two enzymes; function, sequence, structure
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div class="primary-tile">
+                                            <h2>Sequence search</h2>
+                                            <div>
+                                                <img src="/enzymeportal/resources/images/sequence.png"><br/>
+                                                    <div class="tile-text">
+                                                        Run a sequence search against known enzymes
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
 
-</body>
-</html>
+                                    <div class="row highlight-panel browse-section large-12">
+                                        <h1>Browse enzymes</h1>
+                                        <a href="browse/enzymes">
+                                            <div class="primary-tile">
+                                                <h2>By enzyme Classification</h2>
+                                                <div class="tile-text">
+                                                    <img src="/enzymeportal/resources/images/enzyme.png"><br/>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="browse/disease">
+                                                <div class="primary-tile">
+                                                    <h2>By diseases</h2>
+                                                    <div class="tile-text">
+                                                        <img src="/enzymeportal/resources/images/diseases.png"><br/>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="browse/taxonomy">
+                                                    <div class="primary-tile">
+                                                        <h2>By taxonomy</h2>
+                                                        <div class="tile-text">
+                                                            <img src="/enzymeportal/resources/images/taxon.png"><br/>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <a href="browse/pathways">
+                                                        <div class="primary-tile">
+                                                            <h2>By pathways</h2>
+                                                            <div class="tile-text">
+                                                                <img src="/enzymeportal/resources/images/pathways.png"><br/>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="row highlight-panel large-12">
+
+                                                        <div class="technical-tile">
+                                                            <h1>About Enzyme Portal</h1>
+                                                            <div>
+                                                                <div class="tile-text">
+                                                                    The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.
+
+                                                                    <br />
+                                                                      <a target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">
+                                                                          <img src="/enzymeportal/resources/images/youtube2.png"></a>
+
+                                                                  <p><a href="about">more...</a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="technical-tile">
+                                                            <h1>Technical documents</h1>
+                                                            <div>
+                                                                <div class="tile-text">
+                                                                    <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>,
+                                                                    an online project hosting service.</p>
+
+                                                                    <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="technical-tile">
+                                                            <h1>Enzyme Portal resources</h1>
+                                                            <div>
+                                                                <div class="tile-text">
+                                                                  <p>To build its reports, the Enzyme Portal uses data from
+                                                                      <a href="http://www.uniprot.org" target="_blank">UniProtKb</a>,
+                                                                      <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>,
+                                                                      <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
+                                                                      <a href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>,
+                                                                      <a href="http://www.reactome.org/" target="_blank">REACTOME</a>,
+                                                                      <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
+                                                                      <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a>
+                                                                      and many more resources.</p>
+                                                                  <p>
+                                                                      <a href="about">more...</a>
+                                                                  </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="content" role="main" class="row">
+                                                <%@include file="footer.jspf" %>
+                                            </div>
+                                            <!--! end of #wrapper -->
+                                        </div>
+                                        <script src="resources/javascript/search.js" type="text/javascript"></script>
+                                        <%--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>--%>
+
+                                    </body>
+                                </html>
