@@ -29,6 +29,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.ProjectedSpecies;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
+import uk.ac.ebi.ep.data.domain.ReactionMechanism;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
@@ -42,6 +43,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
+import uk.ac.ebi.ep.data.repositories.ReactionMechanismRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -93,6 +95,8 @@ public class EnzymePortalService {
     private EnzymesToTaxonomyRepository enzymesToTaxonomyRepository;
 //    @Autowired
 //    private IntenzEnzymesRepository intenzEnzymesRepository;
+    @Autowired
+    private ReactionMechanismRepository reactionMechanismRepository;
 
     private static final int ORACLE_IN_CLAUSE_LIMIT = 1000;
     private static final int QUERY_LIMIT = 999;
@@ -259,24 +263,23 @@ public class EnzymePortalService {
 
     }
 
-//        @Transactional(readOnly = true)
-//    public List<EnzymePortalPathways> findAllPathways() {
-//        return pathwaysRepository.findAllPathways();
-//}
-//    @Transactional(readOnly = true)
-//    public List<EnzymePortalPathways> findPathways() {
-//
-//        return pathwaysRepository.findPathways()
-//                .stream()
-//                .distinct()
-//                .parallel()
-//                .collect(Collectors.toList());
-//    }
-//    @Transactional(readOnly = true)
-//    public List<String> findAccessionsByReactionId(String reactionId) {
-//
-//        return reactionRepository.findAccessionsByReactionId(reactionId);
-//    }
+
+    //reaction mechanism
+
+
+    @Transactional(readOnly = true)
+    public List<ReactionMechanism> findReactionMechanismsByMcsaId(String mscaId) {
+
+        return reactionMechanismRepository.findReactionMechanismsByMcsaId(mscaId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReactionMechanism> findReactionMechanismsByAccession(String accession) {
+
+        return reactionMechanismRepository.findReactionMechanismsByAccession(accession);
+    }
+    
+
     @Transactional(readOnly = true)
     public List<EnzymeReaction> findReactionsByAccession(String accession) {
 
@@ -284,7 +287,7 @@ public class EnzymePortalService {
         List<EnzymePortalReaction> enzreactions = enzymePortalReactionRepository.findReactionsByAccession(accession);
         List<EnzymeReaction> reactions = new ArrayList<>();
         if (enzreactions != null) {
-            enzreactions.stream().map(r -> new EnzymeReaction("RHEA:"+r.getReactionId(), r.getKeggId()))
+            enzreactions.stream().map(r -> new EnzymeReaction("RHEA:" + r.getReactionId(), r.getKeggId()))
                     .forEach(er -> reactions.add(er));
 
             return reactions;
@@ -956,12 +959,14 @@ public class EnzymePortalService {
             Arrays.asList("ENTRY_TYPE"));
 
     /**
-     * Define page request with paging and sorting. *
+     * Define page request with paging and sorting.
+     *
+     *
      * @param sortType
      * @param sortProperty
      * @param page
      * @param pageSize
-     * @return 
+     * @return
      */
     public PageRequest getPageRequest(String sortType, String sortProperty, int page, int pageSize) {
 
