@@ -12,7 +12,7 @@ public enum FieldName {
     PRIMARY_IMAGE("primary_image"),PRIMARY_IMAGE_SPECIE("primary_image_specie"),EC("ec"),CATALYTIC_ACTIVITY("catalytic_activity"),
     COMPOUND_NAME("compound_name"), COMPOUND_TYPE("compound_type"), DISEASE_NAME("disease_name"),ENZYME_FAMILY("enzyme_family"),
     TRANSFER_FLAG("transfer_flag"),INTENZ_COFACTORS("intenz_cofactors"),INTENZ_ALT_NAMES("alt_names"),
-    RELATED_SPECIES("related_species"),PRIMARY_ACCESSION("primary_accession"),PRIMARY_ORGANISM("primary_organism");
+    RELATED_SPECIES("related_species"),PRIMARY_ACCESSION("primary_accession"),PRIMARY_ORGANISM("primary_organism"), REACTION_MECHANISM("reaction_mechanism");
 
     private FieldName(String name) {
         this.name = name;

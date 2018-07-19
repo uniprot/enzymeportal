@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entity.ReactionMechanism;
 import uk.ac.ebi.ep.xml.entity.UniprotEntry;
 import uk.ac.ebi.ep.xml.schema.AdditionalFields;
 import uk.ac.ebi.ep.xml.schema.CrossReferences;
@@ -35,6 +36,7 @@ public class EnzymeProcessor extends DataTransformer implements ItemProcessor<En
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
 
         addCofactorsField(enzyme.getCofactor(), fields);
+        addReactionMechanism(enzyme.getReactionMechanismSet(), fields);
 
         enzyme.getEnzymePortalEcNumbersSet()
                 .stream()
@@ -83,6 +85,16 @@ public class EnzymeProcessor extends DataTransformer implements ItemProcessor<En
                     .forEach(field -> fields.add(field));
 
         }
+    }
+
+    private void addReactionMechanism(Set<ReactionMechanism> reactionMechanismSet, Set<Field> fields) {
+
+        reactionMechanismSet
+                .stream()
+                .map(rm -> rm.getMcsaId() + ";" + rm.getEnzymeName() + ";" + rm.getImageId() + ";" + rm.getMechanismDescription())
+                .map(mechanism -> new Field(FieldName.REACTION_MECHANISM.getName(), mechanism))
+                .forEachOrdered(pdbfield -> fields.add(pdbfield));
+
     }
 
 }
