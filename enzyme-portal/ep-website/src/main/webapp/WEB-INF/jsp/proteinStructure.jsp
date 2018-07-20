@@ -18,7 +18,8 @@
 	<c:otherwise>
 
         <script>
-            function showStructure(pdbCode){
+
+            function showStructure(pdbCode, proteinName){
             	var structures = document.getElementById('proteinStructures');
                 var divs = structures.childNodes;
                 for (var i = 0; i < divs.length; i++){
@@ -39,28 +40,30 @@
                 	var pdbReqUrl = '${pageContext.request.contextPath}/ajax/pdbe/' + pdbCode;
                 	$(divId).load(pdbReqUrl);
                 }
+								document.getElementById("proteinNameTitle").innerHTML = proteinName;
                 return false;
             }
         </script>
 
         <div class="view">
-           
-                
-        	<c:if test="${fn:length(proteinStructures) gt 1}">
-	        	<div class="references" style="margin-top: 1ex;">
-					<div class="button">${fn:length(proteinStructures)}
-						protein structures available</div>
-		            <table style="display: none;">
-		            <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
-		                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
-		                	onclick="return showStructure('${proteinStructure.id}');">
-		                    <td><a href="#">${proteinStructure.id}</a></td>
-		                    <td>${proteinStructure.name}</td>
-		                </tr>
-		            </c:forEach>
-		            </table>
-	            </div>
-        	</c:if>
+
+  			<h3><span id="proteinNameTitle">${enzymeModel.proteinstructure[0].name}</span></h3>
+
+				<c:if test="${fn:length(proteinStructures) gt 1}">
+					<div class="references" style="margin-top: 1ex;">
+					<div class="button">Change Protein Structure (${fn:length(proteinStructures)} available)</div>
+							<table style="display: none;">
+							<c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
+									<tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
+										onclick="return showStructure('${proteinStructure.id}','${proteinStructure.name}');">
+											<td><a href="#">${proteinStructure.id}</a></td>
+											<td>${proteinStructure.name}</td>
+									</tr>
+							</c:forEach>
+							</table>
+						</div>
+				</c:if>
+
 			<div class="clearfix"></div>
             <div id="proteinStructures">
 				<div class="summary structure" id="structure-${proteinStructures[0].id}">

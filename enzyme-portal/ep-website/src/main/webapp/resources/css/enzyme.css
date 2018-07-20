@@ -831,3 +831,19 @@ div#organismList, div#cofactorsList, div#inhibitorsList, div#activatorsList, div
     font-size: 34px;
     line-height: normal;
 }
+
+.image{
+  border-right: 1px solid #08a1b1;
+}
+
+.references table{
+  width: 65%;
+}
+
+.references .button{
+  margin-bottom: 0;
+}
+
+.hidden{
+  display: none;
+}
