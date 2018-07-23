@@ -28,6 +28,14 @@ public enum Field {
      * Reactions/pathways tab.
      */
     REACTIONSPATHWAYS("reactionsPathways"),
+        /**
+     * Reactions/pathways tab.
+     */
+    REACTIONSMECHANISMS("reactionsMechanisms"),
+        /**
+     * Reactions/pathways tab.
+     */
+    PATHWAYS("pathways"),
     /**
      * Small molecules tab.
      */

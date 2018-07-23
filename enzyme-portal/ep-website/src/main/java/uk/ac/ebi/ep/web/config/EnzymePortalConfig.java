@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.web.config;
 
 import java.util.HashMap;
@@ -33,13 +32,15 @@ import uk.ac.ebi.ep.web.utils.SearchUtil;
  */
 @Configuration
 @PropertySources({
-    @PropertySource(value = "classpath:log4j.properties", ignoreResourceNotFound = true),
-    @PropertySource("classpath:ep-web-client.properties"),
+    @PropertySource(value = "classpath:log4j.properties", ignoreResourceNotFound = true)
+    ,
+    @PropertySource("classpath:ep-web-client.properties")
+    ,
     @PropertySource("classpath:chembl-adapter.properties")
 
 })
 public class EnzymePortalConfig {
-
+    
     @Autowired
     private Environment env;
 
@@ -50,51 +51,51 @@ public class EnzymePortalConfig {
         interceptor.setParamName("lang");
         return interceptor;
     }
-
+    
     @Bean
     public String uniprotAlignUrl() {
         String alignUrl = env.getProperty("uniprot.align.url");
         return alignUrl;
     }
-
+    
     @Bean
     public String pdbImgUrl() {
         String pdbImgUrl = env.getProperty("pdb.structure.img.url");
         return pdbImgUrl;
     }
-
+    
     @Bean
     public String pdbStructureCompareUrl() {
         String pdbStructureCompareUrl = env.getProperty("pdb.structure.compare.url");
         return pdbStructureCompareUrl;
     }
-
+    
     @Bean
     public IntenzConfig intenzConfig() {
         IntenzConfig config = new IntenzConfig();
-
+        
         config.setTimeout(Integer.parseInt(env.getProperty("intenz.ws.timeout")));
         config.setIntenzXmlUrl(env.getProperty("intenz.xml.url"));
         config.setEcBaseUrl("https://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
         return config;
     }
-
+    
     @Bean
     public IntenzAdapter intenzAdapter() {
         IntenzAdapter intenz = new IntenzAdapter();
         intenz.setConfig(intenzConfig());
         return intenz;
     }
-
+    
     @Bean
     public RheaWsAdapter rheaAdapter() {
         return new RheaWsAdapter();
     }
-
+    
     @Bean
     public Config searchConfig() {
         Config config = new Config();
-
+        
         config.setResultsPerPage(Integer.parseInt(env.getProperty("search.results.per.page")));
         config.setMaxPages(Integer.parseInt(env.getProperty("search.results.pages.max")));
         config.setMaxTextLength(Integer.parseInt(env.getProperty("search.summary.text.length.max")));
@@ -102,7 +103,7 @@ public class EnzymePortalConfig {
         config.setSearchCacheSize(Integer.parseInt(env.getProperty("search.cache.size")));
         return config;
     }
-
+    
     @Bean
     public ReactomeConfig reactomeConfig() {
         ReactomeConfig rc = new ReactomeConfig();
@@ -110,10 +111,10 @@ public class EnzymePortalConfig {
         rc.setUseProxy(Boolean.parseBoolean(env.getProperty("reactome.ws.proxy")));
         rc.setWsBaseUrl(env.getProperty("reactome.ws.url"));
         rc.setEventBaseUrl("https://www.reactome.org/content/detail/");
-
+        
         return rc;
     }
-
+    
     @Bean
     public ChebiConfig chebiConfig() {
         ChebiConfig chebiConfig = new ChebiConfig();
@@ -123,32 +124,32 @@ public class EnzymePortalConfig {
         chebiConfig.setMaxRetrievedMolecules(Integer.parseInt(env.getProperty("chebi.results.max")));
         chebiConfig.setCompoundBaseUrl(env.getProperty("chebi.compound.base.url"));
         chebiConfig.setCompoundImgBaseUrl(env.getProperty("chebi.compound.img.base.url"));
-
+        
         return chebiConfig;
     }
-
+    
     @Bean
     public ChebiAdapter chebiAdapter() {
         ChebiAdapter chebiAdapter = new ChebiAdapter();
         chebiAdapter.setConfig(chebiConfig());
         return chebiAdapter;
     }
-
+    
     public Map<String, String> drugbankConfig() {
         Map<String, String> drugbankConfig = new HashMap<>();
         drugbankConfig.put("compound.base.url", env.getProperty("drugbank.compound.base.url"));
         drugbankConfig.put("compound.img.base.url", env.getProperty("drugbank.compound.img.base.url"));
-
+        
         return drugbankConfig;
     }
-
+    
     @Bean
     public ChemblConfig chemblConfig() {
         ChemblConfig chemblConfig = new ChemblConfig();
-
+        
         return chemblConfig;
     }
-
+    
     @Bean
     public Functions functions() {
         Functions functions = new Functions();
@@ -157,7 +158,7 @@ public class EnzymePortalConfig {
         functions.setDrugbankConfig(drugbankConfig());
         return functions;
     }
-
+    
     @Bean
     public FilesConfig filesConfig() {
         FilesConfig filesConfig = new FilesConfig();
@@ -166,49 +167,53 @@ public class EnzymePortalConfig {
         filesConfig.setSitemapUrl(env.getProperty("sitemap.directory"));
         return filesConfig;
     }
-
+    
     @Bean
     public PdbService pdbService() {
         return new PdbService(pdbeRestService());
     }
-
+    
     @Bean
     public PDBeRestService pdbeRestService() {
-
+        
         return new PDBeRestService();
     }
-
+    
     @Bean
     public PDBeUrl pDBeUrl() {
         PDBeUrl pdBeUrl = new PDBeUrl();
-
+        
         String summaryUrl = env.getProperty("pdb.summary.url");
         String experimentUrl = env.getProperty("pdb.experiment.url");
         String publicationsUrl = env.getProperty("pdb.publications.url");
         String moleculesUrl = env.getProperty("pdb.molecules.url");
         String structuralDomainUrl = env.getProperty("pdb.structuralDomain.url");
-
+        String ligandUrl = env.getProperty("pdb.ligands.url");
+        String cofactorurl = env.getProperty("pdb.cofactor.url");
+        
         pdBeUrl.setSummaryUrl(summaryUrl);
         pdBeUrl.setExperimentUrl(experimentUrl);
         pdBeUrl.setPublicationsUrl(publicationsUrl);
         pdBeUrl.setMoleculesUrl(moleculesUrl);
         pdBeUrl.setStructuralDomainUrl(structuralDomainUrl);
+        pdBeUrl.setLigandUrl(ligandUrl);
+        pdBeUrl.setCofactorUrl(cofactorurl);
         return pdBeUrl;
     }
-
+    
     @Bean
     public SpelAwareProxyProjectionFactory projectionFactory() {
         return new SpelAwareProxyProjectionFactory();
     }
-
+    
     @Bean
     public EnzymeRetriever enzymeRetriever() {
         return new EnzymeRetriever();
     }
-
+    
     @Bean
     public SearchUtil searchUtil() {
         return new SearchUtil();
     }
-
+    
 }

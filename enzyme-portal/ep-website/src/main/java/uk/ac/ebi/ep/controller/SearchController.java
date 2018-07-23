@@ -99,6 +99,16 @@ public class SearchController extends AbstractController {
                 case PROTEINSTRUCTURE:
                     enzymeModel = enzymeRetriever.getProteinStructure(accession);
                     break;
+                case REACTIONSMECHANISMS:
+                    enzymeRetriever.setRheaAdapter(rheaAdapter);
+                    enzymeModel = enzymeRetriever.getRheaReactionsAndMechanisms(accession);
+                    
+                    break;
+                case PATHWAYS:
+
+                    enzymeModel = enzymeRetriever.getPathways(accession);
+                   
+                    break;
                 case REACTIONSPATHWAYS:
                     enzymeRetriever.setRheaAdapter(rheaAdapter);
                     enzymeModel = enzymeRetriever.getReactionsPathways(accession);
@@ -303,7 +313,6 @@ public class SearchController extends AbstractController {
                     = getPreviousSearches(session.getServletContext());
 
             String modelSearchKey = getSearchKey(searchModel.getSearchparams());
-         
 
             searchKey = Jsoup.clean(modelSearchKey, Whitelist.basic());
             results = prevSearches.get(searchKey);
@@ -339,8 +348,8 @@ public class SearchController extends AbstractController {
                 model.addAttribute("searchConfig", searchConfig);
                 model.addAttribute("searchModel", searchModel);
                 SearchFilters searchfilters = searchModel.getSearchresults().getSearchfilters();
-               
-                 model.addAttribute("searchfilters", searchfilters);
+
+                model.addAttribute("searchfilters", searchfilters);
                 model.addAttribute("pagination", getPagination(searchModel));
                 request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
 

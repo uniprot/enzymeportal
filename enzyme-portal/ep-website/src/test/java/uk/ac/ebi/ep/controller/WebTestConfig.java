@@ -19,6 +19,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
+import uk.ac.ebi.ep.data.repositories.ReactionMechanismRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -239,6 +240,11 @@ public class WebTestConfig {
     public EnzymeFinderService enzymeFinderService() {
 
         return Mockito.mock(EnzymeFinderService.class);
+    }
+    
+        @Bean
+    public ReactionMechanismRepository reactionMechanismRepository () {
+        return Mockito.mock(ReactionMechanismRepository.class);
     }
 
 }

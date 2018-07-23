@@ -49,7 +49,7 @@
                     <c:set var="rheaEntryBaseUrl"
                            value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
                     --%>
-                       <c:set var="rheaEntryBaseUrl"
+                    <c:set var="rheaEntryBaseUrl"
                            value="https://www.rhea-db.org/reaction?id="/>
                     <c:set var="intenzEntryBaseUrl"
                            value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
@@ -69,6 +69,12 @@
                     <c:if test='${requestedfield=="proteinstructure"}'>
                         <c:set var="proteinStructureSelected" value="selected"/>
                     </c:if>
+                    <c:if test='${requestedfield=="reactionsMechanisms"}'>
+                        <c:set var="reactionsMechanismsSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="pathways"}'>
+                        <c:set var="pathwaysSelected" value="selected"/>
+                    </c:if>
                     <c:if test='${requestedfield=="reactionspathways"}'>
                         <c:set var="reactionsPathwaysSelected" value="selected"/>
                     </c:if>
@@ -86,92 +92,92 @@
 
                     <section>
                         <div class="header row">
-                            
-                            
+
+
                             <div class="row" id="title-row">
                                 <section class="large-3 columns">
                                     <img src="/enzymeportal/resources/images/protein_page_logo2.png">
                                 </section>
                                 <section class="large-9 columns">
                                     <h2><c:out value="${enzymeModel.name}"/></h2>
-                                    
+
                                     <div class="entry-buttons">
-                                <c:if test="${empty basket ||empty basket[enzymeModel.accession]}">
-                                    <input type="hidden" id="enzymeId" value="${enzymeModel.accession}"/>
-                                    <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b"> Add to Basket</a>
-                                    <script>
-                                        $('#add-to-basket').click(function () {
-                                            ajaxBasket($('#enzymeId').val(), true);
-                                            $(this).hide();
-                                        });
-                                    </script>
-                                </c:if>
-                                <strong>&nbsp;&nbsp;Organism:</strong>
-                                <div class="panel">
-                                    <div class="classification">
-                                        <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
-                                            <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
-                                            <span class="extra"
-                                                  title="${selectedSpecies.scientificname}"
-                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
+                                        <c:if test="${empty basket ||empty basket[enzymeModel.accession]}">
+                                            <input type="hidden" id="enzymeId" value="${enzymeModel.accession}"/>
+                                            <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b"> Add to Basket</a>
+                                            <script>
+                                                $('#add-to-basket').click(function () {
+                                                    ajaxBasket($('#enzymeId').val(), true);
+                                                    $(this).hide();
+                                                });
+                                            </script>
+                                        </c:if>
+                                        <strong>&nbsp;&nbsp;Organism:</strong>
+                                        <div class="panel">
+                                            <div class="classification">
+                                                <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                    <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
+                                                    <span class="extra"
+                                                          title="${selectedSpecies.scientificname}"
+                                                          style="overflow: hidden;">${selectedSpecies.scientificname}</span>
+                                                </div>
+                                            </div>
+                                            <div class="selection">
+                                                <ul>
+                                                    <c:if test="${fn:length(relSpecies)<=0}">
+                                                        <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
+                                                            <c:set var="species" value="${relSpecies[i].species}"/>
+                                                            <c:set var="select" value=""/>
+                                                            <c:if test="${i==0}">
+                                                                <c:set var="select" value="selected"/>
+                                                            </c:if>
+                                                            <li class="${select}">
+                                                                <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                    <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                        <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                        <span class="extra"
+                                                                              title="${species.scientificname}"
+                                                                              style="overflow: hidden;">${species.scientificname}</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                    <c:if test="${fn:length(relSpecies)>0}">
+                                                        <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
+                                                            <c:set var="species" value="${relSpecies[i].species}"/>
+                                                            <c:set var="select" value=""/>
+                                                            <c:if test="${i==0}">
+                                                                <c:set var="select" value="selected"/>
+                                                            </c:if>
+                                                            <li class="${select}">
+                                                                <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                    <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                        <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                        <span class="extra"
+                                                                              title="${species.scientificname}"
+                                                                              style="overflow: hidden;">${species.scientificname}</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="selection">
-                                        <ul>
-                                            <c:if test="${fn:length(relSpecies)<=0}">
-                                                <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
-                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                    <c:set var="select" value=""/>
-                                                    <c:if test="${i==0}">
-                                                        <c:set var="select" value="selected"/>
-                                                    </c:if>
-                                                    <li class="${select}">
-                                                        <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                <span class="extra"
-                                                                      title="${species.scientificname}"
-                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </c:forEach>
-                                            </c:if>
-                                            <c:if test="${fn:length(relSpecies)>0}">
-                                                <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
-                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                    <c:set var="select" value=""/>
-                                                    <c:if test="${i==0}">
-                                                        <c:set var="select" value="selected"/>
-                                                    </c:if>
-                                                    <li class="${select}">
-                                                        <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                <span class="extra"
-                                                                      title="${species.scientificname}"
-                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </c:forEach>
-                                            </c:if>
-                                        </ul>
-                                    </div>
-                                </div>
 
 
-                            </div>
-                                    
-                                    
+                                    </div>
+
+
                                 </section>
                             </div>
-                            
-                            
-                            
 
-                          
-                            
+
+
+
+
+
                         </div>
                     </section>
 
@@ -192,6 +198,22 @@
                                         <a href="proteinStructure" class="tab ${proteinStructureSelected}">
                                             <span class="labelEP icon icon-conceptual icon-c4" data-icon="s">
                                                 <spring:message code="label.entry.proteinStructure.title"/>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li id="mechanism" class="reaction">
+                                        <a href="reactionsMechanisms" class="tab ${reactionsMechanismsSelected}">
+                                            <span class="labelEP icon icon-conceptual" data-icon="y">
+                                                <spring:message code="label.entry.reactionsMechanisms.title"/>
+
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li id="pathway" class="reaction">
+                                        <a href="pathways" class="tab ${pathwaysSelected}">
+                                            <span class="labelEP icon icon-conceptual" data-icon="y">
+                                                <spring:message code="label.entry.pathways.title"/>
+
                                             </span>
                                         </a>
                                     </li>
@@ -265,6 +287,64 @@
                                         </div>
                                     </c:if>
                                 </c:if>
+
+                                <!--START REACTIONS & MECHANISM TAB-->
+                                <c:if test='${requestedfield=="reactionsMechanisms"}'>
+                                    <c:set var="rheaReactions" value="${enzymeModel.enzymeReactions}"/>
+                                    <c:set var="mechanisms" value="${enzymeModel.reactionMechanisms}"/>
+                        
+                                    <div class="node ">
+                                        <div class="view ">
+                                            <%@include file="reactionsMechanisms.jsp" %>
+                                        </div>
+                                    </div>
+                                    <%--    
+                            <c:set var="mechanisms" value="${enzymeModel.reactionMechanisms}"/>
+                            <c:set var="rhea" value="${enzymeModel.enzymeReactions}"/>
+
+                                    <c:if test='${pathway[0].reaction.name == "error"}'>
+                                        <div class="node ">
+                                            <div class="view ">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test='${pathway[0].reaction.name != "error"}'>
+                                        <div class="node ">
+                                            <div class="view ">
+                                                <%@include file="reactionsPathways.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    --%>
+                                </c:if>
+
+                                <!--START PATHWAYS TAB-->
+                                <c:if test='${requestedfield=="pathways"}'>
+                                    <c:set var="pathways" value="${enzymeModel.pathways}"/>
+                                    <div class="node ">
+                                        <div class="view ">
+                                            <%@include file="reactomePathways.jsp" %>
+                                        </div>
+                                    </div>
+                                    <%--       
+                        <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>
+                        <c:if test='${pathway[0].reaction.name == "error"}'>
+                            <div class="node ">
+                                <div class="view ">
+                                    <%@include file="errors.jsp" %>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test='${pathway[0].reaction.name != "error"}'>
+                            <div class="node ">
+                                <div class="view ">
+                                    <%@include file="reactionsPathways.jsp" %>
+                                </div>
+                            </div>
+                        </c:if>
+                                    --%>
+                                </c:if>                               
 
                                 <!--START REACTIONS & PATHWAYS TAB-->
                                 <c:if test='${requestedfield=="reactionspathways"}'>
