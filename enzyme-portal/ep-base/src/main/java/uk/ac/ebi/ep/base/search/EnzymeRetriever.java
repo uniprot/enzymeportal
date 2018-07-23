@@ -23,6 +23,7 @@ import org.xml_cml.schema.cml2.react.Reaction;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
+import uk.ac.ebi.ep.data.domain.ReactionMechanism;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -117,9 +118,6 @@ public class EnzymeRetriever {//  extends EnzymeBase {
     public void setIntenzAdapter(IntenzAdapter intenzAdapter) {
         this.intenzAdapter = intenzAdapter;
     }
-
-
-
 
     public static <T> List<T> removeDuplicates(List<T> list) {
         return list.stream().collect(Collectors.toSet()).stream().collect(Collectors.toList());
@@ -642,6 +640,65 @@ public class EnzymeRetriever {//  extends EnzymeBase {
         enzymeModel.getReactionpathway().stream().distinct().collect(Collectors.toList());
         return enzymeModel;
 
+    }
+
+    protected void addPathways(EnzymeModel model) {
+
+        List<Pathway> pathways = enzymePortalService.findPathwaysByAccession(model.getAccession());
+
+        model.setPathways(pathways);
+
+    }
+
+    public EnzymeModel getPathways(String uniprotAccession)
+            throws EnzymeRetrieverException {
+
+        EnzymeModel model = getEnzymeModel(uniprotAccession);
+
+        addPathways(model);
+        return model;
+    }
+
+    protected void addReactionMechanisms(EnzymeModel model) {
+
+        List<ReactionMechanism> mechanisms = enzymePortalService.findReactionMechanismsByAccession(model.getAccession());
+
+        model.setReactionMechanisms(mechanisms);
+
+    }
+
+    protected void addRheaReactions(EnzymeModel model) {
+
+        // List<EnzymeReaction> reactions = new ArrayList<>();
+        List<EnzymeReaction> reactions = enzymePortalService.findReactionsByAccession(model.getAccession());
+        if (reactions != null && !reactions.isEmpty()) {
+
+            model.setNumReactions(reactions.size());
+            model.setEnzymeReactions(reactions);
+
+        } else {
+
+            RheasResourceClient ws = new RheasResourceClient();
+            List<RheaReaction> rheaReactions = ws.search(model.getAccession());
+            // List<EnzymeReaction> reactions = new ArrayList<>();
+            reactions = rheaReactions.stream()
+                    .map(rhea -> "RHEA:" + rhea.getRheaid().getId())
+                    .map(rheaId -> new EnzymeReaction(rheaId)).collect(Collectors.toList());
+
+            model.setNumReactions(reactions.size());
+            model.setEnzymeReactions(reactions);
+        }
+
+    }
+
+    public EnzymeModel getRheaReactionsAndMechanisms(String uniprotAccession)
+            throws EnzymeRetrieverException {
+
+        EnzymeModel model = getEnzymeModel(uniprotAccession);
+        addRheaReactions(model);
+        addReactionMechanisms(model);
+
+        return model;
     }
 
 }

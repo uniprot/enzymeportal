@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import uk.ac.ebi.ep.data.domain.ReactionMechanism;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
@@ -24,6 +25,8 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
     protected Enzyme enzyme;
     transient List<ProteinStructure> proteinstructure;
     transient List<ReactionPathway> reactionpathway;
+    transient List<ReactionMechanism> reactionMechanisms;
+    transient List<EnzymeReaction> enzymeReactions;
 
     protected String requestedfield;
 
@@ -37,9 +40,9 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
     transient List<String> synonyms;
 
     transient List<String> catalyticActivities;
-    
+
     List<String> ec;
-     protected transient int numReactions;
+    protected transient int numReactions;
 
     public int getNumReactions() {
         return numReactions;
@@ -48,9 +51,30 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
     public void setNumReactions(int numReactions) {
         this.numReactions = numReactions;
     }
-     
-     
-     
+
+    public List<ReactionMechanism> getReactionMechanisms() {
+        if (reactionMechanisms == null) {
+            reactionMechanisms = new ArrayList<>();
+        }
+
+        return reactionMechanisms;
+    }
+
+    public void setReactionMechanisms(List<ReactionMechanism> reactionMechanisms) {
+        this.reactionMechanisms = reactionMechanisms;
+    }
+
+    public List<EnzymeReaction> getEnzymeReactions() {
+        if (enzymeReactions == null) {
+            enzymeReactions = new ArrayList<>();
+        }
+
+        return enzymeReactions;
+    }
+
+    public void setEnzymeReactions(List<EnzymeReaction> enzymeReactions) {
+        this.enzymeReactions = enzymeReactions;
+    }
 
     public List<String> getCatalyticActivities() {
         if (catalyticActivities == null) {
@@ -87,7 +111,7 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
         this.pathways = pathways;
     }
 
-     @Override
+    @Override
     public List<EnzymeAccession> getRelatedspecies() {
         if (relatedspecies == null) {
             relatedspecies = new ArrayList<>();
@@ -689,6 +713,4 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
 //        this.name = name;
 //    }
 //    
-    
-
 }
