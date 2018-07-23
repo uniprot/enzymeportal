@@ -32,18 +32,23 @@
                 <div id="content" role="main" class="clearfix">
 
                     <div class="row">
-                        <div class="large-2 columns">
-                            <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg"></div>
+                        <!-- <div class="large-2 columns">
+                            <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg">
+                            </div> -->
 
-                            <section class="large-10 columns">
+                            <section class="large-12 columns search-panel">
                                 <h1>Search Enzymes</h1>
-                                <p>Enzyme Portal integrates publicaly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds</p>
 
-                                <div id="homepage-search" class="large-12">
+                                <div id="homepage-search" >
                                     <c:if test="${not fn:containsIgnoreCase(pageTitle, 'Advanced Search')}">
                                         <%@ include file="frontierSearchBox.jsp" %>
                                     </c:if>
-                                </div>
+
+
+                            </section>
+                            <section class=" large-10 large-offset-1 ">
+                            Enzyme Portal integrates publicaly available information about enzymes,
+                            such as small-molecule chemistry, biochemical pathways and drug compounds
                             </section>
 
                         </div>
@@ -61,7 +66,18 @@
                                         </div>
                                     </div>
                                 </a>
-                                <a href="#">
+                                <a href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" target="_blank">
+                                    <div class="primary-tile">
+                                        <h2>Sequence search</h2>
+                                        <div>
+                                            <img src="/enzymeportal/resources/images/sequence.png"><br/>
+                                                <div class="tile-text">
+                                                    Run a sequence search against known enzymes
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <a href="/enzymeportal/basket">
                                     <div class="primary-tile">
                                         <h2>Compare enzymes</h2>
                                         <div>
@@ -72,17 +88,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a href="#">
-                                        <div class="primary-tile">
-                                            <h2>Sequence search</h2>
-                                            <div>
-                                                <img src="/enzymeportal/resources/images/sequence.png"><br/>
-                                                    <div class="tile-text">
-                                                        Run a sequence search against known enzymes
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+
                                     </div>
 
                                     <div class="row highlight-panel browse-section large-12">

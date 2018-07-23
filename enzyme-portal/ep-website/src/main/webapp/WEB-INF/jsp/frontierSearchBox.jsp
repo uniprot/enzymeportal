@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : frontierSearchBox
     Created on : Dec 3, 2012, 11:13:00 AM
     Author     : joseph
@@ -14,7 +14,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <div >
     <div >
-        <div class="column medium-10" id="search-bar">
+        <div class="column medium-10 medium-offset-1" id="search-bar">
 
 
             <%--<form:form id="local-search" name="local-search" modelAttribute="searchModel" action="${pageContext.request.contextPath}/enzymes" method="POST">--%>
@@ -95,7 +95,7 @@
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=P27361&keywordType=KEYWORD">P27361</a>,
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=pyruvate kinase&keywordType=KEYWORD">pyruvate kinase</a>
 <!--                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=acetylcholinesterase&keywordType=KEYWORD">acetylcholinesterase</a>-->
-                      <span class="adv"><a href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span>
+                      <!-- <span class="adv"><a href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span> -->
                   </p>
 
               </fieldset>

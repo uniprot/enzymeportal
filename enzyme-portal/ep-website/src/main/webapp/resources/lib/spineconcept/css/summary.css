@@ -431,8 +431,8 @@
 }
 
 .references {
-	float:right;
-	width: 400px;
+	/* float:right; */
+	/* width: 400px; */
 /*	border: 1px solid rgb(167, 184, 193);*/
         border: 0px solid rgb(167, 184, 193);
 	border-radius: 6px;
@@ -443,19 +443,19 @@
 }
 
 .references .button {
-	padding: 2px 4px;
-/*	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;*/
-background: 99% 50% url('../images/down-arrow-small.png') no-repeat rgb(0,124,130);
-/*	border: 1px solid rgb(167, 184, 193);*/
-        border: 0px solid rgb(167, 184, 193);
+	padding: 10px;
+	/*	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;*/
+	background: 99% 50% url('../images/down-arrow-small.png') no-repeat rgb(0,124,130);
+	/*	border: 1px solid rgb(167, 184, 193);*/
+	border: 0px solid rgb(167, 184, 193);
 	border-radius: 6px;
-/*	color: #333;*/
+	/*	color: #333;*/
 	font-weight: bold;
 	cursor: pointer;
-/*        new*/
-        display: block;
-        text-align: justify;
-        font-size: 1rem;
+	/*        new*/
+	display: block;
+	text-align: justify;
+	font-size: 1rem;
 }
 
 .references .button:hover {
@@ -512,7 +512,7 @@ background: 99% 50% url('../images/down-arrow-small.png') no-repeat rgb(0,124,13
 }
 
 .summary .main_link {
-	text-align: right;
+	text-align: left;
 }
 
 .summary .main_link a {
@@ -528,7 +528,7 @@ background: 99% 50% url('../images/down-arrow-small.png') no-repeat rgb(0,124,13
 	float: right;
 	max-width: 400px;
 	padding: 2px;
-	margin: 30px 0px 10px 20px;
+	/* margin: 30px 0px 10px 20px; */
 	text-align: center;
 }
 
