@@ -64,7 +64,7 @@ public class EnzymePortalUniqueEc implements Serializable {
     //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ecNumber")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ecNumber",fetch = FetchType.EAGER)
     private Set<ReactionMechanism> reactionMechanismSet;
 
     public EnzymePortalUniqueEc() {
