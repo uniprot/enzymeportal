@@ -34,35 +34,19 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM PROTEIN_GROUPS";
-    //private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
+    // private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
 
     private static final String ROOT_TAG_NAME = "database";
-   // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
-    
-    //------- TEST QUERY --------
-// private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 500";
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
 
-   // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0";
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 10000";
-    //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E142E6'";
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
-    //
-    //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EFSUWQ'";//DUAL EC
-    //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 5";
-//    private static final String NATIVE_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1\n"
+    //------- TEST QUERY --------
+//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
 //            + "union\n"
-//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=100";
-    //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EJLX47'";
-    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU9G0Q'";
-    //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EU6OHA'";
+//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=1";
+    // END -- TEST QUERY ----
     
-       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
-            + "union\n"
-            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=1";
-       
-       
-       // END -- TEST QUERY ----
-       
+    
+    
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
     public static final String PROTEIN_CENTRIC_XML_JOB = "PROTEIN_CENTRIC_XML_JOB_" + DATE;
@@ -121,7 +105,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     @Override
     public String countEntries(String countQuery) {
-  
+
         Query query = entityManagerFactory.createEntityManager().createNativeQuery(countQuery);
         return String.valueOf(query.getSingleResult());
     }
