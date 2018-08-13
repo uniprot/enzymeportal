@@ -1,0 +1,7 @@
+pdb.summary.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/summary/
+pdb.experiment.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/experiment/
+pdb.publications.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/publications/
+pdb.molecules.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/molecules/
+pdb.structuralDomain.url=https://www.ebi.ac.uk/pdbe/api/mappings/cath/
+pdb.ligands.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/ligand_monomers/
+pdb.cofactor.url=https://www.ebi.ac.uk/pdbe/api/pdb/entry/cofactor/
