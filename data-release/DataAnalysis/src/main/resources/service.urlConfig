@@ -1,0 +1,5 @@
+service.url.function=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Afunction+evidence%3AECO_0000269%29&sort=score&format=list
+service.url.cofactor=https://www.uniprot.org/uniprot/?query=cofactor%3A(chebi%3A*%20evidence%3AECO_0000269)%20AND%20reviewed%3Ayes&sort=score&columns=id&format=list
+service.url.regulation=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22enzyme+regulation%22+evidence%3AECO_0000269%29&sort=score&format=list
+service.url.activity=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22catalytic+activity%22+evidence%3AECO_0000269%29&sort=score&format=list
+service.url.biophysio=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Abiophysicochemical_properties+evidence%3AECO_0000269%29&sort=score&format=list
