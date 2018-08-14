@@ -54,7 +54,7 @@ public class DataConfig {
 //        properties.setProperty("hibernate.default_batch_fetch_size", "30");
 
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
-        vendor.setShowSql(true);
+        vendor.setShowSql(false);
         vendor.setDatabase(Database.ORACLE);
         em.setJpaProperties(properties);
         em.setJpaVendorAdapter(vendor);

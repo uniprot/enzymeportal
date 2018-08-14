@@ -52,7 +52,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
     public void loadCofactors() {
         List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
 
-        logger.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        logger.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
     }

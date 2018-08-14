@@ -54,7 +54,7 @@ public class ChemblCompounds {
         }
         return chemblTargets;
     }
-
+//load targets to database
     public void loadChemblTargetsToDB() {
 
         parserService.disableTargetContraints();
