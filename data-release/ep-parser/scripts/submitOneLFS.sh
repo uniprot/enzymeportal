@@ -7,7 +7,7 @@
 
 TODAY=$(date +%Y%m%d)
 LOG_NAME=$(basename $1 .sh)
-LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/parser/bsub-$LOG_NAME-$TODAY.log
+LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/parser/bsub-$LOG_NAME-$2-$TODAY.log
 
 echo
 echo "**************************** W A R N I N G ****************************"
