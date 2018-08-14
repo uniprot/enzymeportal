@@ -147,6 +147,7 @@ public class RheaReactionParser {
 
             accession2Rhea.getRhea().forEach(rhea -> {
                 String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
+                log.error("Track data insert : "+ rhea.getRheaId() + " :: Acc "+ accession2Rhea.getAccession());
                 enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession2Rhea.getAccession(), url, rhea.getKeggId());
             });
         });
