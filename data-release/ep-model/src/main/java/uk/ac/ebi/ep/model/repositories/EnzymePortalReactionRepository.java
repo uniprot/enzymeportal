@@ -24,7 +24,7 @@ public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePort
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "alter table ENZYME_PORTAL_REACTION disable constraint PK_UNIPROT_ACCESSION", nativeQuery = true)
+    @Query(value = "alter table ENZYME_PORTAL_REACTION disable constraint REACTION_ACCESSION_FK", nativeQuery = true)
     void disableAccessionContraints();
 
     @Modifying(clearAutomatically = true)
@@ -34,7 +34,7 @@ public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePort
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "alter table ENZYME_PORTAL_REACTION enable constraint PK_UNIPROT_ACCESSION", nativeQuery = true)
+    @Query(value = "alter table ENZYME_PORTAL_REACTION enable constraint REACTION_ACCESSION_FK", nativeQuery = true)
     void enableAccessionContraints();
 
 }

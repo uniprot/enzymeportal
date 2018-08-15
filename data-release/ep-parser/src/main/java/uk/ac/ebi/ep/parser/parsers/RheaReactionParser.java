@@ -141,19 +141,25 @@ public class RheaReactionParser {
 
     private void loadReactionToDB(List<Accession2Rhea> acc2RheaList) {
         log.warn("About to disable Accession-Reaction contraints");
+        System.out.println("disable contraint ....");
         enzymePortalParserService.disableAccessionReactionContraints();
+        System.out.println("load data to db "+ acc2RheaList.size());
         acc2RheaList.
                 forEach(accession2Rhea -> accession2Rhea.getRhea()
                 .forEach(rhea -> saveToDB(accession2Rhea.getAccession(), rhea)));
         log.warn("Done loading Reaction to database and about to delete non-enzymes.");
+        System.out.println("done loading .. delete no enzymea");
         enzymePortalParserService.deleteNonEnzymesReactions();
         log.warn("About to enable Accession-Reaction contraints");
+        System.out.println("enable constraints ....");
         enzymePortalParserService.enableAccessionReactionContraints();
         log.warn("Done Parsing and Loading Rhea Data.");
+        System.out.println("done populatign database");
     }
 
     private void saveToDB(String accession, Rhea2kegg rhea) {
         String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
+        System.out.println("LOADING DATA TO DB "+ rhea.getRheaId() + " : "+ accession);
         enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession, url, rhea.getKeggId());
     }
     
