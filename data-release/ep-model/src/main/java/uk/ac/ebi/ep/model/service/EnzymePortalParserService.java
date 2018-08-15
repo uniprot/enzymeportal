@@ -40,9 +40,6 @@ public class EnzymePortalParserService {
     @Autowired
     private EnzymePortalPathwaysRepository pathwaysRepository;
 
-//    @Autowired
-//    private DiseaseRepository diseaseRepository;
-
     @Autowired
     private TempCompoundCompareRepository tempCompoundRepository;
 
@@ -73,35 +70,42 @@ public class EnzymePortalParserService {
         enzymePortalReactionRepository.saveAll(reactions);
     }
 
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void disableAccessionContraints() {
+        enzymePortalReactionRepository.disableAccessionContraints();
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void deleteNonEnzymesReactions() {
+        enzymePortalReactionRepository.deleteNonEnzymesReactions();
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void enableAccessionContraints() {
+        enzymePortalReactionRepository.enableAccessionContraints();
+    }
+
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
 
         return Optional.ofNullable(uniprotEntryRepository.findByAccession(accession));
     }
 
-//    @Transactional(readOnly = true)
-//    public UniprotXref findByPdbId(String pdbId) {
-//
-//        return xrefRepository.findPdbById(pdbId);
-//    }
-
     @Transactional(readOnly = true)
     public List<UniprotXref> findUniprotXrefBySource(String source) {
         return xrefRepository.findUniprotXrefBySource(source);
     }
-
-//    @Transactional(readOnly = true)
-//    public List<String> findPdbIdsWithNoNames() {
-//        return xrefRepository.findPdbCodesWithNoNames();
-//    }
 
     @Transactional(readOnly = true)
     public List<UniprotXref> updatePDB(List<UniprotXref> pdb) {
 
         return xrefRepository.saveAll(pdb);
     }
-    
-        @Modifying(clearAutomatically = true)
+
+    @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
     public void disableTargetContraints() {
         chemblTargetsRepository.disableTargetContraints();
@@ -139,10 +143,6 @@ public class EnzymePortalParserService {
         pathwaysRepository.createPathwayIgnoreDup(accession, pathwayId, pathwayUrl, pathwayName, status, species);
     }
 
-//    public void createDisease(String accession, String omimNumber, String meshId, String efoId, String diseaseName, String evidence, String definition, String score, String url) {
-//
-//        diseaseRepository.createDiseaseIgnoreDup(accession, omimNumber, meshId, efoId, diseaseName, evidence, definition, score, url);
-//    }
 
     public void createTempCompound(TempCompoundCompare compound) {
         tempCompoundRepository.save(compound);

@@ -31,8 +31,8 @@ import uk.ac.ebi.ep.parser.model.Rhea2kegg;
 public class RheaReactionParser {
 
     //private static final Logger logger = Logger.getLogger(EnzymePortalPDBeParser.class);
-    private static final String rhea2keggWebPage = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2kegg_reaction.tsv";
-    private static final String rhea2uniprotWebPage = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
+    private static final String RHEA_2_KEGG_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2kegg_reaction.tsv";
+    private static final String RHEA_2_UNIPROT_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
     @Autowired
     private EnzymePortalParserService enzymePortalParserService;
 
@@ -52,8 +52,8 @@ public class RheaReactionParser {
 
             Path rhea2kegg = directory.resolve("rhea2kegg_reaction.tsv");
             Path rhea2uniprot = directory.resolve("rhea2uniprot.tsv");
-            downloadFile(rhea2keggWebPage, rhea2kegg);
-            downloadFile(rhea2uniprotWebPage, rhea2uniprot);
+            downloadFile(RHEA_2_KEGG_WEB_PAGE, rhea2kegg);
+            downloadFile(RHEA_2_UNIPROT_WEB_PAGE, rhea2uniprot);
 
             Set<Rhea2kegg> r2kSet = processRhea2Kegg(rhea2kegg);
 
@@ -62,7 +62,7 @@ public class RheaReactionParser {
             loadReactionToDB(acc2RheaList);
 
         } catch (IOException ex) {
-            log.error(ex.getMessage(),ex);
+            log.error(ex.getMessage(), ex);
 
         }
 
@@ -124,35 +124,54 @@ public class RheaReactionParser {
 
         r2kSet.stream().forEach(rhea2kegg -> {
             data.stream().filter(d -> (rhea2kegg.getRheaId().trim().equalsIgnoreCase(d[2].trim())))
-                    .map((d) -> {
+                    .map(d -> {
                         Accession2Rhea accession2Rhea = new Accession2Rhea();
                         accession2Rhea.setAccession(d[3]);
                         return accession2Rhea;
                     }).map(accession2Rhea -> {
-                        accession2Rhea.getRhea().add(rhea2kegg);
-                        return accession2Rhea;
-                    }).forEach(accession2Rhea -> {
-                        uniprotRhea.add(accession2Rhea);
-                    });
+                accession2Rhea.getRhea().add(rhea2kegg);
+                return accession2Rhea;
+            }).forEach(accession2Rhea -> uniprotRhea.add(accession2Rhea));
         });
 
         return uniprotRhea;
 
     }
 
+
     private void loadReactionToDB(List<Accession2Rhea> acc2RheaList) {
-
-       
-        acc2RheaList.stream().forEach(accession2Rhea -> {
-
-            accession2Rhea.getRhea().forEach(rhea -> {
-                String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
-                System.out.println("Track data insert : "+ rhea.getRheaId() + " :: Acc "+ accession2Rhea.getAccession());
-                log.error("Track data insert : "+ rhea.getRheaId() + " :: Acc "+ accession2Rhea.getAccession());
-                enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession2Rhea.getAccession(), url, rhea.getKeggId());
-            });
-        });
-
-       
+        log.warn("About to disable Accession-Reaction contraints");
+        enzymePortalParserService.disableAccessionContraints();
+        acc2RheaList.
+                forEach(accession2Rhea -> accession2Rhea.getRhea()
+                .forEach(rhea -> saveToDB(accession2Rhea.getAccession(), rhea)));
+        log.warn("Done loading Reaction to database and about to delete non-enzymes.");
+        enzymePortalParserService.deleteNonEnzymesReactions();
+        log.warn("About to enable Accession-Reaction contraints");
+        enzymePortalParserService.enableAccessionContraints();
+        log.warn("Done Parsing and Loading Rhea Data.");
     }
+
+    private void saveToDB(String accession, Rhea2kegg rhea) {
+        String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
+        enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession, url, rhea.getKeggId());
+    }
+    
+    //    private void loadReactionToDB_OLD(List<Accession2Rhea> acc2RheaList) {
+//
+//        enzymePortalParserService.disableAccessionContraints();
+//        acc2RheaList.stream().forEach(accession2Rhea -> {
+//
+//            accession2Rhea.getRhea().forEach(rhea -> {
+//                String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
+//                System.out.println("Track data insert : " + rhea.getRheaId() + " :: Acc " + accession2Rhea.getAccession());
+//                log.error("Track data insert : " + rhea.getRheaId() + " :: Acc " + accession2Rhea.getAccession());
+//                enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession2Rhea.getAccession(), url, rhea.getKeggId());
+//            });
+//        });
+//        enzymePortalParserService.deleteNonEnzymesReactions();
+//        enzymePortalParserService.enableAccessionContraints();
+//
+//    }
+
 }
