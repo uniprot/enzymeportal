@@ -24,17 +24,17 @@ public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePort
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "ALTER TABLE CHEMBL_TARGETS DISABLE CONSTRAINT CHEMBL_TARGETS_FK1", nativeQuery = true)
+    @Query(value = "alter table ENZYME_PORTAL_REACTION disable constraint PK_UNIPROT_ACCESSION", nativeQuery = true)
     void disableAccessionContraints();
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "delete from CHEMBL_TARGETS where UNIPROT_ACCESSION not in (select accession from UNIPROT_ENTRY)", nativeQuery = true)
+    @Query(value = "delete from ENZYME_PORTAL_REACTION where UNIPROT_ACCESSION not in (select accession from uniprot_entry)", nativeQuery = true)
     void deleteNonEnzymesReactions();
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "ALTER TABLE CHEMBL_TARGETS ENABLE CONSTRAINT CHEMBL_TARGETS_FK1", nativeQuery = true)
+    @Query(value = "alter table ENZYME_PORTAL_REACTION enable constraint PK_UNIPROT_ACCESSION", nativeQuery = true)
     void enableAccessionContraints();
 
 }

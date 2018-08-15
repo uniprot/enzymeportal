@@ -72,7 +72,7 @@ public class EnzymePortalParserService {
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
-    public void disableAccessionContraints() {
+    public void disableAccessionReactionContraints() {
         enzymePortalReactionRepository.disableAccessionContraints();
     }
 
@@ -84,7 +84,7 @@ public class EnzymePortalParserService {
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
-    public void enableAccessionContraints() {
+    public void enableAccessionReactionContraints() {
         enzymePortalReactionRepository.enableAccessionContraints();
     }
 

@@ -141,14 +141,14 @@ public class RheaReactionParser {
 
     private void loadReactionToDB(List<Accession2Rhea> acc2RheaList) {
         log.warn("About to disable Accession-Reaction contraints");
-        enzymePortalParserService.disableAccessionContraints();
+        enzymePortalParserService.disableAccessionReactionContraints();
         acc2RheaList.
                 forEach(accession2Rhea -> accession2Rhea.getRhea()
                 .forEach(rhea -> saveToDB(accession2Rhea.getAccession(), rhea)));
         log.warn("Done loading Reaction to database and about to delete non-enzymes.");
         enzymePortalParserService.deleteNonEnzymesReactions();
         log.warn("About to enable Accession-Reaction contraints");
-        enzymePortalParserService.enableAccessionContraints();
+        enzymePortalParserService.enableAccessionReactionContraints();
         log.warn("Done Parsing and Loading Rhea Data.");
     }
 
@@ -159,7 +159,7 @@ public class RheaReactionParser {
     
     //    private void loadReactionToDB_OLD(List<Accession2Rhea> acc2RheaList) {
 //
-//        enzymePortalParserService.disableAccessionContraints();
+//        enzymePortalParserService.disableAccessionReactionContraints();
 //        acc2RheaList.stream().forEach(accession2Rhea -> {
 //
 //            accession2Rhea.getRhea().forEach(rhea -> {
@@ -170,7 +170,7 @@ public class RheaReactionParser {
 //            });
 //        });
 //        enzymePortalParserService.deleteNonEnzymesReactions();
-//        enzymePortalParserService.enableAccessionContraints();
+//        enzymePortalParserService.enableAccessionReactionContraints();
 //
 //    }
 
