@@ -6,7 +6,7 @@
 # $2 : the script to be submitted to the farm with extension e.g chebi.sh
 TODAY=$(date +%Y%m%d_%H-%M-%S)
 LOG_NAME=$(basename $1 .sh)
-LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/parser/bsub-$LOG_NAME-$2-$TODAY.log
+LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/parser/bsub-$LOG_NAME-$TODAY.log
 
 echo
 echo "**************************** W A R N I N G ****************************"
