@@ -17,9 +17,11 @@ import uk.ac.ebi.ep.model.repositories.ChemblTargetsRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.model.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotXrefRepository;
+import uk.ac.ebi.ep.model.search.model.Summary;
 
 /**
  *
@@ -51,6 +53,9 @@ public class EnzymePortalParserService {
 
     @Autowired
     private ChemblTargetsRepository chemblTargetsRepository;
+
+    @Autowired
+    private EnzymePortalSummaryRepository enzymePortalSummaryRepository;
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
@@ -143,7 +148,6 @@ public class EnzymePortalParserService {
         pathwaysRepository.createPathwayIgnoreDup(accession, pathwayId, pathwayUrl, pathwayName, status, species);
     }
 
-
     public void createTempCompound(TempCompoundCompare compound) {
         tempCompoundRepository.save(compound);
     }
@@ -182,5 +186,11 @@ public class EnzymePortalParserService {
     public List<ChebiCompound> findChebiCompoundByName(String compoundName, String source) {
 
         return chebiCompoundRepository.findByCompoundName(compoundName, source);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Summary> findSummariesByCommentType(String commentType) {
+
+        return enzymePortalSummaryRepository.findSummariesByCommentType(commentType);
     }
 }

@@ -7,14 +7,12 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.model.ChebiCompound;
-import uk.ac.ebi.ep.model.EnzymePortalSummary;
-import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.model.search.model.Compound;
+import uk.ac.ebi.ep.model.search.model.Summary;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
 /**
@@ -24,7 +22,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 @Slf4j
 public class CofactorsFtpFiles implements ICompoundParser {
 
-    private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
+   // private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
     private List<LiteCompound> compounds = null;
     private static final String COMMENT_TYPE = "COFACTORS";
     private static final String NAME = "Name=([^\\s]+)";
@@ -39,27 +37,24 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
     private final EnzymePortalParserService enzymePortalParserService;
 
-    private final EnzymePortalSummaryRepository enzymeSummaryRepository;
-
     private static final String UNIPROT = "UniProt";
     private static final String IUPAC = "IUPAC";
 
-    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService, EnzymePortalSummaryRepository enzymeSummaryRepository) {
+    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
         this.enzymePortalParserService = enzymePortalParserService;
-        this.enzymeSummaryRepository = enzymeSummaryRepository;
         compounds = new ArrayList<>();
     }
 
     @Override
     public void loadCofactors() {
-        List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
-        log.error("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
-        logger.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
+      
+        log.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
     }
 
-    private void computeSpecialCases(String text, EnzymePortalSummary summary, String note) {
+    private void computeSpecialCases(String text, Summary summary, String note) {
         final Pattern xrefPattern = Pattern.compile(XREF);
         final Matcher xrefMatcher = xrefPattern.matcher(text);
 
@@ -69,7 +64,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
             if (xref != null) {
 
-                logger.info("Special case : xref search in CHEBI " + xref);
+                log.info("Special case : xref search in CHEBI " + xref);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByChEBIiD(xref));
 
                 if (liteCompound.isPresent()) {
@@ -85,12 +80,12 @@ public class CofactorsFtpFiles implements ICompoundParser {
                     compound.setCompoundName(compoundName);
                     compound.setCompoundSource(compoundSource);
                     compound.setRelationship(relationship);
-                    compound.setUniprotAccession(summary.getUniprotAccession().getAccession());
+                    compound.setUniprotAccession(summary.getAccession());
                     compound.setUrl(url);
                     compound.setCompoundRole(compoundRole);
                     compound.setNote(note);
                     compounds.add(compound);
-                    logger.info("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
+                    log.info("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
 
                 }
 
@@ -100,11 +95,11 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
     }
 
-    private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
+    private void parseCofactorText(List<Summary> enzymeSummary) {
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
         log.error("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
-        logger.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
+        log.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
                 .stream()
@@ -112,12 +107,12 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 .forEach(compound -> {
                     enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
                 });
-        logger.warn("-------- Done populating the database with cofactors ---------------");
+        log.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
 
     }
 
-    private void processCofactors(EnzymePortalSummary summary) {
+    private void processCofactors(Summary summary) {
         String cofactorText = summary.getCommentText();
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
@@ -137,7 +132,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
-                logger.info("cofactor name search in CHEBI Compound Table " + cofactorName);
+                log.info("cofactor name search in CHEBI Compound Table " + cofactorName);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByCompoundName(cofactorName));
 
                 if (liteCompound.isPresent()) {
@@ -153,7 +148,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
                     compound.setCompoundName(compoundName);
                     compound.setCompoundSource(compoundSource);
                     compound.setRelationship(relationship);
-                    compound.setUniprotAccession(summary.getUniprotAccession().getAccession());
+                    compound.setUniprotAccession(summary.getAccession());
                     compound.setUrl(url);
                     compound.setCompoundRole(compoundRole);
                     compound.setNote(note);

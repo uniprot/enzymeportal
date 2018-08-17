@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.model.EnzymePortalCompound;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
@@ -21,8 +20,6 @@ public class EnzymePortalCompoundParser {
 
     @Autowired
     private EnzymePortalCompoundRepository compoundRepository;
-    @Autowired
-    private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
     @Autowired
     private ChemblService chemblService;
@@ -54,7 +51,7 @@ public class EnzymePortalCompoundParser {
     @Transactional
     public void loadCofactorsFromFTPFiles() {
 
-        ICompoundParser compoundParser = new CofactorsFtpFiles(parserService, enzymeSummaryRepository);
+        ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
         compoundParser.loadCofactors();
 
     }

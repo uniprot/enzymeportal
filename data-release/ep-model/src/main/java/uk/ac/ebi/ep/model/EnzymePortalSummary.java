@@ -19,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+
 import uk.ac.ebi.ep.model.search.model.Summary;
 
 /**
@@ -71,7 +73,7 @@ public class EnzymePortalSummary implements Serializable {
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
 //    @ManyToOne(optional = false)
 //    @BatchSize(size = 10)
 //    @Fetch(FetchMode.SELECT)

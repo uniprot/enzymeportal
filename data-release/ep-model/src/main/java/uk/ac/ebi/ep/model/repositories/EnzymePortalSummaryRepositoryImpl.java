@@ -1,0 +1,36 @@
+
+package uk.ac.ebi.ep.model.repositories;
+
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import uk.ac.ebi.ep.model.search.model.Summary;
+
+
+/**
+ *
+ * @author joseph
+ */
+public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRepositoryCustom {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+
+    @Override
+    public List<Summary> findSummariesByCommentType(String commentType) {
+
+        String nativeQuery = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE";
+        Query query = entityManager.createNativeQuery(nativeQuery, "findCommentTextAndAccession");
+        List<Summary> result = query.setParameter("COMMENT_TYPE", commentType).getResultList();
+
+        return result;
+    }
+
+   
+}
