@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
@@ -20,6 +21,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Slf4j
 public class CofactorsFtpFiles implements ICompoundParser {
 
     private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
@@ -51,7 +53,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
     @Override
     public void loadCofactors() {
         List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
-
+        log.error("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
         logger.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
@@ -101,13 +103,14 @@ public class CofactorsFtpFiles implements ICompoundParser {
     private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
+        log.error("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
         logger.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
                 .stream()
                 .filter(compound -> compound != null)
                 .forEach(compound -> {
-             enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+                    enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
                 });
         logger.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
