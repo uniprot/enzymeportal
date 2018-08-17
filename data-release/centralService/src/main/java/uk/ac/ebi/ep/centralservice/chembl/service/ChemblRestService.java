@@ -23,7 +23,7 @@ import uk.ac.ebi.ep.centralservice.chembl.molecule.ChemblMolecule;
 public class ChemblRestService {
 
     private final Logger LOGGER = Logger.getLogger(ChemblRestService.class);
-    private RestTemplate restTemplate = null;// new RestTemplate(clientHttpRequestFactory());
+    private RestTemplate restTemplate =  new RestTemplate(clientHttpRequestFactory());
 
     public ChemblRestService() {
         restTemplate = new RestTemplate(clientHttpRequestFactoryTimeout());

@@ -7,6 +7,6 @@ chembl.activity.url.Old=https://www.ebi.ac.uk/chembl/api/data/activity.json?limi
 
 
 EX: todo
-https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=5&assay_chembl_id=CHEMBL829810
+https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&assay_chembl_id=CHEMBL829810
 
 https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&assay_chembl_id=CHEMBL748212
