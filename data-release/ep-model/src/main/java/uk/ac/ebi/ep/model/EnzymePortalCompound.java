@@ -47,9 +47,12 @@ import uk.ac.ebi.ep.model.search.model.Compound;
             @ConstructorResult(
                     targetClass = Compound.class,
                     columns = {
-                        @ColumnResult(name = "COMPOUND_ID"),
-                        @ColumnResult(name = "COMPOUND_NAME"),
-                        @ColumnResult(name = "URL"),
+                        @ColumnResult(name = "COMPOUND_ID")
+                        ,
+                        @ColumnResult(name = "COMPOUND_NAME")
+                        ,
+                        @ColumnResult(name = "URL")
+                        ,
                         @ColumnResult(name = "COMPOUND_ROLE")
                     }
             )
@@ -57,15 +60,21 @@ import uk.ac.ebi.ep.model.search.model.Compound;
 )
 
 @NamedQueries({
-    @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
-    @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId"),
-    @NamedQuery(name = "EnzymePortalCompound.findByCompoundId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundId = :compoundId"),
+    @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e")
+    ,
+    @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId")
+    ,
+    @NamedQuery(name = "EnzymePortalCompound.findByCompoundId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundId = :compoundId")
+    ,
     // @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
-    @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource"),
-    @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
+    @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource")
+    ,
+    @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship")
+    ,
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
 //public class EnzymePortalCompound extends Compound implements Serializable {
 public class EnzymePortalCompound implements Serializable {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -101,6 +110,9 @@ public class EnzymePortalCompound implements Serializable {
 
     @Column(name = "NOTE")
     private String note;
+
+    @Column(name = " CHEMBL_TARGET_ID")
+    private String chemblTargetId;
 
     public EnzymePortalCompound() {
     }
@@ -244,7 +256,6 @@ public class EnzymePortalCompound implements Serializable {
 //    public boolean isSelected() {
 //        return selected;
 //    }
-
     public String getNote() {
         return note;
     }
@@ -252,6 +263,16 @@ public class EnzymePortalCompound implements Serializable {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public String getChemblTargetId() {
+        return chemblTargetId;
+    }
+
+    public void setChemblTargetId(String chemblTargetId) {
+        this.chemblTargetId = chemblTargetId;
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -156,8 +156,8 @@ public class EnzymePortalParserService {
         tempCompoundRepository.saveAll(compounds);
     }
 
-    public void addTempCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
-        tempCompoundRepository.addTempCompounds(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
+    public void addTempCompound(String primaryTargetId,String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
+        tempCompoundRepository.addTempCompounds(primaryTargetId,compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
     }
 
     public void insertCompoundsFromTempTable() {
@@ -193,4 +193,17 @@ public class EnzymePortalParserService {
 
         return enzymePortalSummaryRepository.findSummariesByCommentType(commentType);
     }
+
+    @Transactional(readOnly = true)
+    public List<String> findUniqueTargetedproteins() {
+
+        return tempCompoundRepository.findUniqueTargetedproteins();
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findTargetetsByProtein(String accession) {
+
+        return tempCompoundRepository.findTargetetsByProtein(accession);
+    }
+
 }

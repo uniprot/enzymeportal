@@ -22,18 +22,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "TEMP_COMPOUND_COMPARE")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TempCompoundCompare.findAll", query = "SELECT t FROM TempCompoundCompare t"),
-    @NamedQuery(name = "TempCompoundCompare.findByCompoundId", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundId = :compoundId"),
-    @NamedQuery(name = "TempCompoundCompare.findByCompoundName", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundName = :compoundName"),
-    @NamedQuery(name = "TempCompoundCompare.findByCompoundSource", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundSource = :compoundSource"),
-    @NamedQuery(name = "TempCompoundCompare.findByRelationship", query = "SELECT t FROM TempCompoundCompare t WHERE t.relationship = :relationship"),
-    @NamedQuery(name = "TempCompoundCompare.findByUniprotAccession", query = "SELECT t FROM TempCompoundCompare t WHERE t.uniprotAccession = :uniprotAccession"),
-    @NamedQuery(name = "TempCompoundCompare.findByUrl", query = "SELECT t FROM TempCompoundCompare t WHERE t.url = :url"),
-    @NamedQuery(name = "TempCompoundCompare.findByCompoundRole", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundRole = :compoundRole"),
-    @NamedQuery(name = "TempCompoundCompare.findByNote", query = "SELECT t FROM TempCompoundCompare t WHERE t.note = :note"),
+    @NamedQuery(name = "TempCompoundCompare.findAll", query = "SELECT t FROM TempCompoundCompare t")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByCompoundId", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundId = :compoundId")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByCompoundName", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundName = :compoundName")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByCompoundSource", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundSource = :compoundSource")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByRelationship", query = "SELECT t FROM TempCompoundCompare t WHERE t.relationship = :relationship")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByUniprotAccession", query = "SELECT t FROM TempCompoundCompare t WHERE t.uniprotAccession = :uniprotAccession")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByUrl", query = "SELECT t FROM TempCompoundCompare t WHERE t.url = :url")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByCompoundRole", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundRole = :compoundRole")
+    ,
+    @NamedQuery(name = "TempCompoundCompare.findByNote", query = "SELECT t FROM TempCompoundCompare t WHERE t.note = :note")
+    ,
     @NamedQuery(name = "TempCompoundCompare.findByCompoundInternalId", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundInternalId = :compoundInternalId")})
 public class TempCompoundCompare implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
+    @Column(name = "PRIMARY_TARGET_ID")
+    private String primaryTargetId;
     @Column(name = "COMPOUND_ID")
     private String compoundId;
     @Column(name = "COMPOUND_NAME")
@@ -50,11 +63,10 @@ public class TempCompoundCompare implements Serializable {
     private String compoundRole;
     @Column(name = "NOTE")
     private String note;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @Column(name = "COMPOUND_INTERNAL_ID")
-      @SequenceGenerator(allocationSize = 1, name = "tmpSeqGenerator", sequenceName = "TEMP_COMPOUND_COMPARE_SEQ")
+    @SequenceGenerator(allocationSize = 1, name = "tmpSeqGenerator", sequenceName = "TEMP_COMPOUND_COMPARE_SEQ")
     @GeneratedValue(generator = "tmpSeqGenerator", strategy = GenerationType.AUTO)
     private Long compoundInternalId;
 
@@ -137,6 +149,14 @@ public class TempCompoundCompare implements Serializable {
         this.compoundInternalId = compoundInternalId;
     }
 
+    public String getPrimaryTargetId() {
+        return primaryTargetId;
+    }
+
+    public void setPrimaryTargetId(String primaryTargetId) {
+        this.primaryTargetId = primaryTargetId;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -160,13 +180,13 @@ public class TempCompoundCompare implements Serializable {
         return Objects.equals(this.uniprotAccession, other.uniprotAccession);
     }
 
-
-
+//    @Override
+//    public String toString() {
+//        return "TempCompoundCompare{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
+//    }
     @Override
     public String toString() {
-        return "TempCompoundCompare{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
+        return "TempCompoundCompare{" + "primaryTargetId=" + primaryTargetId + ", compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
 
-
-    
 }
