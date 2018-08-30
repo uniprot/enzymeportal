@@ -3,10 +3,23 @@ chembl.molecule.url=https://www.ebi.ac.uk/chembl/api/data/molecule.json?molecule
 chembl.assay.url=https://www.ebi.ac.uk/chembl/api/data/assay.json?limit=1000&target_chembl_id=
 chembl.activity.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&assay_chembl_id=
 chembl.activity.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&assay_chembl_id=
-chembl.activity.url.Old=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&assay_chembl_id=
+
+chembl.primary.target.selector.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1&standard_type_in=IC50,Inhibition&target_chembl_id=
+
+chembl.activity.inhibition.ic50.url.REMOVE=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type_in=IC50,Inhibition&target_chembl_id=
+
+chembl.activity.inhibition.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type_in=IC50,Inhibition&target_chembl_id__in=
+
+
 
 
 EX: todo
 https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&assay_chembl_id=CHEMBL829810
 
 https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&assay_chembl_id=CHEMBL748212
+
+https://www.ebi.ac.uk/chembl/api/data/activity.xml?limit=1&standard_value__gt=50&standard_type=Inhibition&target_chembl_id=CHEMBL1827
+then use this to get all data
+https://www.ebi.ac.uk/chembl/api/data/activity.xml?limit=1&standard_value__gt=50&standard_type=Inhibition&target_chembl_id__in=CHEMBL1827,CHEMBL2095220,CHEMBL2097161,CHEMBL2363066,CHEMBL2111340,CHEMBL2111400,CHEMBL2111470
+
+https://www.ebi.ac.uk/chembl/api/data/activity.xml?limit=1000&standard_value__gt=50&standard_type=Inhibition&target_chembl_id=CHEMBL1827

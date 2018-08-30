@@ -31,7 +31,7 @@ public class ChemblServiceConfig {
     
     @Bean
     public ChemblService chemblService() {
-        return new ChemblService(chemblRestService(),chemblServiceUrl());
+        return new ChemblService(chemblRestService(), chemblServiceUrl());
     }
     
     @Bean
@@ -43,12 +43,16 @@ public class ChemblServiceConfig {
         String assayUrl = env.getProperty("chembl.assay.url");
         String activityUrl = env.getProperty("chembl.activity.url");
         String ic50ActivityUrl = env.getProperty("chembl.activity.ic50.url");
+        String primaryTargetSelectorUrl = env.getProperty("chembl.primary.target.selector.url");
+        String inhibitionIc50Url = env.getProperty("chembl.activity.inhibition.ic50.url");
         
         serviceUrl.setMechanismUrl(mechanismUrl);
         serviceUrl.setMoleculeUrl(moleculeUrl);
         serviceUrl.setAssayUrl(assayUrl);
         serviceUrl.setActivityUrl(activityUrl);
         serviceUrl.setIc50ActivityUrl(ic50ActivityUrl);
+        serviceUrl.setPrimaryTargetSelectorUrl(primaryTargetSelectorUrl);
+        serviceUrl.setInhibitionIc50Url(inhibitionIc50Url);
         
         return serviceUrl;
     }

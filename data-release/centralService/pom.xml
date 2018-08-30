@@ -17,7 +17,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     
-<!--    <parent>
+    <!--    <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
         <version>1.0.7-SNAPSHOT</version>
@@ -45,47 +45,53 @@
             </plugin>
         </plugins>
     </build>
-<!--    <dependencyManagement>
+    <!--    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>5.0.8.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>-->
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-framework-bom</artifactId>
-            <version>5.0.8.RELEASE</version>
-            <type>pom</type>
-            <scope>import</scope>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
-    </dependencies>
-</dependencyManagement>-->
-    <dependencies>
-          <dependency>
-    <groupId>org.springframework.data</groupId>
-    <artifactId>spring-data-jpa</artifactId>
-  </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-model</artifactId>
-           <version>2.0.0-SNAPSHOT</version>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency> 
+        
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-<!--             <version>3.5</version>-->
+            <!--             <version>3.5</version>-->
         </dependency>
         
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-<!--             <version>2.5</version>-->
+            <!--             <version>2.5</version>-->
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-<!--             <version>4.1.3</version>-->
+            <!--             <version>4.1.3</version>-->
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-<!--             <version>4.5.3</version>-->
+            <!--             <version>4.5.3</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -98,14 +104,14 @@
             <artifactId>log4j</artifactId>
             <type>jar</type>
             <scope>compile</scope>
-<!--             <version>1.2.17</version>-->
+            <!--             <version>1.2.17</version>-->
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <type>jar</type>
             <scope>compile</scope>
-<!--             <version>1.7.25</version>-->
+            <!--             <version>1.7.25</version>-->
         </dependency> 
         
         <dependency>
@@ -113,7 +119,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <type>jar</type>
             <scope>compile</scope>
-<!--         <version>1.7.25</version>-->
+            <!--         <version>1.7.25</version>-->
         </dependency>
         
         <dependency>
@@ -121,7 +127,7 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <type>jar</type>
             <scope>compile</scope>
-<!--            <version>1.7.25</version>-->
+            <!--            <version>1.7.25</version>-->
         </dependency>
  
 
@@ -142,12 +148,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-<!--             <version>2.8.9</version>-->
+            <!--             <version>2.8.9</version>-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-<!--              <version>2.8.9</version>-->
+            <!--              <version>2.8.9</version>-->
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -159,14 +165,14 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <scope>test</scope>
-<!--             <version>1.3</version>-->
+            <!--             <version>1.3</version>-->
         </dependency>
          
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-<!--             <version>4.12</version>-->
+            <!--             <version>4.12</version>-->
             <exclusions>
                 <exclusion>
                     <artifactId>hamcrest-core</artifactId>
@@ -178,7 +184,7 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
-<!--             <version>1.10.19</version>-->
+            <!--             <version>1.10.19</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
