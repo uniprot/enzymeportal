@@ -24,9 +24,9 @@
     </dependencyManagement>
     <modules>
         <module>xml-generator</module>
-        <module>centralService</module>
-        <module>ep-config</module>
+        <module>ep-config</module>          
         <module>ep-model</module>
+        <module>centralService</module>
         <module>DataAnalysis</module>
         <module>PDBeAdapter</module>
         <module>ep-parser</module>

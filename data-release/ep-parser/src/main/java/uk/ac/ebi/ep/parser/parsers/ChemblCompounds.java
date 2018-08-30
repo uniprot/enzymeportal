@@ -8,9 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.model.ChemblTargets;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.model.Targets;
@@ -20,9 +19,9 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
  *
  * @author Joseph
  */
+@Slf4j
 public class ChemblCompounds {
 
-    private final Logger logger = Logger.getLogger(ChemblCompounds.class);
     private final ChemblXmlParser chemblXmlParser;
     private final EnzymePortalParserService parserService;
 
@@ -39,7 +38,7 @@ public class ChemblCompounds {
         try {
             chemblTargets = chemblXmlParser.parseChemblTarget();
         } catch (FileNotFoundException ex) {
-            logger.error("chembl-target_component.xml not found", ex);
+            log.error("chembl-target_component.xml not found", ex);
         }
         return chemblTargets;
     }
@@ -50,16 +49,16 @@ public class ChemblCompounds {
             chemblTargets = chemblXmlParser.parseChemblTargets();
 
         } catch (FileNotFoundException ex) {
-            logger.error("chembl-target_component.xml not found", ex);
+            log.error("chembl-target_component.xml not found", ex);
         }
         return chemblTargets;
     }
 //load targets to database
+
     public void loadChemblTargetsToDB() {
 
         parserService.disableTargetContraints();
         Set<Targets> targets = parseChemblTargetsXML();
-       
 
         targets.stream().forEach(target
                 -> target.getChemblId()
@@ -77,35 +76,48 @@ public class ChemblCompounds {
 
     public void loadChEMBL() {
 
-        List<ChemblTargets> chemblTargets = parserService.findChemblTargets();
-        logger.warn("Number of ChEMBL targets to process  : " + chemblTargets.size());
+        List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
+        //.stream().limit(1).collect(Collectors.toList());
 
-        chemblTargets
-                .stream()
-                .forEach(chemblTarget -> chemblService.chemblSmallMolecules(chemblTarget.getChemblId(), chemblTarget.getUniprotAccession().getAccession()));
+        log.warn(" Number of unique targeted proteins found " + uniqueTargetedproteins.size());
 
-        logger.warn("Done processing ChEMBL targets and now reading TempCompoundCompare table to update compound table : " + chemblTargets.size());
+        uniqueTargetedproteins
+                .forEach(protein -> chemblService.processChemblSmallMolecules(findProteinTargetets(protein), protein));
 
+        loadToDB();
+
+    }
+
+    private List<String> findUniqueTargetedproteins() {
+
+        return parserService.findUniqueTargetedproteins();
+
+    }
+
+    private List<String> findProteinTargetets(String accession) {
+        return parserService.findTargetetsByProtein(accession);
+    }
+
+    private void loadToDB() {
         List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
         //load into database
         if (compounds != null) {
 
-            System.out.println("Num compounds found " + compounds.size());
-
-            logger.warn("About to load the temporal compounds found ::::::  " + compounds.size());
+//            System.out.println("Num compounds found " + compounds.size());
+//            compounds.stream().forEach(x->System.out.println(x.getUniprotAccession() +" Data "+ x.getCompoundId() + " "+ x.getCompoundName() + " "+ x.getPrimaryTargetId()));
+            log.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
             compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
-                parserService.addTempCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+                parserService.addTempCompound(compound.getPrimaryTargetId(), compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
             });
 
-            logger.warn("Finished loading temporal compound table ::::::  ");
-            logger.warn("*******************Updating compound table ignoring duplicates ************");
+            log.warn("Finished loading temporal compound table ::::::  ");
+            log.warn("*******************Updating compound table ignoring duplicates ************");
             parserService.insertCompoundsFromTempTable();
-            logger.warn("**********DONE*************** ");
+            log.warn("**********DONE*************** ");
 
         }
-
     }
 
 }
