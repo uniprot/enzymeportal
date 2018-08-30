@@ -169,7 +169,7 @@ public class ChemblService {
         for (String targetId : targets) {
             String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId;
             
-            log.warn("fda url " + mechanismUrl);
+            //log.warn("fda url " + mechanismUrl);
             
             Optional<FdaApproved> fda = chemblRestService.getFdaApprovedDrug(mechanismUrl);
             
