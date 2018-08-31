@@ -12,37 +12,40 @@ import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
-import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
 /**
  *
  * @author joseph
  */
 @Slf4j
-public class FDA {
+public class FDA extends SmallMolecules {
 
     private final ChemblService chemblService;
 
-    private final ChemblXmlParser chemblXmlParser;
-
+    // private final ChemblXmlParser chemblXmlParser;
     private final EnzymePortalParserService parserService;
 
-    public FDA(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
+    public FDA(EnzymePortalParserService parserService, ChemblService chemblService) {
+        super(parserService);
         this.chemblService = chemblService;
-        this.chemblXmlParser = chemblXmlParser;
         this.parserService = parserService;
     }
 
-    private List<String> findUniqueTargetedproteins() {
-
-        return parserService.findUniqueTargetedproteins();
-    }
-
-    private List<String> findProteinTargetets(String accession) {
-
-        return parserService.findTargetetsByProtein(accession);
-    }
-
+//    public FDA(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
+//        this.chemblService = chemblService;
+//        this.chemblXmlParser = chemblXmlParser;
+//        this.parserService = parserService;
+//    }
+//    private List<String> findUniqueTargetedproteins() {
+//
+//        return parserService.findUniqueTargetedproteins();
+//    }
+//
+//    private List<String> findProteinTargetets(String accession) {
+//
+//        return parserService.findTargetetsByProtein(accession);
+//    }
+    @Override
     public void loadChEMBL() {
 
 //        Map<String, List<String>> chemblTargets = new HashMap<>();
@@ -69,8 +72,6 @@ public class FDA {
 
         //load into database
         if (compounds != null) {
-
-            log.warn("Num FDA compounds found " + compounds.size());
 
             log.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB

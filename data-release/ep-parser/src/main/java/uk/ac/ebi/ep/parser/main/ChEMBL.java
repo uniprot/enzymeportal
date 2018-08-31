@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package uk.ac.ebi.ep.parser.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,10 +16,9 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author Joseph
  */
-public class ChemblSmallMolecules {
+public class ChEMBL {
     
-    
-    public static void main(String args[]) throws Exception {
+        public static void main(String args[]) throws Exception {
 
         String profile = "";
 
@@ -38,7 +41,10 @@ public class ChemblSmallMolecules {
             context.refresh();
         
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
-
+          
+            compoundService.loadChemblTargets();
+            //activators & inhibitors
+            compoundService.loadChemblFDA();
             //more activators & inhibitors
             compoundService.processChemblTargetsAndUpdateDatabase();
 

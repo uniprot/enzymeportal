@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.parser.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,9 +11,8 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author Joseph
  */
-public class ChemblSmallMolecules {
-    
-    
+public class ChEMBLTargetParser {
+
     public static void main(String args[]) throws Exception {
 
         String profile = "";
@@ -36,11 +34,10 @@ public class ChemblSmallMolecules {
             context.register(GlobalConfig.class);
             context.scan("uk.ac.ebi.ep.parser.config");
             context.refresh();
-        
+
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
 
-            //more activators & inhibitors
-            compoundService.processChemblTargetsAndUpdateDatabase();
+            compoundService.loadChemblTargets();
 
         }
 

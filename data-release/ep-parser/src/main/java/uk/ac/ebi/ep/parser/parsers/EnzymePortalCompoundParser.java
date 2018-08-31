@@ -43,7 +43,7 @@ public class EnzymePortalCompoundParser {
     @Transactional
     public void loadChemblFDA() {
 
-        FDA fda = new FDA(chemblService, chemblXmlParser, parserService);
+        SmallMolecules fda = new FDA(parserService, chemblService);
         fda.loadChEMBL();
 
     }
@@ -59,7 +59,7 @@ public class EnzymePortalCompoundParser {
     @Transactional
     @Modifying
     public void loadChemblTargets() {
-        ChemblCompounds chemblTargets = new ChemblCompounds(chemblService, chemblXmlParser, parserService);
+        TargetParser chemblTargets = new TargetParser(chemblXmlParser, parserService);
         chemblTargets.loadChemblTargetsToDB();
 
     }
@@ -67,8 +67,8 @@ public class EnzymePortalCompoundParser {
     @Transactional
     @Modifying
     public void processChemblTargetsAndUpdateDatabase() {
-        ChemblCompounds chemblTargets = new ChemblCompounds(chemblService, chemblXmlParser, parserService);
-        chemblTargets.loadChEMBL();
+        SmallMolecules molecules = new ChemblCompounds(parserService, chemblService);
+        molecules.loadChEMBL();
 
     }
 

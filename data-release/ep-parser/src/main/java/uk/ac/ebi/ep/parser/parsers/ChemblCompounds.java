@@ -1,79 +1,78 @@
 package uk.ac.ebi.ep.parser.parsers;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
-import uk.ac.ebi.ep.parser.model.Targets;
-import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
 /**
  *
  * @author Joseph
  */
 @Slf4j
-public class ChemblCompounds {
+public class ChemblCompounds extends SmallMolecules {
 
-    private final ChemblXmlParser chemblXmlParser;
+    // private final ChemblXmlParser chemblXmlParser;
     private final EnzymePortalParserService parserService;
 
     private final ChemblService chemblService;
 
-    public ChemblCompounds(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
-        this.chemblService = chemblService;
-        this.chemblXmlParser = chemblXmlParser;
+//    public ChemblCompounds(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
+//        super(parserService);
+//        
+//        this.chemblService = chemblService;
+//        //this.chemblXmlParser = chemblXmlParser;
+//        this.parserService = parserService;
+//    }
+    public ChemblCompounds(EnzymePortalParserService parserService, ChemblService chemblService) {
+        super(parserService);
         this.parserService = parserService;
+        this.chemblService = chemblService;
     }
 
-    public Map<String, List<String>> parseChemblTargetXML() {
-        Map<String, List<String>> chemblTargets = new HashMap<>();
-        try {
-            chemblTargets = chemblXmlParser.parseChemblTarget();
-        } catch (FileNotFoundException ex) {
-            log.error("chembl-target_component.xml not found", ex);
-        }
-        return chemblTargets;
-    }
-
-    public Set<Targets> parseChemblTargetsXML() {
-        Set<Targets> chemblTargets = new HashSet<>();
-        try {
-            chemblTargets = chemblXmlParser.parseChemblTargets();
-
-        } catch (FileNotFoundException ex) {
-            log.error("chembl-target_component.xml not found", ex);
-        }
-        return chemblTargets;
-    }
-//load targets to database
-
-    public void loadChemblTargetsToDB() {
-
-        parserService.disableTargetContraints();
-        Set<Targets> targets = parseChemblTargetsXML();
-
-        targets.stream().forEach(target
-                -> target.getChemblId()
-                        .stream()
-                        .forEach(chemblId -> loadToDB(chemblId, target.getComponentType(), target.getAccession())));
-
-        parserService.deleteNonEnzymesTargets();
-
-        parserService.enableTargetContraints();
-    }
-
-    private void loadToDB(String chemblId, String componentType, String accession) {
-        parserService.addChemblTargets(chemblId, componentType, accession);
-    }
-
+//    public Map<String, List<String>> parseChemblTargetXML() {
+//        Map<String, List<String>> chemblTargets = new HashMap<>();
+//        try {
+//            chemblTargets = chemblXmlParser.parseChemblTarget();
+//        } catch (FileNotFoundException ex) {
+//            log.error("chembl-target_component.xml not found", ex);
+//        }
+//        return chemblTargets;
+//    }
+//
+//    public Set<Targets> parseChemblTargetsXML() {
+//        Set<Targets> chemblTargets = new HashSet<>();
+//        try {
+//            chemblTargets = chemblXmlParser.parseChemblTargets();
+//
+//        } catch (FileNotFoundException ex) {
+//            log.error("chembl-target_component.xml not found", ex);
+//        }
+//        return chemblTargets;
+//    }
+////load targets to database
+//
+//    public void loadChemblTargetsToDB() {
+//
+//        parserService.disableTargetContraints();
+//        Set<Targets> targets = parseChemblTargetsXML();
+//
+//        targets.stream().forEach(target
+//                -> target.getChemblId()
+//                        .stream()
+//                        .forEach(chemblId -> loadToDB(chemblId, target.getComponentType(), target.getAccession())));
+//
+//        parserService.deleteNonEnzymesTargets();
+//
+//        parserService.enableTargetContraints();
+//    }
+//    private void loadToDB(String chemblId, String componentType, String accession) {
+//        parserService.addChemblTargets(chemblId, componentType, accession);
+//    }
+    @Override
     public void loadChEMBL() {
 
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
@@ -88,16 +87,15 @@ public class ChemblCompounds {
 
     }
 
-    private List<String> findUniqueTargetedproteins() {
-
-        return parserService.findUniqueTargetedproteins();
-
-    }
-
-    private List<String> findProteinTargetets(String accession) {
-        return parserService.findTargetetsByProtein(accession);
-    }
-
+//    private List<String> findUniqueTargetedproteins() {
+//
+//        return parserService.findUniqueTargetedproteins();
+//
+//    }
+//
+//    private List<String> findProteinTargetets(String accession) {
+//        return parserService.findTargetetsByProtein(accession);
+//    }
     private void loadToDB() {
         List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
