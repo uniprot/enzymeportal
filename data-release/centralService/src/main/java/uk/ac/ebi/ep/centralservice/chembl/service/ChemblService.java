@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.centralservice.helper.Role;
 import uk.ac.ebi.ep.centralservice.helper.StandardType;
+import uk.ac.ebi.ep.centralservice.helper.StandardValue;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 
 /**
@@ -65,18 +66,6 @@ public class ChemblService {
         String primaryTargetSelectorUrl = chemblServiceUrl.getPrimaryTargetSelectorUrl() + targetId;
 
         return chemblRestService.getChemblActivity(primaryTargetSelectorUrl);
-    }
-
-    private String computePrimaryTarget(List<String> targets) {
-        SortedMap<Integer, String> primaryTargetAggregator = new TreeMap<>();
-
-        targets
-                .forEach(targetId -> primaryTargetAggregator.put(getPrimaryTargetFromChemblActivity(targetId)
-                .orElse(new ChemblActivity())
-                .getPageMeta()
-                .getTotalCount(), targetId));
-
-        return primaryTargetAggregator.get(primaryTargetAggregator.lastKey());
     }
 
     private TempCompoundCompare getTempCompoundCompare(String primaryTargetId, String compoundId, String compoundSource, String moleculeName, String relationship, String compoundRole, String url, String note, String accession) {
@@ -130,74 +119,137 @@ public class ChemblService {
 
         if (standardValue != null && standardType != null) {
             Float sValue = Float.valueOf(standardValue);
-            return (standardType.equalsIgnoreCase(StandardType.INHIBITION.name()) && sValue >= 50)
-                    || (standardType.equalsIgnoreCase(StandardType.IC50.name()) && sValue <= 1000);
+            if (standardType.equalsIgnoreCase(StandardType.INHIBITION.name()) && sValue >= StandardValue.FIFTY.getStandardValue()) {
+
+                return true;
+            }
+            return standardType.equalsIgnoreCase(StandardType.IC50.name()) && sValue <= StandardValue.ONE_THOUSAND.getStandardValue();
+//            return (standardType.equalsIgnoreCase(StandardType.INHIBITION.name()) && sValue >= 50f)
+//                    || (standardType.equalsIgnoreCase(StandardType.IC50.name()) && sValue <= 1000f);
+
         }
         return false;
 
     }
 
-    private Optional<ChemblActivity> getChemblActivity(String targetId) {
-        String inhibitionIc50Url = chemblServiceUrl.getInhibitionIc50Url() + targetId;
+    private Optional<ChemblActivity> getChemblActivity(String targetId, int limit) {
+        //use primary target size as limit for quick retrieval from chembl rest api
+        String inhibitionIc50Url = chemblServiceUrl.getInhibitionIc50Url() + targetId + "&limit=" + limit;
 
         //TODO delete later
-        log.warn("URL SENT " + inhibitionIc50Url);
+        //log.warn("URL SENT " + inhibitionIc50Url);
         return chemblRestService.getChemblActivity(inhibitionIc50Url);
     }
 
-    public void processChemblSmallMolecules(List<String> targets, String protein) {
-        String primaryTargetId = computePrimaryTarget(targets);
+    @Deprecated
+    private String computePrimaryTarget(List<String> targets) {
+        SortedMap<Integer, String> primaryTargetAggregator = new TreeMap<>();
 
-        String targetIds = targets
-                .stream()
-                .distinct()
-                .collect(Collectors.joining(","));
-
-        //TODO delete later
-        if (targets.size() > 1) {
-            log.warn("Targets to process  " + targetIds);
-        }
-
-        getChemblActivity(targetIds)
+        targets
+                .forEach(targetId -> primaryTargetAggregator.put(getPrimaryTargetFromChemblActivity(targetId)
                 .orElse(new ChemblActivity())
-                .getActivities()
-                .stream()
-                .filter(activity -> filterStandardTypeAndValue(activity))
-                .filter(n -> n.getMoleculePrefName() != null)
-                .distinct()
-                .forEach(data -> activitiesToCompounds(data, chemblCompounds, protein, primaryTargetId));
+                .getPageMeta()
+                .getTotalCount(), targetId));
+
+        return primaryTargetAggregator.get(primaryTargetAggregator.lastKey());
     }
 
-    public void getMoleculesByCuratedMechanism(List<String> targets, String protein) {
+    private SortedMap<Integer, String> processTargetList(List<String> targets) {
+        SortedMap<Integer, String> primaryTargetAggregator = new TreeMap<>();
+
+        targets
+                .forEach(targetId -> primaryTargetAggregator.put(getPrimaryTargetFromChemblActivity(targetId)
+                .orElse(new ChemblActivity())
+                .getPageMeta()
+                .getTotalCount(), targetId));
+
+        primaryTargetAggregator
+                .entrySet()
+                .removeIf(key -> key.getKey() <= 0);
+
+        return primaryTargetAggregator;
+    }
+
+    private int getLimit(SortedMap<Integer, String> primaryTargetAggregator) {
+        int limit = primaryTargetAggregator.lastKey();
+        if (limit > 1_000) {
+            limit = 1000;
+        }
+        return limit;
+    }
+
+    public void processChemblSmallMolecules(List<String> targetList, String protein) {
+
+        SortedMap<Integer, String> primaryTargetAggregator = processTargetList(targetList);
+        List<String> targets = primaryTargetAggregator
+                .values()
+                .stream()
+                .collect(Collectors.toList());
+
+        if (!targets.isEmpty()) {
+
+            String primaryTargetId = primaryTargetAggregator.get(primaryTargetAggregator.lastKey());
+            int limit = getLimit(primaryTargetAggregator);
+
+            String targetIds = targets
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.joining(","));
+
+            //TODO delete later
+            if (targetList.size() > 1) {
+                log.warn("Initial Targets of size : " + targetList.size() + "<<==>> Final target size : " + targets.size() + "::: Targets sent to REST API : " + targetIds);
+            }
+            getChemblActivity(targetIds, limit)
+                    .orElse(new ChemblActivity())
+                    .getActivities()
+                    .stream()
+                    .distinct()
+                    .filter(n -> n.getMoleculePrefName() != null)
+                    .filter(activity -> filterStandardTypeAndValue(activity))
+                    .forEach(data -> activitiesToCompounds(data, chemblCompounds, protein, primaryTargetId));
+        }
+    }
+
+    public void getMoleculesByCuratedMechanism(List<String> targetList, String protein) {
 
         List<String> moleculeChemblIdsInhibitors = new ArrayList<>();
         List<String> moleculeChemblIdsActivators = new ArrayList<>();
-        String primaryTargetId = computePrimaryTarget(targets);
-        for (String targetId : targets) {
-            String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId;
 
-            //log.warn("fda url " + mechanismUrl);
-            Optional<FdaApproved> fda = chemblRestService.getFdaApprovedDrug(mechanismUrl);
+        SortedMap<Integer, String> primaryTargetAggregator = processTargetList(targetList);
+        List<String> targets = primaryTargetAggregator
+                .values()
+                .stream()
+                .collect(Collectors.toList());
 
-            if (fda.isPresent() && !fda.get().getMechanisms().isEmpty()) {
+        if (!targets.isEmpty()) {
+            String primaryTargetId = primaryTargetAggregator.get(primaryTargetAggregator.lastKey());
+             int limit = getLimit(primaryTargetAggregator);
+            for (String targetId : targets) {
+                String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId + "&limit=" + limit;
 
-                for (Mechanism mechanism : fda.get().getMechanisms()) {
+                //log.warn("fda url " + mechanismUrl);
+                Optional<FdaApproved> fda = chemblRestService.getFdaApprovedDrug(mechanismUrl);
 
-                    if (Role.INHIBITOR.name().equalsIgnoreCase(mechanism.getActionType())) {
-                        //add molecule id to inhibitors
-                        moleculeChemblIdsInhibitors.add(mechanism.getMoleculeChemblId());
+                if (fda.isPresent() && !fda.get().getMechanisms().isEmpty()) {
 
+                    for (Mechanism mechanism : fda.get().getMechanisms()) {
+
+                        if (Role.INHIBITOR.name().equalsIgnoreCase(mechanism.getActionType())) {
+                            //add molecule id to inhibitors
+                            moleculeChemblIdsInhibitors.add(mechanism.getMoleculeChemblId());
+
+                        }
+                        if (Role.ACTIVATOR.name().equalsIgnoreCase(mechanism.getActionType())) {
+                            //add molecule id to activator
+                            moleculeChemblIdsActivators.add(mechanism.getMoleculeChemblId());
+                        }
                     }
-                    if (Role.ACTIVATOR.name().equalsIgnoreCase(mechanism.getActionType())) {
-                        //add molecule id to activator
-                        moleculeChemblIdsActivators.add(mechanism.getMoleculeChemblId());
-                    }
+
                 }
-
             }
+            computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, fdaChemblCompounds, protein, primaryTargetId);
         }
-        computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, fdaChemblCompounds, protein, primaryTargetId);
-
     }
 
     private void computePreferredName(List<String> moleculeChemblIdsInhibitors, List<String> moleculeChemblIdsActivators,

@@ -1,16 +1,27 @@
-chembl.mechanism.url=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?limit=1000&target_chembl_id=
+chembl.mechanism.url=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?target_chembl_id=
 chembl.molecule.url=https://www.ebi.ac.uk/chembl/api/data/molecule.json?molecule_chembl_id=
 chembl.assay.url=https://www.ebi.ac.uk/chembl/api/data/assay.json?limit=1000&target_chembl_id=
-chembl.activity.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&assay_chembl_id=
-chembl.activity.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&assay_chembl_id=
 
 chembl.primary.target.selector.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1&standard_type_in=IC50,Inhibition&target_chembl_id=
+chembl.activity.inhibition.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&target_chembl_id=
+chembl.activity.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&target_chembl_id=
+chembl.activity.inhibition.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?standard_type_in=IC50,Inhibition&target_chembl_id__in=
 
+
+
+
+
+
+
+--deprecated
 chembl.activity.inhibition.ic50.url.REMOVE=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type_in=IC50,Inhibition&target_chembl_id=
+chembl.activity.inhibition.url.DEPRECATED=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&standard_value__gte=50&assay_chembl_id=
+chembl.activity.ic50.url.DEPRECATED=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=IC50&standard_value__lte=1000&assay_chembl_id=
 
-chembl.activity.inhibition.ic50.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type_in=IC50,Inhibition&target_chembl_id__in=
-
-
+chembl.activity.inhibition.url.DEL=https://www.ebi.ac.uk/chembl/api/data/activity.json?standard_type=Inhibition&target_chembl_id=
+chembl.activity.ic50.url.DEL=https://www.ebi.ac.uk/chembl/api/data/activity.json?standard_type=IC50&target_chembl_id=
+chembl.activity.inhibition.ic50.url.OLD=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type_in=IC50,Inhibition&target_chembl_id__in=
+chembl.mechanism.url.OLD=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?limit=1000&target_chembl_id=
 
 
 EX: todo

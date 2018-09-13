@@ -41,7 +41,7 @@ public class ChemblServiceConfig {
         String mechanismUrl = env.getProperty("chembl.mechanism.url");
         String moleculeUrl = env.getProperty("chembl.molecule.url");
         String assayUrl = env.getProperty("chembl.assay.url");
-        String activityUrl = env.getProperty("chembl.activity.url");
+        String inhibitionActivityUrl = env.getProperty("chembl.activity.inhibition.url");
         String ic50ActivityUrl = env.getProperty("chembl.activity.ic50.url");
         String primaryTargetSelectorUrl = env.getProperty("chembl.primary.target.selector.url");
         String inhibitionIc50Url = env.getProperty("chembl.activity.inhibition.ic50.url");
@@ -49,7 +49,7 @@ public class ChemblServiceConfig {
         serviceUrl.setMechanismUrl(mechanismUrl);
         serviceUrl.setMoleculeUrl(moleculeUrl);
         serviceUrl.setAssayUrl(assayUrl);
-        serviceUrl.setActivityUrl(activityUrl);
+        serviceUrl.setInhibitionActivityUrl(inhibitionActivityUrl);
         serviceUrl.setIc50ActivityUrl(ic50ActivityUrl);
         serviceUrl.setPrimaryTargetSelectorUrl(primaryTargetSelectorUrl);
         serviceUrl.setInhibitionIc50Url(inhibitionIc50Url);

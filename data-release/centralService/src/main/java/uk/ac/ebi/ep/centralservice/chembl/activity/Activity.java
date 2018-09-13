@@ -317,9 +317,9 @@ public class Activity {
 
     @JsonProperty("molecule_pref_name")
     public String getMoleculePrefName() {
-        if(moleculePrefName == null){
-            moleculePrefName = moleculeChemblId;
-        }
+//        if(moleculePrefName == null){
+//            moleculePrefName = moleculeChemblId;
+//        }
         return moleculePrefName;
     }
 

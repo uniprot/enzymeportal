@@ -9,7 +9,8 @@ public class ChemblServiceUrl {
     private String mechanismUrl;
     private String moleculeUrl;
     private String assayUrl;
-    private String activityUrl;
+    //private String activityUrl;
+    private String inhibitionActivityUrl;
     private String ic50ActivityUrl;
     private String primaryTargetSelectorUrl;
     private String inhibitionIc50Url;
@@ -38,13 +39,13 @@ public class ChemblServiceUrl {
         this.assayUrl = assayUrl;
     }
 
-    public String getActivityUrl() {
-        return activityUrl;
-    }
-
-    public void setActivityUrl(String activityUrl) {
-        this.activityUrl = activityUrl;
-    }
+//    public String getActivityUrl() {
+//        return activityUrl;
+//    }
+//
+//    public void setActivityUrl(String activityUrl) {
+//        this.activityUrl = activityUrl;
+//    }
 
     public String getIc50ActivityUrl() {
         return ic50ActivityUrl;
@@ -69,5 +70,15 @@ public class ChemblServiceUrl {
     public void setInhibitionIc50Url(String inhibitionIc50Url) {
         this.inhibitionIc50Url = inhibitionIc50Url;
     }
+
+    public String getInhibitionActivityUrl() {
+        return inhibitionActivityUrl;
+    }
+
+    public void setInhibitionActivityUrl(String inhibitionActivityUrl) {
+        this.inhibitionActivityUrl = inhibitionActivityUrl;
+    }
+    
+    
 
 }
