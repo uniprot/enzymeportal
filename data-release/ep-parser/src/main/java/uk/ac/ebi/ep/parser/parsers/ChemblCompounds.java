@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
@@ -15,95 +16,49 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 @Slf4j
 public class ChemblCompounds extends SmallMolecules {
 
-    // private final ChemblXmlParser chemblXmlParser;
     private final EnzymePortalParserService parserService;
 
     private final ChemblService chemblService;
 
-//    public ChemblCompounds(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
-//        super(parserService);
-//        
-//        this.chemblService = chemblService;
-//        //this.chemblXmlParser = chemblXmlParser;
-//        this.parserService = parserService;
-//    }
+
     public ChemblCompounds(EnzymePortalParserService parserService, ChemblService chemblService) {
         super(parserService);
         this.parserService = parserService;
         this.chemblService = chemblService;
     }
 
-//    public Map<String, List<String>> parseChemblTargetXML() {
-//        Map<String, List<String>> chemblTargets = new HashMap<>();
-//        try {
-//            chemblTargets = chemblXmlParser.parseChemblTarget();
-//        } catch (FileNotFoundException ex) {
-//            log.error("chembl-target_component.xml not found", ex);
-//        }
-//        return chemblTargets;
-//    }
-//
-//    public Set<Targets> parseChemblTargetsXML() {
-//        Set<Targets> chemblTargets = new HashSet<>();
-//        try {
-//            chemblTargets = chemblXmlParser.parseChemblTargets();
-//
-//        } catch (FileNotFoundException ex) {
-//            log.error("chembl-target_component.xml not found", ex);
-//        }
-//        return chemblTargets;
-//    }
-////load targets to database
-//
-//    public void loadChemblTargetsToDB() {
-//
-//        parserService.disableTargetContraints();
-//        Set<Targets> targets = parseChemblTargetsXML();
-//
-//        targets.stream().forEach(target
-//                -> target.getChemblId()
-//                        .stream()
-//                        .forEach(chemblId -> loadToDB(chemblId, target.getComponentType(), target.getAccession())));
-//
-//        parserService.deleteNonEnzymesTargets();
-//
-//        parserService.enableTargetContraints();
-//    }
-//    private void loadToDB(String chemblId, String componentType, String accession) {
-//        parserService.addChemblTargets(chemblId, componentType, accession);
-//    }
     @Override
     public void loadChEMBL() {
 
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
-        //.stream().limit(1).collect(Collectors.toList());
+        //.stream().limit(20).collect(Collectors.toList());
 
         log.warn(" Number of unique targeted proteins found " + uniqueTargetedproteins.size());
+        
+      //uncomment if we don't need to track how many processed
+//        uniqueTargetedproteins
+//                .forEach(protein -> chemblService.processChemblSmallMolecules(findProteinTargetets(protein), protein));
 
+        AtomicInteger count = new AtomicInteger(1);
         uniqueTargetedproteins
-                .forEach(protein -> chemblService.processChemblSmallMolecules(findProteinTargetets(protein), protein));
+                .stream()
+                .map(protein -> {
+            chemblService.processChemblSmallMolecules(findProteinTargetets(protein), protein);
+            return protein;
+        }).forEachOrdered((x) -> log.warn(x+ " Num processed : " + count.getAndIncrement()));
 
         loadToDB();
 
     }
 
-//    private List<String> findUniqueTargetedproteins() {
-//
-//        return parserService.findUniqueTargetedproteins();
-//
-//    }
-//
-//    private List<String> findProteinTargetets(String accession) {
-//        return parserService.findTargetetsByProtein(accession);
-//    }
+
     private void loadToDB() {
         List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
         //load into database
         if (compounds != null) {
 
-//            System.out.println("Num compounds found " + compounds.size());
-//            compounds.stream().forEach(x->System.out.println(x.getUniprotAccession() +" Data "+ x.getCompoundId() + " "+ x.getCompoundName() + " "+ x.getPrimaryTargetId()));
+
             log.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
             compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
