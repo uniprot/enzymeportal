@@ -265,6 +265,10 @@ public class EnzymePortalCompound implements Serializable {
     }
 
     public String getChemblTargetId() {
+        
+        if(chemblTargetId == null){
+            chemblTargetId="";
+        }
         return chemblTargetId;
     }
 
