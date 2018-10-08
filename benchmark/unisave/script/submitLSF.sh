@@ -13,5 +13,6 @@ echo "LSF logs can be found here $LOG_DIR "
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 
-bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 -o $LOG_DIR  $1
+#bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 -o $LOG_DIR  $1
+bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 sh loadUnisave.sh
 

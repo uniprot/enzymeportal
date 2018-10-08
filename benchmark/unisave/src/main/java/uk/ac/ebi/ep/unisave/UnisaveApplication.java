@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.unisave;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import uk.ac.ebi.ep.unisave.repositories.UnisaveEntryRepository;
 //
 
 @SpringBootApplication
+@Slf4j
 public class UnisaveApplication {
 
     public static void main(String[] args) {
@@ -27,15 +29,16 @@ public class UnisaveApplication {
 //        p.setProperty("couchbase.host", "http://ves-oy-cf");
 //        app.setDefaultProperties(p);
         app.run(args).getBean(UnisaveEntryRepository.class).loadUnisaveEntries(entries());
+        log.error("DONE LOADING UNISAVE DATA ........");
     }
     
     
        private static List<UnisaveEntry> entries() {
-
+log.error("About to start generating unisave entries **************");
 //        return IntStream.range(1, 1_987_694)
 //                .mapToObj(n -> newUnisaveEntry(n))
 //                .collect(Collectors.toList());
-        return IntStream.range(1, 100)
+        return IntStream.range(1, 1_000_000)
                 .mapToObj(n -> newUnisaveEntry(n))
                 .collect(Collectors.toList());//2mins
 
