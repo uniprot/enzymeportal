@@ -35,12 +35,12 @@ public class UnisaveApplication {
     
        private static List<UnisaveEntry> entries() {
 log.error("About to start generating unisave entries **************");
-//        return IntStream.range(1, 1_987_694)
-//                .mapToObj(n -> newUnisaveEntry(n))
-//                .collect(Collectors.toList());
-        return IntStream.range(1, 1_000_000)
+        return IntStream.range(1, 1_987_694)
                 .mapToObj(n -> newUnisaveEntry(n))
-                .collect(Collectors.toList());//2mins
+                .collect(Collectors.toList());
+//        return IntStream.range(1, 1_000_000)
+//                .mapToObj(n -> newUnisaveEntry(n))
+//                .collect(Collectors.toList());//2mins
 
     }
 
