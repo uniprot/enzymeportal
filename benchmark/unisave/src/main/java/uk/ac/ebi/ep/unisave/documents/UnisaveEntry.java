@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.couchbase.core.mapping.Document;
@@ -36,6 +37,7 @@ public class UnisaveEntry {
     private String accesion;
     @Field
     @JsonProperty("unisaveVersions")
+    @Singular
     private List<UnisaveVersion> unisaveVersions;
     @Field
     private Integer latest;

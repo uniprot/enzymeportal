@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.Banner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import uk.ac.ebi.ep.unisave.config.ShutdownBean;
 import uk.ac.ebi.ep.unisave.documents.UnisaveEntry;
 import uk.ac.ebi.ep.unisave.documents.UnisaveVersion;
 import uk.ac.ebi.ep.unisave.repositories.UnisaveEntryRepository;
@@ -18,27 +19,31 @@ public class UnisaveApplication {
 
     public static void main(String[] args) {
 
-        //SpringApplication.run(UnisaveApplication.class, args);
-        SpringApplication app = new SpringApplication(UnisaveApplication.class);
-        app.setLogStartupInfo(false);
-        app.setBannerMode(Banner.Mode.OFF);
+        try ( //SpringApplication.run(UnisaveApplication.class, args);
+//        SpringApplication app = new SpringApplication(UnisaveApplication.class);
+//        app.setLogStartupInfo(false);
+//        app.setBannerMode(Banner.Mode.OFF);
 //             UrlResource r = new UrlResource("http://www.example.com/image/banner.png");
 //            app.setBanner(new ImageBanner(r));
-
 //        Properties p = new Properties();
 //        p.setProperty("couchbase.host", "http://ves-oy-cf");
 //        app.setDefaultProperties(p);
-        app.run(args).getBean(UnisaveEntryRepository.class).loadUnisaveEntries(entries());
-        log.error("DONE LOADING UNISAVE DATA ........");
+        //app.run(args).getBean(UnisaveEntryRepository.class).loadUnisaveEntries(entries());
+                ConfigurableApplicationContext ctx = new SpringApplicationBuilder(UnisaveApplication.class).run(args)) {
+            ctx.getBean(UnisaveEntryRepository.class)
+                    .loadUnisaveEntries(entries());
+            log.error("DONE LOADING UNISAVE DATA ........");
+            ctx.getBean(ShutdownBean.class);
+        }
+
     }
-    
-    
-       private static List<UnisaveEntry> entries() {
-log.error("About to start generating unisave entries **************");
-        return IntStream.range(1, 1_987_694)
+
+    private static List<UnisaveEntry> entries() {
+        log.error("About to start generating unisave entries **************");
+        return IntStream.range(1, 1_987_695)
                 .mapToObj(n -> newUnisaveEntry(n))
                 .collect(Collectors.toList());
-//        return IntStream.range(1, 1_000_000)
+//        return IntStream.range(1, 10_000)
 //                .mapToObj(n -> newUnisaveEntry(n))
 //                .collect(Collectors.toList());//2mins
 
@@ -74,11 +79,6 @@ log.error("About to start generating unisave entries **************");
         version.setVersionNumber(number);
         version.setType("Summary");
         return version;
-    } 
-    
-    
-      
-    
-
+    }
 
 }

@@ -5,6 +5,7 @@ import com.couchbase.client.core.time.Delay;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.couchbase.client.java.error.TemporaryFailureException;
 import com.couchbase.client.java.query.N1qlParams;
 import com.couchbase.client.java.query.N1qlQuery;
 import com.couchbase.client.java.query.Statement;
@@ -15,6 +16,7 @@ import com.couchbase.client.java.util.retry.RetryBuilder;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.couchbase.core.CouchbaseOperations;
@@ -22,6 +24,7 @@ import org.springframework.data.couchbase.repository.config.RepositoryOperations
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
 import org.springframework.data.couchbase.repository.query.support.N1qlUtils;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 import uk.ac.ebi.ep.unisave.documents.UnisaveEntry;
 import uk.ac.ebi.ep.unisave.documents.UnisaveVersion;
 
@@ -113,18 +116,20 @@ public class UnisaveEntryRepositoryImpl extends Helpers implements UnisaveEntryC
 
         List<JsonDocument> docs = entries
                 .stream()
+                .parallel()
                 .map(entry -> uniSaveToDocument(entry))
                 //.map(entry -> conversionService.convert(entry, JsonDocument.class))
                 .collect(Collectors.toList());
-
+        
         Observable
                 .from(docs)
                 .flatMap((final JsonDocument docToInsert) -> getBucket().async()
                 .insert(docToInsert))
                 .retryWhen(RetryBuilder
-                        .anyOf(BackpressureException.class)
-                        .delay(Delay.exponential(TimeUnit.MILLISECONDS, 500))
+                        .anyOf(BackpressureException.class, TimeoutException.class,TemporaryFailureException.class)
                         .max(10)
+                        .delay(Delay.exponential(TimeUnit.SECONDS), Schedulers.io())
+                        //.delay(Delay.exponential(TimeUnit.MILLISECONDS, 500))
                         .build())
                 .last()
                 .toBlocking()
@@ -140,7 +145,7 @@ public class UnisaveEntryRepositoryImpl extends Helpers implements UnisaveEntryC
                 .flatMap((final JsonDocument docToInsert) -> getBucket().async()
                 .insert(docToInsert))
                 .retryWhen(RetryBuilder
-                        .anyOf(BackpressureException.class)
+                        .any()
                         .delay(Delay.exponential(TimeUnit.MILLISECONDS, 100))
                         .max(10)
                         .build())

@@ -58,10 +58,14 @@ public class ReactiveCouchbaseConfig extends AbstractReactiveCouchbaseConfigurat
     protected CouchbaseEnvironment getEnvironment() {
         return DefaultCouchbaseEnvironment.builder()
                 .connectTimeout(10000)
-                .kvTimeout(10000)
+                .kvTimeout(100000000)
                 .queryTimeout(10000)
                 .viewTimeout(10000)
+                
+                .keepAliveTimeout(100000000)
                 .build();
+        
+  
     }
 
         @Override
@@ -83,7 +87,10 @@ public class ReactiveCouchbaseConfig extends AbstractReactiveCouchbaseConfigurat
         return Consistency.READ_YOUR_OWN_WRITES;
     }
 
-    
+    @Bean
+    public ShutdownBean shutdownBean(){
+        return new ShutdownBean();
+    }
 
 }
 
