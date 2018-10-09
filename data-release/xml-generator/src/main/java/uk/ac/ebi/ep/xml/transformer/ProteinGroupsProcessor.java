@@ -106,7 +106,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
                 addScientificNameFields(uniprotEntry.getScientificName(), fields);
                 addCommonNameFields(uniprotEntry.getCommonName(), fields);
-
+                 addUniprotFamilyFields(uniprotEntry.getUniprotFamiliesSet(), fields);
                 addAccessionXrefs(uniprotEntry.getAccession(), refs);
 
                 addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
