@@ -65,9 +65,10 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
         addGeneNameFields(uniprotEntry.getEntryToGeneMappingSet(), fields);
- 
-        addUniprotFamilyFields(uniprotEntry.getUniprotFamiliesSet(), fields);
-   
+
+        //addUniprotFamilyFields(uniprotEntry.getUniprotFamiliesSet(), fields);
+        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+
         addSynonymFields(uniprotEntry.getSynonymNames(), uniprotEntry.getProteinName(), fields);
         //addSource(enzyme, refs);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
@@ -103,6 +104,5 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
                 .forEachOrdered(pdbfield -> fields.add(pdbfield));
 
     }
-
 
 }

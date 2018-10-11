@@ -241,4 +241,15 @@ public abstract class XmlTransformer {
         }
     }
 
+    protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs) {
+        if (!families.isEmpty()) {
+            families.stream().map(family -> {
+                Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
+                fields.add(field);
+                return new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName());
+
+            }).forEach(xref -> refs.add(xref));
+        }
+    }
+
 }

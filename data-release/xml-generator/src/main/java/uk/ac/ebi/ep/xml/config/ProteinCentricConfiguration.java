@@ -37,16 +37,13 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     // private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
 
     private static final String ROOT_TAG_NAME = "database";
-   private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
 
     //------- TEST QUERY --------
-//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=3 \n"
+//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
 //            + "union\n"
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=1";
     // END -- TEST QUERY ----
-    
-    
-    
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
     public static final String PROTEIN_CENTRIC_XML_JOB = "PROTEIN_CENTRIC_XML_JOB_" + DATE;
