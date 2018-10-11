@@ -29,27 +29,6 @@ import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
     //, @NamedQuery(name = "UniprotFamilies.findByFamilyName", query = "SELECT u FROM UniprotFamilies u WHERE u.familyName = :familyName")
     , @NamedQuery(name = "UniprotFamilies.findByUniprotFamilyId", query = "SELECT u FROM UniprotFamilies u WHERE u.uniprotFamilyId = :uniprotFamilyId")})
 public class UniprotFamilies implements Serializable {
-//
-//    @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
-//    @ManyToOne
-//    private UniprotEntryEnzyme accession;
-////    @JoinColumn(name = "FAMILY_NAME_ID", referencedColumnName = "FAMILY_NAME_ID")
-////    @ManyToOne
-////    private UniqueFamilyName familyNameId;
-//
-//    private static final long serialVersionUID = 1L;
-//    @Size(max = 15)
-//    @Column(name = "DBENTRY_ID")
-//    private String dbentryId;
-//    @Size(max = 4000)
-//    @Column(name = "FAMILY_NAME")
-//    private String familyName;
-//    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-//    @Id
-//    @Basic(optional = false)
-//    @NotNull
-//    @Column(name = "UNIPROT_FAMILY_ID")
-//    private Long uniprotFamilyId;
 
     private static final long serialVersionUID = 1L;
     @Size(max = 15)
@@ -70,9 +49,6 @@ public class UniprotFamilies implements Serializable {
     @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne
     private UniprotEntryEnzyme accession;
-//    @JoinColumn(name = "FAMILY_NAME_ID", referencedColumnName = "FAMILY_NAME_ID")
-//    @ManyToOne
-//    private UniqueFamilyName familyNameId;
 
     public UniprotFamilies() {
     }
@@ -105,13 +81,6 @@ public class UniprotFamilies implements Serializable {
         this.uniprotFamilyId = uniprotFamilyId;
     }
 
-//    public UniprotEntry getAccession() {
-//        return accession;
-//    }
-//
-//    public void setAccession(UniprotEntry accession) {
-//        this.accession = accession;
-//    }
     @Override
     public int hashCode() {
         int hash = 7;
@@ -159,11 +128,5 @@ public class UniprotFamilies implements Serializable {
         this.familyGroupId = familyGroupId;
     }
 
-//    public UniqueFamilyName getFamilyNameId() {
-//        return familyNameId;
-//    }
-//
-//    public void setFamilyNameId(UniqueFamilyName familyNameId) {
-//        this.familyNameId = familyNameId;
-//    }
+
 }
