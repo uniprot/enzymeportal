@@ -38,7 +38,8 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     private static final String ROOT_TAG_NAME = "database";
 
     ////------- TEST QUERY --------
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' and rownum<=2";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
+    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
     /// end TEST QUERY /////
     
     
@@ -57,7 +58,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         this.xmlFileProperties = xmlFileProperties;
     }
 
-    @Bean(destroyMethod = "")
+    @Bean(destroyMethod = "", name="enzymeDatabaseReader")
     @Override
     public ItemReader<EnzymePortalUniqueEc> databaseReader() {
 
@@ -77,14 +78,14 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean(destroyMethod = "")
+    @Bean(destroyMethod = "", name="enzymeXmlWriter")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
         //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_XML_TO_FILE");
-        xmlWriter.setResource(XmlOutputDir());
+        xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);
         xmlWriter.setMarshaller(xmlMarshaller(Entry.class));
         xmlWriter.setHeaderCallback(xmlHeaderCallback(NATIVE_COUNT_QUERY));
@@ -93,9 +94,9 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean
+    @Bean(name="enzymeXmlOutputDir")
     @Override
-    public Resource XmlOutputDir() {
+    public Resource xmlOutputDir() {
         return new FileSystemResource(xmlFileProperties.getEnzymeCentric());
     }
 
@@ -111,7 +112,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     }
 
     @Override
-    @Bean
+    @Bean(name = "enzymeJobExecutionListener")
     public JobExecutionListener jobExecutionListener() {
         return new JobCompletionNotificationListener(ENZYME_CENTRIC_XML_JOB);
     }

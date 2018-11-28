@@ -1,4 +1,5 @@
-package uk.ac.ebi.ep.xml.config;
+
+package uk.ac.ebi.ep.xml;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
@@ -16,14 +17,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
+import uk.ac.ebi.ep.xml.config.XmlFileProperties;
+import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
 import uk.ac.ebi.ep.xml.listeners.JobCompletionNotificationListener;
 import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
-import uk.ac.ebi.ep.xml.transformer.ProteinGroupsProcessor;
+import uk.ac.ebi.ep.xml.transformer.EnzymeProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 
 /**
@@ -31,62 +33,60 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  * @author Joseph
  */
 @Configuration
-public class ProteinCentricConfiguration extends AbstractBatchConfig {
-
-    private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM PROTEIN_GROUPS";
-    // private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
-
+//@Import(DataConfig.class)
+public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
+ private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1' AND TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
     private static final String ROOT_TAG_NAME = "database";
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
 
-    //------- TEST QUERY --------
-//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
-//            + "union\n"
-//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
-       
-       //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
-    // END -- TEST QUERY ----
-    private static final String PATTERN = "MMM_d_yyyy@hh:mma";
-    private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
-    public static final String PROTEIN_CENTRIC_XML_JOB = "PROTEIN_CENTRIC_XML_JOB_" + DATE;
-    public static final String PROTEIN_READ_PROCESS_WRITE_XML_STEP = "proteinReadProcessAndWriteXMLstep_" + DATE;
+    ////------- TEST QUERY --------
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
+    private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
+    /// end TEST QUERY /////
+    
+    
+    private static final String pattern = "MMM_d_yyyy@hh:mma";
+    private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
+    public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + date;
+    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + date;
 
     protected final EntityManagerFactory entityManagerFactory;
 
     private final XmlFileProperties xmlFileProperties;
 
     @Autowired
-    public ProteinCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public MockEnzymeCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
     }
 
+    @Bean(destroyMethod = "", name="enzymeDatabaseReaderTest")
     @Override
-    @Bean(destroyMethod = "",name = "proteinDatabaseReader")
-    public ItemReader<ProteinGroups> databaseReader() {
+    public ItemReader<EnzymePortalUniqueEc> databaseReader() {
 
-        return new JpaPagingItemReaderBuilder<ProteinGroups>()
-                .name("READ_UNIQUE_PROTEIN_GROUP")
+        return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
+                .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(5)
-                .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
+                .queryProvider(createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class))
                 .build();
+
     }
 
     @Override
-    public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
+    public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor(xmlFileProperties);
+        return new EnzymeProcessor(xmlFileProperties);
 
     }
 
-    @Bean(destroyMethod = "",name = "proteinXmlWriter")
+    @Bean(destroyMethod = "", name="enzymeXmlWriterTest")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
         //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
-        xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
+        xmlWriter.setName("WRITE_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);
         xmlWriter.setMarshaller(xmlMarshaller(Entry.class));
@@ -96,15 +96,14 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-     @Bean(name = "proteinXmlOutputDir")
+    @Bean(name="enzymeXmlOutputDirTest")
     @Override
     public Resource xmlOutputDir() {
-        return new FileSystemResource(xmlFileProperties.getProteinCentric());
+        return new FileSystemResource(xmlFileProperties.getEnzymeCentric());
     }
 
     @Override
     public String countEntries(String countQuery) {
-
         Query query = entityManagerFactory.createEntityManager().createNativeQuery(countQuery);
         return String.valueOf(query.getSingleResult());
     }
@@ -115,9 +114,9 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     }
 
     @Override
-     @Bean(name = "proteinJobExecutionListener")
+    @Bean(name = "enzymeJobExecutionListenerTest")
     public JobExecutionListener jobExecutionListener() {
-        return new JobCompletionNotificationListener(PROTEIN_CENTRIC_XML_JOB);
+        return new JobCompletionNotificationListener(ENZYME_CENTRIC_XML_JOB);
     }
 
     @Override

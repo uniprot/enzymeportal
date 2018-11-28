@@ -26,8 +26,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.xml.repository"})
 public class DataConfig {
 
-   // private static final String [] PACKAGES_TO_SCAN = {"uk.ac.ebi.ep.xml.entity","uk.ac.ebi.ep.xml.entity.enzyme","uk.ac.ebi.ep.xml.entity.protein"};
-     private static final String  PACKAGES_TO_SCAN = "uk.ac.ebi.ep.xml.entity";
+    // private static final String [] PACKAGES_TO_SCAN = {"uk.ac.ebi.ep.xml.entity","uk.ac.ebi.ep.xml.entity.enzyme","uk.ac.ebi.ep.xml.entity.protein"};
+    private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.xml.entity";
 
     @Bean
     @Primary
@@ -43,9 +43,7 @@ public class DataConfig {
                 .type(HikariDataSource.class).build();
     }
 
-
-    
-        @Bean
+    @Bean
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
         return builder
@@ -55,7 +53,7 @@ public class DataConfig {
 
     }
 
-    @Bean
+    @Bean(name="xmlTransactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
@@ -70,7 +68,5 @@ public class DataConfig {
     public JpaProperties jpaProperties() {
         return new JpaProperties();
     }
-
-
 
 }

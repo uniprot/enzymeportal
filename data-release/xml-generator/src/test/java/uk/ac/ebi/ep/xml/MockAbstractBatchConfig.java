@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.xml.config;
+package uk.ac.ebi.ep.xml;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +21,10 @@ import uk.ac.ebi.ep.xml.listeners.GlobalListener;
 
 /**
  *
- * @author Joseph <joseph@ebi.ac.uk>
- * @param <T> input data
- * @param <S> output data
+ * @author Joseph
  */
 @Slf4j
-public abstract class AbstractBatchConfig<T, S> {
+public abstract class MockAbstractBatchConfig<T, S> {
 
     abstract JobExecutionListener jobExecutionListener();
 
@@ -89,4 +87,8 @@ public abstract class AbstractBatchConfig<T, S> {
         return marshaller;
     }
 
+//            @Bean
+//    public JobLauncherTestUtils utils()  {
+//        return new JobLauncherTestUtils();
+//    }
 }

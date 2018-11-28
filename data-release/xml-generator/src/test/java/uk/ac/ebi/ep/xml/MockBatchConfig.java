@@ -1,5 +1,6 @@
-package uk.ac.ebi.ep.xml.config;
+package uk.ac.ebi.ep.xml;
 
+import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -8,28 +9,48 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
 import uk.ac.ebi.ep.xml.schema.Entry;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author Joseph
  */
 @Configuration
 @EnableBatchProcessing
-public class XmlBatchConfig {
+//@Import(DataConfig.class)
+//@Import(XmlFileProperties.class)
+public class MockBatchConfig {
 
-//    @Autowired
-//    protected EntityManagerFactory entityManagerFactory;
+    @Autowired
+    protected EntityManagerFactory entityManagerFactory;
     @Autowired
     private XmlFileProperties xmlFileProperties;
+    
 
-    @Bean(name = "enzymeXmlJob")
-    public Job enzymeXmlJob(JobBuilderFactory jobBuilderFactory,
-            StepBuilderFactory stepBuilderFactory, EnzymeCentricConfiguration ecConfig) throws Exception {
 
-        Step uniqueEcStep = stepBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_READ_PROCESS_WRITE_XML_STEP)
+//    @Bean
+//    public MockProteinCentricConfig proteinCentricConfig() {
+//        return new MockProteinCentricConfig(entityManagerFactory, xmlFileProperties);
+//    }
+//
+//    @Bean
+//    public MockEnzymeCentricConfig enzymeCentricConfig() {
+//        return new MockEnzymeCentricConfig(entityManagerFactory, xmlFileProperties);
+//    }
+
+    //@Bean
+//    public XmlFileProperties xmlFileProperties() {
+//        return new XmlFileProperties();
+//    }
+
+    @Bean(name = "enzymeXmlJobTest")
+    public Job enzymeXmlJobTest(JobBuilderFactory jobBuilderFactory,
+            StepBuilderFactory stepBuilderFactory, MockEnzymeCentricConfig ecConfig) throws Exception {
+
+        Step uniqueEcStep = stepBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_READ_PROCESS_WRITE_XML_STEP)
                 .<EnzymePortalUniqueEc, Entry>chunk(xmlFileProperties.getChunkSize())
                 .reader(ecConfig.databaseReader())
                 .processor(ecConfig.entryProcessor())
@@ -41,23 +62,18 @@ public class XmlBatchConfig {
                 .listener(ecConfig.itemWriteListener())
                 .build();
 
-        return jobBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_CENTRIC_XML_JOB)
+        return jobBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_CENTRIC_XML_JOB)
                 .start(uniqueEcStep)
                 .listener(ecConfig.jobExecutionListener())
                 .build();
 
     }
 
+    @Bean(name = "proteinXmlJobTest")
+    public Job proteinXmlJobTest(JobBuilderFactory jobBuilderFactory,
+            StepBuilderFactory stepBuilderFactory, MockProteinCentricConfig proteinConfig) throws Exception {
 
-//    @Bean
-//    public EnzymeCentricConfiguration enzymeCentricConfiguration() {
-//        return new EnzymeCentricConfiguration(entityManagerFactory, xmlFileProperties);
-//    }
-    @Bean(name = "proteinXmlJob")
-    public Job proteinXmlJob(JobBuilderFactory jobBuilderFactory,
-            StepBuilderFactory stepBuilderFactory, ProteinCentricConfiguration proteinConfig) throws Exception {
-
-        Step proteinGroupStep = stepBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_READ_PROCESS_WRITE_XML_STEP)
+        Step proteinGroupStep = stepBuilderFactory.get(MockProteinCentricConfig.PROTEIN_READ_PROCESS_WRITE_XML_STEP)
                 .<ProteinGroups, Entry>chunk(xmlFileProperties.getChunkSize())
                 .reader(proteinConfig.databaseReader())
                 .processor(proteinConfig.entryProcessor())
@@ -69,23 +85,10 @@ public class XmlBatchConfig {
                 .listener(proteinConfig.itemWriteListener())
                 .build();
 
-        return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)
+        return jobBuilderFactory.get(MockProteinCentricConfig.PROTEIN_CENTRIC_XML_JOB)
                 .start(proteinGroupStep)
                 .listener(proteinConfig.jobExecutionListener())
                 .build();
-//        return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)
-//                .incrementer(new RunIdIncrementer())
-//                .listener(proteinConfig.jobExecutionListener())
-//                .flow(proteinGroupStep).end().build();
 
     }
-
-//    @Bean
-//    public ProteinCentricConfiguration proteinCentricConfiguration() {
-//        return new ProteinCentricConfiguration(entityManagerFactory, xmlFileProperties);
-//    }
-//    @Bean
-//    public XmlFileProperties xmlFileProperties() {
-//        return new XmlFileProperties();
-//    }
 }

@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.xml.config;
+package uk.ac.ebi.ep.xml;
 
 import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
@@ -31,20 +32,22 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  * @author Joseph
  */
 @Configuration
-public class ProteinCentricConfiguration extends AbstractBatchConfig {
+public class MockProteinCentricConfig extends MockAbstractBatchConfig {
 
-    private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM PROTEIN_GROUPS";
+    //private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM PROTEIN_GROUPS";
     // private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
+    
+        private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM(select * from PROTEIN_GROUPS where ENTRY_TYPE=0 AND ROWNUM <=1 UNION (select * from PROTEIN_GROUPS where ENTRY_TYPE=1 AND ROWNUM <=2))";
 
     private static final String ROOT_TAG_NAME = "database";
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
 
     //------- TEST QUERY --------
-//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
-//            + "union\n"
-//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
-       
-       //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
+    private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
+            + "union\n"
+            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
+
+    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
     // END -- TEST QUERY ----
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
@@ -56,13 +59,13 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     private final XmlFileProperties xmlFileProperties;
 
     @Autowired
-    public ProteinCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public MockProteinCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
     }
 
     @Override
-    @Bean(destroyMethod = "",name = "proteinDatabaseReader")
+    @Bean(destroyMethod = "", name = "proteinDatabaseReaderTest")
     public ItemReader<ProteinGroups> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
@@ -80,7 +83,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean(destroyMethod = "",name = "proteinXmlWriter")
+    @Bean(destroyMethod = "", name = "proteinXmlWriterTest")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
@@ -96,7 +99,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-     @Bean(name = "proteinXmlOutputDir")
+    @Bean(name = "proteinXmlOutputDirTest")
     @Override
     public Resource xmlOutputDir() {
         return new FileSystemResource(xmlFileProperties.getProteinCentric());
@@ -115,7 +118,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     }
 
     @Override
-     @Bean(name = "proteinJobExecutionListener")
+    @Bean(name = "proteinJobExecutionListenerTest")
     public JobExecutionListener jobExecutionListener() {
         return new JobCompletionNotificationListener(PROTEIN_CENTRIC_XML_JOB);
     }

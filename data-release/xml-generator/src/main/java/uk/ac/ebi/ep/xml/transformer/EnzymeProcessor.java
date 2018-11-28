@@ -6,7 +6,6 @@ import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
-import uk.ac.ebi.ep.xml.entity.enzyme.ReactionMechanism;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
 import uk.ac.ebi.ep.xml.schema.AdditionalFields;
 import uk.ac.ebi.ep.xml.schema.CrossReferences;
@@ -37,7 +36,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
 
         addCofactorsField(enzyme.getCofactor(), fields);
-        addReactionMechanism(enzyme.getReactionMechanismSet(), fields);
+        //addReactionMechanism(enzyme.getReactionMechanismSet(), fields);
 
         enzyme.getEnzymePortalEcNumbersSet()
                 .stream()
@@ -66,7 +65,6 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
         addGeneNameFields(uniprotEntry.getEntryToGeneMappingSet(), fields);
 
-        //addUniprotFamilyFields(uniprotEntry.getUniprotFamiliesSet(), fields);
         addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
 
         addSynonymFields(uniprotEntry.getSynonymNames(), uniprotEntry.getProteinName(), fields);
@@ -95,14 +93,15 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         }
     }
 
-    private void addReactionMechanism(Set<ReactionMechanism> reactionMechanismSet, Set<Field> fields) {
-
-        reactionMechanismSet
-                .stream()
-                .map(rm -> rm.getMcsaId() + ";" + rm.getEnzymeName() + ";" + rm.getImageId() + ";" + rm.getMechanismDescription())
-                .map(mechanism -> new Field(FieldName.REACTION_MECHANISM.getName(), mechanism))
-                .forEachOrdered(pdbfield -> fields.add(pdbfield));
-
-    }
+//    @Deprecated
+//    private void addReactionMechanism(Set<ReactionMechanism> reactionMechanismSet, Set<Field> fields) {
+//
+//        reactionMechanismSet
+//                .stream()
+//                .map(rm -> rm.getMcsaId() + ";" + rm.getEnzymeName() + ";" + rm.getImageId() + ";" + rm.getMechanismDescription())
+//                .map(mechanism -> new Field(FieldName.REACTION_MECHANISM.getName(), mechanism))
+//                .forEachOrdered(pdbfield -> fields.add(pdbfield));
+//
+//    }
 
 }

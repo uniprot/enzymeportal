@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -64,8 +63,8 @@ public class EnzymePortalUniqueEc implements Serializable {
     //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ecNumber",fetch = FetchType.EAGER)
-    private Set<ReactionMechanism> reactionMechanismSet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ecNumber",fetch = FetchType.EAGER)
+//    private Set<ReactionMechanism> reactionMechanismSet;
 
     public EnzymePortalUniqueEc() {
     }
@@ -169,13 +168,13 @@ public class EnzymePortalUniqueEc implements Serializable {
         this.intenzAltNamesSet = intenzAltNamesSet;
     }
 
-    @XmlTransient
-    public Set<ReactionMechanism> getReactionMechanismSet() {
-        return reactionMechanismSet;
-    }
-
-    public void setReactionMechanismSet(Set<ReactionMechanism> reactionMechanismSet) {
-        this.reactionMechanismSet = reactionMechanismSet;
-    }
+//    @XmlTransient
+//    public Set<ReactionMechanism> getReactionMechanismSet() {
+//        return reactionMechanismSet;
+//    }
+//
+//    public void setReactionMechanismSet(Set<ReactionMechanism> reactionMechanismSet) {
+//        this.reactionMechanismSet = reactionMechanismSet;
+//    }
 
 }
