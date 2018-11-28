@@ -15,6 +15,7 @@ import uk.ac.ebi.ep.centralservice.chembl.activity.ChemblActivity;
 import uk.ac.ebi.ep.centralservice.chembl.config.ChemblServiceUrl;
 import uk.ac.ebi.ep.centralservice.chembl.mechanism.FdaApproved;
 import uk.ac.ebi.ep.centralservice.chembl.mechanism.Mechanism;
+import uk.ac.ebi.ep.centralservice.chembl.mechanism.MechanismRef;
 import uk.ac.ebi.ep.centralservice.chembl.molecule.ChemblMolecule;
 import uk.ac.ebi.ep.centralservice.chembl.molecule.Molecule;
 import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
@@ -32,6 +33,7 @@ import uk.ac.ebi.ep.model.TempCompoundCompare;
 @Slf4j
 public class ChemblService {
 
+    private static final String REF_TYPE = "FDA";
     private final ChemblRestService chemblRestService;
 
     private final List<TempCompoundCompare> chemblCompounds;
@@ -224,7 +226,7 @@ public class ChemblService {
 
         if (!targets.isEmpty()) {
             String primaryTargetId = primaryTargetAggregator.get(primaryTargetAggregator.lastKey());
-             int limit = getLimit(primaryTargetAggregator);
+            int limit = getLimit(primaryTargetAggregator);
             for (String targetId : targets) {
                 String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId + "&limit=" + limit;
 
@@ -234,15 +236,19 @@ public class ChemblService {
                 if (fda.isPresent() && !fda.get().getMechanisms().isEmpty()) {
 
                     for (Mechanism mechanism : fda.get().getMechanisms()) {
+                        for (MechanismRef ref : mechanism.getMechanismRefs()) {
 
-                        if (Role.INHIBITOR.name().equalsIgnoreCase(mechanism.getActionType())) {
-                            //add molecule id to inhibitors
-                            moleculeChemblIdsInhibitors.add(mechanism.getMoleculeChemblId());
+                            if (ref.getRefType().equalsIgnoreCase(REF_TYPE)) {
+                                if (Role.INHIBITOR.name().equalsIgnoreCase(mechanism.getActionType())) {
+                                    //add molecule id to inhibitors
+                                    moleculeChemblIdsInhibitors.add(mechanism.getMoleculeChemblId());
 
-                        }
-                        if (Role.ACTIVATOR.name().equalsIgnoreCase(mechanism.getActionType())) {
-                            //add molecule id to activator
-                            moleculeChemblIdsActivators.add(mechanism.getMoleculeChemblId());
+                                }
+                                if (Role.ACTIVATOR.name().equalsIgnoreCase(mechanism.getActionType())) {
+                                    //add molecule id to activator
+                                    moleculeChemblIdsActivators.add(mechanism.getMoleculeChemblId());
+                                }
+                            }
                         }
                     }
 
