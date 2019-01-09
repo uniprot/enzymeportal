@@ -11,11 +11,7 @@
     <description>
         The Enzyme Portal PDBe REST Service Adapter.
     </description>
-<!--    <parent>
-        <artifactId>ep</artifactId>
-        <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.7-SNAPSHOT</version>
-    </parent>-->
+
     
             <parent>
         <artifactId>data-release</artifactId>
@@ -36,10 +32,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.8.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
         </plugins>
@@ -79,8 +76,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+             <version>1.18.4</version>
 <!--            <version>1.16.18</version>-->
-            <!--            <scope>provided</scope>-->
+              <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -133,11 +131,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.0.2</version>
-        </dependency> 
+        </dependency> -->
         
         <dependency>
             <groupId>org.hamcrest</groupId>
