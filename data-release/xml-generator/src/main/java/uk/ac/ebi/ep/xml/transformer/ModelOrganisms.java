@@ -30,7 +30,7 @@ public enum ModelOrganisms {
 
     private long taxId;
 
-    private ModelOrganisms(@NotNull long taxId) {
+    ModelOrganisms(@NotNull long taxId) {
         this.taxId = taxId;
     }
 

@@ -82,10 +82,8 @@ public abstract class XmlTransformer {
         }
     }
 
-    void computeSynonymsAndBuildFields(Optional<String> synonymName, String proteinName, Set<Field> fields) {
-        if (synonymName.isPresent()) {
+    void computeSynonymsAndBuildFields(String synonymName, String proteinName, Set<Field> fields) {
             Stream.of(synonymName
-                    .get()
                     .split(";"))
                     .distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
@@ -94,14 +92,14 @@ public abstract class XmlTransformer {
 
                     }).forEach(field -> fields.add(field));
 
-        }
+
     }
 
     protected void addSynonymFields(String synonymNames, String proteinName, Set<Field> fields) {
         if (synonymNames != null && proteinName != null) {
 
             Optional<String> synonymName = Optional.ofNullable(synonymNames);
-            computeSynonymsAndBuildFields(synonymName, proteinName, fields);
+            computeSynonymsAndBuildFields(synonymName.orElse(""), proteinName, fields);
 
         }
     }

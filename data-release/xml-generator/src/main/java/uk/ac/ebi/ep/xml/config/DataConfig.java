@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.xml.repository"})
+//@EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.xml.repository"})
 public class DataConfig {
 
     // private static final String [] PACKAGES_TO_SCAN = {"uk.ac.ebi.ep.xml.entity","uk.ac.ebi.ep.xml.entity.enzyme","uk.ac.ebi.ep.xml.entity.protein"};

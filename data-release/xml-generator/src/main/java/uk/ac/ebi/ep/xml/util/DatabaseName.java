@@ -7,7 +7,7 @@ package uk.ac.ebi.ep.xml.util;
 public enum DatabaseName {
     UNIPROTKB("UNIPROTKB"), INTENZ("INTENZ"), TAXONOMY("TAXONOMY"), OMIM("OMIM"), REACTOME("REACTOME"),UNIPROT_FAMILY("UNIPROT_FAMILY");
 
-    private DatabaseName(String name) {
+    DatabaseName(String name) {
         this.dbName = name;
     }
 

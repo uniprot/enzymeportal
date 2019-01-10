@@ -1,6 +1,8 @@
 package uk.ac.ebi.ep.xml;
 
 import javax.persistence.EntityManagerFactory;
+
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -20,8 +22,6 @@ import uk.ac.ebi.ep.xml.schema.Entry;
  */
 @Configuration
 @EnableBatchProcessing
-//@Import(DataConfig.class)
-//@Import(XmlFileProperties.class)
 public class MockBatchConfig {
 
     @Autowired
@@ -30,21 +30,6 @@ public class MockBatchConfig {
     private XmlFileProperties xmlFileProperties;
     
 
-
-//    @Bean
-//    public MockProteinCentricConfig proteinCentricConfig() {
-//        return new MockProteinCentricConfig(entityManagerFactory, xmlFileProperties);
-//    }
-//
-//    @Bean
-//    public MockEnzymeCentricConfig enzymeCentricConfig() {
-//        return new MockEnzymeCentricConfig(entityManagerFactory, xmlFileProperties);
-//    }
-
-    //@Bean
-//    public XmlFileProperties xmlFileProperties() {
-//        return new XmlFileProperties();
-//    }
 
     @Bean(name = "enzymeXmlJobTest")
     public Job enzymeXmlJobTest(JobBuilderFactory jobBuilderFactory,

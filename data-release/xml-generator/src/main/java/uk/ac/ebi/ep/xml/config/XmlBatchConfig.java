@@ -22,8 +22,12 @@ public class XmlBatchConfig {
 
 //    @Autowired
 //    protected EntityManagerFactory entityManagerFactory;
+    private final XmlFileProperties xmlFileProperties;
+
     @Autowired
-    private XmlFileProperties xmlFileProperties;
+    public XmlBatchConfig(XmlFileProperties xmlFileProperties) {
+        this.xmlFileProperties = xmlFileProperties;
+    }
 
     @Bean(name = "enzymeXmlJob")
     public Job enzymeXmlJob(JobBuilderFactory jobBuilderFactory,

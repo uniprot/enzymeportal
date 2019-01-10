@@ -33,19 +33,17 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  * @author Joseph
  */
 @Configuration
-//@Import(DataConfig.class)
 public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
  private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1' AND TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
+
     private static final String ROOT_TAG_NAME = "database";
 
-    ////------- TEST QUERY --------
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
+
     private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
-    /// end TEST QUERY /////
+
     
     
-    private static final String pattern = "MMM_d_yyyy@hh:mma";
+    private static final String pattern = "MMM_d_yyyy@hh:mm:ssa";
     private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
     public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + date;
     public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + date;

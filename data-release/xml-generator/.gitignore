@@ -23,3 +23,12 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Projects Specifics ###
+*.properties
+*.log
+/src/main/resources/config/application-uzprel.properties
+/src/main/resources/config/application-uzpdev.properties
+/src/main/resources/config/release.info
+/logs/
+/xml-generator.iml

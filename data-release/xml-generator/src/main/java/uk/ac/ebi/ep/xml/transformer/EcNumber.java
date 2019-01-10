@@ -185,7 +185,7 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
 
         private final String name;
 
-        private EnzymeFamily(String name) {
+        EnzymeFamily(String name) {
             this.name = name;
         }
 
@@ -206,7 +206,7 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
 
         private final String name;
 
-        private EcClass(String name) {
+        EcClass(String name) {
             this.name = name;
         }
 
@@ -235,7 +235,7 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
 
         private final int familyName;
 
-        private EnzymeClass(int name) {
+        EnzymeClass(int name) {
             this.familyName = name;
         }
 

@@ -14,7 +14,7 @@ public enum FieldName {
     TRANSFER_FLAG("transfer_flag"),INTENZ_COFACTORS("intenz_cofactors"),INTENZ_ALT_NAMES("alt_names"),
     RELATED_SPECIES("related_species"),PRIMARY_ACCESSION("primary_accession"),PRIMARY_ORGANISM("primary_organism"), UNIPROT_FAMILY("uniprot_family");
 
-    private FieldName(String name) {
+    FieldName(String name) {
         this.name = name;
     }
     private final String name;

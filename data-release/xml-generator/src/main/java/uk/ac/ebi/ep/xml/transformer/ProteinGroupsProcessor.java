@@ -199,7 +199,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         if (entry.getSynonymNames() != null && proteinName != null) {
 
             Optional<String> synonymName = Optional.ofNullable(entry.getSynonymNames());
-            computeSynonymsAndBuildFields(synonymName, proteinName, fields);
+            computeSynonymsAndBuildFields(synonymName.orElse(""), proteinName, fields);
 
         }
 
