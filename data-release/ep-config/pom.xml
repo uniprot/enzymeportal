@@ -278,7 +278,7 @@
                     <include>ep-web-client.properties</include>
                     <!--                 This one configures the ChEMBL adapter: -->
                     <include>chembl-adapter.properties</include>
-                    <include>log4j.properties</include>
+<!--                    <include>log4j.properties</include>-->
                     <include>ep-xml-config.properties</include>
                     <include>sitemapProp.properties</include>
                
