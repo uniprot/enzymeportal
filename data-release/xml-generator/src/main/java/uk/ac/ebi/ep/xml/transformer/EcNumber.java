@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.io.Serializable;
@@ -23,7 +22,6 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
     public EcNumber() {
 
     }
-
 
     public EcNumber(Integer ec) {
         this.ec = ec;
@@ -87,6 +85,9 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         if (ec == 6) {
             return EnzymeFamily.LIGASES.getName();
         }
+        if (ec == 7) {
+            return EnzymeFamily.TRANSLOCASES.getName();
+        }
 
         return "Invalid Ec Number";
     }
@@ -111,6 +112,9 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         }
         if (family.equalsIgnoreCase(EnzymeFamily.LIGASES.getName())) {
             return EnzymeClass.LIGASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.TRANSLOCASES.getName())) {
+            return EnzymeClass.TRANSLOCASES.getFamilyName();
         }
         return 0;
     }
@@ -142,6 +146,10 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
             return EnzymeFamily.LIGASES.getName();
         }
 
+        if (ec.startsWith("7")) {
+            return EnzymeFamily.TRANSLOCASES.getName();
+        }
+
         return "Invalid Ec Number";
     }
 
@@ -166,12 +174,15 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         if (family.equalsIgnoreCase(EnzymeFamily.LIGASES.getName())) {
             return EcClass.LIGASES.getName();
         }
+        if (family.equalsIgnoreCase(EnzymeFamily.TRANSLOCASES.getName())) {
+            return EcClass.TRANSLOCASES.getName();
+        }
         return "invalid enzyme family";
     }
 
     @Override
     public int compareTo(EcNumber o) {
-      return  ec.compareTo(o.getEc());
+        return ec.compareTo(o.getEc());
     }
 
     public enum EnzymeFamily {
@@ -181,7 +192,8 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         HYDROLASES("Hydrolases"),
         LYASES("Lyases"),
         ISOMERASES("Isomerases"),
-        LIGASES("Ligases");
+        LIGASES("Ligases"),
+        TRANSLOCASES("Translocases");
 
         private final String name;
 
@@ -202,7 +214,8 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         HYDROLASES("3"),
         LYASES("4"),
         ISOMERASES("5"),
-        LIGASES("6");
+        LIGASES("6"),
+        TRANSLOCASES("7");
 
         private final String name;
 
@@ -231,7 +244,8 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
         HYDROLASES(3),
         LYASES(4),
         ISOMERASES(5),
-        LIGASES(6);
+        LIGASES(6),
+        TRANSLOCASES(7);
 
         private final int familyName;
 
@@ -276,5 +290,5 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
     public String toString() {
         return "EcNumber{" + "ec=" + ec + ", family=" + getFamily() + ", families=" + getFamilies() + '}';
     }
-    
+
 }
