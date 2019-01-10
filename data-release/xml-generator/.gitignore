@@ -24,11 +24,19 @@
 /nbdist/
 /.nb-gradle/
 
+
 ### Projects Specifics ###
 *.properties
 *.log
-/src/main/resources/config/application-uzprel.properties
-/src/main/resources/config/application-uzpdev.properties
-/src/main/resources/config/release.info
-/logs/
-/xml-generator.iml
+/data-release/ep-config/target/
+/data-release/ep-model/target/
+/data-release/centralService/target/
+/data-release/PDBeAdapter/target/
+/data-release/DataAnalysis/target/
+/data-release/ep-parser/target/
+/data-release/SitemapGenerator/target/
+/data-release/SitemapGenerator/SitemapGenerator.iml
+#/data-release/.idea*
+/data-release/.idea/checkstyle-idea.xml
+/data-release/.idea/codeStyles/Project.xml
+/data-release/.idea/dbnavigator.xml
