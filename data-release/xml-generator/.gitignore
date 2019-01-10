@@ -40,3 +40,4 @@
 /data-release/.idea/checkstyle-idea.xml
 /data-release/.idea/codeStyles/Project.xml
 /data-release/.idea/dbnavigator.xml
+!/src/main/resources/config/application.properties
