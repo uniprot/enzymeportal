@@ -162,7 +162,8 @@ public abstract class XmlTransformer {
                 .stream()
                 .map(compound -> {
                     if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
-                        String chebiId = compound.getCompoundId().replaceAll("CHEBI:", "");
+                        //String chebiId = compound.getCompoundId().replaceAll("CHEBI:", "");
+                        String chebiId = compound.getCompoundId();
                         Field cofactor = new Field(FieldName.COFACTOR.getName(), chebiId);
                         fields.add(cofactor);
                         Field cofactorName = new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName());
@@ -186,9 +187,7 @@ public abstract class XmlTransformer {
             }
             return compound;
         }).map(compound -> new Ref(compound.getCompoundId(), compound.getCompoundSource()))
-                .forEach(xref -> {
-                    refs.add(xref);
-                });
+                .forEach(xref ->  refs.add(xref));
 
     }
 
