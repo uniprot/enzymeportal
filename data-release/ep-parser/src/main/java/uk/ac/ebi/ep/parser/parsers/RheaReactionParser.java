@@ -32,7 +32,7 @@ public class RheaReactionParser {
 
     //private static final Logger logger = Logger.getLogger(EnzymePortalPDBeParser.class);
     private static final String RHEA_2_KEGG_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2kegg_reaction.tsv";
-    private static final String RHEA_2_UNIPROT_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
+    //private static final String RHEA_2_UNIPROT_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
     @Autowired
     private EnzymePortalParserService enzymePortalParserService;
 
@@ -53,7 +53,7 @@ public class RheaReactionParser {
             Path rhea2kegg = directory.resolve("rhea2kegg_reaction.tsv");
             Path rhea2uniprot = directory.resolve("rhea2uniprot.tsv");
             downloadFile(RHEA_2_KEGG_WEB_PAGE, rhea2kegg);
-            downloadFile(RHEA_2_UNIPROT_WEB_PAGE, rhea2uniprot);
+            //downloadFile(RHEA_2_UNIPROT_WEB_PAGE, rhea2uniprot);
 
             Set<Rhea2kegg> r2kSet = processRhea2Kegg(rhea2kegg);
 
