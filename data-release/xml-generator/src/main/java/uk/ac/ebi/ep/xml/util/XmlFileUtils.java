@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class XmlFileUtils {
 
-
     private XmlFileUtils() {
     }
 
@@ -31,7 +30,8 @@ public class XmlFileUtils {
         String permission = "rwxr-xr--";
         try {
             createDirectory(directory, permission);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             log.error("IOException while creating directory " + directory, ex);
         }
 
