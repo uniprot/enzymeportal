@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.model.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.model.ChebiCompound;
 import uk.ac.ebi.ep.model.ChemblTargets;
 import uk.ac.ebi.ep.model.EnzymePortalReaction;
+import uk.ac.ebi.ep.model.EnzymeReactionInfo;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.model.UniprotXref;
@@ -16,11 +18,14 @@ import uk.ac.ebi.ep.model.repositories.ChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.ChemblTargetsRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalPathwaysRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalReactantRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
 import uk.ac.ebi.ep.model.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotXrefRepository;
+import uk.ac.ebi.ep.model.search.model.ReactionInfoView;
 import uk.ac.ebi.ep.model.search.model.Summary;
 
 /**
@@ -56,6 +61,70 @@ public class EnzymePortalParserService {
 
     @Autowired
     private EnzymePortalSummaryRepository enzymePortalSummaryRepository;
+
+    @Autowired
+    private EnzymeReactionInfoRepository enzymeReactionInfoRepository;
+
+    @Autowired
+    private EnzymePortalReactantRepository enzymePortalReactantRepository;
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void createReactant(String reactantId, String reactantName, String reactantSource, String relationship, String accession, String url, String reactantRole, String reactantDirection) {
+        enzymePortalReactantRepository.createReactantIgnoreDup(reactantId, reactantName, reactantSource, relationship, accession, url, reactantRole, reactantDirection);
+
+    }
+
+//    @Modifying(clearAutomatically = true)
+//    @Transactional(readOnly = false)
+//    public void addReactants(List<EnzymePortalReactant> reactants) {
+//        enzymePortalReactantRepository.saveAll(reactants);
+//    }
+//
+//    @Modifying(clearAutomatically = true)
+//    @Transactional(readOnly = false)
+//    public void addReactant(EnzymePortalReactant reactant) {
+//        enzymePortalReactantRepository.save(reactant);
+//    }
+
+    public Long countReactionInfo(String xrefType) {
+        return enzymeReactionInfoRepository.countReactionInfoByXrefType(xrefType);
+    }
+
+    @Transactional
+    public Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(String xrefType) {
+
+        return enzymeReactionInfoRepository.findAllReactionInfoByXrefTypeAndStream(xrefType);
+    }
+
+    @Transactional(readOnly = true)
+    public Stream<EnzymeReactionInfo> streamLimitedReactionInfoByXrefType(String xrefType, Long limit) {
+
+        return enzymeReactionInfoRepository.streamLimitedReactionInfoByXrefType(xrefType, limit);
+
+    }
+
+    @Transactional
+    public Stream<ReactionInfoView> findAllReactionInfoViewByXrefTypeAndStream(String xrefType) {
+
+        return enzymeReactionInfoRepository.findAllReactionInfoViewByXrefTypeAndStream(xrefType);
+    }
+
+    @Transactional
+    public List<EnzymeReactionInfo> findReactionInfoByXrefType(String xrefType) {
+        return enzymeReactionInfoRepository.findReactionInfoByXrefType(xrefType);
+    }
+
+    @Transactional
+    public List<ReactionInfoView> findReactionInfoViewByXrefType(String xrefType) {
+        return enzymeReactionInfoRepository.findReactionInfoViewByXrefType(xrefType);
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void updateRheaReaction(String keggId, String reactionId) {
+        enzymePortalReactionRepository.updateRheaReaction(keggId, reactionId);
+    }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
@@ -156,8 +225,8 @@ public class EnzymePortalParserService {
         tempCompoundRepository.saveAll(compounds);
     }
 
-    public void addTempCompound(String primaryTargetId,String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
-        tempCompoundRepository.addTempCompounds(primaryTargetId,compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
+    public void addTempCompound(String primaryTargetId, String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
+        tempCompoundRepository.addTempCompounds(primaryTargetId, compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
     }
 
     public void insertCompoundsFromTempTable() {

@@ -64,6 +64,7 @@ public class Compound  implements  Serializable {
         ACTIVATOR,
         INHIBITOR,
         DRUG,
+        REACTANT,
         BIOACTIVE;
 
         public String value() {

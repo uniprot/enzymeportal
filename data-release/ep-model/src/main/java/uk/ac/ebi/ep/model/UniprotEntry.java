@@ -34,21 +34,15 @@ import org.springframework.util.StringUtils;
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u")
-    ,
-    @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId")
-    ,
-    @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName")
-    ,
-    @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName")
-    ,
+    @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
+    @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
+    @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
+    @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
 })
 
 public class UniprotEntry implements Serializable {
 
-//    @ManyToMany(mappedBy = "uniprotEntrySet")
-//    private Set<ReactionMechanism> reactionMechanismSet;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -97,6 +91,8 @@ public class UniprotEntry implements Serializable {
     @Column(name = "PDB_FLAG")
     private Character pdbFlag;
 
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<EnzymePortalReactant> enzymePortalReactantSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
     private Set<UniprotXref> uniprotXrefSet;
 
@@ -119,17 +115,6 @@ public class UniprotEntry implements Serializable {
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<ChemblTargets> chemblTargetsSet;
 
-//    public UniprotEntry() {
-//    }
-//
-//    public UniprotEntry(String accession) {
-//        this.accession = accession;
-//    }
-//
-//    public UniprotEntry(String accession, long dbentryId) {
-//        this.accession = accession;
-//        this.dbentryId = dbentryId;
-//    }
 
     public String getUniprotid() {
         return name;
@@ -269,7 +254,6 @@ public class UniprotEntry implements Serializable {
         this.pdbFlag = pdbFlag;
     }
 
-
     @XmlTransient
     public Set<UniprotXref> getUniprotXrefSet() {
         return uniprotXrefSet;
@@ -297,8 +281,6 @@ public class UniprotEntry implements Serializable {
 
     }
 
-
-
     @XmlTransient
     public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
         return enzymePortalEcNumbersSet;
@@ -307,8 +289,6 @@ public class UniprotEntry implements Serializable {
     public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {
         this.enzymePortalEcNumbersSet = enzymePortalEcNumbersSet;
     }
-
-
 
     @XmlTransient
     public Set<EnzymePortalSummary> getEnzymePortalSummarySet() {
@@ -359,7 +339,6 @@ public class UniprotEntry implements Serializable {
         return "uk.ac.ebi.ep.ep.model.UniprotEntry[ accession=" + accession + " ]";
     }
 
-
     @XmlTransient
     public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
         return enzymePortalReactionSet;
@@ -378,6 +357,13 @@ public class UniprotEntry implements Serializable {
         this.chemblTargetsSet = chemblTargetsSet;
     }
 
+    @XmlTransient
+    public Set<EnzymePortalReactant> getEnzymePortalReactantSet() {
+        return enzymePortalReactantSet;
+    }
 
+    public void setEnzymePortalReactantSet(Set<EnzymePortalReactant> enzymePortalReactantSet) {
+        this.enzymePortalReactantSet = enzymePortalReactantSet;
+    }
 
 }

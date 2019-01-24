@@ -144,5 +144,5 @@ public class UniprotXref implements Comparable<UniprotXref>, Serializable {
     public int compareTo(UniprotXref p) {
        return this.sourceId.compareToIgnoreCase(p.getSourceId());
     }
-    
+      
 }

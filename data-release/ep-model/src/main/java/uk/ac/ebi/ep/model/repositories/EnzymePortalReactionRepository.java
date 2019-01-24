@@ -23,6 +23,12 @@ public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePort
     void addRheaReaction(String rheaId, String reactionName, String reactionSource, String relationship, String accession, String url, String keggId);
 
     @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+
+    @Query(value = "UPDATE ENZYME_PORTAL_REACTION SET kegg_id = :kegg_id where reaction_id= :reaction_id", nativeQuery = true)
+    void updateRheaReaction(@Param("kegg_id") String keggId, @Param("reaction_id") String reactionId);
+
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "alter table ENZYME_PORTAL_REACTION disable constraint REACTION_ACCESSION_FK", nativeQuery = true)
     void disableAccessionContraints();
