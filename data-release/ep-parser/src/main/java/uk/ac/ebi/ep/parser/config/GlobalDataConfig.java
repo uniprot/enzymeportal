@@ -17,7 +17,7 @@ import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
-import uk.ac.ebi.ep.parser.parsers.RheaReactionParser;
+import uk.ac.ebi.ep.parser.parsers.RheaReaction;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
@@ -124,8 +124,8 @@ public class GlobalDataConfig {
     }
 
     @Bean
-    public RheaReactionParser rheaReactionParser() {
-        return new RheaReactionParser();
+    public RheaReaction rheaReaction() {
+        return new RheaReaction();
     }
 
 

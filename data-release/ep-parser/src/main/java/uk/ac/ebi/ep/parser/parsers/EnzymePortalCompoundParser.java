@@ -51,8 +51,20 @@ public class EnzymePortalCompoundParser {
     @Transactional
     public void loadCofactorsFromFTPFiles() {
 
-        ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
-        compoundParser.loadCofactors();
+        //ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
+        //compoundParser.loadCofactors();
+        GenericCompound cofactor = new CofactorsFtpFiles(parserService);
+        cofactor.loadCompoundToDatabase();
+
+    }
+
+    @Transactional
+    public void loadReactants() {
+
+        // ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
+        //compoundParser.loadReactants();
+        GenericCompound reactant = new CompoundReactantParser(parserService);
+        reactant.loadCompoundToDatabase();
 
     }
 

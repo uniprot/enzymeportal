@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -20,35 +19,45 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Slf4j
-public class CofactorsFtpFiles implements ICompoundParser {
+public class CofactorsFtpFiles extends GenericCompound {// implements ICompoundParser {
 
-   // private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
+    // private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
     private List<LiteCompound> compounds = null;
-    private static final String COMMENT_TYPE = "COFACTORS";
-    private static final String NAME = "Name=([^\\s]+)";
-    private static final String XREF = "Xref=ChEBI:([^\\s]+)";
-    private static final String NOTE = "Note=([^\\*]+)";
+//    private static final String COMMENT_TYPE = "COFACTORS";
+//    private static final String NAME = "Name=([^\\s]+)";
+//    private static final String XREF = "Xref=ChEBI:([^\\s]+)";
+//    private static final String NOTE = "Note=([^\\*]+)";
+//
+//    protected static final Pattern COMPOUND_NAME_PATTERN
+//            = Pattern.compile("(.*?)(?: \\((.*?)\\))?");
+//
+//    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
+//    protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
-    protected static final Pattern COMPOUND_NAME_PATTERN
-            = Pattern.compile("(.*?)(?: \\((.*?)\\))?");
+ 
 
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
-    protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
+    //private final EnzymePortalParserService enzymePortalParserService;
+//    private static final String UNIPROT = "UniProt";
+//    private static final String IUPAC = "IUPAC";
 
-    private final EnzymePortalParserService enzymePortalParserService;
-
-    private static final String UNIPROT = "UniProt";
-    private static final String IUPAC = "IUPAC";
-
-    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
-        this.enzymePortalParserService = enzymePortalParserService;
+//    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
+//        this.enzymePortalParserService = enzymePortalParserService;
+//        compounds = new ArrayList<>();
+//    }
+    
+       public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
+        super(enzymePortalParserService);
         compounds = new ArrayList<>();
+    }
+    private void loadCompound(LiteCompound compound) {
+        enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
 
     @Override
-    public void loadCofactors() {
+    void loadCompoundToDatabase() {
+        //public void loadCofactors() {
         List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
-      
+
         log.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
@@ -104,9 +113,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
         compounds
                 .stream()
                 .filter(compound -> compound != null)
-                .forEach(compound -> {
-                    enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-                });
+                .forEach(compound -> loadCompound(compound));
         log.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
 

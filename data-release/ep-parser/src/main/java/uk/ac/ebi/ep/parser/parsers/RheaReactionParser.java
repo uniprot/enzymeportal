@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.model.Accession2Rhea;
 import uk.ac.ebi.ep.parser.model.Rhea2kegg;
@@ -27,12 +29,13 @@ import uk.ac.ebi.ep.parser.model.Rhea2kegg;
  *
  * @author Joseph
  */
+@Deprecated
+@Service("rheaReactionParser")
 @Slf4j
 public class RheaReactionParser {
 
-    //private static final Logger logger = Logger.getLogger(EnzymePortalPDBeParser.class);
     private static final String RHEA_2_KEGG_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2kegg_reaction.tsv";
-    //private static final String RHEA_2_UNIPROT_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
+    private static final String RHEA_2_UNIPROT_WEB_PAGE = "ftp://ftp.ebi.ac.uk/pub/databases/rhea/tsv/rhea2uniprot.tsv";
     @Autowired
     private EnzymePortalParserService enzymePortalParserService;
 
@@ -40,88 +43,89 @@ public class RheaReactionParser {
      *
      * @param fileLocation if null defaults to ${user.home}/data/RHEA
      */
+    @Transactional(readOnly = true)
     public void parseAndLoadRheaReactions(String fileLocation) {
         Path path = Paths.get(System.getProperty("user.home"), "data", "RHEA");
         if (fileLocation != null) {
             path = Paths.get(fileLocation);
         }
-
+        
         String permission = "rwxr-x---";
         try {
             Path directory = createDirectoriesWithPermission(path, permission);
-
+            
             Path rhea2kegg = directory.resolve("rhea2kegg_reaction.tsv");
             Path rhea2uniprot = directory.resolve("rhea2uniprot.tsv");
             downloadFile(RHEA_2_KEGG_WEB_PAGE, rhea2kegg);
-            //downloadFile(RHEA_2_UNIPROT_WEB_PAGE, rhea2uniprot);
+            downloadFile(RHEA_2_UNIPROT_WEB_PAGE, rhea2uniprot);
 
             Set<Rhea2kegg> r2kSet = processRhea2Kegg(rhea2kegg);
 
             List<Accession2Rhea> acc2RheaList = processAcc2Rhea(rhea2uniprot, r2kSet);
-
+            
             loadReactionToDB(acc2RheaList);
 
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
-
+            
         }
-
+        
     }
-
+    
     private void downloadFile(String webPage, Path path) throws MalformedURLException, IOException {
-
+        
         URI u = URI.create(webPage);
         try (InputStream in = u.toURL().openStream()) {
             Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
         }
-
+        
     }
-
+    
     private FileAttribute<Set<PosixFilePermission>> fileAttributes(String permission) {
         Set<PosixFilePermission> perms
                 = PosixFilePermissions.fromString(permission);
-
+        
         return PosixFilePermissions.asFileAttribute(perms);
     }
-
+    
     private Path createDirectoriesWithPermission(Path directories, String permission) throws IOException {
-
+        
         FileAttribute<Set<PosixFilePermission>> attr = fileAttributes(permission);
-
+        
         return Files.createDirectories(directories, attr);
     }
-
+    
     private Set<Rhea2kegg> buildRhea2Kegg(String rheaId, String keggId, Set<Rhea2kegg> r2kSet) {
         Rhea2kegg rhea2kegg = new Rhea2kegg(rheaId, keggId);
         r2kSet.add(rhea2kegg);
         return r2kSet;
     }
-
+    
     public Set<Rhea2kegg> processRhea2Kegg(Path fileToRead) throws IOException {
-
+        
         List<String> files = Files.readAllLines(fileToRead, StandardCharsets.UTF_8);
         Set<Rhea2kegg> rheaKeggList = new HashSet<>();
-
+        
         files.stream()
                 .skip(1)
                 .map(s -> s.split("\t")).filter(l -> l.length > 3)
                 .forEach(data -> buildRhea2Kegg(data[2], data[3], rheaKeggList));
-
+        
         return rheaKeggList;
     }
-
+    
     public List<Accession2Rhea> processAcc2Rhea(Path fileToRead, Set<Rhea2kegg> r2kSet) throws IOException {
-
+        
         List<String> files = Files.readAllLines(fileToRead, StandardCharsets.UTF_8);
-
+        
         List<String[]> data = files.stream()
                 .skip(1)
                 .map(s -> s.split("\t"))
                 .filter(l -> l.length > 3)
                 .collect(Collectors.toList());
-
+        
         List<Accession2Rhea> uniprotRhea = new ArrayList<>();
-
+        
         r2kSet.stream().forEach(rhea2kegg -> {
             data.stream().filter(d -> (rhea2kegg.getRheaId().trim().equalsIgnoreCase(d[2].trim())))
                     .map(d -> {
@@ -133,11 +137,11 @@ public class RheaReactionParser {
                 return accession2Rhea;
             }).forEach(accession2Rhea -> uniprotRhea.add(accession2Rhea));
         });
-
+        
         return uniprotRhea;
-
+        
     }
-
+    
     private void loadReactionToDB(List<Accession2Rhea> acc2RheaList) {
         log.warn("About to disable Accession-Reaction contraints");
         enzymePortalParserService.disableAccessionReactionContraints();
@@ -147,15 +151,15 @@ public class RheaReactionParser {
         log.warn("Done loading Reaction to database and about to delete non-enzymes.");
         enzymePortalParserService.deleteNonEnzymesReactions();
         log.warn("About to enable Accession-Reaction contraints");
-
+        
         enzymePortalParserService.enableAccessionReactionContraints();
         log.warn("Done Parsing and Loading Rhea Data.");
-
+        
     }
-
+    
     private void saveToDB(String accession, Rhea2kegg rhea) {
         String url = "https://www.rhea-db.org/reaction?id=" + rhea.getRheaId();
         enzymePortalParserService.addRheaReaction(rhea.getRheaId(), null, "RHEA", null, accession, url, rhea.getKeggId());
     }
-
+    
 }

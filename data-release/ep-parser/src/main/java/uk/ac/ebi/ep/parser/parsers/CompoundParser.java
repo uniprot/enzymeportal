@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  *
  * @author joseph <joseph@ebi.ac.uk>
  */
+@Deprecated
 public abstract class CompoundParser {
 
     protected final Logger LOGGER = Logger.getLogger(CompoundParser.class);
