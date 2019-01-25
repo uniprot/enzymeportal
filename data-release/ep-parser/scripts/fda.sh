@@ -1,4 +1,4 @@
-
+# This script loads chembl compounds (activators & inhibitors) to database
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 

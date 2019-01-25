@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.HashSet;
@@ -56,7 +52,7 @@ public class EnzymePortalPDBeParser {
         
         //update entry
         List<UniprotXref> pdbEntries = entries.stream().collect(Collectors.toList());
-        
+         LOGGER.info("Number of PDB entries to be loaded to database : " + pdbEntries.size());
          List<UniprotXref> updatedEntries = parserService.updatePDB(pdbEntries);
         LOGGER.info("Number of PDB entries updated are : " + updatedEntries.size());
         updatedEntries.clear();

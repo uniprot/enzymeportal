@@ -1,0 +1,7 @@
+#Please run the script in the following order
+sh submitOneLFS.sh uzprel ./${script-name}
+1. pdb.sh
+2. chembl.sh
+3. rheareactions.sh
+4. reactant.sh
+5. when chembl.sh is done, then run cofactorsFTP.sh

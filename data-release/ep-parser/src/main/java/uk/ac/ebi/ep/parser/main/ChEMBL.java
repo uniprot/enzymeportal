@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.parser.main;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.config.DevDataConfig;
@@ -16,9 +17,10 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author Joseph
  */
+@Slf4j
 public class ChEMBL {
-    
-        public static void main(String args[]) throws Exception {
+
+    public static void main(String args[]) throws Exception {
 
         String profile = "";
 
@@ -39,12 +41,14 @@ public class ChEMBL {
             context.register(GlobalConfig.class);
             context.scan("uk.ac.ebi.ep.parser.config");
             context.refresh();
-        
+
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
-          
+            log.info("About to load ChEMBL targets to the database");
             compoundService.loadChemblTargets();
+            log.info("Done loading targets and now about to run loadChemblFDA()");
             //activators & inhibitors
             compoundService.loadChemblFDA();
+            log.info("Done running FDA and now about to process more inhibitors by running processChemblTargetsAndUpdateDatabase()");
             //more activators & inhibitors
             compoundService.processChemblTargetsAndUpdateDatabase();
 
