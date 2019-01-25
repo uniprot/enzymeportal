@@ -71,7 +71,7 @@ public class RheaReaction {
     }
 
     private void processReactionInfo() {
-        try (Stream<EnzymeReactionInfo> rheaInfoStream = enzymePortalParserService.streamLimitedReactionInfoByXrefType(RHEA_XREF, 50_000L)) {
+        try (Stream<EnzymeReactionInfo> rheaInfoStream = enzymePortalParserService.findAllReactionInfoByXrefTypeAndStream(RHEA_XREF)) {
 
             rheaInfoStream.forEach(rhea -> {
                 loadRheaReaction(rhea.getXref(), rhea.getUniprotAccession());

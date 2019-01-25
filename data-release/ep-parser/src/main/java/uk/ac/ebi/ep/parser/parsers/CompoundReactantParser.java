@@ -20,6 +20,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 @Slf4j
 public class CompoundReactantParser extends GenericCompound {
 
+    private static final String XREF_TYPE ="CHEBI";
     private List<LiteCompound> reactants = null;
 
     public CompoundReactantParser(EnzymePortalParserService enzymePortalParserService) {
@@ -36,7 +37,7 @@ public class CompoundReactantParser extends GenericCompound {
     @Override
     void loadCompoundToDatabase() {
 
-        try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.streamLimitedReactionInfoByXrefType("CHEBI", 1000L)) {
+        try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.findAllReactionInfoByXrefTypeAndStream(XREF_TYPE)) {
 
             reactionInfo.forEach(data -> processReactionInfo(data));
 
