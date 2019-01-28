@@ -15,7 +15,7 @@ public interface EnzymePortalReactantRepository extends JpaRepository<EnzymePort
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "Insert /*+ IGNORE_ROW_ON_DUPKEY_INDEX(ENZYME_PORTAL_REACTANT,ENZYME_PORTAL_REACTANT_UK1) */ INTO ENZYME_PORTAL_REACTANT "
-            + "(REACTANT_ID,REACTANT_NAME,REACTANT_SOURCE,RELATIONSHIP,UNIPROT_ACCESSION,URL,REACTANT_ROLE,REACTANT_DIRECTION) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
-    void createReactantIgnoreDup(String reactantId, String reactantName, String reactantSource, String relationship, String accession, String url, String reactantRole, String reactantDirection);
+            + "(REACTANT_INTERNAL_ID,REACTANT_ID,REACTANT_NAME,REACTANT_SOURCE,RELATIONSHIP,UNIPROT_ACCESSION,URL,REACTANT_ROLE,REACTION_DIRECTION) VALUES (SEQ_REACTANT_INTERNAL_ID.NEXTVAL,?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
+    void createReactantIgnoreDup(String reactantId, String reactantName, String reactantSource, String relationship, String accession, String url, String reactantRole, String reactionDirection);
 
 }
