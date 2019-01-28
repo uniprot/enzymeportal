@@ -21,7 +21,7 @@ public abstract class GenericCompound {
     protected static final Pattern COMPOUND_NAME_PATTERN
             = Pattern.compile("(.*?)(?: \\((.*?)\\))?");
 
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O","H2O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
     protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
     protected final EnzymePortalParserService enzymePortalParserService;

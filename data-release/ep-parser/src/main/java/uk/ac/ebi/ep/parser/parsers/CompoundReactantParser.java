@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 @Slf4j
 public class CompoundReactantParser extends GenericCompound {
 
-    private static final String XREF_TYPE ="CHEBI";
+    private static final String XREF_TYPE = "CHEBI";
     private List<LiteCompound> reactants = null;
 
     public CompoundReactantParser(EnzymePortalParserService enzymePortalParserService) {
@@ -36,10 +37,11 @@ public class CompoundReactantParser extends GenericCompound {
     @Transactional(readOnly = false)
     @Override
     void loadCompoundToDatabase() {
-
+        AtomicInteger counter = new AtomicInteger(1);
+        Long total = enzymePortalParserService.countReactionInfo(XREF_TYPE);
+        log.info("About to start streaming and processing " + total + " entries.");
         try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.findAllReactionInfoByXrefTypeAndStream(XREF_TYPE)) {
-
-            reactionInfo.forEach(data -> processReactionInfo(data));
+            reactionInfo.forEach(data -> processReactionInfo(data, counter));
 
         }
         log.info("Writing to Enzyme Portal database... Number of reactants to write : " + reactants.size());
@@ -53,7 +55,8 @@ public class CompoundReactantParser extends GenericCompound {
 
     }
 
-    private void processReactionInfo(EnzymeReactionInfo reactionInfo) {
+    private void processReactionInfo(EnzymeReactionInfo reactionInfo, AtomicInteger counter) {
+        System.out.println("Processing CHEBI ID : " + reactionInfo.getXref() + " Num processed so far : " + counter.getAndIncrement());
         ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundById(reactionInfo.getXref(), UNIPROT)
                 .stream()
                 .filter(c -> c.getSource().equalsIgnoreCase(UNIPROT))
