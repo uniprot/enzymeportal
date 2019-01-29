@@ -68,6 +68,28 @@ public class EnzymePortalParserService {
     @Autowired
     private EnzymePortalReactantRepository enzymePortalReactantRepository;
 
+    @Transactional
+    public Stream<EnzymeReactionInfo> findUniqueXrefReactionInfoByXrefTypeAndStream(String xrefType) {
+
+        // return enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType);
+        try (Stream<EnzymeReactionInfo> reactionInfo = enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType)) {
+            reactionInfo.forEach(data -> System.out.println(" unique " + data));
+
+        }
+        return Stream.empty();
+    }
+
+    @Transactional
+    public Stream<EnzymeReactionInfo> findReactionInfoByChebiAndStream() {
+
+        return enzymeReactionInfoRepository.findReactionInfoByChebiAndStream();
+//        try (Stream<EnzymeReactionInfo> reactionInfo = enzymeReactionInfoRepository.findReactionInfoByChebiAndStream()) {
+//            reactionInfo.forEach(data -> System.out.println(" unique " + data));
+//
+//        }
+//        return Stream.empty();
+    }
+
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
     public void createReactant(String reactantId, String reactantName, String reactantSource, String relationship, String accession, String url, String reactantRole, String reactantDirection) {
@@ -75,17 +97,9 @@ public class EnzymePortalParserService {
 
     }
 
-//    @Modifying(clearAutomatically = true)
-//    @Transactional(readOnly = false)
-//    public void addReactants(List<EnzymePortalReactant> reactants) {
-//        enzymePortalReactantRepository.saveAll(reactants);
-//    }
-//
-//    @Modifying(clearAutomatically = true)
-//    @Transactional(readOnly = false)
-//    public void addReactant(EnzymePortalReactant reactant) {
-//        enzymePortalReactantRepository.save(reactant);
-//    }
+    public Long countDistinctReactionInfoByXrefType(String xrefType) {
+        return enzymeReactionInfoRepository.countDistinctReactionInfoByXrefType(xrefType);
+    }
 
     public Long countReactionInfo(String xrefType) {
         return enzymeReactionInfoRepository.countReactionInfoByXrefType(xrefType);

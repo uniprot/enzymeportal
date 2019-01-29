@@ -32,4 +32,13 @@ public interface EnzymeReactionInfoRepository extends JpaRepository<EnzymeReacti
     @Query(value = "SELECT COUNT(*) FROM enzyme_reaction_info WHERE xref_type = :xref_type", nativeQuery = true)
     Long countReactionInfoByXrefType(@Param("xref_type") String xrefType);
 
+    @Query("SELECT e FROM EnzymeReactionInfo e WHERE ROWID IN ( SELECT MAX(ROWID) FROM EnzymeReactionInfo WHERE xrefType='CHEBI' GROUP BY xref )")
+    Stream<EnzymeReactionInfo> findReactionInfoByChebiAndStream();
+
+    @Query(value = "SELECT COUNT (distinct xref) FROM enzyme_reaction_info where xref_type = :xref_type", nativeQuery = true)
+    Long countDistinctReactionInfoByXrefType(@Param("xref_type") String xrefType);
+
+    @Query("SELECT e FROM EnzymeReactionInfo e WHERE ROWID IN ( SELECT MAX(ROWID) FROM EnzymeReactionInfo WHERE xrefType=:xrefType GROUP BY xref )")
+    Stream<EnzymeReactionInfo> findUniqueXrefReactionInfoByXrefTypeAndStream(@Param("xrefType") String xrefType);
+
 }
