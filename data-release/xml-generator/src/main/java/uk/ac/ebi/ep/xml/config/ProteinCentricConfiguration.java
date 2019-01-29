@@ -76,7 +76,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor(xmlFileProperties);
+        return new ProteinGroupsProcessor();
 
     }
 

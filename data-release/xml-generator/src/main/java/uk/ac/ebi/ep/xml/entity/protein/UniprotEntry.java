@@ -34,7 +34,7 @@ import uk.ac.ebi.ep.xml.transformer.ModelOrganisms;
 public class UniprotEntry extends Protein implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    private static final String PDB = "PDB";
     @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
     @ManyToOne
     private ProteinGroups proteinGroupId;
@@ -46,15 +46,11 @@ public class UniprotEntry extends Protein implements Serializable {
     @Fetch(FetchMode.JOIN)
     private Set<ProteinEcNumbers> enzymePortalEcNumbersSet;
 
-    private static final String PDB = "PDB";
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    private Set<EnzymePortalReaction> enzymePortalReactionSet;
 
     public UniprotEntry() {
     }
 
-    public String getUniprotid() {
+    public String getUniprotId() {
         return name;
     }
 
@@ -162,13 +158,22 @@ public class UniprotEntry extends Protein implements Serializable {
         }
     }
 
-    @XmlTransient
-    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-        return enzymePortalReactionSet;
-    }
-
-    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
-        this.enzymePortalReactionSet = enzymePortalReactionSet;
-    }
+//    @XmlTransient
+//    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+//        return enzymePortalReactionSet;
+//    }
+//
+//    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+//        this.enzymePortalReactionSet = enzymePortalReactionSet;
+//    }
+//    
+//        @XmlTransient
+//    public Set<EnzymePortalReactant> getEnzymePortalReactantSet() {
+//        return enzymePortalReactantSet;
+//    }
+//
+//    public void setEnzymePortalReactantSet(Set<EnzymePortalReactant> enzymePortalReactantSet) {
+//        this.enzymePortalReactantSet = enzymePortalReactantSet;
+//    }
 
 }

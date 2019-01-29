@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.xml.transformer;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.batch.item.ItemProcessor;
-import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
@@ -20,9 +19,9 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  */
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
-    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
-        super(xmlFileProperties);
-    }
+//    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
+//        super(xmlFileProperties);
+//    }
 
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
@@ -31,12 +30,13 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
-        entry.setDescription(enzyme.getCatalyticActivity());
+        String description = String.format("%s %s %s", enzyme.getEcNumber(), enzyme.getEnzymeName(), enzyme.getCofactor());
+        entry.setDescription(description);
 
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
 
         addCofactorsField(enzyme.getCofactor(), fields);
-        //addReactionMechanism(enzyme.getReactionMechanismSet(), fields);
+        addCatalyticActivityField(enzyme.getCatalyticActivity(), fields);
 
         enzyme.getEnzymePortalEcNumbersSet()
                 .stream()
@@ -75,6 +75,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addCompoundFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+        addReactantFields(uniprotEntry.getEnzymePortalReactantSet(), fields);
+        addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
     }
 
     private void addAltNamesField(Set<IntenzAltNames> altNames, Set<Field> fields) {
@@ -93,6 +95,13 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         }
     }
 
+    private void addCatalyticActivityField(String catalyticActivity, Set<Field> fields) {
+        if (catalyticActivity != null) {
+            Field field = new Field(FieldName.CATALYTIC_ACTIVITY.getName(), catalyticActivity);
+            fields.add(field);
+        }
+    }
+
 //    @Deprecated
 //    private void addReactionMechanism(Set<ReactionMechanism> reactionMechanismSet, Set<Field> fields) {
 //
@@ -103,5 +112,4 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //                .forEachOrdered(pdbfield -> fields.add(pdbfield));
 //
 //    }
-
 }

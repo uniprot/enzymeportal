@@ -15,8 +15,7 @@
  */
 package uk.ac.ebi.ep.xml.config;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,8 +23,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-@Getter
-@Setter
+@Data
 @Configuration
 @ConfigurationProperties(prefix = "ep.xml")
 public class XmlFileProperties {

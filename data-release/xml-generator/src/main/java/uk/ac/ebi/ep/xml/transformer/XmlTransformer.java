@@ -1,22 +1,20 @@
 package uk.ac.ebi.ep.xml.transformer;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.EntryToGeneMapping;
 import uk.ac.ebi.ep.xml.entity.EnzymePortalCompound;
 import uk.ac.ebi.ep.xml.entity.EnzymePortalDisease;
 import uk.ac.ebi.ep.xml.entity.EnzymePortalPathways;
+import uk.ac.ebi.ep.xml.entity.EnzymePortalReactant;
+import uk.ac.ebi.ep.xml.entity.EnzymePortalReaction;
 import uk.ac.ebi.ep.xml.entity.UniprotFamilies;
-import uk.ac.ebi.ep.xml.schema.Database;
 import uk.ac.ebi.ep.xml.schema.Field;
 import uk.ac.ebi.ep.xml.schema.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
 import uk.ac.ebi.ep.xml.util.FieldName;
-import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
  *
@@ -27,24 +25,25 @@ public abstract class XmlTransformer {
     public static final String ENZYME_PORTAL = "Enzyme Portal";
     public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
     private static final String REACTOME_PATHWAY_ID_REGEX = "^R-.*-.*";
-    private final XmlFileProperties xmlFileProperties;
+    
+//    private final XmlFileProperties xmlFileProperties;
+//
+//    public XmlTransformer(XmlFileProperties xmlFileProperties) {
+//        Preconditions.checkArgument(xmlFileProperties == null, "xmlFileProperties (XML Configuration) can not be null");
+//
+//        this.xmlFileProperties = xmlFileProperties;
+//    }
 
-    public XmlTransformer(XmlFileProperties xmlFileProperties) {
-        Preconditions.checkArgument(xmlFileProperties == null, "xmlFileProperties (XML Configuration) can not be null");
-
-        this.xmlFileProperties = xmlFileProperties;
-    }
-
-    protected Database buildDatabaseInfo(long entryCount) {
-        Database database = new Database();
-        database.setName(ENZYME_PORTAL);
-        database.setDescription(ENZYME_PORTAL_DESCRIPTION);
-        database.setRelease(xmlFileProperties.getReleaseNumber());
-        LocalDate date = LocalDate.now();
-        database.setReleaseDate(date);
-        database.setEntryCount(entryCount);
-        return database;
-    }
+//    protected Database buildDatabaseInfo(long entryCount) {
+//        Database database = new Database();
+//        database.setName(ENZYME_PORTAL);
+//        database.setDescription(ENZYME_PORTAL_DESCRIPTION);
+//        database.setRelease(xmlFileProperties.getReleaseNumber());
+//        LocalDate date = LocalDate.now();
+//        database.setReleaseDate(date);
+//        database.setEntryCount(entryCount);
+//        return database;
+//    }
 
     protected void addUniprotIdFields(String uniprotName, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotName)) {
@@ -83,15 +82,14 @@ public abstract class XmlTransformer {
     }
 
     void computeSynonymsAndBuildFields(String synonymName, String proteinName, Set<Field> fields) {
-            Stream.of(synonymName
-                    .split(";"))
-                    .distinct()
-                    .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
-                    .map(syn -> {
-                        return new Field(FieldName.SYNONYM.getName(), syn);
+        Stream.of(synonymName
+                .split(";"))
+                .distinct()
+                .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
+                .map(syn -> {
+                    return new Field(FieldName.SYNONYM.getName(), syn);
 
-                    }).forEach(field -> fields.add(field));
-
+                }).forEach(field -> fields.add(field));
 
     }
 
@@ -187,7 +185,7 @@ public abstract class XmlTransformer {
             }
             return compound;
         }).map(compound -> new Ref(compound.getCompoundId(), compound.getCompoundSource()))
-                .forEach(xref ->  refs.add(xref));
+                .forEach(xref -> refs.add(xref));
 
     }
 
@@ -228,15 +226,15 @@ public abstract class XmlTransformer {
         return reactomePathwayId;
     }
 
-    protected void addUniprotFamilyFields(Set<UniprotFamilies> families, Set<Field> fields) {
-        if (!families.isEmpty()) {
-
-            families.stream()
-                    .map(family -> new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName()))
-                    .forEach(field -> fields.add(field));
-
-        }
-    }
+//    protected void addUniprotFamilyFields(Set<UniprotFamilies> families, Set<Field> fields) {
+//        if (!families.isEmpty()) {
+//
+//            families.stream()
+//                    .map(family -> new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName()))
+//                    .forEach(field -> fields.add(field));
+//
+//        }
+//    }
 
     protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs) {
         if (!families.isEmpty()) {
@@ -248,5 +246,39 @@ public abstract class XmlTransformer {
             }).forEach(xref -> refs.add(xref));
         }
     }
+
+    protected void addReactionFieldsAndXrefs(Set<EnzymePortalReaction> reactions, Set<Field> fields, Set<Ref> refs) {
+
+        reactions.stream().map(reaction -> {
+            Field field = new Field(FieldName.RHEA.getName(), reaction.getReactionId());
+            fields.add(field);
+            return new Ref(reaction.getReactionId(), DatabaseName.RHEA.getDbName());
+
+        }).forEach(xref -> refs.add(xref));
+
+    }
+
+    //use temporarly till fixed in db then use <code>addReactantFieldsAndXrefs</code> instead 
+    protected void addReactantFields(Set<EnzymePortalReactant> reactants, Set<Field> fields) {
+        if (!reactants.isEmpty()) {
+
+            reactants.stream()
+                    .map(reactant -> new Field(FieldName.REACTANT.getName(), reactant.getReactantName()))
+                    .forEach(field -> fields.add(field));
+
+        }
+    }
+    
+    //uncomment when the fix is done at database
+//        protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
+//
+//        reactants.stream().map(reactant -> {
+//            Field field = new Field(FieldName.REACTANT.getName(),reactant.getReactantName());
+//            fields.add(field);
+//            return new Ref(reactant.getRheaId(), DatabaseName.RHEA.getDbName());
+//
+//        }).forEach(xref -> refs.add(xref));
+//
+//    }
 
 }

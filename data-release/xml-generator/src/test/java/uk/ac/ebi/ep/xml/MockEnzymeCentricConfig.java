@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml;
 
 import java.time.LocalDateTime;
@@ -34,19 +33,17 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  */
 @Configuration
 public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
- private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1' AND TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
+    //private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE EC_NUMBER='2.1.1.1' AND TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
 
+    private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
     private static final String ROOT_TAG_NAME = "database";
 
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
 
-    private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
-
-    
-    
-    private static final String pattern = "MMM_d_yyyy@hh:mm:ssa";
-    private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
-    public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + date;
-    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + date;
+    private static final String PATTERN = "MMM_d_yyyy@hh:mm:ssa";
+    private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
+    public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + DATE;
+    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + DATE;
 
     protected final EntityManagerFactory entityManagerFactory;
 
@@ -58,7 +55,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
         this.xmlFileProperties = xmlFileProperties;
     }
 
-    @Bean(destroyMethod = "", name="enzymeDatabaseReaderTest")
+    @Bean(destroyMethod = "", name = "enzymeDatabaseReaderTest")
     @Override
     public ItemReader<EnzymePortalUniqueEc> databaseReader() {
 
@@ -74,11 +71,11 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     @Override
     public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new EnzymeProcessor(xmlFileProperties);
+        return new EnzymeProcessor();
 
     }
 
-    @Bean(destroyMethod = "", name="enzymeXmlWriterTest")
+    @Bean(destroyMethod = "", name = "enzymeXmlWriterTest")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
@@ -94,7 +91,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
 
     }
 
-    @Bean(name="enzymeXmlOutputDirTest")
+    @Bean(name = "enzymeXmlOutputDirTest")
     @Override
     public Resource xmlOutputDir() {
         return new FileSystemResource(xmlFileProperties.getEnzymeCentric());

@@ -75,7 +75,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     @Override
     public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new EnzymeProcessor(xmlFileProperties);
+        return new EnzymeProcessor();
 
     }
 

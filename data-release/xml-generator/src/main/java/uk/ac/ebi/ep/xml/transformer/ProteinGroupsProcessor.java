@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.ItemProcessor;
-import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.EnzymeCatalyticActivity;
 import uk.ac.ebi.ep.xml.entity.protein.PrimaryProtein;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinEcNumbers;
@@ -31,9 +30,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
 
-    public ProteinGroupsProcessor(XmlFileProperties xmlFileProperties) {
-        super(xmlFileProperties);
-    }
+//    public ProteinGroupsProcessor(XmlFileProperties xmlFileProperties) {
+//        super(xmlFileProperties);
+//    }
 
     @Override
     public Entry process(ProteinGroups proteinGroups) throws Exception {

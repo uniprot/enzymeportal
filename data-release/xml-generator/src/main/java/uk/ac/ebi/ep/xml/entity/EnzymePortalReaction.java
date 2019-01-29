@@ -1,10 +1,9 @@
-package uk.ac.ebi.ep.xml.entity.protein;
+package uk.ac.ebi.ep.xml.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
 
 /**
  *
@@ -54,9 +54,10 @@ public class EnzymePortalReaction implements Serializable {
     @Size(max = 20)
     @Column(name = "KEGG_ID")
     private String keggId;
+
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UniprotEntry uniprotAccession;
+    @ManyToOne(optional = false)
+    private UniprotEntryEnzyme uniprotAccession;
 
     public EnzymePortalReaction() {
     }
@@ -113,11 +114,11 @@ public class EnzymePortalReaction implements Serializable {
         this.url = url;
     }
 
-    public UniprotEntry getUniprotAccession() {
+    public UniprotEntryEnzyme getUniprotAccession() {
         return uniprotAccession;
     }
 
-    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+    public void setUniprotAccession(UniprotEntryEnzyme uniprotAccession) {
         this.uniprotAccession = uniprotAccession;
     }
 

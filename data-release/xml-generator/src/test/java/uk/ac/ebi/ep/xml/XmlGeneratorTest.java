@@ -1,6 +1,15 @@
 package uk.ac.ebi.ep.xml;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,24 +22,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.SQLException;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 /**
  * @author Joseph
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"management.port=0"})
-@ActiveProfiles("uzpdev")
+@ActiveProfiles("uzprel")
 public class XmlGeneratorTest {
 
     @Autowired
@@ -66,7 +64,6 @@ public class XmlGeneratorTest {
 
         String query = "SELECT COUNT(*) FROM(select * from PROTEIN_GROUPS where ENTRY_TYPE=0 AND ROWNUM <=1 UNION (select * from PROTEIN_GROUPS where ENTRY_TYPE=1 AND ROWNUM <=2))";
 
-
         int expectedEntries = countEntries(query);
 
         JobExecution jobExecution = jobLauncher.run(proteinXmlJobTest, new JobParameters());
@@ -80,7 +77,7 @@ public class XmlGeneratorTest {
             assertThat(step.getWriteCount(), is(expectedEntries));
             assertThat(step.getSkipCount(), is(0));
 
-            printXml();
+            printXml(xmlFileProperties.getProteinCentric());
         }
 
     }
@@ -89,7 +86,6 @@ public class XmlGeneratorTest {
     public void successfulEnzymeCentricJobRun() throws Exception {
 
         String query = "SELECT COUNT(*) FROM(select * from ENZYME_PORTAL_UNIQUE_EC where ROWNUM <=1)";
-
 
         int expectedEntries = countEntries(query);
 
@@ -103,11 +99,9 @@ public class XmlGeneratorTest {
         assertThat(step.getWriteCount(), is(expectedEntries));
         assertThat(step.getSkipCount(), is(0));
 
-        printXml();
-
+        printXml(xmlFileProperties.getEnzymeCentric());
 
     }
-
 
     private StepExecution getStepByName(String stepName, JobExecution jobExecution) {
 //        for (StepExecution stepExecution : jobExecution.getStepExecutions()) {
@@ -117,15 +111,12 @@ public class XmlGeneratorTest {
 
 //        }
         //throw new IllegalArgumentException("Step name not recognized: " + stepName);
-
-
         return jobExecution.getStepExecutions()
                 .stream()
                 .peek(s -> System.out.println("Job Status : " + s.getStatus().name()))
                 .filter(stepExecution -> stepExecution.getStepName().equalsIgnoreCase(stepName))
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
-
 
     }
 
@@ -135,9 +126,9 @@ public class XmlGeneratorTest {
         return Integer.parseInt(count);
     }
 
-    private void printXml() throws IOException {
-        try (FileReader fileReader = new FileReader(xmlFileProperties.getProteinCentric());
-             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+    private void printXml(String fileLocation) throws IOException {
+        try (FileReader fileReader = new FileReader(fileLocation);
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
             String line;
 

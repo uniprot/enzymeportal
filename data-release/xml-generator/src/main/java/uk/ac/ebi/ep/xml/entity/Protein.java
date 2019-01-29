@@ -84,6 +84,13 @@ public class Protein {
     @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "accession")
     protected Set<UniprotFamilies> uniprotFamiliesSet;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
+
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
 
     public String getCommonName() {
         if (commonName == null || StringUtils.isEmpty(commonName)) {
