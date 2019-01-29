@@ -38,9 +38,11 @@ public class CompoundReactantParser extends GenericCompound {
     @Override
     void loadCompoundToDatabase() {
         AtomicInteger counter = new AtomicInteger(1);
-        Long total = enzymePortalParserService.countReactionInfo(XREF_TYPE);
+        //Long total = enzymePortalParserService.countReactionInfo(XREF_TYPE);
+        Long total = enzymePortalParserService.countDistinctReactionInfoByXrefType(XREF_TYPE);
         log.info("About to start streaming and processing " + total + " entries.");
-        try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.findAllReactionInfoByXrefTypeAndStream(XREF_TYPE)) {
+        // try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.findAllReactionInfoByXrefTypeAndStream(XREF_TYPE)) {
+        try (Stream<EnzymeReactionInfo> reactionInfo = enzymePortalParserService.findUniqueXrefReactionInfoByXrefTypeAndStream(XREF_TYPE)) {
             reactionInfo.forEach(data -> processReactionInfo(data, counter));
 
         }
