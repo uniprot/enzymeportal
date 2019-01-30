@@ -33,7 +33,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //    public ProteinGroupsProcessor(XmlFileProperties xmlFileProperties) {
 //        super(xmlFileProperties);
 //    }
-
     @Override
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
@@ -57,11 +56,13 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         return entry;
     }
 
-    private void addRelatedSpeciesField(List<UniprotEntry> entries, final Set<Field> fields) {
+    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
+        // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
 
         List<String> specieList
                 = entries
                         .stream()
+                        .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
                         .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
                         .distinct()
                         .collect(Collectors.toList());
@@ -87,39 +88,78 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
 
-            List<UniprotEntry> relatedProteins = entries.stream()
-                    .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
-                    .distinct()
-                    .collect(Collectors.toList());
+            addRelatedSpeciesField(primaryProtein, entries, fields);
 
-            addRelatedSpeciesField(relatedProteins, fields);
+//            List<UniprotEntry> relatedProteins = entries.stream()
+//                    .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
+//                    .distinct()
+//                    .collect(Collectors.toList());
+//            addRelatedSpeciesField(relatedProteins, fields);
+            //for (UniprotEntry uniprotEntry : relatedProteins) {// TODO commented out due to uniprot_family issues where found in enzyme-centric but zero in protein-centric
+            addProteinCentricFields(proteinGroups, entries, fields, refs);
 
-            for (UniprotEntry uniprotEntry : relatedProteins) {
-                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
-
-                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
-                    addPrimaryEc(uniprotEntry, fields);
-                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
-                    addPrimaryGeneNameFields(uniprotEntry, fields);
-                }
-
-                addScientificNameFields(uniprotEntry.getScientificName(), fields);
-                addCommonNameFields(uniprotEntry.getCommonName(), fields);
-               
-                addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
-                addAccessionXrefs(uniprotEntry.getAccession(), refs);
-
-                addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
-
-                addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
-                addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
-                addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
-                addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
-                addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
-            }
-
+//            for (UniprotEntry uniprotEntry : entries) {
+//                if (uniprotEntry.getAccession().equals(primaryProtein.getAccession())) {
+//
+//                    addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+//                    addPrimaryEc(uniprotEntry, fields);
+//                    addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+//                    addPrimaryGeneNameFields(uniprotEntry, fields);
+//                }
+//
+//                addScientificNameFields(uniprotEntry.getScientificName(), fields);
+//                addCommonNameFields(uniprotEntry.getCommonName(), fields);
+//
+//                addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+//                addAccessionXrefs(uniprotEntry.getAccession(), refs);
+//
+//                addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+//
+//                addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+//                addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
+//                addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
+//                addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+//                addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+//            }
         }
 
+    }
+
+    private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, Set<Field> fields, Set<Ref> refs) {
+        for (UniprotEntry uniprotEntry : entries) {
+//            if (uniprotEntry.getAccession().equals(proteinGroups.getPrimaryProtein().getAccession())) {
+//
+//                addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+//                addPrimaryEc(uniprotEntry, fields);
+//                addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+//                addPrimaryGeneNameFields(uniprotEntry, fields);
+//            }
+            addPrimaryEntities(proteinGroups, uniprotEntry, fields);
+
+            addScientificNameFields(uniprotEntry.getScientificName(), fields);
+            addCommonNameFields(uniprotEntry.getCommonName(), fields);
+
+            addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+            addAccessionXrefs(uniprotEntry.getAccession(), refs);
+
+            addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+
+            addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+            addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
+            addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
+            addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+            addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+        }
+    }
+
+    private void addPrimaryEntities(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (uniprotEntry.getAccession().equals(proteinGroups.getPrimaryProtein().getAccession())) {
+
+            addPrimarySynonymFields(uniprotEntry, proteinGroups.getProteinName(), fields);
+            addPrimaryEc(uniprotEntry, fields);
+            addPrimaryCatalyticActivityFields(uniprotEntry, fields);
+            addPrimaryGeneNameFields(uniprotEntry, fields);
+        }
     }
 
     private void addEnzymeFamilyToProteinField(Set<ProteinEcNumbers> enzymes, Set<Field> fields) {
