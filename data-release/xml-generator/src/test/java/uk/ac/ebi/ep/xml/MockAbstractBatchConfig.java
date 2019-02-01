@@ -57,7 +57,7 @@ public abstract class MockAbstractBatchConfig<T, S> {
     protected ItemWriteListener itemWriteListener() {
         return new GlobalListener<>();
     }
-
+    
     protected JpaNativeQueryProvider<T> createQueryProvider(String sqlQuery, Class<T> clazz) {
         JpaNativeQueryProvider<T> queryProvider = new JpaNativeQueryProvider<>();
         queryProvider.setSqlQuery(sqlQuery);

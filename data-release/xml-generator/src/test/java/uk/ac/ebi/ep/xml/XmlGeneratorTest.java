@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 /**
  * @author Joseph
  */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"management.port=0"})

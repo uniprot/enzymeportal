@@ -1,8 +1,6 @@
 package uk.ac.ebi.ep.xml;
 
 import javax.persistence.EntityManagerFactory;
-
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -11,6 +9,8 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
@@ -35,6 +35,7 @@ public class MockBatchConfig {
     public Job enzymeXmlJobTest(JobBuilderFactory jobBuilderFactory,
             StepBuilderFactory stepBuilderFactory, MockEnzymeCentricConfig ecConfig) throws Exception {
 
+        TaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
         Step uniqueEcStep = stepBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_READ_PROCESS_WRITE_XML_STEP)
                 .<EnzymePortalUniqueEc, Entry>chunk(xmlFileProperties.getChunkSize())
                 .reader(ecConfig.databaseReader())
@@ -43,8 +44,9 @@ public class MockBatchConfig {
                 .listener(ecConfig.logChunkListener())
                 .listener(ecConfig.stepExecutionListener())
                 .listener(ecConfig.itemReadListener())
-                .listener(ecConfig.itemProcessListener())
-                .listener(ecConfig.itemWriteListener())
+                //.listener(ecConfig.itemProcessListener())
+                //.listener(ecConfig.itemWriteListener())
+                .taskExecutor(taskExecutor).throttleLimit(1)
                 .build();
 
         return jobBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_CENTRIC_XML_JOB)

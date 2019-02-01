@@ -39,6 +39,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     private static final String ROOT_TAG_NAME = "database";
 
     private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where ROWNUM <= 7";
 
     private static final String PATTERN = "MMM_d_yyyy@hh:mm:ssa";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
@@ -62,8 +63,10 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(5)
+                .pageSize(1_00)
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class))
+                .saveState(false)
+                .transacted(false)
                 .build();
 
     }

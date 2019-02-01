@@ -30,7 +30,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
-        String description = String.format("%s %s %s", enzyme.getEcNumber(), enzyme.getEnzymeName(), enzyme.getCofactor());
+        
+        String description = String.format("%s %s", enzyme.getEcNumber(), enzyme.getEnzymeName());
         entry.setDescription(description);
 
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);

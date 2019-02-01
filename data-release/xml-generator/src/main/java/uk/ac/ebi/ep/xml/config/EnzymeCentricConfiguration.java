@@ -3,11 +3,12 @@ package uk.ac.ebi.ep.xml.config;
 import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
@@ -15,6 +16,7 @@ import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
@@ -32,6 +34,7 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
 @Configuration
+@Import(DataConfig.class)
 public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
@@ -42,16 +45,17 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
     //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'";
     /// end TEST QUERY /////
-    
-    
-    private static final String pattern = "MMM_d_yyyy@hh:mma";
-    private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
-    public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + date;
-    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + date;
+    private static final String PATTERN = "MMM_d_yyyy@hh:mma";
+    private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
+    public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + DATE;
+    public static final String ENZYME_READ_PROCESS_WRITE_XML_STEP = "enzymeReadProcessAndWriteXMLstep_" + DATE;
 
     protected final EntityManagerFactory entityManagerFactory;
 
     private final XmlFileProperties xmlFileProperties;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Autowired
     public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
@@ -59,15 +63,18 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         this.xmlFileProperties = xmlFileProperties;
     }
 
-    @Bean(destroyMethod = "", name="enzymeDatabaseReader")
+    @Bean(destroyMethod = "", name = "enzymeDatabaseReader")
     @Override
-    public ItemReader<EnzymePortalUniqueEc> databaseReader() {
+    public JpaPagingItemReader<EnzymePortalUniqueEc> databaseReader() {
         JpaNativeQueryProvider<EnzymePortalUniqueEc> queryProvider = createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class);
+      
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(5)
+                .pageSize(100)
                 .queryProvider(queryProvider)
+                .saveState(false)
+                .transacted(false)
                 .build();
 
     }
@@ -79,7 +86,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean(destroyMethod = "", name="enzymeXmlWriter")
+    @Bean(destroyMethod = "", name = "enzymeXmlWriter")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
@@ -95,7 +102,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean(name="enzymeXmlOutputDir")
+    @Bean(name = "enzymeXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
         return new FileSystemResource(xmlFileProperties.getEnzymeCentric());
