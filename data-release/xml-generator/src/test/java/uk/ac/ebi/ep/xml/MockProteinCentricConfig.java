@@ -66,7 +66,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
                 .name("READ_UNIQUE_PROTEIN_GROUP")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(5)
+                .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
                 .build();
     }

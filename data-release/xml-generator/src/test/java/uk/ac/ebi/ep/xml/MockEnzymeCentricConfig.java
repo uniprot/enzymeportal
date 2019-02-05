@@ -63,7 +63,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(1_00)
+                .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class))
                 .saveState(false)
                 .transacted(false)
