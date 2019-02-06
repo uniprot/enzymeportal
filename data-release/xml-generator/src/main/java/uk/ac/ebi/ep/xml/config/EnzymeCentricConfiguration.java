@@ -71,7 +71,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(xmlFileProperties.getChunkSize())
+                .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(queryProvider)
                 .saveState(false)
                 .transacted(false)

@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.xml.entity.protein;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,15 +12,12 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.xml.entity.Protein;
 import uk.ac.ebi.ep.xml.transformer.ModelOrganisms;
 
@@ -42,9 +40,9 @@ public class UniprotEntry extends Protein implements Serializable {
     @ManyToOne
     private RelatedProteins relatedProteinsId;
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    private Set<ProteinEcNumbers> enzymePortalEcNumbersSet;
+    @OneToMany(mappedBy = "uniprotAccession")
+    //@Fetch(FetchMode.JOIN)
+    private Set<ProteinEcNumbers> enzymePortalEcNumbersSet = new HashSet<>();
 
 
     public UniprotEntry() {

@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -40,9 +39,9 @@ import org.hibernate.annotations.FetchMode;
     @NamedQuery(name = "EnzymePortalUniqueEc.findByCofactor", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.cofactor = :cofactor")})
 public class EnzymePortalUniqueEc implements Serializable {
 
-    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ecNumber")
     @Fetch(FetchMode.JOIN)
-    private Set<IntenzAltNames> intenzAltNamesSet;
+    private Set<IntenzAltNames> intenzAltNamesSet = new HashSet<>();
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -61,7 +60,7 @@ public class EnzymePortalUniqueEc implements Serializable {
 
     @OneToMany(mappedBy = "ecNumber")
     @Fetch(FetchMode.JOIN)
-    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
+    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet = new HashSet<>();
 
     public EnzymePortalUniqueEc() {
     }

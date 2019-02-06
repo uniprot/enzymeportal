@@ -34,5 +34,6 @@ public class XmlFileProperties {
     private String schema;
     private int chunkSize;
     private String dir;
+    private int pageSize;
 
 }

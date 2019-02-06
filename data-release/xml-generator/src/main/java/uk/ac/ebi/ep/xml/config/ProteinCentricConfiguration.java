@@ -68,7 +68,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
                 .name("READ_UNIQUE_PROTEIN_GROUP")
                 .entityManagerFactory(entityManagerFactory)
-                .pageSize(xmlFileProperties.getChunkSize())
+                .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
                 .saveState(false)
                 .transacted(false)

@@ -3,11 +3,11 @@ package uk.ac.ebi.ep.xml.entity.enzyme;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -50,8 +50,8 @@ public class IntenzEnzymes implements Serializable {
     private Character accPresent;
     @Column(name = "COFACTOR")
     private String cofactor;
-    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.EAGER)
-    private Set<IntenzAltNames> intenzAltNamesSet;
+    @OneToMany(mappedBy = "ecNumber")
+    private Set<IntenzAltNames> intenzAltNamesSet = new HashSet<>();
 
     public IntenzEnzymes() {
     }

@@ -2,19 +2,17 @@ package uk.ac.ebi.ep.xml.entity;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.util.StringUtils;
 
 /**
@@ -61,37 +59,69 @@ public class Protein {
     protected BigInteger uncharacterized;
     @Column(name = "PDB_FLAG")
     protected Character pdbFlag;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    protected Set<EntryToGeneMapping> entryToGeneMappingSet;
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    //@Fetch(FetchMode.JOIN)
+//    protected Set<EntryToGeneMapping> entryToGeneMappingSet = new HashSet<>();
+//
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+//
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
+//    protected Set<UniprotXref> uniprotXrefSet;
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    protected Set<EnzymePortalCompound> enzymePortalCompoundSet;
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet;
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(mappedBy = "accession")
+//    protected Set<UniprotFamilies> uniprotFamiliesSet;
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    @Fetch(FetchMode.JOIN)
+//    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
+//
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    @Fetch(FetchMode.JOIN)
+//    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
+    
+    
+        @OneToMany(mappedBy = "uniprotAccession")
+    //@Fetch(FetchMode.JOIN)
+    protected Set<EntryToGeneMapping> entryToGeneMappingSet = new HashSet<>();
 
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+    //@Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet = new HashSet<>();
 
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
-    protected Set<UniprotXref> uniprotXrefSet;
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    protected Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
-    @Fetch(FetchMode.JOIN)
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet;
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
+    protected Set<UniprotXref> uniprotXrefSet = new HashSet<>();
+    //@Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalCompound> enzymePortalCompoundSet = new HashSet<>();
+   // @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet = new HashSet<>();
+    //@Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet = new HashSet<>();
+    //@Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "accession")
-    protected Set<UniprotFamilies> uniprotFamiliesSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
+    protected Set<UniprotFamilies> uniprotFamiliesSet = new HashSet<>();
+    @OneToMany(mappedBy = "uniprotAccession")
+    //@Fetch(FetchMode.JOIN)
+    protected Set<EnzymePortalReaction> enzymePortalReactionSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
-
+    @OneToMany(mappedBy = "uniprotAccession")
+    //@Fetch(FetchMode.JOIN)
+    protected Set<EnzymePortalReactant> enzymePortalReactantSet = new HashSet<>();
+    
     public String getCommonName() {
         if (commonName == null || StringUtils.isEmpty(commonName)) {
             commonName = scientificName;
