@@ -20,5 +20,6 @@ echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 #bsub -R "rusage[mem=32000]" -M 32000 -q production-rh7 -o /ebi/uniprot/production/enzyme_portal/logs/xml/bsub-ep-xml-$(date +%Y%m%d).log ./enzyme-xml-generator.sh uzprel
 #bsub -R "rusage[mem=64000]" -M 64000 -q production-rh7 -o $LOG_DIR  $1
-bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 -o $LOG_DIR  $1
+#bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 -o $LOG_DIR  $1
+bsub -P bigmem -n 8 -M 200000 -R "rusage[mem=200000]" -o $LOG_DIR  $1
 
