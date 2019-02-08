@@ -44,9 +44,9 @@ public class MockBatchConfig {
                 .listener(ecConfig.logChunkListener())
                 .listener(ecConfig.stepExecutionListener())
                 .listener(ecConfig.itemReadListener())
-                //.listener(ecConfig.itemProcessListener())
+                .listener(ecConfig.itemProcessListener())
                 //.listener(ecConfig.itemWriteListener())
-                .taskExecutor(taskExecutor).throttleLimit(1)
+                //.taskExecutor(taskExecutor).throttleLimit(1)
                 .build();
 
         return jobBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_CENTRIC_XML_JOB)
@@ -69,7 +69,7 @@ public class MockBatchConfig {
                 .listener(proteinConfig.stepExecutionListener())
                 .listener(proteinConfig.itemReadListener())
                 .listener(proteinConfig.itemProcessListener())
-                .listener(proteinConfig.itemWriteListener())
+                //.listener(proteinConfig.itemWriteListener())
                 .build();
 
         return jobBuilderFactory.get(MockProteinCentricConfig.PROTEIN_CENTRIC_XML_JOB)

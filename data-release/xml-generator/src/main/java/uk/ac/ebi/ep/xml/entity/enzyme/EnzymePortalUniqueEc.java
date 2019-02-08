@@ -41,7 +41,7 @@ public class EnzymePortalUniqueEc implements Serializable {
 
     @OneToMany(mappedBy = "ecNumber")
     @Fetch(FetchMode.JOIN)
-    private Set<IntenzAltNames> intenzAltNamesSet = new HashSet<>();
+    private Set<IntenzAltNames> intenzAltNamesSet;// = new HashSet<>();
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -60,7 +60,7 @@ public class EnzymePortalUniqueEc implements Serializable {
 
     @OneToMany(mappedBy = "ecNumber")
     @Fetch(FetchMode.JOIN)
-    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet = new HashSet<>();
+    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;// = new HashSet<>();
 
     public EnzymePortalUniqueEc() {
     }

@@ -8,7 +8,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
 import uk.ac.ebi.ep.xml.schema.Entry;
@@ -39,12 +38,12 @@ public class XmlBatchConfig {
                 .processor(ecConfig.entryProcessor())
                 .writer(ecConfig.xmlWriter())
                 .listener(ecConfig.logChunkListener())
-                //.listener(ecConfig.stepExecutionListener())
-                //.listener(ecConfig.itemReadListener())
-                //.listener(ecConfig.itemProcessListener())
+                .listener(ecConfig.stepExecutionListener())
+                .listener(ecConfig.itemReadListener())
+                .listener(ecConfig.itemProcessListener())
                 //.listener(ecConfig.itemWriteListener())
-                .taskExecutor(new SimpleAsyncTaskExecutor())
-                .throttleLimit(1)
+                //.taskExecutor(new SimpleAsyncTaskExecutor())
+                //.throttleLimit(4)
                 .build();
 
         return jobBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_CENTRIC_XML_JOB)
@@ -65,12 +64,12 @@ public class XmlBatchConfig {
                 .processor(proteinConfig.entryProcessor())
                 .writer(proteinConfig.xmlWriter())
                 .listener(proteinConfig.logChunkListener())
-                //.listener(proteinConfig.stepExecutionListener())
-                //.listener(proteinConfig.itemReadListener())
+                .listener(proteinConfig.stepExecutionListener())
+                .listener(proteinConfig.itemReadListener())
                 //.listener(proteinConfig.itemProcessListener())
                 //.listener(proteinConfig.itemWriteListener())
-                .taskExecutor(new SimpleAsyncTaskExecutor())
-                .throttleLimit(1)
+                //.taskExecutor(new SimpleAsyncTaskExecutor())
+                //.throttleLimit(10)
                 .build();
 
         return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)

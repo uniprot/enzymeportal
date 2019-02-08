@@ -43,8 +43,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 //       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
 //            + "union\n"
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
-       
-       //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
+    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
     // END -- TEST QUERY ----
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
@@ -62,18 +61,36 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     }
 
     @Override
-    @Bean(destroyMethod = "",name = "proteinDatabaseReader")
+    @Bean(destroyMethod = "", name = "proteinDatabaseReader")
     public ItemReader<ProteinGroups> databaseReader() {
+//        HibernateNativeQueryProvider provider = new HibernateNativeQueryProvider();
+//        provider.setEntityClass(ProteinGroups.class);
+//        provider.setSqlQuery(NATIVE_READ_QUERY);
+//        return new HibernatePagingItemReaderBuilder<ProteinGroups>()
+//                .name("READ_UNIQUE_PROTEIN_GROUP")
+//                .fetchSize(xmlFileProperties.getPageSize())
+//                .pageSize(xmlFileProperties.getPageSize())
+//                .queryProvider(provider).sessionFactory(getSessionFactory())
+//                .useStatelessSession(false)
+//                .build();
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
                 .name("READ_UNIQUE_PROTEIN_GROUP")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
-                .saveState(false)
-                .transacted(false)
+                //.saveState(false)
+                //.transacted(false)
                 .build();
     }
+    
+   // @Bean
+//	public SessionFactory getSessionFactory() {
+//	    if (entityManagerFactory.unwrap(SessionFactory.class) == null) {
+//	        throw new NullPointerException("factory is not a hibernate factory");
+//	    }
+//	    return entityManagerFactory.unwrap(SessionFactory.class);
+//	}
 
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
@@ -82,7 +99,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-    @Bean(destroyMethod = "",name = "proteinXmlWriter")
+    @Bean(destroyMethod = "", name = "proteinXmlWriter")
     @Override
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
@@ -98,7 +115,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     }
 
-     @Bean(name = "proteinXmlOutputDir")
+    @Bean(name = "proteinXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
         return new FileSystemResource(xmlFileProperties.getProteinCentric());
@@ -117,7 +134,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     }
 
     @Override
-     @Bean(name = "proteinJobExecutionListener")
+    @Bean(name = "proteinJobExecutionListener")
     public JobExecutionListener jobExecutionListener() {
         return new JobCompletionNotificationListener(PROTEIN_CENTRIC_XML_JOB);
     }

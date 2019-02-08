@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.xml.config;
 import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import javax.sql.DataSource;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
@@ -54,8 +53,8 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     private final XmlFileProperties xmlFileProperties;
 
-    @Autowired
-    private DataSource dataSource;
+    //@Autowired
+    //private DataSource dataSource;
 
     @Autowired
     public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
@@ -73,8 +72,8 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(queryProvider)
-                .saveState(false)
-                .transacted(false)
+                //.saveState(false)
+                //.transacted(false)
                 .build();
 
     }

@@ -11,7 +11,6 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -28,21 +27,21 @@ public class DataConfig {
 
     // private static final String [] PACKAGES_TO_SCAN = {"uk.ac.ebi.ep.xml.entity","uk.ac.ebi.ep.xml.entity.enzyme","uk.ac.ebi.ep.xml.entity.protein"};
     private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.xml.entity";
-
+    
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource")
     public DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }
-
+    
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource dataSource(DataSourceProperties properties) {
         return (HikariDataSource) properties.initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();
     }
-
+    
     @Bean
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
@@ -50,23 +49,24 @@ public class DataConfig {
                 .dataSource(dataSource)
                 .packages(PACKAGES_TO_SCAN)
                 .build();
-
+        
     }
-
-    @Bean(name="xmlTransactionManager")
+    
+    @Bean(name = "xmlTransactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
+        //return new DataSourceTransactionManager(dataSource(dataSourceProperties()));
     }
-
+    
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-
+    
     @Bean
     @ConfigurationProperties("spring.jpa")
     public JpaProperties jpaProperties() {
         return new JpaProperties();
     }
-
+    
 }

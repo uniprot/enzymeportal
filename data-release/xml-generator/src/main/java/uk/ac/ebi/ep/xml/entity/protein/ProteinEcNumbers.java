@@ -121,7 +121,9 @@ public class ProteinEcNumbers extends Enzyme implements Serializable, Comparator
         if (ec == 6) {
             return EcNumber.EnzymeFamily.LIGASES.getName();
         }
-
+        if (ec == 7) {
+            return EcNumber.EnzymeFamily.TRANSLOCASES.getName();
+        }
         return "Invalid Ec Number";
     }
 
