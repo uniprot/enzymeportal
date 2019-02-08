@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -40,7 +38,7 @@ import org.hibernate.annotations.FetchMode;
 public class EnzymePortalUniqueEc implements Serializable {
 
     @OneToMany(mappedBy = "ecNumber")
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
     private Set<IntenzAltNames> intenzAltNamesSet;// = new HashSet<>();
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,7 +57,7 @@ public class EnzymePortalUniqueEc implements Serializable {
     private String cofactor;
 
     @OneToMany(mappedBy = "ecNumber")
-    @Fetch(FetchMode.JOIN)
+   // @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;// = new HashSet<>();
 
     public EnzymePortalUniqueEc() {

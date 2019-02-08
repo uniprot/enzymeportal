@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.xml.transformer;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
@@ -22,7 +23,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
 //        super(xmlFileProperties);
 //    }
-
+@Transactional
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
         Set<Field> fields = new HashSet<>();

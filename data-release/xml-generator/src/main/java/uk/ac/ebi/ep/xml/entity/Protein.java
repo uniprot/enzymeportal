@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
@@ -93,32 +92,32 @@ public class Protein {
 //    
     
 
-        @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EntryToGeneMapping> entryToGeneMappingSet;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
-    protected Set<UniprotXref> uniprotXrefSet;
-
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymePortalCompound> enzymePortalCompoundSet;
-
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
-
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet;
-
-    @OneToMany(mappedBy = "accession", fetch = FetchType.EAGER)
-    protected Set<UniprotFamilies> uniprotFamiliesSet;
-    
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
-
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
+//        @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EntryToGeneMapping> entryToGeneMappingSet;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
+//    protected Set<UniprotXref> uniprotXrefSet;
+//
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymePortalCompound> enzymePortalCompoundSet;
+//
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
+//
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet;
+//
+//    @OneToMany(mappedBy = "accession", fetch = FetchType.EAGER)
+//    protected Set<UniprotFamilies> uniprotFamiliesSet;
+//    
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
+//
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+//    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
 //    
     
     
@@ -158,6 +157,43 @@ public class Protein {
 //    @OneToMany(mappedBy = "uniprotAccession")
 //    //@BatchSize(size = 10)
 //    protected Set<EnzymePortalReactant> enzymePortalReactantSet = new HashSet<>();
+    
+        @OneToMany(mappedBy = "uniprotAccession")
+    //@BatchSize(size = 50)
+    protected Set<EntryToGeneMapping> entryToGeneMappingSet ;
+
+    //@BatchSize(size = 50)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalDisease> enzymePortalDiseaseSet ;
+
+
+      // @BatchSize(size = 50)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
+    protected Set<UniprotXref> uniprotXrefSet ;
+
+   // @BatchSize(size = 50)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalCompound> enzymePortalCompoundSet ;
+
+       //@BatchSize(size = 50)
+    //@LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet ;
+
+    //@BatchSize(size = 50)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalPathways> enzymePortalPathwaysSet ;
+
+    //@BatchSize(size = 50)
+    @OneToMany(mappedBy = "accession")
+    protected Set<UniprotFamilies> uniprotFamiliesSet ;
+    //@BatchSize(size = 50)
+    @OneToMany(mappedBy = "uniprotAccession")
+    protected Set<EnzymePortalReaction> enzymePortalReactionSet;
+
+    @OneToMany(mappedBy = "uniprotAccession")
+    //@BatchSize(size = 10)
+    protected Set<EnzymePortalReactant> enzymePortalReactantSet ;
 
     public String getCommonName() {
         if (commonName == null || StringUtils.isEmpty(commonName)) {
