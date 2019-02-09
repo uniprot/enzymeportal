@@ -1,9 +1,12 @@
 package uk.ac.ebi.ep.xml.transformer;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
@@ -18,12 +21,23 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
+@Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
 //    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
 //        super(xmlFileProperties);
 //    }
-@Transactional
+    private void processOnlyEcWithSwissProtOrEvidence(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields, Set<Ref> refs) {
+        enzymes
+                .stream()
+                .parallel()
+                .filter(u -> (u.getUniprotAccession().getEntryType() == 0)
+                || u.getUniprotAccession().getExpEvidenceFlag() == BigInteger.ONE)
+                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+
+    }
+
+    @Transactional
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
         Set<Field> fields = new HashSet<>();
@@ -31,7 +45,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
-        
+
         String description = String.format("%s %s", enzyme.getEcNumber(), enzyme.getEnzymeName());
         entry.setDescription(description);
 
@@ -40,9 +54,22 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addCofactorsField(enzyme.getCofactor(), fields);
         addCatalyticActivityField(enzyme.getCatalyticActivity(), fields);
 
-        enzyme.getEnzymePortalEcNumbersSet()
-                .stream()
+        int numEnzymes = enzyme.getEnzymePortalEcNumbersSet().size();
+        log.warn("Num ezymes to process" + numEnzymes);
+        if(numEnzymes >= 100){
+            
+            processOnlyEcWithSwissProtOrEvidence(enzyme.getEnzymePortalEcNumbersSet(),fields, refs);
+        }else {
+    
+            enzyme.getEnzymePortalEcNumbersSet()
+                .stream().parallel()
                 .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+  
+        }
+        //default
+//        enzyme.getEnzymePortalEcNumbersSet()
+//                .stream().parallel()
+//                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
 
         addAltNamesField(enzyme.getIntenzAltNamesSet(), fields);
         addEcSource(enzyme.getEcNumber(), refs);
@@ -59,7 +86,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    private void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         // addUniprotIdFields(uniprotEntry, fields);
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
 

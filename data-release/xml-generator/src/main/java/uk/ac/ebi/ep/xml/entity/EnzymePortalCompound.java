@@ -6,7 +6,6 @@
 package uk.ac.ebi.ep.xml.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +41,7 @@ public class EnzymePortalCompound implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "COMPOUND_INTERNAL_ID")
-    private BigDecimal compoundInternalId;
+    private Long compoundInternalId;
     @Column(name = "COMPOUND_ID")
     private String compoundId;
     @Column(name = "COMPOUND_NAME")
@@ -64,15 +63,15 @@ public class EnzymePortalCompound implements Serializable {
     public EnzymePortalCompound() {
     }
 
-    public EnzymePortalCompound(BigDecimal compoundInternalId) {
+    public EnzymePortalCompound(Long compoundInternalId) {
         this.compoundInternalId = compoundInternalId;
     }
 
-    public BigDecimal getCompoundInternalId() {
+    public Long getCompoundInternalId() {
         return compoundInternalId;
     }
 
-    public void setCompoundInternalId(BigDecimal compoundInternalId) {
+    public void setCompoundInternalId(Long compoundInternalId) {
         this.compoundInternalId = compoundInternalId;
     }
 
