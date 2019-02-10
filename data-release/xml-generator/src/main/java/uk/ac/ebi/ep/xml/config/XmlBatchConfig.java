@@ -65,7 +65,7 @@ public class XmlBatchConfig {
                 .writer(proteinConfig.xmlWriter())
                 .listener(proteinConfig.logChunkListener())
                 //.listener(proteinConfig.stepExecutionListener())
-                //.listener(proteinConfig.itemReadListener())
+                .listener(proteinConfig.itemReadListener())
                 //.listener(proteinConfig.itemProcessListener())
                 //.listener(proteinConfig.itemWriteListener())
                 //.taskExecutor(new SimpleAsyncTaskExecutor())
