@@ -39,11 +39,11 @@ public class XmlBatchConfig {
                 .writer(ecConfig.xmlWriter())
                 .listener(ecConfig.logChunkListener())
                 //.listener(ecConfig.stepExecutionListener())
-               // .listener(ecConfig.itemReadListener())
+                .listener(ecConfig.itemReadListener())
                 //.listener(ecConfig.itemProcessListener())
                 //.listener(ecConfig.itemWriteListener())
                 //.taskExecutor(new DefaultManagedTaskExecutor() )
-                //.throttleLimit(20)
+                //.throttleLimit(100)
                 .build();
 
         return jobBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_CENTRIC_XML_JOB)

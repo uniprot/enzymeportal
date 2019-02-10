@@ -61,7 +61,7 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
     public void afterProcess(T t, S s) {
         String timeText = printTime(processorStartTime);
 
-        log.error("Time taken to process the entry [" + t + "]: " + timeText);
+        //log.error("Time taken to process the entry [" + t + "]: " + timeText);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
     public void afterWrite(List<? extends T> list) {
         String timeText = printTime(writeStartTime);
 
-        log.error("Time taken to write the entry size [" + list.size() + "]: " + timeText);
+       // log.error("Time taken to write the entry size [" + list.size() + "]: " + timeText);
     }
 
     @Override
