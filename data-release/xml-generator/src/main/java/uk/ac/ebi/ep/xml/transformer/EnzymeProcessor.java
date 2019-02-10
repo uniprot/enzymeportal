@@ -30,7 +30,6 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     private void processOnlyEcWithSwissProtOrEvidence(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields, Set<Ref> refs) {
         enzymes
                 .stream()
-                .parallel()
                 .filter(u -> (u.getUniprotAccession().getEntryType() == 0)
                 || u.getUniprotAccession().getExpEvidenceFlag() == BigInteger.ONE)
                 .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
@@ -53,26 +52,25 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         addCofactorsField(enzyme.getCofactor(), fields);
         addCatalyticActivityField(enzyme.getCatalyticActivity(), fields);
+        addAltNamesField(enzyme.getIntenzAltNamesSet(), fields);
+        addEcSource(enzyme.getEcNumber(), refs);
 
         int numEnzymes = enzyme.getEnzymePortalEcNumbersSet().size();
-        log.warn("Num ezymes to process" + numEnzymes);
-        if(numEnzymes >= 100){
-            
-            processOnlyEcWithSwissProtOrEvidence(enzyme.getEnzymePortalEcNumbersSet(),fields, refs);
-        }else {
-    
+        log.warn(enzyme.getEcNumber() + " Num ezymes to process " + numEnzymes);
+        if (numEnzymes >= 100) {
+
+            processOnlyEcWithSwissProtOrEvidence(enzyme.getEnzymePortalEcNumbersSet(), fields, refs);
+        } else {
+
             enzyme.getEnzymePortalEcNumbersSet()
-                .stream().parallel()
-                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-  
+                    .stream()
+                    .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+
         }
         //default
 //        enzyme.getEnzymePortalEcNumbersSet()
 //                .stream().parallel()
 //                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-
-        addAltNamesField(enzyme.getIntenzAltNamesSet(), fields);
-        addEcSource(enzyme.getEcNumber(), refs);
 
         AdditionalFields additionalFields = new AdditionalFields();
         additionalFields.setField(fields);
