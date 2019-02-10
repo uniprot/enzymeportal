@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
@@ -20,6 +21,7 @@ import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
+import uk.ac.ebi.ep.xml.listeners.DatabaseReaderListener;
 import uk.ac.ebi.ep.xml.listeners.JobCompletionNotificationListener;
 import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
@@ -83,15 +85,14 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
                 //.transacted(false)
                 .build();
     }
-    
-   // @Bean
+
+    // @Bean
 //	public SessionFactory getSessionFactory() {
 //	    if (entityManagerFactory.unwrap(SessionFactory.class) == null) {
 //	        throw new NullPointerException("factory is not a hibernate factory");
 //	    }
 //	    return entityManagerFactory.unwrap(SessionFactory.class);
 //	}
-
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
@@ -142,6 +143,13 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Override
     ChunkListener logChunkListener() {
         return new LogChunkListener(xmlFileProperties.getChunkSize());
+    }
+
+    @Override
+    ItemReadListener itemReadListener() {
+
+        return new DatabaseReaderListener<ProteinGroups>();
+
     }
 
 }

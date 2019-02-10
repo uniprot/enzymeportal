@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
@@ -22,6 +23,7 @@ import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
+import uk.ac.ebi.ep.xml.listeners.DatabaseReaderListener;
 import uk.ac.ebi.ep.xml.listeners.JobCompletionNotificationListener;
 import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
@@ -56,7 +58,6 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     //@Autowired
     //private DataSource dataSource;
-
     @Autowired
     public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
         this.entityManagerFactory = entityManagerFactory;
@@ -67,7 +68,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     @Override
     public JpaPagingItemReader<EnzymePortalUniqueEc> databaseReader() {
         JpaNativeQueryProvider<EnzymePortalUniqueEc> queryProvider = createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class);
-      
+
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
                 .name("READ_UNIQUE_EC")
                 .entityManagerFactory(entityManagerFactory)
@@ -128,6 +129,13 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     @Override
     ChunkListener logChunkListener() {
         return new LogChunkListener(xmlFileProperties.getChunkSize());
+    }
+
+    @Override
+    ItemReadListener itemReadListener() {
+
+        return new DatabaseReaderListener<EnzymePortalUniqueEc>();
+
     }
 
 }

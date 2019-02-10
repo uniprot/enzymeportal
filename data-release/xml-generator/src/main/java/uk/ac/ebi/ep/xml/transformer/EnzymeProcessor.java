@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
@@ -36,7 +35,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    @Transactional
+    //@Transactional
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
         Set<Field> fields = new HashSet<>();
@@ -83,8 +82,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         return entry;
 
     }
-
-    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+//synchronized
+    private void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         // addUniprotIdFields(uniprotEntry, fields);
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
 

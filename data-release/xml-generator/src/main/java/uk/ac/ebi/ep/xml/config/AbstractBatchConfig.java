@@ -17,9 +17,9 @@ import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import uk.ac.ebi.ep.xml.listeners.DatabaseReaderListener;
 import uk.ac.ebi.ep.xml.listeners.GlobalListener;
 import uk.ac.ebi.ep.xml.listeners.XmlProcessorListener;
+import uk.ac.ebi.ep.xml.listeners.XmlStepExecutionListener;
 
 /**
  *
@@ -47,12 +47,13 @@ public abstract class AbstractBatchConfig<T, S> {
     abstract ChunkListener logChunkListener();
 
     protected StepExecutionListener stepExecutionListener() {
-        return new GlobalListener<>();
+        return new XmlStepExecutionListener();
     }
 
-    protected ItemReadListener itemReadListener() {
-        return new DatabaseReaderListener<T>();
-    }
+    abstract ItemReadListener itemReadListener();
+//    protected ItemReadListener itemReadListener() {
+//        return new DatabaseReaderListener<T>();
+//    }
 
     protected ItemProcessListener itemProcessListener() {
         return new XmlProcessorListener<T,S>();

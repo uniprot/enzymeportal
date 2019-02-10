@@ -39,7 +39,7 @@ public class XmlBatchConfig {
                 .writer(ecConfig.xmlWriter())
                 .listener(ecConfig.logChunkListener())
                 //.listener(ecConfig.stepExecutionListener())
-                //.listener(ecConfig.itemReadListener())
+               // .listener(ecConfig.itemReadListener())
                 //.listener(ecConfig.itemProcessListener())
                 //.listener(ecConfig.itemWriteListener())
                 //.taskExecutor(new DefaultManagedTaskExecutor() )
