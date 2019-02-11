@@ -3,6 +3,8 @@ package uk.ac.ebi.ep.xml.transformer;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalEcNumbers;
@@ -23,6 +25,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 @Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
+    private final AtomicInteger count = new AtomicInteger(1);
 //    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
 //        super(xmlFileProperties);
 //    }
@@ -55,26 +58,27 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addEcSource(enzyme.getEcNumber(), refs);
 
         int numEnzymes = enzyme.getEnzymePortalEcNumbersSet().size();
-        log.warn(enzyme.getEcNumber() + " Num ezymes to process " + numEnzymes);
-        if (numEnzymes >= 200) {
+        log.warn(enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : "+ count.getAndIncrement());
 
-            //processOnlyEcWithSwissProtOrEvidence(enzyme.getEnzymePortalEcNumbersSet(), fields, refs);
-            enzyme.getEnzymePortalEcNumbersSet()
-                    .stream().limit(200).parallel()
-                    .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-
-        } else {
-
+        if (numEnzymes <= 100) {
             enzyme.getEnzymePortalEcNumbersSet()
                     .stream().parallel()
                     .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+        } else {
 
+            enzyme.getEnzymePortalEcNumbersSet()
+                    .stream()
+                    .parallel()
+                    .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
+                processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
+
+            }));
         }
+
         //default
 //        enzyme.getEnzymePortalEcNumbersSet()
 //                .stream().parallel()
 //                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-
         AdditionalFields additionalFields = new AdditionalFields();
         additionalFields.setField(fields);
         entry.setAdditionalFields(additionalFields);
@@ -86,8 +90,16 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         return entry;
 
     }
-//synchronized
 
+//    private void processInParallel(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
+//        // List<CompletableFuture<Void>> futures = 
+//        enzyme.getEnzymePortalEcNumbersSet()
+//                .stream()
+//                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
+//            processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
+//        }));
+//    }
+//synchronized
     private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         // addUniprotIdFields(uniprotEntry, fields);
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
