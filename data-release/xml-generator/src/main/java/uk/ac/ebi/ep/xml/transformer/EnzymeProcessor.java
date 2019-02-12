@@ -62,13 +62,14 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         if (numEnzymes <= 100) {
             enzyme.getEnzymePortalEcNumbersSet()
-                    .stream().parallel()
+                    .stream()
+                    //.parallel()
                     .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
         } else {
 
             enzyme.getEnzymePortalEcNumbersSet()
                     .stream()
-                    .parallel()
+                    //.parallel()
                     .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
                 processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
 
