@@ -67,7 +67,7 @@ public class XmlBatchConfig {
                 //.listener(proteinConfig.stepExecutionListener())
                 .listener(proteinConfig.itemReadListener())
                 //.listener(proteinConfig.itemProcessListener())
-                //.listener(proteinConfig.itemWriteListener())
+                .listener(proteinConfig.itemWriteListener())
                 //.taskExecutor(new SimpleAsyncTaskExecutor())
                 //.throttleLimit(10)
                 .build();
