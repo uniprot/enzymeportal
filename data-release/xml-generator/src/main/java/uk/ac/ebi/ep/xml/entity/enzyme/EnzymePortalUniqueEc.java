@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.xml.entity.enzyme;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -22,18 +23,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "ENZYME_PORTAL_UNIQUE_EC")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EnzymePortalUniqueEc.findAll", query = "SELECT e FROM EnzymePortalUniqueEc e")
-    ,
-    @NamedQuery(name = "EnzymePortalUniqueEc.findByEcNumber", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecNumber = :ecNumber")
-    ,
-    @NamedQuery(name = "EnzymePortalUniqueEc.findByEcFamily", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecFamily = :ecFamily")
-    ,
-    @NamedQuery(name = "EnzymePortalUniqueEc.findByEnzymeName", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.enzymeName = :enzymeName")
-    ,
-    @NamedQuery(name = "EnzymePortalUniqueEc.findByCatalyticActivity", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.catalyticActivity = :catalyticActivity")
-    ,
-    @NamedQuery(name = "EnzymePortalUniqueEc.findByTransferFlag", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.transferFlag = :transferFlag")
-    ,
+    @NamedQuery(name = "EnzymePortalUniqueEc.findAll", query = "SELECT e FROM EnzymePortalUniqueEc e"),
+    @NamedQuery(name = "EnzymePortalUniqueEc.findByEcNumber", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecNumber = :ecNumber"),
+    @NamedQuery(name = "EnzymePortalUniqueEc.findByEcFamily", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecFamily = :ecFamily"),
+    @NamedQuery(name = "EnzymePortalUniqueEc.findByEnzymeName", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.enzymeName = :enzymeName"),
+    @NamedQuery(name = "EnzymePortalUniqueEc.findByCatalyticActivity", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.catalyticActivity = :catalyticActivity"),
+    @NamedQuery(name = "EnzymePortalUniqueEc.findByTransferFlag", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.transferFlag = :transferFlag"),
     @NamedQuery(name = "EnzymePortalUniqueEc.findByCofactor", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.cofactor = :cofactor")})
 public class EnzymePortalUniqueEc implements Serializable {
 
@@ -57,7 +52,7 @@ public class EnzymePortalUniqueEc implements Serializable {
     private String cofactor;
 
     @OneToMany(mappedBy = "ecNumber")
-   // @Fetch(FetchMode.JOIN)
+    // @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;// = new HashSet<>();
 
     public EnzymePortalUniqueEc() {
@@ -120,7 +115,8 @@ public class EnzymePortalUniqueEc implements Serializable {
 //        if (enzymePortalEcNumbersSet == null) {
 //            enzymePortalEcNumbersSet = new HashSet<>();
 //        }
-        return enzymePortalEcNumbersSet;
+        return Collections.synchronizedSet(enzymePortalEcNumbersSet);
+        //return enzymePortalEcNumbersSet;
     }
 
     public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {
@@ -161,6 +157,5 @@ public class EnzymePortalUniqueEc implements Serializable {
     public void setIntenzAltNamesSet(Set<IntenzAltNames> intenzAltNamesSet) {
         this.intenzAltNamesSet = intenzAltNamesSet;
     }
-
 
 }

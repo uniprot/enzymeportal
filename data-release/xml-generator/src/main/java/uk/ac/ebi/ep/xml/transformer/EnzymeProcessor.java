@@ -1,13 +1,11 @@
 package uk.ac.ebi.ep.xml.transformer;
 
-import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
-import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.enzyme.IntenzAltNames;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
@@ -29,20 +27,22 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
 //        super(xmlFileProperties);
 //    }
-    private void processOnlyEcWithSwissProtOrEvidence(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields, Set<Ref> refs) {
-        enzymes
-                .stream()
-                .filter(u -> (u.getUniprotAccession().getEntryType() == 0)
-                || u.getUniprotAccession().getExpEvidenceFlag() == BigInteger.ONE)
-                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-
-    }
+//    private void processOnlyEcWithSwissProtOrEvidence(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields, Set<Ref> refs) {
+//        enzymes
+//                .stream()
+//                .filter(u -> (u.getUniprotAccession().getEntryType() == 0)
+//                || u.getUniprotAccession().getExpEvidenceFlag() == BigInteger.ONE)
+//                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+//
+//    }
 
     //@Transactional
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
-        Set<Field> fields = new HashSet<>();
-        Set<Ref> refs = new HashSet<>();
+        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+        //Set s = Collections.synchronizedSet(new HashSet<>());
+        //Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
@@ -59,22 +59,29 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         int numEnzymes = enzyme.getEnzymePortalEcNumbersSet().size();
         log.warn(enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : "+ count.getAndIncrement());
-
-        if (numEnzymes <= 100) {
+        
             enzyme.getEnzymePortalEcNumbersSet()
                     .stream()
-                    //.parallel()
-                    .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-        } else {
-
-            enzyme.getEnzymePortalEcNumbersSet()
-                    .stream()
-                    //.parallel()
+                    .parallel()
                     .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
                 processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
 
             }));
-        }
+//        if (numEnzymes <= 1000) {
+//            enzyme.getEnzymePortalEcNumbersSet()
+//                    .stream()
+//                    //.parallel()
+//                    .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+//        } else {
+//
+//            enzyme.getEnzymePortalEcNumbersSet()
+//                    .stream()
+//                    //.parallel()
+//                    .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
+//                processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
+//
+//            }));
+//        }
 
         //default
 //        enzyme.getEnzymePortalEcNumbersSet()
@@ -101,7 +108,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //        }));
 //    }
 //synchronized
-    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
         // addUniprotIdFields(uniprotEntry, fields);
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
 

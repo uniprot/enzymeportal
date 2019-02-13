@@ -1,11 +1,11 @@
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +33,15 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
-     private final AtomicInteger count = new AtomicInteger(1);
+    private final AtomicInteger count = new AtomicInteger(1);
 
     @Override
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
-        Set<Field> fields = new HashSet<>();
-        Set<Ref> refs = new HashSet<>();
+           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+//        Set<Field> fields = new HashSet<>();
+//        Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -79,7 +81,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
     }
 
-    private void addPrimaryProtein(ProteinGroups proteinGroups, final Set<Field> fields, Set<Ref> refs) {
+    private void addPrimaryProtein(ProteinGroups proteinGroups, final CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
             addPrimaryProteinField(primaryProtein, fields);
@@ -99,17 +101,21 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     }
 
-    private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, Set<Field> fields, Set<Ref> refs) {
-       log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : "+ count.getAndIncrement());
+    private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+        log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
         entries.stream()
-                //.parallel()
+                .parallel()
                 .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
             processEntries(proteinGroups, uniprotEntry, fields, refs);
 
         }));
+
+       // entries.forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+
     }
 
-    private synchronized void processEntries(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    //synchronized
+    private synchronized void processEntries(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
         addPrimaryEntities(proteinGroups, uniprotEntry, fields);
 
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
