@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -103,14 +102,16 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
         log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
+//        entries.stream()
+//                .parallel()
+//                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
+//            processEntries(proteinGroups, uniprotEntry, fields, refs);
+//
+//        }));
+
         entries.stream()
                 .parallel()
-                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
-            processEntries(proteinGroups, uniprotEntry, fields, refs);
-
-        }));
-
-       // entries.forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+                .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
     }
 

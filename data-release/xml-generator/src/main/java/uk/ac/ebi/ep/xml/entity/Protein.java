@@ -11,7 +11,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.Data;
 import org.springframework.util.StringUtils;
 
 /**
@@ -19,7 +18,7 @@ import org.springframework.util.StringUtils;
  * @author Joseph
  */
 @MappedSuperclass
-@Data
+//@Data
 public class Protein {
 
     @Basic(optional = false)
@@ -201,5 +200,200 @@ public class Protein {
         }
         return commonName;
     }
+
+    public long getDbentryId() {
+        return dbentryId;
+    }
+
+    public void setDbentryId(long dbentryId) {
+        this.dbentryId = dbentryId;
+    }
+
+    public String getAccession() {
+        return accession;
+    }
+
+    public void setAccession(String accession) {
+        this.accession = accession;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(Long taxId) {
+        this.taxId = taxId;
+    }
+
+    public String getProteinName() {
+        return proteinName;
+    }
+
+    public void setProteinName(String proteinName) {
+        this.proteinName = proteinName;
+    }
+
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
+
+    public Integer getSequenceLength() {
+        return sequenceLength;
+    }
+
+    public void setSequenceLength(Integer sequenceLength) {
+        this.sequenceLength = sequenceLength;
+    }
+
+    public Date getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
+    }
+
+    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public Short getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(Short entryType) {
+        this.entryType = entryType;
+    }
+
+    public BigInteger getFunctionLength() {
+        return functionLength;
+    }
+
+    public void setFunctionLength(BigInteger functionLength) {
+        this.functionLength = functionLength;
+    }
+
+    public String getSynonymNames() {
+        return synonymNames;
+    }
+
+    public void setSynonymNames(String synonymNames) {
+        this.synonymNames = synonymNames;
+    }
+
+    public BigInteger getExpEvidenceFlag() {
+        return expEvidenceFlag;
+    }
+
+    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
+        this.expEvidenceFlag = expEvidenceFlag;
+    }
+
+    public BigInteger getUncharacterized() {
+        return uncharacterized;
+    }
+
+    public void setUncharacterized(BigInteger uncharacterized) {
+        this.uncharacterized = uncharacterized;
+    }
+
+    public Character getPdbFlag() {
+        return pdbFlag;
+    }
+
+    public void setPdbFlag(Character pdbFlag) {
+        this.pdbFlag = pdbFlag;
+    }
+
+    public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
+        return entryToGeneMappingSet;
+    }
+
+    public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
+        this.entryToGeneMappingSet = entryToGeneMappingSet;
+    }
+
+    public Set<EnzymePortalDisease> getEnzymePortalDiseaseSet() {
+        return enzymePortalDiseaseSet;
+    }
+
+    public void setEnzymePortalDiseaseSet(Set<EnzymePortalDisease> enzymePortalDiseaseSet) {
+        this.enzymePortalDiseaseSet = enzymePortalDiseaseSet;
+    }
+
+    public Set<UniprotXref> getUniprotXrefSet() {
+        return uniprotXrefSet;
+    }
+
+    public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
+        this.uniprotXrefSet = uniprotXrefSet;
+    }
+
+    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
+        return enzymePortalCompoundSet;
+    }
+
+    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
+        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+    }
+
+    public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
+        return enzymeCatalyticActivitySet;
+    }
+
+    public void setEnzymeCatalyticActivitySet(Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet) {
+        this.enzymeCatalyticActivitySet = enzymeCatalyticActivitySet;
+    }
+
+    public Set<EnzymePortalPathways> getEnzymePortalPathwaysSet() {
+        return enzymePortalPathwaysSet;
+    }
+
+    public void setEnzymePortalPathwaysSet(Set<EnzymePortalPathways> enzymePortalPathwaysSet) {
+        this.enzymePortalPathwaysSet = enzymePortalPathwaysSet;
+    }
+
+    public Set<UniprotFamilies> getUniprotFamiliesSet() {
+        return uniprotFamiliesSet;
+    }
+
+    public void setUniprotFamiliesSet(Set<UniprotFamilies> uniprotFamiliesSet) {
+        this.uniprotFamiliesSet = uniprotFamiliesSet;
+    }
+
+    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+        return enzymePortalReactionSet;
+    }
+
+    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+        this.enzymePortalReactionSet = enzymePortalReactionSet;
+    }
+
+    public Set<EnzymePortalReactant> getEnzymePortalReactantSet() {
+        return enzymePortalReactantSet;
+    }
+
+    public void setEnzymePortalReactantSet(Set<EnzymePortalReactant> enzymePortalReactantSet) {
+        this.enzymePortalReactantSet = enzymePortalReactantSet;
+    }
+    
+    
+    
 
 }

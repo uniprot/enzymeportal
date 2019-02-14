@@ -41,7 +41,7 @@ public class XmlBatchConfig {
                 //.listener(ecConfig.stepExecutionListener())
                 //.listener(ecConfig.itemReadListener())
                 //.listener(ecConfig.itemProcessListener())
-                .listener(ecConfig.itemWriteListener())
+                //.listener(ecConfig.itemWriteListener())
                 //.taskExecutor(new DefaultManagedTaskExecutor() )
                 //.throttleLimit(100)
                 .build();
@@ -65,9 +65,9 @@ public class XmlBatchConfig {
                 .writer(proteinConfig.xmlWriter())
                 .listener(proteinConfig.logChunkListener())
                 //.listener(proteinConfig.stepExecutionListener())
-                .listener(proteinConfig.itemReadListener())
+                //.listener(proteinConfig.itemReadListener())
                 //.listener(proteinConfig.itemProcessListener())
-                .listener(proteinConfig.itemWriteListener())
+                //.listener(proteinConfig.itemWriteListener())
                 //.taskExecutor(new SimpleAsyncTaskExecutor())
                 //.throttleLimit(10)
                 .build();

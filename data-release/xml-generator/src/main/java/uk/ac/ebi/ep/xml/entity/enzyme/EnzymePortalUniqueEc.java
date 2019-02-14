@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.xml.entity.enzyme;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -115,8 +114,8 @@ public class EnzymePortalUniqueEc implements Serializable {
 //        if (enzymePortalEcNumbersSet == null) {
 //            enzymePortalEcNumbersSet = new HashSet<>();
 //        }
-        return Collections.synchronizedSet(enzymePortalEcNumbersSet);
-        //return enzymePortalEcNumbersSet;
+        //return Collections.synchronizedSet(enzymePortalEcNumbersSet);
+        return enzymePortalEcNumbersSet;
     }
 
     public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {

@@ -1,8 +1,8 @@
 package uk.ac.ebi.ep.xml.transformer;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -23,26 +23,17 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 @Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
+//    ForkJoinPool forkJoinPool = new ForkJoinPool();
     private final AtomicInteger count = new AtomicInteger(1);
-//    public EnzymeProcessor(XmlFileProperties xmlFileProperties) {
-//        super(xmlFileProperties);
-//    }
-//    private void processOnlyEcWithSwissProtOrEvidence(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields, Set<Ref> refs) {
-//        enzymes
-//                .stream()
-//                .filter(u -> (u.getUniprotAccession().getEntryType() == 0)
-//                || u.getUniprotAccession().getExpEvidenceFlag() == BigInteger.ONE)
-//                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-//
-//    }
 
     //@Transactional
     @Override
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
-        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+//        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+//        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
         //Set s = Collections.synchronizedSet(new HashSet<>());
-        //Set<Ref> refs = new HashSet<>();
+        Set<Field> fields = new HashSet<>();
+        Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
@@ -58,30 +49,21 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addEcSource(enzyme.getEcNumber(), refs);
 
         int numEnzymes = enzyme.getEnzymePortalEcNumbersSet().size();
-        log.warn(enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : "+ count.getAndIncrement());
-        
-            enzyme.getEnzymePortalEcNumbersSet()
-                    .stream()
-                    .parallel()
-                    .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
-                processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
+        log.warn(enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : " + count.getAndIncrement());
+//        log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +" FJP "+ forkJoinPool.getParallelism());
+//        Stream<List<EnzymePortalEcNumbers>> chunkedStream = StreamUtils.buffer(enzyme.getEnzymePortalEcNumbersSet().stream(), 1_000);
+//
+//  
+//        chunkedStream
+//                .flatMap(List::stream)
+//                .forEach(e -> processUniprotEntry(e.getUniprotAccession(), fields, refs));
 
-            }));
-//        if (numEnzymes <= 1000) {
-//            enzyme.getEnzymePortalEcNumbersSet()
-//                    .stream()
-//                    //.parallel()
-//                    .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
-//        } else {
-//
-//            enzyme.getEnzymePortalEcNumbersSet()
-//                    .stream()
-//                    //.parallel()
-//                    .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
-//                processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
-//
-//            }));
-//        }
+        enzyme.getEnzymePortalEcNumbersSet()
+                .stream()
+                //.parallel()
+                .forEach(uniprotEntry -> CompletableFuture.supplyAsync((()
+                -> processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs))).toCompletableFuture().join());
+
 
         //default
 //        enzyme.getEnzymePortalEcNumbersSet()
@@ -99,17 +81,9 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-//    private void processInParallel(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
-//        // List<CompletableFuture<Void>> futures = 
-//        enzyme.getEnzymePortalEcNumbersSet()
-//                .stream()
-//                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
-//            processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs);
-//        }));
-//    }
 //synchronized
-    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
-        // addUniprotIdFields(uniprotEntry, fields);
+    private synchronized Set<Field> processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
 
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
@@ -128,6 +102,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
         addReactantFields(uniprotEntry.getEnzymePortalReactantSet(), fields);
         addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
+        return new HashSet<>();
     }
 
     private void addAltNamesField(Set<IntenzAltNames> altNames, Set<Field> fields) {
@@ -163,4 +138,9 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //                .forEachOrdered(pdbfield -> fields.add(pdbfield));
 //
 //    }
+    //https://medium.com/@johnmcclean/dysfunctional-programming-in-java-3-functional-composition-16828f0609c2
+    //https://medium.com/@johnmcclean/reactive-programming-with-java-8-and-simple-react-batching-and-chunking-ecac62ce8bec
+//LazyReact builder = new LazyReact(10,100);
+//LazyStream<EnzymePortalEcNumbers> s = new FutureStreamImpl(builder, enzyme.getEnzymePortalEcNumbersSet().stream());
+//s.forEach(e->processUniprotEntry(e.getUniprotAccession(), fields, refs));
 }
