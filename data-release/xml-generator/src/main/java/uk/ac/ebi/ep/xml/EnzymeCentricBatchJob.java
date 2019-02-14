@@ -23,7 +23,7 @@ public class EnzymeCentricBatchJob {
 
     public static void main(String[] args) throws Exception {
 //xmllint --nocdata --format enzyme-portal-enzymes-ebeye.xml | grep -c '<entry id="2.7.1.1">'
-        //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
         ForkJoinPool forkJoinPool = new ForkJoinPool();
                 log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +"  FJP : "+ forkJoinPool.getParallelism());
         ConfigurableApplicationContext context = SpringApplication.run(EnzymeCentricBatchJob.class, args);

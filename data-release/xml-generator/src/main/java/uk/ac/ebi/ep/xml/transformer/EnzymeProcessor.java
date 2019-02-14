@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.xml.transformer;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -58,17 +57,19 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //                .flatMap(List::stream)
 //                .forEach(e -> processUniprotEntry(e.getUniprotAccession(), fields, refs));
 
-        enzyme.getEnzymePortalEcNumbersSet()
-                .stream()
-                //.parallel()
-                .forEach(uniprotEntry -> CompletableFuture.supplyAsync((()
-                -> processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs))).toCompletableFuture().join());
+//        enzyme.getEnzymePortalEcNumbersSet()
+//                .stream()
+//                //.parallel()
+//                .forEach(uniprotEntry -> CompletableFuture.supplyAsync((()
+//                -> processUniprotEntry(uniprotEntry.getUniprotAccession(), fields, refs))).toCompletableFuture().join());
 
 
         //default
-//        enzyme.getEnzymePortalEcNumbersSet()
-//                .stream().parallel()
-//                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+        enzyme.getEnzymePortalEcNumbersSet()
+                .stream()
+                .parallel()
+                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+        
         AdditionalFields additionalFields = new AdditionalFields();
         additionalFields.setField(fields);
         entry.setAdditionalFields(additionalFields);
