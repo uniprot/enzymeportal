@@ -76,8 +76,8 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(queryProvider)
-                //.saveState(false)
-                //.transacted(false)
+                .saveState(false)
+                .transacted(false)
                 .build();
 
     }

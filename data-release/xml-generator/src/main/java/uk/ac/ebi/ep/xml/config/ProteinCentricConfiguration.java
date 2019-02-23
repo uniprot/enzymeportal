@@ -65,34 +65,17 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Override
     @Bean(destroyMethod = "", name = "proteinDatabaseReader")
     public ItemReader<ProteinGroups> databaseReader() {
-//        HibernateNativeQueryProvider provider = new HibernateNativeQueryProvider();
-//        provider.setEntityClass(ProteinGroups.class);
-//        provider.setSqlQuery(NATIVE_READ_QUERY);
-//        return new HibernatePagingItemReaderBuilder<ProteinGroups>()
-//                .name("READ_UNIQUE_PROTEIN_GROUP")
-//                .fetchSize(xmlFileProperties.getPageSize())
-//                .pageSize(xmlFileProperties.getPageSize())
-//                .queryProvider(provider).sessionFactory(getSessionFactory())
-//                .useStatelessSession(false)
-//                .build();
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
                 .name("READ_UNIQUE_PROTEIN_GROUP")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
-                //.saveState(false)
-                //.transacted(false)
+                .saveState(false)
+                .transacted(false)
                 .build();
     }
 
-    // @Bean
-//	public SessionFactory getSessionFactory() {
-//	    if (entityManagerFactory.unwrap(SessionFactory.class) == null) {
-//	        throw new NullPointerException("factory is not a hibernate factory");
-//	    }
-//	    return entityManagerFactory.unwrap(SessionFactory.class);
-//	}
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 

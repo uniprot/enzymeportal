@@ -34,11 +34,35 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     protected static final String UNREVIEWED = "unreviewed";
     private final AtomicInteger count = new AtomicInteger(1);
 
+//    @Override
+//    public Entry process(ProteinGroups proteinGroups) throws Exception {
+//        AdditionalFields additionalFields = new AdditionalFields();
+//           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+//         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+////        Set<Field> fields = new HashSet<>();
+////        Set<Ref> refs = new HashSet<>();
+//        Entry entry = new Entry();
+//
+//        entry.setId(proteinGroups.getProteinGroupId());
+//        entry.setName(proteinGroups.getProteinName());
+//        entry.setDescription(proteinGroups.getProteinName());
+//
+//        addPrimaryProtein(proteinGroups, fields, refs);
+//
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
+//
+//        CrossReferences cr = new CrossReferences();
+//        cr.setRef(refs);
+//        entry.setCrossReferences(cr);
+//
+//        return entry;
+//    }
     @Override
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
-           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
 //        Set<Field> fields = new HashSet<>();
 //        Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
@@ -102,17 +126,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
         log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
-//        entries.stream()
-//                .parallel()
-//                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
-//            processEntries(proteinGroups, uniprotEntry, fields, refs);
-//
-//        }));
 
         entries.stream()
                 .parallel()
                 .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
-
+        
     }
 
     //synchronized
@@ -132,6 +150,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
         addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+        addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
+        addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
     }
 
     private void addPrimaryEntities(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields) {
@@ -273,5 +293,76 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         }
     }
+    
+    
+    //TODO
+    
+    
+//        private void addProteinCentricFields(Entry entry, ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+//        log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
+////        entries.stream()
+////                .parallel()
+////                .map(uniprotEntry -> CompletableFuture.runAsync(() -> {
+////            processEntries(proteinGroups, uniprotEntry, fields, refs);
+////
+////        }));
+//
+////        entries.stream()
+////                .parallel()
+////                .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+//        processInParallel(entry, proteinGroups, fields, refs);
+//    }
+    
+//        private void processInParallel(Entry entry, ProteinGroups proteinGroups, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+//        // final AtomicInteger tc = new AtomicInteger(1);
+//        // AtomicInteger atom = new AtomicInteger(1);
+//        //SimpleTimer timer = new SimpleTimer();
+//        LazyReact.parallelCommonBuilder()
+//                .async()
+//                //.ofAsync(() ->enzyme.getEnzymePortalEcNumbersSet())
+//                //.flatMap(x->x.stream())
+//                .from(proteinGroups.getUniprotEntryList())
+//                .grouped(100)
+//                .flatMap(x -> x.stream())
+//                //.peek(data -> System.out.println(" CHECK "+ atom.getAndIncrement()))
+//                .forEachAsync(ec -> process(proteinGroups, ec, fields, refs, entry));
+//
+//    }
+//
+//    private Entry process(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs, Entry entry) {
+//
+//        AtomicInteger tc = new AtomicInteger(1);
+//        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+//        addPrimaryEntities(proteinGroups, uniprotEntry, fields);
+//
+//        addScientificNameFields(uniprotEntry.getScientificName(), fields);
+//        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+//
+//        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+//        addAccessionXrefs(uniprotEntry.getAccession(), refs);
+//
+//        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+//
+//        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+//        addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
+//        addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
+//        addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+//        addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+//          addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
+//
+//        AdditionalFields additionalFields = new AdditionalFields();
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
+//
+//        CrossReferences cr = new CrossReferences();
+//        cr.setRef(refs);
+//        entry.setCrossReferences(cr);
+//
+//        stopWatch.stop();
+//        //log.error("Name-"+uniprotEntry.getAccession()+"="+tc.getAndIncrement() + " Executing query:{}, took: {}", uniprotEntry.getAccession(), stopWatch.getTotalTimeSeconds() + " sec");
+//
+//        return entry;
+//    }
 
 }
