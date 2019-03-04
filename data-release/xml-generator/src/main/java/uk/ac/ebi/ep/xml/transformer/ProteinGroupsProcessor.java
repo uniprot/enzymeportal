@@ -1,12 +1,14 @@
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.ItemProcessor;
@@ -61,28 +63,47 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     @Override
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
-        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
-//        Set<Field> fields = new HashSet<>();
-//        Set<Ref> refs = new HashSet<>();
+        CrossReferences cr = new CrossReferences();
+        // CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+        //CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+        Set<Field> fields = new HashSet<>();
+        Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
         entry.setName(proteinGroups.getProteinName());
         entry.setDescription(proteinGroups.getProteinName());
 
-        addPrimaryProtein(proteinGroups, fields, refs);
+        return addPrimaryProtein(proteinGroups, fields, refs, additionalFields, cr, entry);
 
-        additionalFields.setField(fields);
-        entry.setAdditionalFields(additionalFields);
-
-        CrossReferences cr = new CrossReferences();
-        cr.setRef(refs);
-        entry.setCrossReferences(cr);
-
-        return entry;
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
+//
+//        CrossReferences cr = new CrossReferences();
+//        cr.setRef(refs);
+//        entry.setCrossReferences(cr);
+//
+//        return entry;
     }
 
+    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, UniprotEntry uniprotEntry, final Set<Field> fields) {
+
+        if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
+            List<String> specieList = Stream.of(uniprotEntry.getAccession() + ";" + uniprotEntry.getCommonName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId())
+                    .collect(Collectors.toList());
+            if (!specieList.isEmpty()) {
+                String rs = String.join(" | ", specieList);
+
+                String rsField = StringUtils.removeEnd(rs, " | ");
+
+                Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+                fields.add(relatedSpeciesField);
+            }
+        }
+
+    }
+
+    @Deprecated
     private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
         // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
 
@@ -104,7 +125,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
     }
 
-    private void addPrimaryProtein(ProteinGroups proteinGroups, final CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+    private Entry addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields, CrossReferences cr, Entry entry) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
             addPrimaryProteinField(primaryProtein, fields);
@@ -114,27 +135,31 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             addPrimaryFunctionFields(primaryProtein, fields);
 
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
-
-            addRelatedSpeciesField(primaryProtein, entries, fields);
+            log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
+            //addRelatedSpeciesField(primaryProtein, entries, fields);
 
             //for (UniprotEntry uniprotEntry : relatedProteins) {// TODO commented out due to uniprot_family issues where found in enzyme-centric but zero in protein-centric
-            addProteinCentricFields(proteinGroups, entries, fields, refs);
+            //addProteinCentricFields(proteinGroups, entries, fields, refs);
+            return entries
+                    .stream()
+                    .map(uniprotEntry -> processAsync(proteinGroups, uniprotEntry, fields, refs, additionalFields, cr, entry).join())
+                    .findAny()
+                    .get();
+                    //.join();
 
         }
-
+        return entry;
     }
 
-    private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
-        log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
-
-        entries.stream()
-                .parallel()
-                .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
-        
+    private CompletableFuture<Entry> processAsync(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields, CrossReferences cr, Entry entry) {
+        return CompletableFuture.supplyAsync(() -> computeEntry(proteinGroups, uniprotEntry, fields, refs, additionalFields, cr, entry));
     }
 
-    //synchronized
-    private synchronized void processEntries(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+    private Entry computeEntry(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields, CrossReferences cr, Entry entry) {
+
+        //related protein
+        addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), uniprotEntry, fields);
+
         addPrimaryEntities(proteinGroups, uniprotEntry, fields);
 
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
@@ -152,8 +177,45 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
         addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
         addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
+
+        additionalFields.setField(fields);
+
+        entry.setAdditionalFields(additionalFields);
+
+        cr.setRef(refs);
+        entry.setCrossReferences(cr);
+
+        return entry;
     }
 
+//    private void addProteinCentricFields(ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+//        log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
+//
+//        entries.stream()
+//                .parallel()
+//                .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+//
+//    }
+    //synchronized
+//    private synchronized void processEntries(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
+//        addPrimaryEntities(proteinGroups, uniprotEntry, fields);
+//
+//        addScientificNameFields(uniprotEntry.getScientificName(), fields);
+//        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+//
+//        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+//        addAccessionXrefs(uniprotEntry.getAccession(), refs);
+//
+//        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+//
+//        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+//        addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
+//        addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
+//        addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+//        addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+//        addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
+//        addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
+//    }
     private void addPrimaryEntities(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields) {
         if (uniprotEntry.getAccession().equals(proteinGroups.getPrimaryProtein().getAccession())) {
 
@@ -293,11 +355,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         }
     }
-    
-    
+
     //TODO
-    
-    
 //        private void addProteinCentricFields(Entry entry, ProteinGroups proteinGroups, List<UniprotEntry> entries, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
 //        log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + entries.size() + " count : " + count.getAndIncrement());
 ////        entries.stream()
@@ -312,7 +371,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 ////                .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 //        processInParallel(entry, proteinGroups, fields, refs);
 //    }
-    
 //        private void processInParallel(Entry entry, ProteinGroups proteinGroups, CopyOnWriteArraySet<Field> fields, CopyOnWriteArraySet<Ref> refs) {
 //        // final AtomicInteger tc = new AtomicInteger(1);
 //        // AtomicInteger atom = new AtomicInteger(1);
@@ -364,5 +422,4 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //
 //        return entry;
 //    }
-
 }

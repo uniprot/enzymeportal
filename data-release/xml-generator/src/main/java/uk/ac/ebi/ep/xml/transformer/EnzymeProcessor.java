@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.xml.transformer;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -31,9 +32,11 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     public Entry process(EnzymePortalUniqueEc enzyme) throws Exception {
 //        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
 //        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
-        //Set s = Collections.synchronizedSet(new HashSet<>());
+
         Set<Field> fields = new HashSet<>();
         Set<Ref> refs = new HashSet<>();
+        AdditionalFields additionalFields = new AdditionalFields();
+        CrossReferences cr = new CrossReferences();
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
@@ -52,21 +55,27 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         log.warn(enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : " + count.getAndIncrement());
 
         //default
-        enzyme.getEnzymePortalEcNumbersSet()
+//        enzyme.getEnzymePortalEcNumbersSet()
+//                .stream()
+//                .parallel()
+//                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+//
+//        AdditionalFields additionalFields = new AdditionalFields();
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
+//
+//        CrossReferences cr = new CrossReferences();
+//        cr.setRef(refs);
+//        entry.setCrossReferences(cr);
+
+        return enzyme.getEnzymePortalEcNumbersSet()
                 .stream()
-                .parallel()
-                .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
+                .map(data -> processAsync(data.getUniprotAccession(), fields, refs, additionalFields, cr, entry).join())
+                .findAny()
+                .get();
+                //.join();
 
-        AdditionalFields additionalFields = new AdditionalFields();
-        additionalFields.setField(fields);
-        entry.setAdditionalFields(additionalFields);
-
-        CrossReferences cr = new CrossReferences();
-        cr.setRef(refs);
-        entry.setCrossReferences(cr);
-
-        return entry;
-
+        // return entry;
     }
     // @Transactional
 //    @Override
@@ -109,11 +118,34 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //        return entry;
 //    }
 
-//synchronized
-    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    private CompletableFuture<Entry> processAsync(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields, CrossReferences cr, Entry entry) {
+        return CompletableFuture.supplyAsync(() -> computeEntry(uniprotEntry, fields, refs, additionalFields, cr, entry));
+    }
 
+    private Entry computeEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields, CrossReferences cr, Entry entry) {
+        //CompletableFuture.runAsync(() -> processUniprotEntry(uniprotEntry, fields, refs));
+//        Set<Field> proteinField = addProteinNameFields(uniprotEntry.getProteinName(), fields);
+//        Set<Field> scientificNameField = addScientificNameFields(uniprotEntry.getScientificName(), fields);
+//        Set<Field> commonNameField = addCommonNameFields(uniprotEntry.getCommonName(), fields);
+//        Set<Field> geneNameField = addGeneNameFields(uniprotEntry.getEntryToGeneMappingSet(), fields);
+//        Set<Field> synNameField = addSynonymFields(uniprotEntry.getSynonymNames(), uniprotEntry.getProteinName(), fields);
+//
+//        Set<Ref> reactionRefs = addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
+//        Set<Ref> accRef = addAccessionXrefs(uniprotEntry.getAccession(), refs);
+//        Set<Ref> taxRef = addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+//        Set<Ref> pathRef = addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+
+        // entry = addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs, entry);
+        // entry = addCompoundFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs, entry);
+        //entry = addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs, entry);
+        // entry = addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs, entry);
+//        additionalFields.setField(proteinField);
+//        additionalFields.setField(scientificNameField);
+//        additionalFields.setField(commonNameField);
+//        additionalFields.setField(geneNameField);
+//        additionalFields.setField(synNameField);
+//     
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
-
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
         addGeneNameFields(uniprotEntry.getEntryToGeneMappingSet(), fields);
@@ -121,17 +153,52 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
 
         addSynonymFields(uniprotEntry.getSynonymNames(), uniprotEntry.getProteinName(), fields);
-        //addSource(enzyme, refs);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
         addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
 
         addCompoundFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
-        //addReactantFields(uniprotEntry.getEnzymePortalReactantSet(), fields);
         addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
         addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
+
+        additionalFields.setField(fields);
+
+        entry.setAdditionalFields(additionalFields);
+
+//        cr.setRef(reactionRefs);
+//        cr.setRef(accRef);
+//        cr.setRef(taxRef);
+//        cr.setRef(pathRef);
+        cr.setRef(refs);
+        entry.setCrossReferences(cr);
+
+        return entry;
     }
+//synchronized
+//original impl
+//    private synchronized void processUniprotEntry(UniprotEntryEnzyme uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+//
+//        addProteinNameFields(uniprotEntry.getProteinName(), fields);
+//
+//        addScientificNameFields(uniprotEntry.getScientificName(), fields);
+//        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+//        addGeneNameFields(uniprotEntry.getEntryToGeneMappingSet(), fields);
+//
+//        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+//
+//        addSynonymFields(uniprotEntry.getSynonymNames(), uniprotEntry.getProteinName(), fields);
+//        //addSource(enzyme, refs);
+//        addAccessionXrefs(uniprotEntry.getAccession(), refs);
+//        addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+//
+//        addCompoundFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+//        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+//        addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+//        //addReactantFields(uniprotEntry.getEnzymePortalReactantSet(), fields);
+//        addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
+//        addReactionXrefs(uniprotEntry.getEnzymePortalReactionSet(), refs);
+//    }
 
     private void addAltNamesField(Set<IntenzAltNames> altNames, Set<Field> fields) {
 
