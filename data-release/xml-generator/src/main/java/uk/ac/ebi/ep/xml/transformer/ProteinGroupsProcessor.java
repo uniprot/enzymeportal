@@ -223,7 +223,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
     private void splitAndProcess(List<UniprotEntry> entries, ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
         //ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        //ForkJoinPool forkJoinPool = new ForkJoinPool(96);// ForkJoinPool.commonPool();
+        ForkJoinPool forkJoinPool =  ForkJoinPool.commonPool();
         List<List<UniprotEntry>> chunks = ListUtils.partition(entries, entries.size() / 10);
 
         List<CompletableFuture<Void>> cfList = new ArrayList<>();
@@ -233,7 +233,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
                     .runAsync(() -> chunks.get(index)
                     .parallelStream()
                     //.peek(p->System.out.println(" POOL "+ forkJoinPool))
-                    .forEach(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref)));
+                    .forEach(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref)),forkJoinPool);
             cfList.add(task);
         }
         log.warn("Number of tasks submitted " + cfList.size());
@@ -241,7 +241,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
         CompletableFuture<Void> allCompletableFuture = CompletableFuture.allOf(cfList.toArray(new CompletableFuture<?>[0]));
         allCompletableFuture.join();
 
-        // forkJoinPool.shutdown();
+         forkJoinPool.shutdown();
     }
 
     private FieldAndXref computeEntry(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
