@@ -178,8 +178,8 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
             }
         
             if(numEntry > 1_000){
-            //splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
-            parallel(entries, proteinGroups, fields, refs, fieldAndXref); 
+            splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
+            //parallel(entries, proteinGroups, fields, refs, fieldAndXref); 
             }else{
               parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);  
             }
