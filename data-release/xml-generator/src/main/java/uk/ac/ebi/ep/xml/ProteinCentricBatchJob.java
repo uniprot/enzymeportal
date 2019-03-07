@@ -22,8 +22,9 @@ import uk.ac.ebi.ep.xml.config.DataConfig;
 public class ProteinCentricBatchJob {
 
     public static void main(String[] args) throws Exception {
- System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
-         ForkJoinPool forkJoinPool = new ForkJoinPool();
+ System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "48");
+ //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "16"); 
+         ForkJoinPool forkJoinPool =  new ForkJoinPool();
                 log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +"  FJP : "+ forkJoinPool.getParallelism());
         ConfigurableApplicationContext context = SpringApplication.run(ProteinCentricBatchJob.class, args);
 

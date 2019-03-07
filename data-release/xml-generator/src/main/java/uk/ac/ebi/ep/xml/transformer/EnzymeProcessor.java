@@ -22,7 +22,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  */
 @Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
-
+//https://www.codementor.io/nitinpuri/controlling-parallelism-of-java-8-collection-streams-umex0qbt1
 //    ForkJoinPool forkJoinPool = new ForkJoinPool();
     // private Executor executor = Executors.newCachedThreadPool();
     //private ExecutorService executorService  = Executors.newFixedThreadPool(20);
