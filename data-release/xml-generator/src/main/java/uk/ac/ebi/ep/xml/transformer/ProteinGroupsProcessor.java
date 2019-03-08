@@ -178,15 +178,15 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
             }
             
                 
-                parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
 
-//            if (numEntry > 1_000) {
-//                //splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-//                 //splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
-//                parallel(entries, proteinGroups, fields, refs, fieldAndXref);
-//            } else {
-//                parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-//            }
+            if (numEntry > 1_000) {
+                //splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+                 splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
+                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+            } else {
+                parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+            }
 
             return fieldAndXref;
 
