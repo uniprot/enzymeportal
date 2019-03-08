@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.xml.transformer;
 
+import com.oath.cyclops.react.collectors.lazy.MaxActive;
 import cyclops.futurestream.LazyReact;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -178,15 +179,15 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
             }
             
                 
-                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+                parallel(entries, proteinGroups, fields, refs, fieldAndXref);
 
-            if (numEntry > 1_000) {
-                //splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-                 splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
-                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
-            } else {
-                parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-            }
+//            if (numEntry > 1_000) {
+//                //splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+//                 splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
+//                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+//            } else {
+//                parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+//            }
 
             return fieldAndXref;
 
@@ -201,7 +202,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
 
     }
 
- //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
+ LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
 
     // LazyReact builder = new LazyReact(100, 100);
      //LazyReact builder = new LazyReact();
@@ -214,7 +215,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
 
        
          //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
-        LazyReact builder = new LazyReact(entries.size(), forkJoinPool);
+        //LazyReact builder = new LazyReact(entries.size(), forkJoinPool);
         //LazyReact builder = new LazyReact(100, 100);
         builder.autoOptimizeOn().async()
                 .from(entries)
