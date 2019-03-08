@@ -90,7 +90,7 @@ public class Protein {
 //    protected Set<EnzymePortalReactant> enzymePortalReactantSet;
 //    
     
-
+    
 //        @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
 //    protected Set<EntryToGeneMapping> entryToGeneMappingSet;
 //

@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.xml.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -18,6 +19,7 @@ import uk.ac.ebi.ep.xml.schema.Entry;
  */
 @Configuration
 @EnableBatchProcessing
+@Slf4j
 public class XmlBatchConfig {
 
 
@@ -30,7 +32,7 @@ public class XmlBatchConfig {
 
     @Bean(name = "enzymeXmlJob")
     public Job enzymeXmlJob(JobBuilderFactory jobBuilderFactory,
-            StepBuilderFactory stepBuilderFactory, EnzymeCentricConfiguration ecConfig) throws Exception {
+            StepBuilderFactory stepBuilderFactory, EnzymeCentricConfiguration ecConfig) {
 
         Step uniqueEcStep = stepBuilderFactory.get(EnzymeCentricConfiguration.ENZYME_READ_PROCESS_WRITE_XML_STEP)
                 .<EnzymePortalUniqueEc, Entry>chunk(xmlFileProperties.getChunkSize())
@@ -56,7 +58,7 @@ public class XmlBatchConfig {
 
     @Bean(name = "proteinXmlJob")
     public Job proteinXmlJob(JobBuilderFactory jobBuilderFactory,
-            StepBuilderFactory stepBuilderFactory, ProteinCentricConfiguration proteinConfig) throws Exception {
+            StepBuilderFactory stepBuilderFactory, ProteinCentricConfiguration proteinConfig) {
 
         Step proteinGroupStep = stepBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_READ_PROCESS_WRITE_XML_STEP)
                 .<ProteinGroups, Entry>chunk(xmlFileProperties.getChunkSize())
