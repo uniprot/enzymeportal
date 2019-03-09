@@ -177,19 +177,19 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //            if (numEntry == 0) {
 //                return fieldAndXref;
 //            }
-           //parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+           parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
                  // parallelStream(entries, proteinGroups, fields, refs);
               //  parallel(entries, proteinGroups, fields, refs, fieldAndXref);
 
-            if (numEntry > 10_000) {
-                splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-                 //splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
-                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
-                //splitAndParallelStream(entries, proteinGroups, fields, refs);
-            } else {
-                //parallelStream(entries, proteinGroups, fields, refs);
-                   parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
-            }
+//            if (numEntry > 10_000) {
+//                splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+//                 //splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
+//                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+//                //splitAndParallelStream(entries, proteinGroups, fields, refs);
+//            } else {
+//                //parallelStream(entries, proteinGroups, fields, refs);
+//                   parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+//            }
 
             return fieldAndXref;
 
