@@ -13,7 +13,6 @@ import uk.ac.ebi.ep.xml.entity.EnzymePortalReactant;
 import uk.ac.ebi.ep.xml.entity.EnzymePortalReaction;
 import uk.ac.ebi.ep.xml.entity.UniprotFamilies;
 import uk.ac.ebi.ep.xml.schema.Field;
-import uk.ac.ebi.ep.xml.schema.FieldAndXref;
 import uk.ac.ebi.ep.xml.schema.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
 import uk.ac.ebi.ep.xml.util.FieldName;
@@ -251,44 +250,44 @@ public abstract class Transformer {
 //        return entry;
     }
 
-    protected FieldAndXref addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
+    protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs ) {
         //if (!families.isEmpty()) {
-//            families.stream().map(family -> {
-//                Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
-//                fields.add(field);
-//                return new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName());
-//
-//            }).forEach(xref -> refs.add(xref));
-
-            for (UniprotFamilies family : families) {
+            families.stream().map(family -> {
                 Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
                 fields.add(field);
-                refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName()));
-                fieldAndXref.setField(fields);
-                fieldAndXref.setRef(refs);
-            }
-        //}
-        return fieldAndXref;
+                return new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName());
+
+            }).forEach(xref -> refs.add(xref));
+
+//            for (UniprotFamilies family : families) {
+//                Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
+//                fields.add(field);
+//                refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName()));
+//                fieldAndXref.setField(fields);
+//                fieldAndXref.setRef(refs);
+//            }
+//        //}
+//        return fieldAndXref;
     }
 
-    protected FieldAndXref addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
+    protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
 //
-//        reactants.stream().map(reactant -> {
-//            Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
-//            fields.add(field);
-//            return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
-//
-//        }).forEach(xref -> refs.add(xref));
-
-
-        for (EnzymePortalReactant reactant : reactants) {
+        reactants.stream().map(reactant -> {
             Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
             fields.add(field);
-            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
-            fieldAndXref.setField(fields);
-            fieldAndXref.setRef(refs);
+            return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
 
-        }
-        return fieldAndXref;
+        }).forEach(xref -> refs.add(xref));
+
+
+//        for (EnzymePortalReactant reactant : reactants) {
+//            Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
+//            fields.add(field);
+//            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
+//            fieldAndXref.setField(fields);
+//            fieldAndXref.setRef(refs);
+//
+//        }
+//        return fieldAndXref;
     }
 }
