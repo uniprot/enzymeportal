@@ -48,7 +48,7 @@ public class ProteinGroups implements Serializable {
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
     @OneToMany(mappedBy = "proteinGroupId")
-    ///@OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
     private List<UniprotEntry> uniprotEntryList;
 

@@ -251,7 +251,7 @@ public abstract class Transformer {
     }
 
     protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs ) {
-        //if (!families.isEmpty()) {
+        if (!families.isEmpty()) {
             families.stream().map(family -> {
                 Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
                 fields.add(field);
@@ -266,19 +266,20 @@ public abstract class Transformer {
 //                fieldAndXref.setField(fields);
 //                fieldAndXref.setRef(refs);
 //            }
-//        //}
+        }
 //        return fieldAndXref;
     }
 
     protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
-//
+
+        if(!reactants.isEmpty()){
         reactants.stream().map(reactant -> {
             Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
             fields.add(field);
             return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
 
         }).forEach(xref -> refs.add(xref));
-
+        }
 
 //        for (EnzymePortalReactant reactant : reactants) {
 //            Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());

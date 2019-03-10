@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.xml.transformer;
 
+import cyclops.futurestream.LazyReact;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Slf4j
-public class ProteinGroupsProcessor extends XmlTransformer implements ItemProcessor<ProteinGroups, Entry> {
+public class ProteinGroupsProcessor extends Transformer implements ItemProcessor<ProteinGroups, Entry> {
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
@@ -78,11 +79,12 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         entry.setDescription(proteinGroups.getProteinName());
 
         FieldAndXref result = addPrimaryProtein(proteinGroups, fields, refs, fieldAndXref);
-
+        //addPrimaryProtein(proteinGroups, fields, refs, fieldAndXref);
          //addPrimaryProtein(proteinGroups, fields, refs);
 
          //additionalFields.setField(fields);
          //cr.setRef(refs);
+
         additionalFields.setField(result.getField());
        cr.setRef(result.getRef());
 
@@ -166,7 +168,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             addPrimaryFunctionFields(primaryProtein, fields);
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
             int numEntry = entries.size();
-            log.warn(proteinGroups.getProteinGroupId() + " Number of proteints to process " + numEntry + " count : " + count.getAndIncrement());
+            log.warn(proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
             //log.info("Available Processor " + Runtime.getRuntime().availableProcessors());
 
             //addRelatedSpeciesField(primaryProtein, entries, fields);
@@ -177,11 +179,14 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //            if (numEntry == 0) {
 //                return fieldAndXref;
 //            }
-           parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+           //parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
                  // parallelStream(entries, proteinGroups, fields, refs);
-              //  parallel(entries, proteinGroups, fields, refs, fieldAndXref);
+                 if(numEntry > 0){
+                  parallel(entries, proteinGroups, fields, refs, fieldAndXref);      
+                 }
+             
 
-//            if (numEntry > 10_000) {
+//            if (numEntry > 1_00) {
 //                splitAndParallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
 //                 //splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
 //                //parallel(entries, proteinGroups, fields, refs, fieldAndXref);
@@ -208,30 +213,40 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
 // LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
 
-    // LazyReact builder = new LazyReact(100, 100);
-     //LazyReact builder = new LazyReact();
+   // LazyReact builder = new LazyReact(100, 100);
+    // LazyReact builder = new LazyReact();
      //LazyReact builder = new LazyReact(100, forkJoinPool);
    // @Transactional
-//    private void parallel(List<UniprotEntry> entries, ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
-//        // System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "256");
-//        //ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
-//        //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.CPU);
-//
-//       
-//         //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
-//        //LazyReact builder = new LazyReact(entries.size(), forkJoinPool);
-//        //LazyReact builder = new LazyReact(100, 100);
-//        builder.autoOptimizeOn().async()
-//                .from(entries)
-//                .grouped(10)
-//                .flatMapStream(x -> x.stream().parallel())
-//                .parallel()
-//                .map(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref))
-//                //.peek(p->System.out.println(" POOL "+  forkJoinPool))
-//                .join();
-//
-//       // forkJoinPool.shutdown();
-//    }
+    private void parallel(List<UniprotEntry> entries, ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
+        // System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "256");
+        //ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+        //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.CPU);
+
+       
+         //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
+        //LazyReact builder = new LazyReact(entries.size(), forkJoinPool);
+        //LazyReact builder = new LazyReact(100, 100);
+        LazyReact
+                //.parallelBuilder(entries.size())
+                .parallelBuilder(Runtime.getRuntime().availableProcessors())
+                .autoOptimizeOn()
+        //builder.autoOptimizeOn()
+                //.async()
+                .from(entries)
+                //.parallel()
+                //.grouped(10))
+                //.flatMap(x -> x.stream().parallel())
+               // .parallel()
+                //.forEachAsync(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref));
+                .map(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref))
+                //.parallel()
+                //.peek(p->System.out.println(" POOL "+  p))
+                //.run();
+                //.peek(p->System.out.println(" POOL "+  forkJoinPool))
+                .join();
+
+       // forkJoinPool.shutdown();
+    }
 
     //@Transactional
     //private void splitAndParallelStream(List<UniprotEntry> entries, ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs ) {
@@ -242,10 +257,10 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         for (int x = 0; x < chunks.size(); x++) {
             final int index = x;
 
-//            chunks.get(index).parallelStream()
-//                    .forEach(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref));
             chunks.get(index).parallelStream()
-                    .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+                    .forEach(uniprotEntry -> computeEntry(proteinGroups, uniprotEntry, fields, refs, fieldAndXref));
+//            chunks.get(index).parallelStream()
+//                    .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
         }
 
