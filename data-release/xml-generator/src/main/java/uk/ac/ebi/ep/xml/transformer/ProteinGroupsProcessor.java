@@ -171,7 +171,7 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
             addPrimaryFunctionFields(primaryProtein, fields);
             List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
             int numEntry = entries.size();
-            log.warn(proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
+            log.warn("Processor "+ Runtime.getRuntime().availableProcessors()+" "+proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
             //log.info("Available Processor " + Runtime.getRuntime().availableProcessors());
 
             //addRelatedSpeciesField(primaryProtein, entries, fields);
@@ -185,8 +185,8 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
            //parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
                  // parallelStream(entries, proteinGroups, fields, refs);
                  if(numEntry > 0){
-                  //parallel(entries, proteinGroups, fields, refs, fieldAndXref);  
-                  parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
+                  parallel(entries, proteinGroups, fields, refs, fieldAndXref);  
+                  //parallelStream(entries, proteinGroups, fields, refs, fieldAndXref);
                  // splitAndProcess(entries, proteinGroups, fields, refs, fieldAndXref);
                  }
              
@@ -229,15 +229,15 @@ public class ProteinGroupsProcessor extends Transformer implements ItemProcessor
         //ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
         //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.CPU);
 
-     int paralism =  ForkJoinPool.commonPool().getParallelism();
+    // int paralism =  ForkJoinPool.commonPool().getParallelism();
    
          //LazyReact builder = new LazyReact(forkJoinPool, true, MaxActive.IO);
         //LazyReact builder = new LazyReact(entries.size(), forkJoinPool);
         //LazyReact builder = new LazyReact(100, 100);
         LazyReact
-                .parallelBuilder(entries.size())
+                //.parallelBuilder(entries.size())
                  //.parallelBuilder(100)
-                //.parallelBuilder(Runtime.getRuntime().availableProcessors())
+                .parallelBuilder(Runtime.getRuntime().availableProcessors())
                 .autoOptimizeOn()
         //builder.autoOptimizeOn()
                 //.async()
