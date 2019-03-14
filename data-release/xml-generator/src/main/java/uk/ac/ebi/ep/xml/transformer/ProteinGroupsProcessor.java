@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -98,7 +97,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
   
              entries.parallelStream()
               .parallel()
-              .peek(p->System.out.println(" POOL "+  ForkJoinPool.commonPool()))
+              //.peek(p->System.out.println(" POOL "+  ForkJoinPool.commonPool()))
              .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
 
