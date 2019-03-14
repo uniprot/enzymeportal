@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.xml;
 
-import java.util.concurrent.ForkJoinPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -22,10 +21,8 @@ import uk.ac.ebi.ep.xml.config.DataConfig;
 public class EnzymeCentricBatchJob {
 
     public static void main(String[] args) throws Exception {
-//xmllint --nocdata --format enzyme-portal-enzymes-ebeye.xml | grep -c '<entry id="2.7.1.1">'
-        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-                log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +"  FJP : "+ forkJoinPool.getParallelism());
+        log.error("Available Processor : " + Runtime.getRuntime().availableProcessors());
+        //log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +"  FJP : "+ forkJoinPool.getParallelism());
         ConfigurableApplicationContext context = SpringApplication.run(EnzymeCentricBatchJob.class, args);
 
         Job xmlJob = context.getBean("enzymeXmlJob", Job.class);
