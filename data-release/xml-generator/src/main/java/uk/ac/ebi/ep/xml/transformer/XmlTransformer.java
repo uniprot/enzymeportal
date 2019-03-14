@@ -30,23 +30,6 @@ public abstract class XmlTransformer {
     static final String INHIBITOR = "INHIBITOR";
     static final String ACTIVATOR = "ACTIVATOR";
 
-//    private final XmlFileProperties xmlFileProperties;
-//
-//    public XmlTransformer(XmlFileProperties xmlFileProperties) {
-//        Preconditions.checkArgument(xmlFileProperties == null, "xmlFileProperties (XML Configuration) can not be null");
-//
-//        this.xmlFileProperties = xmlFileProperties;
-//    }
-//    protected Database buildDatabaseInfo(long entryCount) {
-//        Database database = new Database();
-//        database.setName(ENZYME_PORTAL);
-//        database.setDescription(ENZYME_PORTAL_DESCRIPTION);
-//        database.setRelease(xmlFileProperties.getReleaseNumber());
-//        LocalDate date = LocalDate.now();
-//        database.setReleaseDate(date);
-//        database.setEntryCount(entryCount);
-//        return database;
-//    }
     protected void addUniprotIdFields(String uniprotName, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotName)) {
             Field field = new Field(FieldName.UNIPROT_NAME.getName(), uniprotName);
@@ -158,7 +141,8 @@ public abstract class XmlTransformer {
         for (EnzymePortalCompound compound : compounds) {
             switch (compound.getCompoundRole()) {
                 case COFACTOR:
-                    addCompoundFieldAndXref(compound, FieldName.COFACTOR.getName(), FieldName.COFACTOR_NAME.getName(), fields, refs);
+                    addChebiField(compound, fields, refs);
+                    addCofactorField(compound, fields);
                     break;
                 case INHIBITOR:
                     addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
@@ -176,13 +160,33 @@ public abstract class XmlTransformer {
         }
     }
 
-    private void addCompoundFieldAndXref(EnzymePortalCompound compound, String compoundId, String compoundName, Set<Field> fields, Set<Ref> refs) {
-        Field field = new Field(compoundId, compound.getCompoundId());
-        fields.add(field);
-        Field fieldName = new Field(compoundName, compound.getCompoundName());
+    private void addCompoundFieldAndXref(EnzymePortalCompound compound, String fieldIdkey, String fieldNameKey, Set<Field> fields, Set<Ref> refs) {
+        Field fieldId = new Field(fieldIdkey, compound.getCompoundId());
+        fields.add(fieldId);
+        Field fieldName = new Field(fieldNameKey, compound.getCompoundName());
         fields.add(fieldName);
         Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
         refs.add(xref);
+    }
+
+    private void addCofactorField(EnzymePortalCompound compound, Set<Field> fields) {
+
+        String cofactorId = compound.getCompoundId().replaceAll("CHEBI:", "");
+
+        Field cofactor = new Field(FieldName.COFACTOR.getName(), cofactorId);
+        fields.add(cofactor);
+        Field cofactorName = new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName());
+        fields.add(cofactorName);
+
+    }
+
+    private void addChebiField(EnzymePortalCompound compound, Set<Field> fields, Set<Ref> refs) {
+
+        Field chebi = new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId());
+        fields.add(chebi);
+        Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+        refs.add(xref);
+
     }
 
 //    protected void addCompoundDataFieldsAndXrefs(Set<EnzymePortalCompound> compounds, Set<Field> fields, Set<Ref> refs) {
@@ -259,62 +263,34 @@ public abstract class XmlTransformer {
         return reactomePathwayId;
     }
 
-//    protected void addUniprotFamilyFields(Set<UniprotFamilies> families, Set<Field> fields) {
-//        if (!families.isEmpty()) {
-//
-//            families.stream()
-//                    .map(family -> new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName()))
-//                    .forEach(field -> fields.add(field));
-//
-//        }
-//    }
     protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, Set<Field> fields, Set<Ref> refs) {
         if (!families.isEmpty()) {
             families.stream().map(family -> {
-                Field field = new Field(FieldName.UNIPROT_FAMILY.getName(), family.getFamilyName());
+                Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
                 fields.add(field);
-                return new Ref(family.getFamilyGroupId(), DatabaseName.UNIPROT_FAMILY.getDbName());
+                Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
+                fields.add(fieldId);
+                return new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());
 
             }).forEach(xref -> refs.add(xref));
         }
     }
 
-//    protected void addReactionFieldsAndXrefs(Set<EnzymePortalReaction> reactions, Set<Field> fields, Set<Ref> refs) {
-//
-//        reactions.stream().map(reaction -> {
-//            Field field = new Field(FieldName.RHEA.getName(), reaction.getReactionId());
-//            fields.add(field);
-//            return new Ref(reaction.getReactionId(), reaction.getReactionSource());
-//
-//        }).forEach(xref -> refs.add(xref));
-//
-//    }
-    
-        protected void addReactionXrefs(Set<EnzymePortalReaction> reactions, Set<Ref> refs) {
-        if (!reactions.isEmpty()) {
-            reactions
-                    .stream()
-                    .map(reaction -> new Ref(reaction.getReactionId(), reaction.getReactionSource()))
-                    .forEachOrdered(xref ->  refs.add(xref));
-        }
+    protected void addReactionFieldsAndXrefs(Set<EnzymePortalReaction> reactions, Set<Field> fields, Set<Ref> refs) {
+
+        reactions.stream().map(reaction -> {
+            Field field = new Field(FieldName.RHEA_ID.getName(), reaction.getReactionId());
+            fields.add(field);
+            return new Ref(reaction.getReactionId(), reaction.getReactionSource());
+
+        }).forEach(xref -> refs.add(xref));
+
     }
 
-    //use temporarly till fixed in db then use <code>addReactantFieldsAndXrefs</code> instead 
-//    protected void addReactantFields(Set<EnzymePortalReactant> reactants, Set<Field> fields) {
-//        if (!reactants.isEmpty()) {
-//
-//            reactants.stream()
-//                    .map(reactant -> new Field(FieldName.REACTANT.getName(), reactant.getReactantName()))
-//                    .forEach(field -> fields.add(field));
-//
-//        }
-//    }
-
-    
-        protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
+    protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
 
         reactants.stream().map(reactant -> {
-            Field field = new Field(FieldName.REACTANT.getName(),reactant.getReactantName());
+            Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
             fields.add(field);
             return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
 
