@@ -88,11 +88,11 @@ public class XmlBatchConfig {
 
 
     
-        @Bean(name = "uniprotProteinXmlJob")
-    public Job uniprotProteinXmlJob(JobBuilderFactory jobBuilderFactory,
+        @Bean(name = "uniprotEntryXmlJob")
+    public Job uniprotEntryXmlJob(JobBuilderFactory jobBuilderFactory,
             StepBuilderFactory stepBuilderFactory, ProteinConfiguration proteinConfig) {
 
-        Step proteinGroupStep = stepBuilderFactory.get(ProteinConfiguration.PROTEIN_READ_PROCESS_WRITE_XML_STEP)
+        Step proteinGroupStep = stepBuilderFactory.get(ProteinConfiguration.UNPROT_ENTRY_READ_PROCESS_WRITE_XML_STEP)
                 .<UniprotEntry, Entry>chunk(xmlFileProperties.getChunkSize())
                 .reader(proteinConfig.databaseReader())
                 .processor(proteinConfig.entryProcessor())
@@ -106,14 +106,10 @@ public class XmlBatchConfig {
                 //.throttleLimit(20)
                 .build();
 
-        return jobBuilderFactory.get(ProteinConfiguration.PROTEIN_CENTRIC_XML_JOB)
+        return jobBuilderFactory.get(ProteinConfiguration.UNIPROT_ENTRY_XML_JOB)
                 .start(proteinGroupStep)
                 .listener(proteinConfig.jobExecutionListener())
                 .build();
-//        return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)
-//                .incrementer(new RunIdIncrementer())
-//                .listener(proteinConfig.jobExecutionListener())
-//                .flow(proteinGroupStep).end().build();
 
     }
 }

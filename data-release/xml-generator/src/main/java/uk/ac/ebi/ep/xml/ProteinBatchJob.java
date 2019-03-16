@@ -31,7 +31,7 @@ public class ProteinBatchJob {
                 log.error("Available Processor : "+ Runtime.getRuntime().availableProcessors());
         ConfigurableApplicationContext context = SpringApplication.run(ProteinCentricBatchJob.class, args);
 
-        Job xmlJob = context.getBean("uniprotProteinXmlJob", Job.class);
+        Job xmlJob = context.getBean("uniprotEntryXmlJob", Job.class);
 
         JobLauncher launcher = context.getBean(JobLauncher.class);
         launcher.run(xmlJob, new JobParameters());

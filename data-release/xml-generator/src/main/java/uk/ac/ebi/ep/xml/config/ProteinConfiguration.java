@@ -43,21 +43,14 @@ public class ProteinConfiguration extends AbstractBatchConfig {
     private static final String NATIVE_READ_QUERY = "SELECT * FROM UNIPROT_ENTRY";
 
     //------- TEST QUERY --------
-//       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
-//            + "union\n"
-//            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
-   // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
-    //ETDS4U - 116064
-    //EIY847 - 26932
-   // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EIY847'";
-     // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'";//longest running
-    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E069GJ'";
-       // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E6PFD2'";
+
+      //private static final String NATIVE_READ_QUERY  = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION='K0NQ24'";
+       // private static final String NATIVE_READ_QUERY  = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION='O76074'";
     // END -- TEST QUERY ----
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
-    public static final String PROTEIN_CENTRIC_XML_JOB = "PROTEIN_CENTRIC_XML_JOB_" + DATE;
-    public static final String PROTEIN_READ_PROCESS_WRITE_XML_STEP = "proteinReadProcessAndWriteXMLstep_" + DATE;
+    public static final String UNIPROT_ENTRY_XML_JOB = "UNIPROT_ENTRY_XML_JOB_" + DATE;
+    public static final String UNPROT_ENTRY_READ_PROCESS_WRITE_XML_STEP = "unirpotEntryReadProcessAndWriteXMLstep_" + DATE;
 
     protected final EntityManagerFactory entityManagerFactory;
 
@@ -74,7 +67,7 @@ public class ProteinConfiguration extends AbstractBatchConfig {
     public ItemReader<UniprotEntry> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<UniprotEntry>()
-                .name("READ_UNIQUE_PROTEIN_GROUP")
+                .name("READ_UNIPROT_ENTRY")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, UniprotEntry.class))
@@ -96,7 +89,7 @@ public class ProteinConfiguration extends AbstractBatchConfig {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
         //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
-        xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
+        xmlWriter.setName("WRITE_UNIPROT_ENTRY_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);
         xmlWriter.setMarshaller(xmlMarshaller(Entry.class));
@@ -109,7 +102,7 @@ public class ProteinConfiguration extends AbstractBatchConfig {
     @Bean(name = "uniprotEntryXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
-        return new FileSystemResource(xmlFileProperties.getProteinCentric());
+        return new FileSystemResource(xmlFileProperties.getProteinEntry());
     }
 
     @Override
@@ -127,7 +120,7 @@ public class ProteinConfiguration extends AbstractBatchConfig {
     @Override
     @Bean(name = "uniprotEntryJobExecutionListener")
     public JobExecutionListener jobExecutionListener() {
-        return new JobCompletionNotificationListener(PROTEIN_CENTRIC_XML_JOB);
+        return new JobCompletionNotificationListener(UNIPROT_ENTRY_XML_JOB);
     }
 
     @Override

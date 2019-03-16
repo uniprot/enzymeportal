@@ -30,6 +30,7 @@ public class XmlFileProperties {
     private String releaseNumber;
     private String enzymeCentric;
     private String proteinCentric;
+    private String proteinEntry;
     private String schema;
     private int chunkSize;
     private String dir;
@@ -57,6 +58,14 @@ public class XmlFileProperties {
 
     public void setProteinCentric(String proteinCentric) {
         this.proteinCentric = proteinCentric;
+    }
+
+    public String getProteinEntry() {
+        return proteinEntry;
+    }
+
+    public void setProteinEntry(String proteinEntry) {
+        this.proteinEntry = proteinEntry;
     }
 
     public String getSchema() {

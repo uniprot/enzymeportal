@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.xml.transformer;
 
-import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.xml.entity.EnzymeCatalyticActivity;
-import uk.ac.ebi.ep.xml.entity.protein.PrimaryProtein;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinEcNumbers;
 import uk.ac.ebi.ep.xml.entity.protein.UniprotEntry;
 import uk.ac.ebi.ep.xml.schema.AdditionalFields;
@@ -31,7 +29,7 @@ public class ProteinProcessor extends XmlTransformer implements ItemProcessor<Un
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
-   // private final AtomicInteger count = new AtomicInteger(1);
+    // private final AtomicInteger count = new AtomicInteger(1);
     // ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
 
     @Override
@@ -75,41 +73,16 @@ public class ProteinProcessor extends XmlTransformer implements ItemProcessor<Un
 
     }
 
-//    private void addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs) {
-// //private FieldAndXref addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, FieldAndXref fieldAndXref) {
-//
-//        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
-//        if (primaryProtein != null) {
-//            addPrimaryProteinField(primaryProtein, fields);
-//            addPrimaryImage(primaryProtein, fields);
-//
-//            addEntryTypeFields(primaryProtein, fields);
-//            addPrimaryFunctionFields(primaryProtein, fields);
-//            List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
-//            int numEntry = entries.size();
-//            log.warn("Processor "+ Runtime.getRuntime().availableProcessors()+" "+proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
-//  
-//             entries.parallelStream()
-//              .parallel()
-//              //.peek(p->System.out.println(" POOL "+  ForkJoinPool.commonPool()))
-//             .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
-//
-//
-//        }
-//
-//
-//    }
     //synchronized
     private void processEntries(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
 
-//                    addPrimaryProteinField(primaryProtein, fields);
-//            addPrimaryImage(primaryProtein, fields);
-//
-//            addEntryTypeFields(primaryProtein, fields);
-//            addPrimaryFunctionFields(primaryProtein, fields);
+        addPdbImage(uniprotEntry, fields);
+
+        addEntryTypeFields(uniprotEntry, fields);
+        addFunctionFields(uniprotEntry, fields);
 //related protein
         addRelatedSpeciesField(uniprotEntry, fields);
-        //addPrimaryEntities(proteinGroups, uniprotEntry, fields);
+
         addPrimarySynonymFields(uniprotEntry, uniprotEntry.getProteinName(), fields);
         addPrimaryEc(uniprotEntry, fields);
         addPrimaryCatalyticActivityFields(uniprotEntry, fields);
@@ -159,27 +132,11 @@ public class ProteinProcessor extends XmlTransformer implements ItemProcessor<Un
 
     }
 
-    private void addPrimaryProteinField(PrimaryProtein primaryProtein, final Set<Field> fields) {
+    private void addFunctionFields(UniprotEntry entry, Set<Field> fields) {
 
-        if (primaryProtein != null) {
-            Field primaryAccessionfield = new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryProtein.getAccession());
-            fields.add(primaryAccessionfield);
-            String commonName = primaryProtein.getCommonName();
-            if (commonName == null) {
-                commonName = primaryProtein.getScientificName();
-            }
-            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), " " + commonName);
-            fields.add(primaryOganismfield);
-
-        }
-
-    }
-
-    private void addPrimaryFunctionFields(PrimaryProtein primaryProtein, Set<Field> fields) {
-
-        if (primaryProtein != null) {
-            if (primaryProtein.getFunction() != null && !StringUtils.isEmpty(primaryProtein.getFunction())) {
-                Field primaryFunctionfield = new Field(FieldName.FUNCTION.getName(), primaryProtein.getFunction());
+        if (entry != null) {
+            if (entry.getFunction() != null && !StringUtils.isEmpty(entry.getFunction())) {
+                Field primaryFunctionfield = new Field(FieldName.FUNCTION.getName(), entry.getFunction());
 
                 fields.add(primaryFunctionfield);
             }
@@ -187,21 +144,25 @@ public class ProteinProcessor extends XmlTransformer implements ItemProcessor<Un
 
     }
 
-    private void addPrimaryImage(PrimaryProtein primaryProtein, Set<Field> fields) {
+    private void addPdbImage(UniprotEntry entry, Set<Field> fields) {
+        if (entry.getUniprotXrefSet() != null || !entry.getUniprotXrefSet().isEmpty()) {
+            String pdbId = entry.getUniprotXrefSet()
+                    .stream()
+                    .filter(x -> x.getSource().equalsIgnoreCase("PDB"))
+                    .map(id -> id.getSourceId())
+                    .limit(1).findFirst().orElse("");
+            if (StringUtils.isNotEmpty(pdbId)) {
+                Field pdbfield = new Field(FieldName.PRIMARY_IMAGE.getName(), pdbId);
+                fields.add(pdbfield);
+            }
 
-        Character hasPdbFlag = 'Y';
-
-        if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
-            String pdbId = primaryProtein.getPdbId() + "|" + primaryProtein.getPdbSpecies() + "|" + primaryProtein.getPdbLinkedAcc();
-            Field pdbfield = new Field(FieldName.PRIMARY_IMAGE.getName(), pdbId);
-            fields.add(pdbfield);
         }
 
     }
 
-    private void addEntryTypeFields(PrimaryProtein primaryProtein, Set<Field> fields) {
+    private void addEntryTypeFields(UniprotEntry entry, Set<Field> fields) {
 
-        BigInteger type = primaryProtein.getEntryType();
+        Short type = entry.getEntryType();
 
         if (type != null) {
             String entryType = String.valueOf(type);
@@ -271,26 +232,25 @@ public class ProteinProcessor extends XmlTransformer implements ItemProcessor<Un
         }
     }
 
-    @Deprecated
-    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
-        // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
-
-        List<String> specieList
-                = entries
-                        .stream()
-                        .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
-                        .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
-                        .distinct()
-                        .collect(Collectors.toList());
-
-        if (!specieList.isEmpty()) {
-            String rs = String.join(" | ", specieList);
-
-            String rsField = StringUtils.removeEnd(rs, " | ");
-
-            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
-            fields.add(relatedSpeciesField);
-        }
-    }
-
+//    @Deprecated
+//    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
+//        // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
+//
+//        List<String> specieList
+//                = entries
+//                        .stream()
+//                        .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
+//                        .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
+//                        .distinct()
+//                        .collect(Collectors.toList());
+//
+//        if (!specieList.isEmpty()) {
+//            String rs = String.join(" | ", specieList);
+//
+//            String rsField = StringUtils.removeEnd(rs, " | ");
+//
+//            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+//            fields.add(relatedSpeciesField);
+//        }
+//    }
 }
