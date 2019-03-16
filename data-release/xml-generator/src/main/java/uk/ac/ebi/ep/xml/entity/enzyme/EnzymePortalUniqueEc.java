@@ -111,9 +111,9 @@ public class EnzymePortalUniqueEc implements Serializable {
 
     @XmlTransient
     public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
-//        if (enzymePortalEcNumbersSet == null) {
-//            enzymePortalEcNumbersSet = new HashSet<>();
-//        }
+        if (enzymePortalEcNumbersSet == null) {
+            enzymePortalEcNumbersSet = new HashSet<>();
+        }
         //return Collections.synchronizedSet(enzymePortalEcNumbersSet);
         return enzymePortalEcNumbersSet;
     }

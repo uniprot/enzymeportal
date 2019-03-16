@@ -206,6 +206,15 @@
                             <mainClass>uk.ac.ebi.ep.xml.ProteinCentricBatchJob</mainClass>
                         </configuration>
                     </execution>
+                   <execution>
+                        <id>protein-batch</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>uk.ac.ebi.ep.xml.ProteinBatchJob</mainClass>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             

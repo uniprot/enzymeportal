@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
 import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
+import uk.ac.ebi.ep.xml.entity.protein.UniprotEntry;
 import uk.ac.ebi.ep.xml.schema.Entry;
 
 /**
@@ -71,7 +72,7 @@ public class XmlBatchConfig {
                 //.listener(proteinConfig.itemProcessListener())
                 //.listener(proteinConfig.itemWriteListener())
                 //.taskExecutor(new SimpleAsyncTaskExecutor())
-                //.throttleLimit(10)
+                //.throttleLimit(20)
                 .build();
 
         return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)
@@ -86,4 +87,33 @@ public class XmlBatchConfig {
     }
 
 
+    
+        @Bean(name = "uniprotProteinXmlJob")
+    public Job uniprotProteinXmlJob(JobBuilderFactory jobBuilderFactory,
+            StepBuilderFactory stepBuilderFactory, ProteinConfiguration proteinConfig) {
+
+        Step proteinGroupStep = stepBuilderFactory.get(ProteinConfiguration.PROTEIN_READ_PROCESS_WRITE_XML_STEP)
+                .<UniprotEntry, Entry>chunk(xmlFileProperties.getChunkSize())
+                .reader(proteinConfig.databaseReader())
+                .processor(proteinConfig.entryProcessor())
+                .writer(proteinConfig.xmlWriter())
+                .listener(proteinConfig.logChunkListener())
+                //.listener(proteinConfig.stepExecutionListener())
+                //.listener(proteinConfig.itemReadListener())
+                //.listener(proteinConfig.itemProcessListener())
+                //.listener(proteinConfig.itemWriteListener())
+                //.taskExecutor(new SimpleAsyncTaskExecutor())
+                //.throttleLimit(20)
+                .build();
+
+        return jobBuilderFactory.get(ProteinConfiguration.PROTEIN_CENTRIC_XML_JOB)
+                .start(proteinGroupStep)
+                .listener(proteinConfig.jobExecutionListener())
+                .build();
+//        return jobBuilderFactory.get(ProteinCentricConfiguration.PROTEIN_CENTRIC_XML_JOB)
+//                .incrementer(new RunIdIncrementer())
+//                .listener(proteinConfig.jobExecutionListener())
+//                .flow(proteinGroupStep).end().build();
+
+    }
 }
