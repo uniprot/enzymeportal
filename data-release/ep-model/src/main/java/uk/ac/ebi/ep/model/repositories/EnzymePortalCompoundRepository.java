@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.model.EnzymePortalCompound;
+import uk.ac.ebi.ep.model.search.model.CofactorView;
 
 /**
  *
  * @author joseph
  */
-public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePortalCompound, Long>{//, QuerydslPredicateExecutor<EnzymePortalCompound>, EnzymePortalCompoundRepositoryCustom {
+public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePortalCompound, Long> {//, QuerydslPredicateExecutor<EnzymePortalCompound>, EnzymePortalCompoundRepositoryCustom {
 
     List<EnzymePortalCompound> findByCompoundName(String name);
 
@@ -36,6 +37,12 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
     @Query(value = "SELECT * FROM ENZYME_PORTAL_COMPOUND WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<EnzymePortalCompound> findCompoundsByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
-
+    @Query(value = "select DISTINCT c.compoundName as compoundName, c.compoundId as compoundId from EnzymePortalCompound c WHERE c.compoundRole='COFACTOR' order by c.compoundName, c.compoundId")
+    List<CofactorView> findCofactors();
+    
+        @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "Insert INTO ENZYME_COFACTOR (COFACTOR_INTERNAL_ID,COFACTOR_ID,COFACTOR_NAME) VALUES (SEQ_COFACTOR_INTERNAL_ID.NEXTVAL,?1,?2) ", nativeQuery = true)
+    void createCofactor(String cofactorId, String cofactorName, String cofactorUrl);
 
 }
