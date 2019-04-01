@@ -47,6 +47,10 @@ public class EnzymePortalCompoundParser {
         fda.loadChEMBL();
 
     }
+    public void loadUniqueCofactors(){
+        GenericCompound cofactor = new UniqueCofactor(parserService);
+        cofactor.loadCompoundToDatabase();
+    }
 
     @Transactional
     public void loadCofactorsFromFTPFiles() {
