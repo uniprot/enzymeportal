@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.sitemaps.ObjectFactory;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.model.service.SitemapService;
-
 import uk.ac.ebi.ep.sitemap.advanced.ChangeFreq;
 import uk.ac.ebi.ep.sitemap.advanced.W3CDateFormat;
 import uk.ac.ebi.ep.sitemap.advanced.WebSitemapGenerator;
@@ -32,14 +31,15 @@ public class EnzymePortalSiteMap extends SiteMapGenerator<File> {
     private static final String ENZYME_PORTAL_URL ="http://www.ebi.ac.uk/enzymeportal"; 
     private static final String ENZYME_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/enzyme");
     private static final String PROTEIN_STRUCTURE_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/proteinStructure");
-    private static final String REACTION_PATHWAYS_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/reactionsPathways");
+    private static final String REACTION_MECHANISM_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/reactionsMechanisms");
+       private static final String PATHWAYS_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/pathways");
     private static final String MOLECULES_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/molecules");
     private static final String DISEASE_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/diseaseDrugs");
     private static final String LITERATURE_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/literature");
     private ObjectFactory objectFactory;
     private Marshaller marshaller;
     private final String CHANGE_FREQ = "weekly";
-    private static final String[] tabs = {ENZYME_TAB, PROTEIN_STRUCTURE_TAB, REACTION_PATHWAYS_TAB, MOLECULES_TAB, DISEASE_TAB, LITERATURE_TAB};
+    private static final String[] TABS = {ENZYME_TAB, PROTEIN_STRUCTURE_TAB, REACTION_MECHANISM_TAB,PATHWAYS_TAB, MOLECULES_TAB, DISEASE_TAB, LITERATURE_TAB};
 
      //@Autowired
     private final SitemapService sitemapService;
@@ -83,7 +83,7 @@ public class EnzymePortalSiteMap extends SiteMapGenerator<File> {
              sitemapGenerator = WebSitemapGenerator.builder(SITEMAP_LOCATION, output).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
             for (Object input : inputData) {
 
-                for (String entry_tab : tabs) {
+                for (String entry_tab : TABS) {
 
                     url = new WebSitemapUrl.Options(MessageFormat.format(entry_tab, new Object[]{input})).lastMod(new Date()).priority(1.0).changeFreq(ChangeFreq.HOURLY).build();
                     sitemapGenerator.addUrl(url);
