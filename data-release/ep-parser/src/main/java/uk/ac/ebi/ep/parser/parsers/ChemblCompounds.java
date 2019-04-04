@@ -33,7 +33,7 @@ public class ChemblCompounds extends SmallMolecules {
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
         //.stream().limit(20).collect(Collectors.toList());
 
-        log.warn(" Number of unique targeted proteins found " + uniqueTargetedproteins.size());
+        log.info(" Number of unique targeted proteins found " + uniqueTargetedproteins.size());
         
       //uncomment if we don't need to track how many processed
 //        uniqueTargetedproteins
@@ -45,7 +45,7 @@ public class ChemblCompounds extends SmallMolecules {
                 .map(protein -> {
             chemblService.processChemblSmallMolecules(findProteinTargetets(protein), protein);
             return protein;
-        }).forEachOrdered((x) -> log.warn(x+ " Num processed : " + count.getAndIncrement()));
+        }).forEachOrdered((x) -> log.info(x+ " Num processed : " + count.getAndIncrement()));
 
         loadToDB();
 
@@ -59,16 +59,16 @@ public class ChemblCompounds extends SmallMolecules {
         if (compounds != null) {
 
 
-            log.warn("About to load the temporal compounds found ::::::  " + compounds.size());
+            log.info("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
             compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
                 parserService.addTempCompound(compound.getPrimaryTargetId(), compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
             });
 
-            log.warn("Finished loading temporal compound table ::::::  ");
-            log.warn("*******************Updating compound table ignoring duplicates ************");
+            log.info("Finished loading temporal compound table ::::::  ");
+            log.info("*******************Updating compound table ignoring duplicates ************");
             parserService.insertCompoundsFromTempTable();
-            log.warn("**********DONE*************** ");
+            log.info("**********DONE*************** ");
 
         }
     }

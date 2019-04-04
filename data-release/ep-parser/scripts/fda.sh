@@ -14,7 +14,7 @@ echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.FDAParser" -Dexec.args="$DB_CONFIG"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.FDAParser" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished parsing chembl-target_component.xml file and updating Enzyme Portal database with ChEMBL Compounds  - $(date)"
 

@@ -107,8 +107,7 @@ public class CofactorsFtpFiles extends GenericCompound {// implements ICompoundP
     private void parseCofactorText(List<Summary> enzymeSummary) {
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
-        log.error("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
-        log.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
+         log.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
                 .stream()

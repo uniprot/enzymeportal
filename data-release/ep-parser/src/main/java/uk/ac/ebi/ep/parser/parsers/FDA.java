@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
@@ -22,7 +23,7 @@ public class FDA extends SmallMolecules {
 
     private final ChemblService chemblService;
 
-     private final EnzymePortalParserService parserService;
+    private final EnzymePortalParserService parserService;
 
     public FDA(EnzymePortalParserService parserService, ChemblService chemblService) {
         super(parserService);
@@ -34,12 +35,20 @@ public class FDA extends SmallMolecules {
     public void loadChEMBL() {
 
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
-    
-        log.warn(" Number of unique targeted proteins found for FDA : " + uniqueTargetedproteins.size());
+          //.stream().limit(100).collect(Collectors.toList());
 
+        log.info(" Number of unique targeted proteins found for FDA : " + uniqueTargetedproteins.size());
+
+        AtomicInteger count = new AtomicInteger(1);
         uniqueTargetedproteins
-                .forEach(protein -> chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein));
+                .stream()
+                .map(protein -> {
+                    chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein);
+                    return protein;
+                }).forEach((x) -> log.info(x + " Num processed FDA : " + count.getAndIncrement()));
 
+//        uniqueTargetedproteins
+//                .forEach(protein -> chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein));
         loadToDatabase();
 
     }
@@ -50,21 +59,20 @@ public class FDA extends SmallMolecules {
         //load into database
         if (compounds != null) {
 
-            log.warn("About to load the temporal compounds found ::::::  " + compounds.size());
+            log.info("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
 
             compounds.stream()
                     .filter(compound -> compound != null)
                     .forEach(compound -> parserService.addTempCompound(compound.getPrimaryTargetId(), compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote()));
 
-            log.warn("Finished loading temporal compound table ::::::  ");
-            log.warn("*******************Updating compound table ignoring duplicates ************");
+            log.info("Finished loading temporal compound table ::::::  ");
+            log.info("*******************Updating compound table ignoring duplicates ************");
 
             parserService.insertCompoundsFromTempTable();
-            log.warn("**********DONE*************** ");
+            log.info("**********DONE*************** ");
 
         }
     }
-
 
 }
