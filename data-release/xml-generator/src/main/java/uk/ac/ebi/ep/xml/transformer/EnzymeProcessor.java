@@ -52,20 +52,14 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         log.warn("Processors " + Runtime.getRuntime().availableProcessors() + " " + enzyme.getEcNumber() + " Number of ezymes to process " + numEnzymes + " count : " + count.getAndIncrement());
 
         if (enzyme.getEnzymePortalEcNumbersSet().size() > 1_000) {
-            //default
             new ArrayList<>(enzyme.getEnzymePortalEcNumbersSet())
-                    //enzyme.getEnzymePortalEcNumbersSet()
                     .parallelStream()
                     .parallel()
-                   // .peek(s -> System.out.println("parallel Thread :: " + Thread.currentThread() + " active count " + Thread.activeCount()))
                     .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
 
         } else {
-            //default
-
             enzyme.getEnzymePortalEcNumbersSet()
                     .stream()
-                   // .peek(s -> System.out.println("squential Thread :: " + Thread.currentThread() + " active count " + Thread.activeCount()))
                     .forEach(ec -> processUniprotEntry(ec.getUniprotAccession(), fields, refs));
 
         }

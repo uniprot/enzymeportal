@@ -61,7 +61,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         return entry;
     }
 
-    @Deprecated
+    //@Deprecated
     private List<String> computeRelatedSpecies(PrimaryProtein primaryProtein, UniprotEntry uniprotEntry, List<String> specieList, final Set<Field> fields) {
 
         if (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()) {
@@ -79,7 +79,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     }
 
-      @Deprecated
+    // @Deprecated
     private void addRelatedSpeciesField(List<String> specieList, final Set<Field> fields) {
         if (!specieList.isEmpty()) {
             String rs = String.join(" | ", specieList);
@@ -103,13 +103,20 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             List<String> specieList = new ArrayList<>();
             int numEntry = entries.size();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
-            entries.parallelStream()
-                    .parallel()
-                    //.peek(p->System.out.println(" POOL "+  ForkJoinPool.commonPool()))
-                    .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, specieList, fields, refs));
+            if (numEntry > 1_000) {
+                entries.parallelStream()
+                        .parallel()
+                        .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, specieList, fields, refs));
 
-             addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
-            //addRelatedSpeciesField(specieList, fields);
+                //addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
+                addRelatedSpeciesField(specieList, fields);
+            } else {
+                entries.stream()
+                        .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, specieList, fields, refs));
+
+                //addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
+                addRelatedSpeciesField(specieList, fields);
+            }
 
         }
 
@@ -118,7 +125,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     //synchronized
     private void processEntries(ProteinGroups proteinGroups, UniprotEntry uniprotEntry, List<String> specieList, Set<Field> fields, Set<Ref> refs) {
         //related protein
-        //computeRelatedSpecies(proteinGroups.getPrimaryProtein(), uniprotEntry, specieList, fields);
+        computeRelatedSpecies(proteinGroups.getPrimaryProtein(), uniprotEntry, specieList, fields);
         addPrimaryEntities(proteinGroups, uniprotEntry, fields);
 
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
@@ -278,7 +285,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
     }
 
-  
+    @Deprecated// double iteration of entries
     private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
         // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
 

@@ -292,6 +292,13 @@ public abstract class XmlTransformer {
         reactants.stream().map(reactant -> {
             Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
             fields.add(field);
+            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
+                Field chebi = new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId());
+                fields.add(chebi);
+            } else {
+                Field rhea_comp = new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId());
+                fields.add(rhea_comp);
+            }
             return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
 
         }).forEach(xref -> refs.add(xref));
