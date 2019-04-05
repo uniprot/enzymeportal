@@ -19,31 +19,10 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Slf4j
-public class CofactorsFtpFiles extends GenericCompound {// implements ICompoundParser {
+public class CofactorsFtpFiles extends GenericCompound {
 
-    // private final Logger logger = Logger.getLogger(CofactorsFtpFiles.class);
     private List<LiteCompound> compounds = null;
-//    private static final String COMMENT_TYPE = "COFACTORS";
-//    private static final String NAME = "Name=([^\\s]+)";
-//    private static final String XREF = "Xref=ChEBI:([^\\s]+)";
-//    private static final String NOTE = "Note=([^\\*]+)";
-//
-//    protected static final Pattern COMPOUND_NAME_PATTERN
-//            = Pattern.compile("(.*?)(?: \\((.*?)\\))?");
-//
-//    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
-//    protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
- 
-
-    //private final EnzymePortalParserService enzymePortalParserService;
-//    private static final String UNIPROT = "UniProt";
-//    private static final String IUPAC = "IUPAC";
-
-//    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
-//        this.enzymePortalParserService = enzymePortalParserService;
-//        compounds = new ArrayList<>();
-//    }
     
        public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
         super(enzymePortalParserService);
@@ -107,7 +86,7 @@ public class CofactorsFtpFiles extends GenericCompound {// implements ICompoundP
     private void parseCofactorText(List<Summary> enzymeSummary) {
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
-         log.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
+         log.info("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
                 .stream()
