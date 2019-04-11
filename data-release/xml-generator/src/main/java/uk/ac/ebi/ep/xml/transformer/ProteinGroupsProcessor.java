@@ -131,16 +131,20 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
 
-        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+        //addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
+        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), fields, refs);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
 
-        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), fields, refs);
+        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), fields, refs);
 
-        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+        //addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
+        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), fields, refs);
+
         addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
         addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
-        addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+        //addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
+        addTaxonomyFieldAndXrefs(uniprotEntry.getTaxId(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), fields, refs);
         addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
         addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
     }

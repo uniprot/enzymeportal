@@ -45,7 +45,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 //       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
 //            + "union\n"
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
-   // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
+    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
     //ETDS4U - 116064
     //EIY847 - 26932
    // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E1L5IY'";

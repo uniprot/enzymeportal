@@ -5,7 +5,7 @@ package uk.ac.ebi.ep.xml.util;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public enum FieldName {
-
+    WITH_TAXONOMY("with_taxonomy"),WITH_PROTEIN_FAMILY("with_protein_family"),WITH_DISEASE("with_disease"),WITH_COFACTOR("with_cofactor"),WITH_PATHWAYS("with_pathways"),
     CHEBI_ID("chebi_id"),PROTEIN_FAMILY("protein_family"),PROTEIN_FAMILY_ID("protein_family_id"),REACTANT("reactant"),RHEA_ID("rhea_id"),UNIPROT_NAME("uniprot_name"),ENTRY_TYPE("entry_type"),FUNCTION("function"), PROTEIN_NAME("protein_name"),GENE_NAME("gene_name"),
     SCIENTIFIC_NAME("scientific_name"), COMMON_NAME("common_name"), SYNONYM("synonym"), STATUS("status"), SOURCE("source"),
     COFACTOR("cofactor"),INHIBITOR("inhibitor"),ACTIVATOR("activator"),COFACTOR_NAME("cofactor_name"),INHIBITOR_NAME("inhibitor_name"),ACTIVATOR_NAME("activator_name"),
