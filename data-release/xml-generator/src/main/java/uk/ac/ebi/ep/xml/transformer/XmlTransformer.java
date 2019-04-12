@@ -114,10 +114,10 @@ public abstract class XmlTransformer {
         }
     }
 
-    protected void addTaxonomyFieldAndXrefs(Long taxonomy, String accession, String commonName, Set<Field> fields, Set<Ref> refs) {
+    protected void addTaxonomyFieldAndXrefs(Long taxonomy, String accession, String commonName,int exp, Set<Field> fields, Set<Ref> refs) {
         String taxId = Long.toString(taxonomy);
         if (!StringUtils.isEmpty(taxId)) {
-            String withTaxonomy = String.format("%s;%s;%s", taxId, accession, commonName);
+            String withTaxonomy = String.format("%s;%s;%s;%d", taxId, accession, commonName,exp);
             Field field = new Field(FieldName.WITH_TAXONOMY.getName(), withTaxonomy);
             fields.add(field);
             Ref xref = new Ref(taxId, DatabaseName.TAXONOMY.getDbName());
@@ -172,13 +172,13 @@ public abstract class XmlTransformer {
         }
     }
 
-    protected void addCompoundDataFieldsAndXrefs(Set<EnzymePortalCompound> compounds, String accession, String commonName, Set<Field> fields, Set<Ref> refs) {
+    protected void addCompoundDataFieldsAndXrefs(Set<EnzymePortalCompound> compounds, String accession, String commonName,int exp, Set<Field> fields, Set<Ref> refs) {
 
         for (EnzymePortalCompound compound : compounds) {
             switch (compound.getCompoundRole()) {
                 case COFACTOR:
                     addChebiField(compound, fields, refs);
-                    addCofactorField(compound, accession, commonName, fields);
+                    addCofactorField(compound, accession, commonName,exp, fields);
                     break;
                 case INHIBITOR:
                     addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
@@ -216,7 +216,7 @@ public abstract class XmlTransformer {
 
     }
 
-    private void addCofactorField(EnzymePortalCompound compound, String accession, String commonName, Set<Field> fields) {
+    private void addCofactorField(EnzymePortalCompound compound, String accession, String commonName,int exp, Set<Field> fields) {
 
         String cofactorId = compound.getCompoundId().replaceAll("CHEBI:", "");
 
@@ -224,7 +224,7 @@ public abstract class XmlTransformer {
         fields.add(cofactor);
         Field cofactorName = new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName());
         fields.add(cofactorName);
-        String withCofactor = String.format("%s;%s;%s", cofactorId, accession, commonName);
+        String withCofactor = String.format("%s;%s;%s;%d", cofactorId, accession, commonName,exp);
         Field identityField = new Field(FieldName.WITH_COFACTOR.getName(), withCofactor);
         fields.add(identityField);
 
@@ -287,13 +287,13 @@ public abstract class XmlTransformer {
 
     }
 
-    protected void addDiseaseFieldsAndXrefs(Set<EnzymePortalDisease> diseases, String accession, String commonName, Set<Field> fields, Set<Ref> refs) {
+    protected void addDiseaseFieldsAndXrefs(Set<EnzymePortalDisease> diseases, String accession, String commonName,int exp, Set<Field> fields, Set<Ref> refs) {
 
         diseases.stream().map(disease -> {
             Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
             fields.add(field);
 
-            String withDisease = String.format("%s;%s;%s", disease.getOmimNumber(), accession, commonName);
+            String withDisease = String.format("%s;%s;%s;%d", disease.getOmimNumber(), accession, commonName,exp);
             Field identityField = new Field(FieldName.WITH_DISEASE.getName(), withDisease);
             fields.add(identityField);
 
@@ -342,7 +342,7 @@ public abstract class XmlTransformer {
         }
     }
 
-    protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, String accession, String commonName, Set<Field> fields, Set<Ref> refs) {
+    protected void addUniprotFamilyFieldsAndXrefs(Set<UniprotFamilies> families, String accession, String commonName,int exp, Set<Field> fields, Set<Ref> refs) {
         if (!families.isEmpty()) {
             families.stream().map(family -> {
                 Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
@@ -350,7 +350,7 @@ public abstract class XmlTransformer {
                 Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
                 fields.add(fieldId);
 
-                String withFamily = String.format("%s;%s;%s", family.getFamilyGroupId(), accession, commonName);
+                String withFamily = String.format("%s;%s;%s;%d", family.getFamilyGroupId(), accession, commonName,exp);
                 Field identityField = new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withFamily);
                 fields.add(identityField);
 
