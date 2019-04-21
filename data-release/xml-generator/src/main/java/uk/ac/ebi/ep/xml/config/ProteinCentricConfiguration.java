@@ -39,7 +39,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     // private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
 
     private static final String ROOT_TAG_NAME = "database";
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+   private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
 
     //------- TEST QUERY --------
 //       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
@@ -48,10 +48,12 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
     //ETDS4U - 116064
     //EIY847 - 26932
+    //EW69YX - java.lang.OutOfMemoryError: Requested array size exceeds VM limit
    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EVBIH4'";
      // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'";//longest running
    // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E069GJ'";
-        //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
+       // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
+    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EW69YX'";
     // END -- TEST QUERY ----
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);

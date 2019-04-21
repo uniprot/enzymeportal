@@ -1,10 +1,9 @@
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +38,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
-           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+//           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+//         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
 
-//        Set<Field> fields = new HashSet<>();
-//        Set<Ref> refs = new HashSet<>();
+        Set<Field> fields = new HashSet<>();
+        Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -98,24 +97,16 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
             addEntryTypeFields(primaryProtein, fields);
             addPrimaryFunctionFields(primaryProtein, fields);
-            List<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
+            Set<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
             //Set<String> specieList = new HashSet<>();
             int numEntry = entries.size();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
-           // if (numEntry > 1_000) {
                 entries.parallelStream()
                         .parallel()
                         .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
                 addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
-                //addRelatedSpeciesField(specieList, fields);
-//            } else {
-//                entries.stream()
-//                        .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, specieList, fields, refs));
-//
-//                addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
-//               // addRelatedSpeciesField(specieList, fields);
-//            }
+
 
         }
 
@@ -290,24 +281,33 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     //@Deprecated// double iteration of entries
-    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, List<UniprotEntry> entries, final Set<Field> fields) {
-        // private void addRelatedSpeciesField( List<UniprotEntry> entries, final Set<Field> fields) {
+    private void addRelatedSpeciesField(PrimaryProtein primaryProtein, Set<UniprotEntry> entries, final Set<Field> fields) {
+       
+//        List<String> specieList
+//                = entries.stream()
+//                        .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
+//                        .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
+//                        .distinct()
+//                        .collect(Collectors.toList());
+//
+//        if (!specieList.isEmpty()) {
+//            String rs = String.join(" | ", specieList);
+//
+//            String rsField = StringUtils.removeEnd(rs, " | ");
+//
+//            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+//            fields.add(relatedSpeciesField);
+//        }
 
-        List<String> specieList
+        String rsField
                 = entries.stream()
                         .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
                         .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() + ";" + u.getExpEvidenceFlag() + ";" + u.getTaxId()))
                         .distinct()
-                        .collect(Collectors.toList());
-
-        if (!specieList.isEmpty()) {
-            String rs = String.join(" | ", specieList);
-
-            String rsField = StringUtils.removeEnd(rs, " | ");
+                        .collect(Collectors.joining("|"));
 
             Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
             fields.add(relatedSpeciesField);
-        }
     }
 
 }

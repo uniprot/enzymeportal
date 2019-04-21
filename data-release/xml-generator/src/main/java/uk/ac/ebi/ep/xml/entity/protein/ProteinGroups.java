@@ -2,8 +2,8 @@ package uk.ac.ebi.ep.xml.entity.protein;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,7 +50,7 @@ public class ProteinGroups implements Serializable {
     @OneToMany(mappedBy = "proteinGroupId")
     //@OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
-    private List<UniprotEntry> uniprotEntryList;
+    private Set<UniprotEntry> uniprotEntryList;
 
     public ProteinGroups() {
     }
@@ -76,14 +76,14 @@ public class ProteinGroups implements Serializable {
     }
 
     @XmlTransient
-    public List<UniprotEntry> getUniprotEntryList() {
+    public Set<UniprotEntry> getUniprotEntryList() {
         if (uniprotEntryList == null) {
-            uniprotEntryList = new ArrayList<>();
+            uniprotEntryList = new HashSet<>();
         }
         return uniprotEntryList;
     }
 
-    public void setUniprotEntryList(List<UniprotEntry> uniprotEntryList) {
+    public void setUniprotEntryList(Set<UniprotEntry> uniprotEntryList) {
         this.uniprotEntryList = uniprotEntryList;
     }
 
