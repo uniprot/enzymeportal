@@ -38,7 +38,7 @@ public class EnzymePortalReaction implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "REACTION_INTERNAL_ID")
-    @SequenceGenerator(allocationSize = 2, name = "rSeqGenerator", sequenceName = "SEQ_REACTION_INTERNAL_ID")
+    @SequenceGenerator(allocationSize = 1, name = "rSeqGenerator", sequenceName = "SEQ_REACTION_INTERNAL_ID")
     @GeneratedValue(generator = "rSeqGenerator", strategy = GenerationType.AUTO)
     private Long reactionInternalId;
     @Column(name = "REACTION_ID")
