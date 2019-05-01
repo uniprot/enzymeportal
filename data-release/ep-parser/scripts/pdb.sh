@@ -11,7 +11,7 @@ echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.PDBeParser" -Dexec.args="$DB_CONFIG"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.PDBeParser" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished querying and computing PDBe data and updating Enzyme Portal database  - $(date)"
 
