@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.model.SpEnzymeEvidence;
+import uk.ac.ebi.ep.model.EnzymeSpExpEvidence;
 
 /**
  *
@@ -35,7 +35,7 @@ public class DataAnalyzerTest {
 
     private final Logger logger = Logger.getLogger(DataAnalyzerTest.class);
     private DataAnalyzer instance = null;
-    private final List<SpEnzymeEvidence> evidences = new CopyOnWriteArrayList<>();
+    private final List<EnzymeSpExpEvidence> evidences = new CopyOnWriteArrayList<>();
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -54,10 +54,10 @@ public class DataAnalyzerTest {
     @Before
     public void setUp() {
         instance = new DataAnalyzer();
-        SpEnzymeEvidence evidence = new SpEnzymeEvidence(BigDecimal.ONE);
+        EnzymeSpExpEvidence evidence = new EnzymeSpExpEvidence(BigDecimal.ONE);
         evidence.setAccession("Acc123");
         evidence.setEvidenceLine("FUNCTION");
-        SpEnzymeEvidence evidence1 = new SpEnzymeEvidence(BigDecimal.TEN);
+        EnzymeSpExpEvidence evidence1 = new EnzymeSpExpEvidence(BigDecimal.TEN);
         evidence1.setAccession("Acc456");
         evidence1.setEvidenceLine("COFACTOR");
         evidences.add(evidence);
@@ -80,7 +80,7 @@ public class DataAnalyzerTest {
         // thrown.expect(IOException.class);
         //thrown.expectMessage("folder already exists");
         String fileDir = output.getParent();
-        List<SpEnzymeEvidence> data = evidences.stream().limit(1).collect(Collectors.toList());
+        List<EnzymeSpExpEvidence> data = evidences.stream().limit(1).collect(Collectors.toList());
         instance.writeToFile(data, fileDir, filename, deleteFile);
 
         assertThat(output).hasExtension("txt").
@@ -152,24 +152,24 @@ public class DataAnalyzerTest {
     public void testCombine() {
         logger.warn("test combine");
 
-        SpEnzymeEvidence evidence = new SpEnzymeEvidence(BigDecimal.ONE);
+        EnzymeSpExpEvidence evidence = new EnzymeSpExpEvidence(BigDecimal.ONE);
         evidence.setAccession("Acc123");
         evidence.setEvidenceLine("FUNCTION");
-        SpEnzymeEvidence evidence1 = new SpEnzymeEvidence(BigDecimal.TEN);
+        EnzymeSpExpEvidence evidence1 = new EnzymeSpExpEvidence(BigDecimal.TEN);
         evidence1.setAccession("Acc456");
         evidence1.setEvidenceLine("COFACTOR");
 
-        List<SpEnzymeEvidence> part1 = new ArrayList<>();
+        List<EnzymeSpExpEvidence> part1 = new ArrayList<>();
         part1.add(evidence);
-        List<SpEnzymeEvidence> part2 = new ArrayList<>();
+        List<EnzymeSpExpEvidence> part2 = new ArrayList<>();
         part2.add(evidence1);
         Boolean allowDuplicate = true;
 
-        List<SpEnzymeEvidence> expResult = new ArrayList<>();
+        List<EnzymeSpExpEvidence> expResult = new ArrayList<>();
         expResult.add(evidence);
         expResult.add(evidence1);
 
-        List<SpEnzymeEvidence> result = instance.combine(part1, part2, allowDuplicate);
+        List<EnzymeSpExpEvidence> result = instance.combine(part1, part2, allowDuplicate);
         assertEquals(expResult, result);
 
     }

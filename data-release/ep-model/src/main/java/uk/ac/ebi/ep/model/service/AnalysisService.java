@@ -11,9 +11,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.model.SpEnzymeEvidence;
-import uk.ac.ebi.ep.model.repositories.SpEnzymeEvidenceRepository;
+import uk.ac.ebi.ep.model.EnzymeSpExpEvidence;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymeSpExpEvidenceRepository;
 
 /**
  *
@@ -24,11 +24,11 @@ import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 public class AnalysisService {
 
     @Autowired
-    private SpEnzymeEvidenceRepository enzymeEvidenceRepository;
+    private EnzymeSpExpEvidenceRepository enzymeEvidenceRepository;
     @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
 
-    public void populateEvidences(List<SpEnzymeEvidence> evidences) {
+    public void populateEvidences(List<EnzymeSpExpEvidence> evidences) {
         enzymeEvidenceRepository.saveAll(evidences);
     }
 

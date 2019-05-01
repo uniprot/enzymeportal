@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
@@ -20,19 +24,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
-@Table(name = "SP_ENZYME_EVIDENCE")
+@Table(name = "ENZYME_SP_EXP_EVIDENCE")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SpEnzymeEvidence.findAll", query = "SELECT s FROM SpEnzymeEvidence s"),
-    @NamedQuery(name = "SpEnzymeEvidence.findByAccession", query = "SELECT s FROM SpEnzymeEvidence s WHERE s.accession = :accession"),
-    @NamedQuery(name = "SpEnzymeEvidence.findByEvidenceLine", query = "SELECT s FROM SpEnzymeEvidence s WHERE s.evidenceLine = :evidenceLine"),
-    @NamedQuery(name = "SpEnzymeEvidence.findByEvidenceInternalId", query = "SELECT s FROM SpEnzymeEvidence s WHERE s.evidenceInternalId = :evidenceInternalId")})
-public class SpEnzymeEvidence implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+    @NamedQuery(name = "EnzymeSpExpEvidence.findAll", query = "SELECT e FROM EnzymeSpExpEvidence e"),
+    @NamedQuery(name = "EnzymeSpExpEvidence.findByAccession", query = "SELECT e FROM EnzymeSpExpEvidence e WHERE e.accession = :accession"),
+    @NamedQuery(name = "EnzymeSpExpEvidence.findByEvidenceLine", query = "SELECT e FROM EnzymeSpExpEvidence e WHERE e.evidenceLine = :evidenceLine"),
+    @NamedQuery(name = "EnzymeSpExpEvidence.findByEvidenceInternalId", query = "SELECT e FROM EnzymeSpExpEvidence e WHERE e.evidenceInternalId = :evidenceInternalId")})
+public class EnzymeSpExpEvidence implements Serializable {
+private static final long serialVersionUID = 1L;
     @Size(max = 15)
     @Column(name = "ACCESSION")
     private String accession;
@@ -47,10 +50,10 @@ public class SpEnzymeEvidence implements Serializable {
     @GeneratedValue(generator = "spSeqGenerator", strategy = GenerationType.SEQUENCE)
     private BigDecimal evidenceInternalId;
 
-    public SpEnzymeEvidence() {
+    public EnzymeSpExpEvidence() {
     }
 
-    public SpEnzymeEvidence(BigDecimal evidenceInternalId) {
+    public EnzymeSpExpEvidence(BigDecimal evidenceInternalId) {
         this.evidenceInternalId = evidenceInternalId;
     }
 
@@ -95,19 +98,20 @@ public class SpEnzymeEvidence implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SpEnzymeEvidence other = (SpEnzymeEvidence) obj;
+        final EnzymeSpExpEvidence other = (EnzymeSpExpEvidence) obj;
         if (!Objects.equals(this.accession, other.accession)) {
             return false;
         }
         return Objects.equals(this.evidenceLine, other.evidenceLine);
     }
+
+    @Override
+    public String toString() {
+        return "EnzymeSpExpEvidence{" + "accession=" + accession + ", evidenceLine=" + evidenceLine + '}';
+    }
     
     
     
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.data.domain.SpEnzymeEvidence[ evidenceInternalId=" + evidenceInternalId + " ]";
-    }
 
 }

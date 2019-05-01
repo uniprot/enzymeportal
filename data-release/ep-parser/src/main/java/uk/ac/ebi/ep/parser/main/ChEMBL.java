@@ -48,9 +48,10 @@ public class ChEMBL {
             log.info("Done loading targets and now about to run loadChemblFDA()");
             //activators & inhibitors
             compoundService.loadChemblFDA();
-            log.info("Done running FDA and now about to process more inhibitors by running processChemblTargetsAndUpdateDatabase()");
+            log.info("Done loading FDA approved drugs to the database");
+            //log.info("Done running FDA and now about to process more inhibitors by running processChemblTargetsAndUpdateDatabase()");
             //more activators & inhibitors
-            compoundService.processChemblTargetsAndUpdateDatabase();
+            //compoundService.processChemblTargetsAndUpdateDatabase();
 
         }
 

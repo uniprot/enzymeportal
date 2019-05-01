@@ -6,14 +6,14 @@
     <version>2.0.8-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>dataAnalysis</name>
-<!--    
+    <!--    
     <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
         <version>1.0.7-SNAPSHOT</version>
     </parent>-->
     
-        <parent>
+    <parent>
         <artifactId>data-release</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
         <version>1.0.0-SNAPSHOT</version>
@@ -44,109 +44,108 @@
     <dependencies>
 
         
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>ep-model</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <!--            <type>jar</type>-->
+        </dependency>
+        
+
+
+        
+        <!--        <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </dependency>
+                
                 <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>ep-model</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-<!--            <type>jar</type>-->
-        </dependency>
-<!--        <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>ep-model</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>-->
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpasyncclient</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-webmvc</artifactId>
+                </dependency>
+                
         
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
+                <dependency>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <type>jar</type>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <type>jar</type>
+                    <scope>compile</scope>
+                </dependency> 
+                
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <type>jar</type>
+                    <scope>compile</scope>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <type>jar</type>
+                    <scope>compile</scope>
+                </dependency>
+         
         
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpasyncclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency> 
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
- 
-
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <!--            <version>${org.springframework-version}</version>-->
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>  
-        
-        
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-<!--        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>1.0.2</version>
-        </dependency> -->
-        
+                
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                                <version>${org.springframework-version}</version>
+                    <exclusions>
+                         Exclude Commons Logging in favor of SLF4j 
+                        <exclusion>
+                            <groupId>commons-logging</groupId>
+                            <artifactId>commons-logging</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>  
+                
+                
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>javax.json</artifactId>
+                    <version>1.0.2</version>
+                </dependency> 
+                
+        -->        
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-<!--            <version>3.2.0</version>-->
+            <version>3.2.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -158,6 +157,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <version>2.27.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -165,6 +165,37 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!--                        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <scope>test</scope>
+                         <version>1.3</version>
+        </dependency>
+         
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+                         <version>4.12</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hamcrest-core</artifactId>
+                    <groupId>org.hamcrest</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+                         <version>1.10.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency> -->
                
     </dependencies> 
     

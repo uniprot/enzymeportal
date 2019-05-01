@@ -80,12 +80,12 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    @Transactional
-    @Modifying
-    public void processChemblTargetsAndUpdateDatabase() {
-        SmallMolecules molecules = new ChemblCompounds(parserService, chemblService);
-        molecules.loadChEMBL();
-
-    }
+//    @Transactional
+//    @Modifying
+//    public void processChemblTargetsAndUpdateDatabase() {
+//        SmallMolecules molecules = new ChemblCompounds(parserService, chemblService);
+//        molecules.loadChEMBL();
+//
+//    }
 
 }

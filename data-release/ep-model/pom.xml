@@ -47,7 +47,7 @@
    
 
         
-        <dependency>
+<!--        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <type>jar</type>
@@ -74,23 +74,23 @@
             <scope>compile</scope>
         </dependency>
  
-        <!--spring data rest-->
+        spring data rest
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-webmvc</artifactId>
         </dependency>
 
-        <!-- Support for Ehcache and others -->
+         Support for Ehcache and others 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <!--		<version>4.1.4.RELEASE</version>-->
+            		<version>4.1.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <exclusions>
-                <!--                 Exclude Commons Logging in favor of SLF4j -->
+                                 Exclude Commons Logging in favor of SLF4j 
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
@@ -102,7 +102,7 @@
             <artifactId>spring-orm</artifactId>
         </dependency>
     
-        <!--    spring data jpa-->
+            spring data jpa
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
@@ -119,7 +119,7 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
 
-        <!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+         for JPA, use hibernate-entitymanager instead of hibernate-core 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -128,12 +128,12 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <!--                        <version>${querydsl.version}</version>-->
+                                    <version>${querydsl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <!--                        <version>${querydsl.version}</version>-->
+                                    <version>${querydsl.version}</version>
         </dependency>
         
         <dependency>
@@ -152,11 +152,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.0.2</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
@@ -186,8 +186,8 @@
             <artifactId>lombok</artifactId>
              <version>1.18.4</version>
             <scope>provided</scope>
-<!--            <optional>true</optional>-->
-        </dependency>
+            <optional>true</optional>
+        </dependency>-->
 
     </dependencies>
     <build>

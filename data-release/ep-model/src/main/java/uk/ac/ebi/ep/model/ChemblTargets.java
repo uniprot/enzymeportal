@@ -114,5 +114,5 @@ public class ChemblTargets implements Serializable {
     public String toString() {
         return "uk.ac.ebi.ep.model.ChemblTargets[ internalId=" + internalId + " ]";
     }
-    
+   
 }

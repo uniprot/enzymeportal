@@ -28,7 +28,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findSwissProtAccessions();
     
         @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE UNIPROT_ENTRY SET EXP_EVIDENCE_FLAG = 1 WHERE ACCESSION IN (SELECT distinct accession from SP_ENZYME_EVIDENCE)", nativeQuery = true)
+    @Query(value = "UPDATE UNIPROT_ENTRY SET EXP_EVIDENCE_FLAG = 1 WHERE ACCESSION IN (SELECT distinct accession from ENZYME_SP_EXP_EVIDENCE)", nativeQuery = true)
     void updateExpEvidenceFlag();
 
     

@@ -111,7 +111,7 @@ public class EnzymePortalCompound implements Serializable {
     @Column(name = "NOTE")
     private String note;
 
-    @Column(name = " CHEMBL_TARGET_ID")
+    @Column(name = "CHEMBL_TARGET_ID")
     private String chemblTargetId;
 
     public EnzymePortalCompound() {

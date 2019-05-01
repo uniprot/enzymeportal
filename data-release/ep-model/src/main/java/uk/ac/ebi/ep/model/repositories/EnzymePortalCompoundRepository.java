@@ -42,7 +42,7 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
     
         @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "Insert INTO ENZYME_COFACTOR (COFACTOR_INTERNAL_ID,COFACTOR_ID,COFACTOR_NAME) VALUES (SEQ_COFACTOR_INTERNAL_ID.NEXTVAL,?1,?2) ", nativeQuery = true)
+    @Query(value = "Insert INTO ENZYME_PORTAL_COFACTOR (COFACTOR_INTERNAL_ID,COFACTOR_ID,COFACTOR_NAME) VALUES (SEQ_COFACTOR_INTERNAL_ID.NEXTVAL,?1,?2) ", nativeQuery = true)
     void createCofactor(String cofactorId, String cofactorName, String cofactorUrl);
 
 }

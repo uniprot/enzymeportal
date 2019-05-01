@@ -1,4 +1,8 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
@@ -9,21 +13,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author joseph
  */
 @Entity
-@Table(name = "ENZYME_COFACTOR")
+@Table(name = "ENZYME_PORTAL_COFACTOR")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "EnzymePortalCofactor.findAll", query = "SELECT e FROM EnzymePortalCofactor e"),
+    @NamedQuery(name = "EnzymePortalCofactor.findByCofactorInternalId", query = "SELECT e FROM EnzymePortalCofactor e WHERE e.cofactorInternalId = :cofactorInternalId"),
+    @NamedQuery(name = "EnzymePortalCofactor.findByCofactorId", query = "SELECT e FROM EnzymePortalCofactor e WHERE e.cofactorId = :cofactorId"),
+    @NamedQuery(name = "EnzymePortalCofactor.findByCofactorName", query = "SELECT e FROM EnzymePortalCofactor e WHERE e.cofactorName = :cofactorName")})
 public class EnzymePortalCofactor implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+   @Id
     @Basic(optional = false)
     @NotNull
         @SequenceGenerator(allocationSize = 1, name = "cofactorSeqGenerator", sequenceName = "SEQ_COFACTOR_INTERNAL_ID")
@@ -36,9 +49,6 @@ public class EnzymePortalCofactor implements Serializable {
     @Size(max = 4000)
     @Column(name = "COFACTOR_NAME")
     private String cofactorName;
-    @Size(max = 255)
-    @Column(name = "COFACTOR_URL")
-    private String cofactorUrl;
 
     public EnzymePortalCofactor() {
     }
@@ -69,14 +79,6 @@ public class EnzymePortalCofactor implements Serializable {
 
     public void setCofactorName(String cofactorName) {
         this.cofactorName = cofactorName;
-    }
-
-    public String getCofactorUrl() {
-        return cofactorUrl;
-    }
-
-    public void setCofactorUrl(String cofactorUrl) {
-        this.cofactorUrl = cofactorUrl;
     }
 
     @Override

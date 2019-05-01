@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.analysis.config.ServiceUrl;
-import uk.ac.ebi.ep.model.SpEnzymeEvidence;
+import uk.ac.ebi.ep.model.EnzymeSpExpEvidence;
 import uk.ac.ebi.ep.model.service.AnalysisService;
 
 
@@ -83,7 +83,7 @@ public class DataAnalyzer {
     public void populateEnzymesWithEvidences() {
 
         try {
-            List<SpEnzymeEvidence> enzymeEvidences = computeAccessionsWithEvidences();
+            List<EnzymeSpExpEvidence> enzymeEvidences = computeAccessionsWithEvidences();
             logger.warn("num evidences written to enzyme portal database " + enzymeEvidences.size());
 
             analysisService.populateEvidences(enzymeEvidences);
@@ -106,7 +106,7 @@ public class DataAnalyzer {
      */
     public void writeToFile(String fileDir, String filename, Boolean deleteFile) {
         try {
-            List<SpEnzymeEvidence> enzymeEvidences = computeAccessionsWithEvidences();
+            List<EnzymeSpExpEvidence> enzymeEvidences = computeAccessionsWithEvidences();
             String fileName = filename;
             if (filename == null || StringUtils.isEmpty(filename)) {
                 fileName = "evidence.tsv";
@@ -129,7 +129,7 @@ public class DataAnalyzer {
      * @param filename filename
      * @param deleteFile true if file clean up is required
      */
-    public void writeToFile(List<SpEnzymeEvidence> enzymeEvidences, String fileDir, String filename, Boolean deleteFile) {
+    public void writeToFile(List<EnzymeSpExpEvidence> enzymeEvidences, String fileDir, String filename, Boolean deleteFile) {
 
         List<String> dataList = new CopyOnWriteArrayList<>();
 
@@ -254,23 +254,23 @@ public class DataAnalyzer {
      * @param enzymes enzymes from enzyme portal database
      * @return enzymes with evidence tags
      */
-    private List<SpEnzymeEvidence> tagEvidences(String url, String evidenceType, List<String> enzymes) {
+    private List<EnzymeSpExpEvidence> tagEvidences(String url, String evidenceType, List<String> enzymes) {
 
         List<String> accessions = downloadAccessionList(url);
         return splitOperation(accessions, evidenceType, enzymes);
 
     }
 
-    private SpEnzymeEvidence createSpEnzymeEvidence(String accession, String evidenceType) {
-        SpEnzymeEvidence evidence = new SpEnzymeEvidence();
+    private EnzymeSpExpEvidence createSpEnzymeEvidence(String accession, String evidenceType) {
+        EnzymeSpExpEvidence evidence = new EnzymeSpExpEvidence();
         evidence.setAccession(accession);
         evidence.setEvidenceLine(evidenceType);
 
         return evidence;
     }
 
-    private List<SpEnzymeEvidence> splitOperation(List<String> accessions, String evidenceType, List<String> enzymes) {
-        List<SpEnzymeEvidence> evidences = new CopyOnWriteArrayList<>();
+    private List<EnzymeSpExpEvidence> splitOperation(List<String> accessions, String evidenceType, List<String> enzymes) {
+        List<EnzymeSpExpEvidence> evidences = new CopyOnWriteArrayList<>();
         
         
         accessions.stream()
@@ -293,32 +293,32 @@ public class DataAnalyzer {
         return evidences;
     }
 
-    private List<SpEnzymeEvidence> computeAccessionsWithEvidences() throws InterruptedException, ExecutionException {
+    private List<EnzymeSpExpEvidence> computeAccessionsWithEvidences() throws InterruptedException, ExecutionException {
         List<String> enzymes = analysisService.findAllSwissProtAccessions();
         logger.info("num swissprot enzymes from enzyme portal database " + enzymes.size());
 
-        CompletableFuture<List<SpEnzymeEvidence>> functionFuture = CompletableFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> functionFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getFunctionUrl(), EvidenceType.FUNCTION.getEvidenceName(), enzymes));
 
-        CompletableFuture<List<SpEnzymeEvidence>> cofactorFuture = CompletableFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> cofactorFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getCofactorUrl(), EvidenceType.COFACTOR.getEvidenceName(), enzymes));
 
-        CompletableFuture<List<SpEnzymeEvidence>> activityFuture = CompletableFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> activityFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getActivityUrl(), EvidenceType.CATALYTIC_ACTIVITY.getEvidenceName(), enzymes));
 
-        CompletableFuture<List<SpEnzymeEvidence>> regulationFuture = CompletableFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> regulationFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getRegulationUrl(), EvidenceType.ENZYME_REGULATION.getEvidenceName(), enzymes));
 
-        CompletableFuture<List<SpEnzymeEvidence>> biophysioFuture = CompletableFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> biophysioFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getBioPhysioUrl(), EvidenceType.BIOPHYSICOCHEMICAL_PROPERTIES.getEvidenceName(), enzymes));
 
-        CompletableFuture<List<SpEnzymeEvidence>> futures = functionFuture
+        CompletableFuture<List<EnzymeSpExpEvidence>> futures = functionFuture
                 .thenCombineAsync(cofactorFuture, (functions, cofactors) -> combineList(true, functions, cofactors))
                 .thenCombineAsync(activityFuture, (entries, activity) -> combineList(true, entries, activity))
                 .thenCombineAsync(regulationFuture, (entries, regulation) -> combineList(true, entries, regulation))
                 .thenCombineAsync(biophysioFuture, (entries, bio) -> combineList(true, entries, bio));
 
-        List<SpEnzymeEvidence> evidences = futures.get().stream().collect(Collectors.toList());
+        List<EnzymeSpExpEvidence> evidences = futures.get().stream().collect(Collectors.toList());
 
         logger.info("Number of Accessions with Evidences found :: " + evidences.size());
 
@@ -326,10 +326,10 @@ public class DataAnalyzer {
 
     }
 
-    private List<SpEnzymeEvidence> combineList(Boolean allowDuplicate, List<SpEnzymeEvidence>... parts) {
+    private List<EnzymeSpExpEvidence> combineList(Boolean allowDuplicate, List<EnzymeSpExpEvidence>... parts) {
 
-        List<SpEnzymeEvidence> data = new CopyOnWriteArrayList<>();
-        for (List<SpEnzymeEvidence> part : parts) {
+        List<EnzymeSpExpEvidence> data = new CopyOnWriteArrayList<>();
+        for (List<EnzymeSpExpEvidence> part : parts) {
             data.addAll(part);
         }
 
@@ -352,9 +352,9 @@ public class DataAnalyzer {
         return data;
     }
 
-    List<SpEnzymeEvidence> combine(List<SpEnzymeEvidence> part1, List<SpEnzymeEvidence> part2, Boolean allowDuplicate) {
+    List<EnzymeSpExpEvidence> combine(List<EnzymeSpExpEvidence> part1, List<EnzymeSpExpEvidence> part2, Boolean allowDuplicate) {
 
-        List<SpEnzymeEvidence> data = new CopyOnWriteArrayList<>();
+        List<EnzymeSpExpEvidence> data = new CopyOnWriteArrayList<>();
         data.addAll(part1);
         data.addAll(part2);
         if (!allowDuplicate) {

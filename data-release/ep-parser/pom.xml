@@ -78,7 +78,7 @@
             <version>1.0.3</version>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <type>jar</type>
@@ -103,7 +103,7 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <type>jar</type>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
  
 <!--        <dependency>
             <groupId>org.biopax.paxtools</groupId>

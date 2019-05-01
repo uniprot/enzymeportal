@@ -12,6 +12,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author Joseph
  */
+@Deprecated
 public class ChemblSmallMolecules {
     
     
@@ -40,7 +41,7 @@ public class ChemblSmallMolecules {
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
 
             //more activators & inhibitors
-            compoundService.processChemblTargetsAndUpdateDatabase();
+            //compoundService.processChemblTargetsAndUpdateDatabase();
 
         }
 

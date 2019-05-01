@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
@@ -17,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.model.search.model.EcNumber;
-
 
 /**
  *
@@ -53,6 +51,11 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
     @Size(max = 4000)
     @Column(name = "CATALYTIC_ACTIVITY")
     private String catalyticActivity;
+    @Column(name = "TRANSFER_FLAG")
+    private Character transferFlag;
+    @Size(max = 4000)
+    @Column(name = "COFACTOR")
+    private String cofactor;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne
     private UniprotEntry uniprotAccession;
@@ -166,6 +169,24 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
         return this.ecFamily.compareTo(getEcFamily());
 
     }
+
+
+    public Character getTransferFlag() {
+        return transferFlag;
+    }
+
+    public void setTransferFlag(Character transferFlag) {
+        this.transferFlag = transferFlag;
+    }
+
+    public String getCofactor() {
+        return cofactor;
+    }
+
+    public void setCofactor(String cofactor) {
+        this.cofactor = cofactor;
+    }
+
 
 
 }

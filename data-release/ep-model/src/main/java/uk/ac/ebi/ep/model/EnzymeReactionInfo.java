@@ -115,6 +115,6 @@ public class EnzymeReactionInfo implements Serializable {
     @Override
     public String toString() {
         return "EnzymeReactionInfo{" + "uniprotAccession=" + uniprotAccession + ", xrefDb=" + xrefDb + ", xrefType=" + xrefType + ", xref=" + xref + ", reactionDirection=" + reactionDirection + '}';
-    }
+    }      
 
 }
