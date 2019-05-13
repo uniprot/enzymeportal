@@ -185,7 +185,7 @@ public class Protein {
 
     //@BatchSize(size = 50)
     @OneToMany(mappedBy = "accession")
-    protected Set<UniprotFamilies> uniprotFamiliesSet ;
+    protected Set<EnzymePortalUniprotFamilies> uniprotFamiliesSet ;
     //@BatchSize(size = 50)
     @OneToMany(mappedBy = "uniprotAccession")
     protected Set<EnzymePortalReaction> enzymePortalReactionSet;
@@ -369,11 +369,11 @@ public class Protein {
         this.enzymePortalPathwaysSet = enzymePortalPathwaysSet;
     }
 
-    public Set<UniprotFamilies> getUniprotFamiliesSet() {
+    public Set<EnzymePortalUniprotFamilies> getUniprotFamiliesSet() {
         return uniprotFamiliesSet;
     }
 
-    public void setUniprotFamiliesSet(Set<UniprotFamilies> uniprotFamiliesSet) {
+    public void setUniprotFamiliesSet(Set<EnzymePortalUniprotFamilies> uniprotFamiliesSet) {
         this.uniprotFamiliesSet = uniprotFamiliesSet;
     }
 

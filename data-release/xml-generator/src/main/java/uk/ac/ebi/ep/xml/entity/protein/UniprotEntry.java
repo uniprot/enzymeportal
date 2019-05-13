@@ -172,4 +172,4 @@ public class UniprotEntry extends Protein implements Serializable {
 //    public void setEnzymePortalReactantSet(Set<EnzymePortalReactant> enzymePortalReactantSet) {
 //        this.enzymePortalReactantSet = enzymePortalReactantSet;
 //    }
-}
+    }

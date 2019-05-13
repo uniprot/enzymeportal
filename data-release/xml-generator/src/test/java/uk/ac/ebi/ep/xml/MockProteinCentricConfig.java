@@ -41,9 +41,8 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
             + "union\n"
             + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
- 
-   //private static final String NATIVE_READ_QUERY =  "SELECT * FROM protein_groups WHERE protein_group_id='EI595W'";
 
+    //private static final String NATIVE_READ_QUERY =  "SELECT * FROM protein_groups WHERE protein_group_id='EI595W'";
     private static final String PATTERN = "MMM_d_yyyy@hh:mm:ssa";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
     public static final String PROTEIN_CENTRIC_XML_JOB = "PROTEIN_CENTRIC_XML_JOB_" + DATE;
@@ -68,6 +67,8 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
+                .saveState(false)
+                .transacted(false)
                 .build();
     }
 

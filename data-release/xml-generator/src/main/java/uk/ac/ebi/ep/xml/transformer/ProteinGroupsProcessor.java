@@ -77,7 +77,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     }
 
-     @Deprecated
+    @Deprecated
     private void addRelatedSpeciesField(Set<String> specieList, final Set<Field> fields) {
         if (!specieList.isEmpty()) {
             String rs = String.join(" | ", specieList);
@@ -101,12 +101,12 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             //Set<String> specieList = new HashSet<>();
             int numEntry = entries.size();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
-                entries.parallelStream()
-                        .parallel()
-                        .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
+            entries.stream()
+                    //.parallelStream()
+                    //.parallel()
+                    .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
-                addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
-
+            addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
 
         }
 
@@ -122,20 +122,20 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
 
         //addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), fields, refs);
-        int expEvidence = uniprotEntry.getExpEvidenceFlag().intValue();
-        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(),expEvidence, fields, refs);
+        int entryType = uniprotEntry.getEntryType().intValue();
+        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getUniprotFamiliesSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), entryType, fields, refs);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
 
-        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(),expEvidence, fields, refs);
+        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), entryType, fields, refs);
 
         //addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), fields, refs);
-        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(),expEvidence, fields, refs);
+        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), entryType, fields, refs);
 
         addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
         addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
         addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
         //addTaxonomyXrefs(uniprotEntry.getTaxId(), refs);
-        addTaxonomyFieldAndXrefs(uniprotEntry.getTaxId(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(),expEvidence, fields, refs);
+        addTaxonomyFieldAndXrefs(uniprotEntry.getTaxId(), uniprotEntry.getAccession(), uniprotEntry.getCommonName(), entryType, fields, refs);
         addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
         addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
     }
@@ -171,14 +171,15 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void addPrimaryProteinField(PrimaryProtein primaryProtein, final Set<Field> fields) {
 
         if (primaryProtein != null) {
-            Field primaryAccessionfield = new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryProtein.getAccession());
-            fields.add(primaryAccessionfield);
+
             String commonName = primaryProtein.getCommonName();
-            if (commonName == null) {
+            if (commonName == null || commonName.isEmpty()) {
                 commonName = primaryProtein.getScientificName();
             }
-            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), " " + commonName);
+            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), commonName);
             fields.add(primaryOganismfield);
+            Field primaryAccessionfield = new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryProtein.getAccession());
+            fields.add(primaryAccessionfield);
 
         }
 
@@ -282,7 +283,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     //@Deprecated// double iteration of entries
     private void addRelatedSpeciesField(PrimaryProtein primaryProtein, Set<UniprotEntry> entries, final Set<Field> fields) {
-       
+
 //        List<String> specieList
 //                = entries.stream()
 //                        .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
@@ -298,7 +299,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
 //            fields.add(relatedSpeciesField);
 //        }
-
         String rsField
                 = entries.stream()
                         .filter((uniprotEntry) -> (uniprotEntry.getRelatedProteinsId().getRelProtInternalId() == primaryProtein.getRelatedProteinsId()))
@@ -306,8 +306,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
                         .distinct()
                         .collect(Collectors.joining("|"));
 
-            Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
-            fields.add(relatedSpeciesField);
+        Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+        fields.add(relatedSpeciesField);
     }
 
 }

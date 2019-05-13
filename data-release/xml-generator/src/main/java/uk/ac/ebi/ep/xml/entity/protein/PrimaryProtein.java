@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.entity.protein;
 
 import java.io.Serializable;
@@ -114,6 +113,10 @@ public class PrimaryProtein implements Serializable {
     }
 
     public String getCommonName() {
+        if (commonName == null) {
+            commonName = getScientificName();
+        }
+
         return commonName;
     }
 
@@ -225,5 +228,5 @@ public class PrimaryProtein implements Serializable {
     public void setPdbLinkedAcc(String pdbLinkedAcc) {
         this.pdbLinkedAcc = pdbLinkedAcc;
     }
-    
+
 }

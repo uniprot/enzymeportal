@@ -8,12 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
 
 /**
@@ -21,14 +18,8 @@ import uk.ac.ebi.ep.xml.entity.enzyme.UniprotEntryEnzyme;
  * @author Joseph
  */
 @Entity
-@Table(name = "UNIPROT_FAMILIES")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "UniprotFamilies.findAll", query = "SELECT u FROM UniprotFamilies u")
-    , @NamedQuery(name = "UniprotFamilies.findByDbentryId", query = "SELECT u FROM UniprotFamilies u WHERE u.dbentryId = :dbentryId")
-    //, @NamedQuery(name = "UniprotFamilies.findByFamilyName", query = "SELECT u FROM UniprotFamilies u WHERE u.familyName = :familyName")
-    , @NamedQuery(name = "UniprotFamilies.findByUniprotFamilyId", query = "SELECT u FROM UniprotFamilies u WHERE u.uniprotFamilyId = :uniprotFamilyId")})
-public class UniprotFamilies implements Serializable {
+@Table(name = "ENZYME_PORTAL_UNIPROT_FAMILIES")
+public class EnzymePortalUniprotFamilies implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Size(max = 15)
@@ -50,10 +41,10 @@ public class UniprotFamilies implements Serializable {
     @ManyToOne
     private UniprotEntryEnzyme accession;
 
-    public UniprotFamilies() {
+    public EnzymePortalUniprotFamilies() {
     }
 
-    public UniprotFamilies(Long uniprotFamilyId) {
+    public EnzymePortalUniprotFamilies(Long uniprotFamilyId) {
         this.uniprotFamilyId = uniprotFamilyId;
     }
 
@@ -100,7 +91,7 @@ public class UniprotFamilies implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UniprotFamilies other = (UniprotFamilies) obj;
+        final EnzymePortalUniprotFamilies other = (EnzymePortalUniprotFamilies) obj;
         if (!Objects.equals(this.familyName, other.familyName)) {
             return false;
         }
