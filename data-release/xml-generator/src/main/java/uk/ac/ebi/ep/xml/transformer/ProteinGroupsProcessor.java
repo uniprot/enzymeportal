@@ -92,18 +92,21 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
-            addPrimaryProteinField(primaryProtein, fields);
-            addPrimaryImage(primaryProtein, fields);
 
-            addEntryTypeFields(primaryProtein, fields);
+            synchronized (this) {
+                addPrimaryProteinField(primaryProtein, fields);
+                addPrimaryImage(primaryProtein, fields);
+                addEntryTypeFields(primaryProtein, fields);
+            }
+
             addPrimaryFunctionFields(primaryProtein, fields);
             Set<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
             //Set<String> specieList = new HashSet<>();
             int numEntry = entries.size();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
-            entries.stream()
-                    //.parallelStream()
-                    //.parallel()
+            entries
+                    .parallelStream()
+                    .parallel()
                     .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
             addRelatedSpeciesField(proteinGroups.getPrimaryProtein(), entries, fields);
