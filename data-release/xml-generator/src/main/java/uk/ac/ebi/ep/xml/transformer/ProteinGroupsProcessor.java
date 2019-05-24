@@ -1,9 +1,9 @@
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +38,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
-//           CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-//         CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
 
-        Set<Field> fields = new HashSet<>();
-        Set<Ref> refs = new HashSet<>();
+        //Set<Field> fields = new HashSet<>();
+        //Set<Ref> refs = new HashSet<>();
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -93,11 +93,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
 
-            synchronized (this) {
-                addPrimaryProteinField(primaryProtein, fields);
-                addPrimaryImage(primaryProtein, fields);
-                addEntryTypeFields(primaryProtein, fields);
-            }
+            // synchronized (this) {
+            addPrimaryProteinField(primaryProtein, fields);
+            addPrimaryImage(primaryProtein, fields);
+            addEntryTypeFields(primaryProtein, fields);
+            //}
 
             addPrimaryFunctionFields(primaryProtein, fields);
             Set<UniprotEntry> entries = proteinGroups.getUniprotEntryList();
@@ -105,7 +105,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             int numEntry = entries.size();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
             entries
-                    .parallelStream()
+                    //.parallelStream()
+                    .stream()
                     .parallel()
                     .forEach(uniprotEntry -> processEntries(proteinGroups, uniprotEntry, fields, refs));
 
