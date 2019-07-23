@@ -1,10 +1,10 @@
 package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +39,13 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     public Entry process(ProteinGroups proteinGroups) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
-//        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
-//        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
-//        CopyOnWriteArraySet<String> relSpecies = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+        CopyOnWriteArraySet<String> relSpecies = new CopyOnWriteArraySet<>();
 
-        Set<Field> fields = new HashSet<>();
-        Set<Ref> refs = new HashSet<>();
-        Set<String> relSpecies = new HashSet<>();
+//        Set<Field> fields = new HashSet<>();
+//        Set<Ref> refs = new HashSet<>();
+//        Set<String> relSpecies = new HashSet<>();
         
         Entry entry = new Entry();
 

@@ -89,11 +89,11 @@ public class ProteinCentricConfiguration {
     public JpaPagingItemReader<ProteinGroups> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
-                .name("READ_UNIQUE_PROTEIN_GROUPS_jp10_10")
+                .name("READ_UNIQUE_PROTEIN_GROUP")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString(JPA_QUERY)
-                //.queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
-                .pageSize(xmlFileProperties.getPageSize())
+                //.queryString(JPA_QUERY)
+                .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
+                ///.pageSize(xmlFileProperties.getPageSize())
                 .saveState(false)
                 .transacted(false)
                 .build();
