@@ -89,7 +89,7 @@ public class ProteinCentricConfiguration {
     public JpaPagingItemReader<ProteinGroups> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
-                .name("READ_UNIQUE_PROTEIN_GROUP")
+                .name("READ_UNIQUE_PROTEIN_GROUPS")
                 .entityManagerFactory(entityManagerFactory)
                 //.queryString(JPA_QUERY)
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
