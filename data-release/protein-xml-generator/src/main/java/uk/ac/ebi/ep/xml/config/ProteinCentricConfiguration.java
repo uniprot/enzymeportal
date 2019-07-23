@@ -93,7 +93,7 @@ public class ProteinCentricConfiguration {
                 .entityManagerFactory(entityManagerFactory)
                 //.queryString(JPA_QUERY)
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
-                ///.pageSize(xmlFileProperties.getPageSize())
+                .pageSize(xmlFileProperties.getPageSize())
                 .saveState(false)
                 .transacted(false)
                 .build();
