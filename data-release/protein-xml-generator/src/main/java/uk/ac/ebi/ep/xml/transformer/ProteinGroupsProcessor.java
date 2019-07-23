@@ -68,11 +68,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
 
-            //synchronized (this) {
+            synchronized (this) {
                 addPrimaryProteinField(primaryProtein, fields);
                 addPrimaryImage(primaryProtein, fields);
                 addEntryTypeFields(primaryProtein, fields);
-            //}
+            }
 
             addPrimaryFunctionFields(primaryProtein, fields);
             Set<UniprotEntry> entries = proteinGroups.getUniprotEntrySet();
