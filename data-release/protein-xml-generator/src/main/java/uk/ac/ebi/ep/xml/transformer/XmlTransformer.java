@@ -137,13 +137,13 @@ public abstract class XmlTransformer {
 
         compounds.stream()
                 .map(compound -> {
-            Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
-            //Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
-            fields.add(field);
-            //fields.add(compoundType);
-            return new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+                    Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
+                    //Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
+                    fields.add(field);
+                    //fields.add(compoundType);
+                    return new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
 
-        }).forEach(xref -> {
+                }).forEach(xref -> {
             refs.add(xref);
         });
 
@@ -175,28 +175,28 @@ public abstract class XmlTransformer {
 
     protected void addCompoundDataFieldsAndXrefs(Set<EnzymePortalCompound> compounds, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
 
-        if( compounds != null | !compounds.isEmpty()){
-        for (EnzymePortalCompound compound : compounds) {
-            switch (compound.getCompoundRole()) {
-                case COFACTOR:
-                    addChebiField(compound, fields, refs);
-                    addCofactorField(compound, accession, commonName, entryType, fields);
-                    break;
-                case INHIBITOR:
-                    addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
-                    break;
-                case ACTIVATOR:
-                    addCompoundFieldAndXref(compound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
-                    break;
-                default:
-                    Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
-                    fields.add(field);
-                    Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
-                    refs.add(xref);
-                    break;
+        if (compounds != null | !compounds.isEmpty()) {
+            for (EnzymePortalCompound compound : compounds) {
+                switch (compound.getCompoundRole()) {
+                    case COFACTOR:
+                        addChebiField(compound, fields, refs);
+                        addCofactorField(compound, accession, commonName, entryType, fields);
+                        break;
+                    case INHIBITOR:
+                        addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
+                        break;
+                    case ACTIVATOR:
+                        addCompoundFieldAndXref(compound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
+                        break;
+                    default:
+                        Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
+                        fields.add(field);
+                        Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+                        refs.add(xref);
+                        break;
+                }
             }
         }
-    }
     }
 
     private void addCompoundFieldAndXref(EnzymePortalCompound compound, String fieldIdkey, String fieldNameKey, Set<Field> fields, Set<Ref> refs) {
@@ -247,30 +247,32 @@ public abstract class XmlTransformer {
 
         diseases.stream()
                 .map(disease -> {
-            Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
-            fields.add(field);
-            return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
+                    Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
+                    fields.add(field);
+                    return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
 
-        }).forEach(xref -> refs.add(xref));
+                }).forEach(xref -> refs.add(xref));
 
     }
 
     protected void addDiseaseFieldsAndXrefs(Set<EnzymePortalDisease> diseases, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
         if (!diseases.isEmpty()) {
-            diseases.stream()
-                    .map(disease -> {
-                Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
-                fields.add(field);
 
-                String withDisease = String.format("%s;%s;%s;%d", disease.getOmimNumber(), accession, commonName, entryType);
-                Field identityField = new Field(FieldName.WITH_DISEASE.getName(), withDisease);
-                fields.add(identityField);
-
-                return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
-
-            }).forEach(xref -> refs.add(xref));
+            diseases.forEach(disease -> addDiseaseFieldsXrefs(disease, accession, commonName, entryType, fields, refs));
         }
 
+    }
+
+    private void addDiseaseFieldsXrefs(EnzymePortalDisease disease, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
+        Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
+        fields.add(field);
+
+        String withDisease = String.format("%s;%s;%s;%d", disease.getOmimNumber(), accession, commonName, entryType);
+        Field identityField = new Field(FieldName.WITH_DISEASE.getName(), withDisease);
+        fields.add(identityField);
+
+        Ref xref = new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
+        refs.add(xref);
     }
 
     protected void addEnzymeFamilyField(String ec, Set<Field> fields) {
@@ -279,6 +281,23 @@ public abstract class XmlTransformer {
         String enzymeFamily = ecNumber.computeFamily(ec);
         Field field = new Field(FieldName.ENZYME_FAMILY.getName(), enzymeFamily);
         fields.add(field);
+    }
+
+    protected void addPathwayFieldsAndXrefs(Set<EnzymePortalPathways> pathways, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
+        if (!pathways.isEmpty()) {
+
+            pathways.forEach(pathway -> addPathwayFieldsXrefs(pathway, accession, commonName, entryType, fields, refs));
+
+        }
+
+    }
+
+    private void addPathwayFieldsXrefs(EnzymePortalPathways pathway, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
+        String withPathway = String.format("%s;%s;%s;%d", pathway.getPathwayId(), accession, commonName, entryType);
+        Field identityField = new Field(FieldName.WITH_PATHWAY.getName(), withPathway);
+        fields.add(identityField);
+        Ref ref = new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName());
+        refs.add(ref);
     }
 
     protected void addPathwaysXrefs(Set<EnzymePortalPathways> pathways, Set<Ref> refs) {
@@ -304,68 +323,74 @@ public abstract class XmlTransformer {
         if (!families.isEmpty()) {
             families.stream()
                     .map(family -> {
-                Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
-                fields.add(field);
-                Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
-                fields.add(fieldId);
-                return new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());
+                        Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
+                        fields.add(field);
+                        Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
+                        fields.add(fieldId);
+                        return new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());
 
-            }).forEach(xref -> refs.add(xref));
+                    }).forEach(xref -> refs.add(xref));
         }
     }
 
     protected void addUniprotFamilyFieldsAndXrefs(Set<EnzymePortalUniprotFamilies> families, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
-  
+
         if (!families.isEmpty()) {
-            families.stream()
-                    .map(family -> {
-                Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
-                fields.add(field);
-                Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
-                fields.add(fieldId);
 
-                String withFamily = String.format("%s;%s;%s;%d", family.getFamilyGroupId(), accession, commonName, entryType);
-                Field identityField = new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withFamily);
-                fields.add(identityField);
-
-                return new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());
-
-            }).forEach(xref -> refs.add(xref));
+            families.forEach(family -> addUniprotFamilyFieldsXrefs(family, accession, commonName, entryType, fields, refs));
         }
+    }
+
+    private void addUniprotFamilyFieldsXrefs(EnzymePortalUniprotFamilies family, String accession, String commonName, int entryType, Set<Field> fields, Set<Ref> refs) {
+        Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
+        fields.add(field);
+        Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
+        fields.add(fieldId);
+
+        String withFamily = String.format("%s;%s;%s;%d", family.getFamilyGroupId(), accession, commonName, entryType);
+        Field identityField = new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withFamily);
+        fields.add(identityField);
+
+        Ref xref = new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());
+        refs.add(xref);
     }
 
     protected void addReactionFieldsAndXrefs(Set<EnzymePortalReaction> reactions, Set<Field> fields, Set<Ref> refs) {
         if (!reactions.isEmpty()) {
-            reactions
-                    .stream()
-                    //.filter(Objects::nonNull)
-                    .map(reaction -> {
-                        Field field = new Field(FieldName.RHEA_ID.getName(), reaction.getReactionId());
-                        fields.add(field);
-                        return new Ref(reaction.getReactionId(), reaction.getReactionSource());
 
-                    }).forEach(xref -> refs.add(xref));
+            reactions.forEach((reaction) -> addReactionFieldsXrefs(reaction, fields, refs));
         }
 
+    }
+
+    private void addReactionFieldsXrefs(EnzymePortalReaction reaction, Set<Field> fields, Set<Ref> refs) {
+        Field field = new Field(FieldName.RHEA_ID.getName(), reaction.getReactionId());
+        fields.add(field);
+        Ref xref = new Ref(reaction.getReactionId(), reaction.getReactionSource());
+        refs.add(xref);
     }
 
     protected void addReactantFieldsAndXrefs(Set<EnzymePortalReactant> reactants, Set<Field> fields, Set<Ref> refs) {
         if (!reactants.isEmpty()) {
-            reactants.stream()
-                    .map(reactant -> {
-                Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
-                fields.add(field);
-                if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
-                    Field chebi = new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId());
-                    fields.add(chebi);
-                } else {
-                    Field rhea_comp = new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId());
-                    fields.add(rhea_comp);
-                }
-                return new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
+            reactants.forEach(reactant -> addReactantFieldsXrefs(reactant, fields, refs));
 
-            }).forEach(xref -> refs.add(xref));
         }
 
     }
+
+    private void addReactantFieldsXrefs(EnzymePortalReactant reactant, Set<Field> fields, Set<Ref> refs) {
+        Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
+        fields.add(field);
+        if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
+            Field chebi = new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId());
+            fields.add(chebi);
+        } else {
+            Field rhea_comp = new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId());
+            fields.add(rhea_comp);
+        }
+
+        Ref xref = new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
+        refs.add(xref);
+    }
+
 }

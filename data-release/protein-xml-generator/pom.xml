@@ -64,17 +64,17 @@
             <artifactId>spring-batch-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--           <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.1-api</artifactId>
-      <version>1.0.2.Final</version>
-      <scope>compile</scope>
-   </dependency>
-   <dependency>
-  <groupId>net.ttddyy</groupId>
-  <artifactId>datasource-proxy</artifactId>
-  <version>1.5.1</version>
-</dependency>-->
+        <!--           <dependency>
+              <groupId>org.hibernate.javax.persistence</groupId>
+              <artifactId>hibernate-jpa-2.1-api</artifactId>
+              <version>1.0.2.Final</version>
+              <scope>compile</scope>
+           </dependency>
+           <dependency>
+          <groupId>net.ttddyy</groupId>
+          <artifactId>datasource-proxy</artifactId>
+          <version>1.5.1</version>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -83,22 +83,25 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--            <plugin> 
+            <plugin> 
                 <groupId>org.hibernate.orm.tooling</groupId> 
                 <artifactId>hibernate-enhance-maven-plugin</artifactId> 
                 <version>5.4.3.Final</version> 
                 <executions> 
                     <execution> 
-                        <configuration>                                                       
-                            <failOnError>true</failOnError> 
-                            <enableLazyInitialization>true</enableLazyInitialization> 
+                        <configuration>  
+                            <failOnError>true</failOnError>
+                            <enableLazyInitialization>true</enableLazyInitialization>
+                            <enableDirtyTracking>true</enableDirtyTracking>
+                            <enableAssociationManagement>true</enableAssociationManagement>
+                            <enableExtendedEnhancement>false</enableExtendedEnhancement>                                                     
                         </configuration> 
                         <goals> 
                             <goal>enhance</goal> 
                         </goals> 
                     </execution> 
                 </executions> 
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,6 +28,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.util.StringUtils;
 
 /**
@@ -33,7 +38,7 @@ import org.springframework.util.StringUtils;
  * @author joseph
  */
 @Entity
-//@BatchSize(size = 10)
+//@BatchSize(size = 1000)
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 @NamedQueries({
@@ -93,55 +98,102 @@ public class UniprotEntry implements Serializable {
     private BigInteger uncharacterized;
     @Column(name = "PDB_FLAG")
     private Character pdbFlag;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
-    private Set<UniprotXref> uniprotXrefSet = Collections.emptySet();
-    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+
     @ManyToOne
+    @JoinColumn(name = "PROTEIN_GROUP_ID", foreignKey = @ForeignKey(name = "PROTEIN_GROUP_ID"))
+//    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+//    @ManyToOne
     private ProteinGroups proteinGroupId;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
     @ManyToOne
     private RelatedProteins relatedProteinsId;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    
+    //
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
+    private Set<UniprotXref> uniprotXrefSet = Collections.emptySet();
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;// = Collections.emptySet();
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalReactant> enzymePortalReactantSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet = new HashSet<>();
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
-    @OneToMany(mappedBy = "uniprotAccession",fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
-    @OneToMany(mappedBy = "uniprotAccession",fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
-//    @Fetch(FetchMode.SELECT)
-//    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "accession", fetch = FetchType.EAGER)
     private Set<EnzymePortalUniprotFamilies> enzymePortalUniprotFamiliesSet;// = Collections.emptySet();
 
+    
+    /// LAZY FETCH TYPE
+//        @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
+//    private Set<UniprotXref> uniprotXrefSet = Collections.emptySet();
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;// = Collections.emptySet();
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalReactant> enzymePortalReactantSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalReaction> enzymePortalReactionSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet = new HashSet<>();
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EntryToGeneMapping> entryToGeneMappingSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "uniprotAccession")
+//    private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
+//    @Fetch(FetchMode.SELECT)
+//    @BatchSize(size = 1000)
+//    @OneToMany(mappedBy = "accession")
+//    private Set<EnzymePortalUniprotFamilies> enzymePortalUniprotFamiliesSet;// = Collections.emptySet();
+    
+    
     public UniprotEntry() {
     }
 

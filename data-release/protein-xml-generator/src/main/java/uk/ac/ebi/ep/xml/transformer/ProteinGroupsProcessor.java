@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.xml.entities.EnzymeCatalyticActivity;
 import uk.ac.ebi.ep.xml.entities.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.xml.entities.PrimaryProtein;
 import uk.ac.ebi.ep.xml.entities.ProteinGroups;
@@ -46,7 +45,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 //        Set<Field> fields = new HashSet<>();
 //        Set<Ref> refs = new HashSet<>();
 //        Set<String> relSpecies = new HashSet<>();
-        
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -63,26 +61,25 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         return entry;
     }
 
-
     private void addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
 
-            synchronized (this) {
+            //synchronized (this) {
                 addPrimaryProteinField(primaryProtein, fields);
                 addPrimaryImage(primaryProtein, fields);
                 addEntryTypeFields(primaryProtein, fields);
-            }
+            //}
 
             addPrimaryFunctionFields(primaryProtein, fields);
             Set<UniprotEntry> entries = proteinGroups.getUniprotEntrySet();
-        
+
             long numEntry = entries.stream().count();
             log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " " + proteinGroups.getProteinGroupId() + " Number of proteins to process " + numEntry + " count : " + count.getAndIncrement());
 
-            entries
+            entries     //.stream()
                     .parallelStream()
-                    .parallel()
+                    //.parallel()
                     .forEach(uniprotEntry -> processEntries(primaryProtein, uniprotEntry, relSpecies, fields, refs));
 
             addRelatedSpeciesField(relSpecies, fields);
@@ -120,23 +117,24 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
         addCommonNameFields(uniprotEntry.getCommonName(), fields);
 
-        AtomicInteger entryType = new AtomicInteger(uniprotEntry.getEntryType().intValue());
+       // AtomicInteger entryType = new AtomicInteger(uniprotEntry.getEntryType().intValue());
+        final int entryType = uniprotEntry.getEntryType().intValue();
         String accession = uniprotEntry.getAccession();
         String commonName = uniprotEntry.getCommonName();
 
-        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getEnzymePortalUniprotFamiliesSet(), accession, commonName, entryType.get(), fields, refs);
+        addUniprotFamilyFieldsAndXrefs(uniprotEntry.getEnzymePortalUniprotFamiliesSet(), accession, commonName, entryType, fields, refs);
         addAccessionXrefs(accession, refs);
 
-        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), accession, commonName, entryType.get(), fields, refs);
+        addCompoundDataFieldsAndXrefs(uniprotEntry.getEnzymePortalCompoundSet(), accession, commonName, entryType, fields, refs);
 
-        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), accession, commonName, entryType.get(), fields, refs);
+        addDiseaseFieldsAndXrefs(uniprotEntry.getEnzymePortalDiseaseSet(), accession, commonName, entryType, fields, refs);
 
         addEcXrefs(uniprotEntry.getEnzymePortalEcNumbersSet(), refs);
-        addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
+        //addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
 
-        addPathwaysXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), refs);
+        addPathwayFieldsAndXrefs(uniprotEntry.getEnzymePortalPathwaysSet(), accession, commonName, entryType, fields, refs);
 
-        addTaxonomyFieldAndXrefs(uniprotEntry.getTaxId(), accession, commonName, entryType.get(), fields, refs);
+        addTaxonomyFieldAndXrefs(uniprotEntry.getTaxId(), accession, commonName, entryType, fields, refs);
         addReactionFieldsAndXrefs(uniprotEntry.getEnzymePortalReactionSet(), fields, refs);
         addReactantFieldsAndXrefs(uniprotEntry.getEnzymePortalReactantSet(), fields, refs);
 
@@ -149,15 +147,19 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             addPrimaryEc(uniprotEntry, fields);
             addPrimaryCatalyticActivityFields(uniprotEntry, fields);
             addPrimaryGeneNameFields(uniprotEntry, fields);
+            //ec class names are used in facets
+            addEnzymeFamilyToProteinField(uniprotEntry.getEnzymePortalEcNumbersSet(), fields);
         }
     }
 
     private void addEnzymeFamilyToProteinField(Set<EnzymePortalEcNumbers> enzymes, Set<Field> fields) {
 
-        enzymes
-                .stream()
-                .map(ec -> new Field(FieldName.ENZYME_FAMILY.getName(), computeEcToFamilyName(ec.getEcFamily())))
-                .forEach((field) -> fields.add(field));
+//        enzymes
+//                .stream()
+//                .map(ec -> new Field(FieldName.ENZYME_FAMILY.getName(), computeEcToFamilyName(ec.getEcFamily())))
+//                .forEach(field -> fields.add(field));
+        
+         enzymes.forEach(ec -> addField(FieldName.ENZYME_FAMILY.getName(), computeEcToFamilyName(ec.getEcFamily()), fields));
 
     }
 
@@ -213,7 +215,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         BigInteger type = primaryProtein.getEntryType();
 
         if (type != null) {
-             Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), "" + type.intValue());
+            Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), "" + type.intValue());
 
             fields.add(entryTypefield);
         }
@@ -233,34 +235,45 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     private void addPrimaryGeneNameFields(UniprotEntry entry, Set<Field> fields) {
 
-        entry.getEntryToGeneMappingSet()
-                .stream()
-                .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
-                .forEach(field -> fields.add(field));
+//        entry.getEntryToGeneMappingSet()
+//                .stream()
+//                .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
+//                .forEach(field -> fields.add(field));
+        
+         entry.getEntryToGeneMappingSet().forEach(geneMapping -> addField(FieldName.GENE_NAME.getName(), geneMapping.getGeneName(), fields));
 
     }
 
     private void addPrimaryCatalyticActivityFields(UniprotEntry entry, Set<Field> fields) {
 
-        Set<EnzymeCatalyticActivity> activities
-                = entry.getEnzymeCatalyticActivitySet();
-
-        if (!activities.isEmpty()) {
-
-            activities.stream().map(activity -> new Field(FieldName.CATALYTIC_ACTIVITY.getName(), activity.getCatalyticActivity()))
-                    .forEach((primaryActivityfield) -> fields.add(primaryActivityfield));
-
-        }
+//        Set<EnzymeCatalyticActivity> activities
+//                = entry.getEnzymeCatalyticActivitySet();
+//
+//        if (!activities.isEmpty()) {
+//
+//            activities.stream().map(activity -> new Field(FieldName.CATALYTIC_ACTIVITY.getName(), activity.getCatalyticActivity()))
+//                    .forEach((primaryActivityfield) -> fields.add(primaryActivityfield));
+//
+//        }
+        
+         entry.getEnzymeCatalyticActivitySet().forEach(activity -> addField(FieldName.CATALYTIC_ACTIVITY.getName(), activity.getCatalyticActivity(), fields));
 
     }
 
     private void addPrimaryEc(UniprotEntry entry, Set<Field> fields) {
 
-        entry.getEnzymePortalEcNumbersSet()
-                .stream()
-                .map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber().getEcNumber()))
-                .forEach(ecfield -> fields.add(ecfield));
+//        entry.getEnzymePortalEcNumbersSet()
+//                .stream()
+//                .map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber().getEcNumber()))
+//                .forEach(ecfield -> fields.add(ecfield));
+        
+        entry.getEnzymePortalEcNumbersSet().forEach(ec -> addField(FieldName.EC.getName(), ec.getEcNumber().getEcNumber(), fields));
 
+    }
+    
+    private void addField(String fieldId, String value, Set<Field> fields){
+         Field field = new Field(fieldId, value);
+          fields.add(field);
     }
 
     private void addStatus(Short type, Set<Field> fields) {

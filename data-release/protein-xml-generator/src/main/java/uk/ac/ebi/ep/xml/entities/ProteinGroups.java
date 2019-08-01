@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.xml.entities;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,11 +43,12 @@ public class ProteinGroups implements Serializable {
     private String proteinGroupId;
     @Column(name = "ENTRY_TYPE")
     private BigInteger entryType;
-    @OneToMany(mappedBy = "proteinGroupId", fetch = FetchType.EAGER)
+    
     //@Fetch(FetchMode.SELECT)
     //@BatchSize(size = 1000)
    // @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-    private Set<UniprotEntry> uniprotEntrySet = Collections.emptySet();
+    @OneToMany(mappedBy = "proteinGroupId", cascade = CascadeType.ALL,orphanRemoval = true, targetEntity = UniprotEntry.class, fetch = FetchType.EAGER)
+    private Set<UniprotEntry> uniprotEntrySet;// = Collections.emptySet();
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "proteinGroups")
     private PrimaryProtein primaryProtein;
 

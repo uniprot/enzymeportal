@@ -5,14 +5,21 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.Order;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
+import org.springframework.batch.item.database.support.OraclePagingQueryProvider;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +29,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import uk.ac.ebi.ep.xml.dao.ProteinGroupsMapper;
 import uk.ac.ebi.ep.xml.entities.ProteinGroups;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
@@ -45,23 +53,26 @@ public class ProteinCentricConfiguration {
 
     private static final String ROOT_TAG_NAME = "database";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups p JOIN uniprot_entry u ON u.protein_group_id = p.protein_group_id and p.protein_group_id = 'ESLAHW'";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups where  rownum <=100";
     private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p";
     // private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='E069GJ'";//11345
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='E76XC1'";
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='EIY847'";
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p JOIN FETCH p.uniprotEntrySet";
-    //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p JOIN FETCH p.uniprotEntrySet u WHERE p.proteinGroupId='EIY847'";
+   // private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p JOIN FETCH p.uniprotEntrySet u WHERE p.proteinGroupId='EIY847'";
     //------- TEST QUERY --------
 //       private static final String NATIVE_READ_QUERY = "select * from PROTEIN_GROUPS where ENTRY_TYPE=0 and rownum<=1 \n"
 //            + "union\n"
 //            + "select * from PROTEIN_GROUPS where ENTRY_TYPE=1 and rownum<=2";
     //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='ESLAHW'";
     // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EIGNIC'";
-    //ETDS4U - 116064
+    //ETDS4U - 120691
     //EIY847 - 26932
+    //EQNOCO - 29584
+    //E99MXF - 1_411_797
     //EW69YX - java.lang.OutOfMemoryError: Requested array size exceeds VM limit
-    //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EVBIH4'";
+    // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E069GJ'";
     //private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'";//longest running
     // private static final String NATIVE_READ_QUERY  = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E069GJ'";
     // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
@@ -75,24 +86,42 @@ public class ProteinCentricConfiguration {
     protected final EntityManagerFactory entityManagerFactory;
 
     private final XmlFileProperties xmlFileProperties;
-//    private final DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 //    private final SessionFactory sessionFactory;
 
     @Autowired
-    public ProteinCentricConfiguration( EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public ProteinCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
 
     }
+    
+    
+      //@Bean
+  public JpaPagingItemReader<ProteinGroups> databaseReaderXX(){
+     JpaPagingItemReader<ProteinGroups> clientReader = new JpaPagingItemReader<>();
+     clientReader.setEntityManagerFactory(entityManagerFactory);
+     clientReader.setQueryString(JPA_QUERY);
+     clientReader.setPageSize(xmlFileProperties.getPageSize());
+     clientReader.setSaveState(false);
+     clientReader.setTransacted(false);
+        try {
+            clientReader.afterPropertiesSet();
+        } catch (Exception ex) {
+            System.out.println("ERROR "+ ex.getMessage());
+        }
+     return clientReader;
+  }
 
     @Bean(destroyMethod = "")
     public JpaPagingItemReader<ProteinGroups> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
-                .name("READ_UNIQUE_PROTEIN_GROUPS")
+                .name("READ_UNIQUE_PROTEIN_GROUPS_" + DATE)
                 .entityManagerFactory(entityManagerFactory)
-                //.queryString(JPA_QUERY)
-                .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
+                .queryString(JPA_QUERY)
+                //.queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
                 .pageSize(xmlFileProperties.getPageSize())
                 .saveState(false)
                 .transacted(false)
@@ -111,7 +140,7 @@ public class ProteinCentricConfiguration {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
         //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
-        xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
+        xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE_" + DATE);
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);
         xmlWriter.setMarshaller(xmlMarshaller(Entry.class));
@@ -195,26 +224,38 @@ public class ProteinCentricConfiguration {
 //                .saveState(false)
 //                .build();
 //    }
-    // @Bean
-//    public JdbcPagingItemReader<ProteinGroup> databaseReader(DataSource dataSource, PagingQueryProvider queryProvider) {
-//
-//                return new JdbcPagingItemReaderBuilder<ProteinGroup>()
-//                                           .name("proteinGroupDatabaseReader")
-//                                           .dataSource(dataSource)
-//                                           .queryProvider(queryProvider)
-//                                          // .rowMapper(customerCreditMapper())
-//                                           .pageSize(100)
-//                                           .build();
-//    }
+    //@Bean(destroyMethod = "")
+    public JdbcPagingItemReader<ProteinGroups> databaseReaderXXX() {
+
+        return new JdbcPagingItemReaderBuilder<ProteinGroups>()
+                .name("proteinGroupDatabaseReader")
+                .dataSource(dataSource)
+                .queryProvider(pagingQueryProvider())
+                .rowMapper(new ProteinGroupsMapper())
+                .pageSize(100)
+                .build();
+    }
+
+    private PagingQueryProvider pagingQueryProvider() {
+        OraclePagingQueryProvider pagingQueryProvider = new OraclePagingQueryProvider();
+        pagingQueryProvider.setSelectClause("*");
+        pagingQueryProvider.setFromClause("from PROTEIN_GROUPS p JOIN uniprot_entry u ON u.protein_group_id = p.protein_group_id");
+        // provider.setWhereClause("where status=:status");
+        Map mm = new HashMap<>();
+        mm.put("PROTEIN_GROUP_ID", Order.ASCENDING);
+        pagingQueryProvider.setSortKeys(mm);
+        return pagingQueryProvider;
+    }
     //@Bean
-//public SqlPagingQueryProviderFactoryBean queryProvider() {
-//        SqlPagingQueryProviderFactoryBean provider = new SqlPagingQueryProviderFactoryBean();
-//
-//        provider.setSelectClause("*");
-//        provider.setFromClause("from PROTEIN_GROUPS");
-//       // provider.setWhereClause("where status=:status");
-//        provider.setSortKey("PROTEIN_GROUP_ID");
-//
-//        return provider;
-//}
+
+    public SqlPagingQueryProviderFactoryBean queryProvider() {
+        SqlPagingQueryProviderFactoryBean provider = new SqlPagingQueryProviderFactoryBean();
+
+        provider.setSelectClause("*");
+        provider.setFromClause("from PROTEIN_GROUPS");
+        // provider.setWhereClause("where status=:status");
+        provider.setSortKey("PROTEIN_GROUP_ID");
+
+        return provider;
+    }
 }
