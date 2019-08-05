@@ -20,6 +20,7 @@ public interface EnzymeReactionInfoRepository extends JpaRepository<EnzymeReacti
     @Query(value = "SELECT  uniprotAccession, xref FROM EnzymeReactionInfo WHERE xrefType=:xrefType")
     List<ReactionInfoView> findReactionInfoViewByXrefType(@Param("xrefType") String xrefType);
 
+    //@Query("SELECT e FROM EnzymeReactionInfo e WHERE e.xrefType=:xrefType AND xref='CHEBI:30839'")
     @Query("SELECT e FROM EnzymeReactionInfo e WHERE e.xrefType=:xrefType")
     Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(@Param("xrefType") String xrefType);
 
@@ -40,5 +41,11 @@ public interface EnzymeReactionInfoRepository extends JpaRepository<EnzymeReacti
 
     @Query("SELECT e FROM EnzymeReactionInfo e WHERE ROWID IN ( SELECT MAX(ROWID) FROM EnzymeReactionInfo WHERE xrefType=:xrefType GROUP BY xref )")
     Stream<EnzymeReactionInfo> findUniqueXrefReactionInfoByXrefTypeAndStream(@Param("xrefType") String xrefType);
+
+//    @Query("SELECT e FROM EnzymeReactionInfoPart e  WHERE e.xrefType=:xrefType AND e.xref='CHEBI:30839'")
+//    Stream<EnzymeReactionInfoPart> streamReactionInfoByPartitionAndXrefType(@Param("xrefType") String xrefType);
+//
+//    @Query(value = "SELECT * FROM ENZYME_REACTION_INFO_PART partition(p1) where xref_type = :xref_type", nativeQuery = true)
+//    List<EnzymeReactionInfoPart> loadByPartition( @Param("xref_type") String xrefType);
 
 }
