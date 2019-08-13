@@ -22,15 +22,15 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
-        log.warn(jobName + " job starting...");
+        log.debug(jobName + " job starting...");
     }
 
     @Override
     public void afterJob(JobExecution jobExecution) {
-        log.warn(jobName + "job status :: " + jobExecution.getStatus());
+        log.info(jobName + "job status :: " + jobExecution.getStatus());
         
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            log.warn(jobName + "job has completed.");
+            log.info(jobName + "job has completed.");
 
             String duration = DateTimeUtil.convertToText(jobExecution.getStartTime().getTime(),
                     jobExecution.getEndTime().getTime());
@@ -40,7 +40,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
             log.info("Exit status   : {}", jobExecution.getExitStatus().getExitCode());
             log.info("Start time    : {}", jobExecution.getStartTime());
             log.info("End time      : {}", jobExecution.getEndTime());
-            log.warn("Duration      : {}", duration);
+            log.info("Duration      : {}", duration);
         }
     }
 }

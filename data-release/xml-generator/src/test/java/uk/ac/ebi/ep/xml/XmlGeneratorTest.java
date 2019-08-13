@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import lombok.extern.slf4j.Slf4j;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
 import static org.junit.Assert.assertThat;
@@ -25,11 +26,12 @@ import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 /**
  * @author Joseph
  */
-//@Ignore //remove ignore when uzpdev is refreshed
+
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"management.port=0"})
-@ActiveProfiles("uzpdev")
+@ActiveProfiles("uzprel")
 public class XmlGeneratorTest {
 
     @Autowired
@@ -114,7 +116,7 @@ public class XmlGeneratorTest {
         //throw new IllegalArgumentException("Step name not recognized: " + stepName);
         return jobExecution.getStepExecutions()
                 .stream()
-                .peek(s -> System.out.println("Job Status : " + s.getStatus().name()))
+                .peek(s -> log.info("Job Status : " + s.getStatus().name()))
                 .filter(stepExecution -> stepExecution.getStepName().equalsIgnoreCase(stepName))
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
@@ -135,6 +137,7 @@ public class XmlGeneratorTest {
 
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
+                //log.info(line);
             }
         }
     }

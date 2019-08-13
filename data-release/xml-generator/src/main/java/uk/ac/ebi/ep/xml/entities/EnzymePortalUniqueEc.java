@@ -1,14 +1,12 @@
-
-package uk.ac.ebi.ep.xml.entity.enzyme;
+package uk.ac.ebi.ep.xml.entities;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,54 +15,43 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
-@Table(name = "INTENZ_ENZYMES")
+@Table(name = "ENZYME_PORTAL_UNIQUE_EC")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "IntenzEnzymes.findAll", query = "SELECT i FROM IntenzEnzymes i"),
-    @NamedQuery(name = "IntenzEnzymes.findByInternalId", query = "SELECT i FROM IntenzEnzymes i WHERE i.internalId = :internalId"),
-    @NamedQuery(name = "IntenzEnzymes.findByEcNumber", query = "SELECT i FROM IntenzEnzymes i WHERE i.ecNumber = :ecNumber"),
-    @NamedQuery(name = "IntenzEnzymes.findByEnzymeName", query = "SELECT i FROM IntenzEnzymes i WHERE i.enzymeName = :enzymeName"),
-    @NamedQuery(name = "IntenzEnzymes.findByCatalyticActivity", query = "SELECT i FROM IntenzEnzymes i WHERE i.catalyticActivity = :catalyticActivity"),
-    @NamedQuery(name = "IntenzEnzymes.findByTransferFlag", query = "SELECT i FROM IntenzEnzymes i WHERE i.transferFlag = :transferFlag"),
-    @NamedQuery(name = "IntenzEnzymes.findByAccPresent", query = "SELECT i FROM IntenzEnzymes i WHERE i.accPresent = :accPresent"),
-    @NamedQuery(name = "IntenzEnzymes.findByCofactor", query = "SELECT i FROM IntenzEnzymes i WHERE i.cofactor = :cofactor")})
-public class IntenzEnzymes implements Serializable {
+@NamedQuery(name = "EnzymePortalUniqueEc.findAll", query = "SELECT e FROM EnzymePortalUniqueEc e")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByEcNumber", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecNumber = :ecNumber")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByEcFamily", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.ecFamily = :ecFamily")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByEnzymeName", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.enzymeName = :enzymeName")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByCatalyticActivity", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.catalyticActivity = :catalyticActivity")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByTransferFlag", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.transferFlag = :transferFlag")
+@NamedQuery(name = "EnzymePortalUniqueEc.findByCofactor", query = "SELECT e FROM EnzymePortalUniqueEc e WHERE e.cofactor = :cofactor")
+public class EnzymePortalUniqueEc implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    @Column(name = "INTERNAL_ID")
-    private BigInteger internalId;
     @Id
     @Basic(optional = false)
     @Column(name = "EC_NUMBER")
     private String ecNumber;
+    @Column(name = "EC_FAMILY")
+    private Short ecFamily;
     @Column(name = "ENZYME_NAME")
     private String enzymeName;
     @Column(name = "CATALYTIC_ACTIVITY")
     private String catalyticActivity;
     @Column(name = "TRANSFER_FLAG")
     private Character transferFlag;
-    @Column(name = "ACC_PRESENT")
-    private Character accPresent;
     @Column(name = "COFACTOR")
     private String cofactor;
-    @OneToMany(mappedBy = "ecNumber")
-    private Set<IntenzAltNames> intenzAltNamesSet;// = new HashSet<>();
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
+    private Set<IntenzAltNames> intenzAltNamesSet;
 
-    public IntenzEnzymes() {
+    public EnzymePortalUniqueEc() {
     }
 
-    public IntenzEnzymes(String ecNumber) {
+    public EnzymePortalUniqueEc(String ecNumber) {
         this.ecNumber = ecNumber;
-    }
-
-    public BigInteger getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(BigInteger internalId) {
-        this.internalId = internalId;
     }
 
     public String getEcNumber() {
@@ -73,6 +60,14 @@ public class IntenzEnzymes implements Serializable {
 
     public void setEcNumber(String ecNumber) {
         this.ecNumber = ecNumber;
+    }
+
+    public Short getEcFamily() {
+        return ecFamily;
+    }
+
+    public void setEcFamily(Short ecFamily) {
+        this.ecFamily = ecFamily;
     }
 
     public String getEnzymeName() {
@@ -97,14 +92,6 @@ public class IntenzEnzymes implements Serializable {
 
     public void setTransferFlag(Character transferFlag) {
         this.transferFlag = transferFlag;
-    }
-
-    public Character getAccPresent() {
-        return accPresent;
-    }
-
-    public void setAccPresent(Character accPresent) {
-        this.accPresent = accPresent;
     }
 
     public String getCofactor() {
@@ -133,19 +120,17 @@ public class IntenzEnzymes implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof IntenzEnzymes)) {
+
+        if (!(object instanceof EnzymePortalUniqueEc)) {
             return false;
         }
-        IntenzEnzymes other = (IntenzEnzymes) object;
+        EnzymePortalUniqueEc other = (EnzymePortalUniqueEc) object;
         return !((this.ecNumber == null && other.ecNumber != null) || (this.ecNumber != null && !this.ecNumber.equals(other.ecNumber)));
     }
 
     @Override
     public String toString() {
-        return "IntenzEnzymes{" + "ecNumber=" + ecNumber + ", enzymeName=" + enzymeName + ", catalyticActivity=" + catalyticActivity + ", transferFlag=" + transferFlag + ", accPresent=" + accPresent + ", cofactor=" + cofactor + '}';
+        return "uk.ac.ebi.ep.xml.entities.EnzymePortalUniqueEc[ ecNumber=" + ecNumber + " ]";
     }
 
-
-    
 }

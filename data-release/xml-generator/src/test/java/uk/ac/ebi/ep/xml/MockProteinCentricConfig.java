@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
-import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
+import uk.ac.ebi.ep.xml.entities.ProteinGroups;
+import uk.ac.ebi.ep.xml.entities.repositories.ProteinXmlRepository;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
@@ -51,11 +52,13 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     protected final EntityManagerFactory entityManagerFactory;
 
     private final XmlFileProperties xmlFileProperties;
+    private final ProteinXmlRepository proteinXmlRepository;
 
     @Autowired
-    public MockProteinCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public MockProteinCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties, ProteinXmlRepository proteinXmlRepository) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
+        this.proteinXmlRepository = proteinXmlRepository;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     public ItemReader<ProteinGroups> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<ProteinGroups>()
-                .name("READ_UNIQUE_PROTEIN_GROUP")
+                .name("READ_UNIQUE_PROTEIN_GROUP_"+ DATE)
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, ProteinGroups.class))
@@ -75,7 +78,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor();
+        return new ProteinGroupsProcessor(proteinXmlRepository);
 
     }
 

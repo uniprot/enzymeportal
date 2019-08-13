@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.xml.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
@@ -49,7 +48,9 @@ public class XmlFileUtils {
                 = PosixFilePermissions.fromString(permission);
         FileAttribute<Set<PosixFilePermission>> attr
                 = PosixFilePermissions.asFileAttribute(perms);
-        boolean fileExist = Files.exists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS);
+       // boolean fileExist = Files.exists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS);
+          boolean fileExist = Paths.get(directory).toFile().exists();
+       
         if (!fileExist) {
             //Files.createDirectories(Paths.get(directory), attr);
             Files.createDirectory(Paths.get(directory), attr);

@@ -11,26 +11,16 @@ import javax.xml.bind.annotation.XmlType;
  * @author joseph
  */
 @XmlRootElement
-//@XmlType(propOrder = {"id", "acc", "name", "description", "additionalFields", "crossReferences"})
 @XmlType(propOrder = {"id", "name", "description", "additionalFields", "crossReferences"})
 public class Entry {
 
     private String id;
-   // private String acc;
     private String name;
     private String description;
 
     private AdditionalFields additionalFields;
     private CrossReferences crossReferences;
 
-//    public String getAcc() {
-//        return acc;
-//    }
-//
-//    @XmlAttribute(name = "acc")
-//    public void setAcc(String acc) {
-//        this.acc = acc;
-//    }
 
     public String getId() {
         return id;
@@ -79,11 +69,6 @@ public class Entry {
     }
     
     
-
-//    @Override
-//    public String toString() {
-//        return "Entry{" + "id=" + id + ", acc=" + acc + ", name=" + name + ", description=" + description + ", additionalFields=" + additionalFields + ", crossReferences=" + crossReferences + '}';
-//    }
 
     @Override
     public String toString() {

@@ -10,14 +10,18 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
 
 /**
  * Extension of the {@link StaxEventItemWriter} that indents the xml tags.
  *
  * @author Joseph
+ * @param <T>
  */
+@Slf4j
 public class CustomStaxEventItemWriter<T> extends StaxEventItemWriter<T> {
+
     @Override
     protected XMLEventWriter createXmlEventWriter(XMLOutputFactory outputFactory, Writer writer)
             throws XMLStreamException {
@@ -44,12 +48,12 @@ public class CustomStaxEventItemWriter<T> extends StaxEventItemWriter<T> {
             if (event.getEventType() == XMLStreamConstants.CHARACTERS) {
                 Characters characters = event.asCharacters();
                 if (characters.getData().isEmpty()) {
-//                    log.debug("Skipping blank event characters, {}", event);
+                    log.debug("Skipping blank event characters, {}", event);
 
                     return;
                 }
             }
-            super.add(event);         
+            super.add(event);
         }
     }
 }

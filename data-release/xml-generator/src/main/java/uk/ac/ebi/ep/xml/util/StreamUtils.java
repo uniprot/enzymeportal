@@ -15,6 +15,9 @@ import java.util.stream.StreamSupport;
  */
 public class StreamUtils {
 
+    private StreamUtils() {
+    }
+
     public static <T> Stream<T> stream(Iterator<T> sourceIterator) {
         return compute(sourceIterator, false);
     }

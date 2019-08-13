@@ -13,7 +13,6 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
  */
 @Slf4j
 public class LogJobListener implements JobExecutionListener {
-    //private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String jobName;
 

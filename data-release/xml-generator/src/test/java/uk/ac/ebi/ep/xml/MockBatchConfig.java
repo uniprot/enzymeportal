@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
-import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
-import uk.ac.ebi.ep.xml.entity.protein.ProteinGroups;
+import uk.ac.ebi.ep.xml.entities.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entities.ProteinGroups;
 import uk.ac.ebi.ep.xml.schema.Entry;
 
 /**

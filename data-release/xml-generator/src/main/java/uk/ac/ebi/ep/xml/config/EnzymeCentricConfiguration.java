@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entities.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entities.repositories.ProteinXmlRepository;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
@@ -39,15 +40,15 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 public class EnzymeCentricConfiguration extends AbstractBatchConfig {
 
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
-   private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
     private static final String ROOT_TAG_NAME = "database";
 
     ////------- TEST QUERY --------
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
-    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.1.1.1'"; //3.2.1.21
+    private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='1.1.1.1'"; //3.2.1.21
     //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.1.4.35'"; //3.2.1.21
-      //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.7.7.7'"; //3.2.1.21
-        //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.5.1.-'"; //3.2.1.21
+    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.7.7.7'"; //3.2.1.21
+    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.5.1.-'"; //3.2.1.21
     /// end TEST QUERY /////
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
@@ -57,13 +58,13 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     protected final EntityManagerFactory entityManagerFactory;
 
     private final XmlFileProperties xmlFileProperties;
+    private final ProteinXmlRepository proteinXmlRepository;
 
-    //@Autowired
-    //private DataSource dataSource;
     @Autowired
-    public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public EnzymeCentricConfiguration(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties, ProteinXmlRepository proteinXmlRepository) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
+        this.proteinXmlRepository = proteinXmlRepository;
     }
 
     @Bean(destroyMethod = "", name = "enzymeDatabaseReader")
@@ -72,7 +73,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
         JpaNativeQueryProvider<EnzymePortalUniqueEc> queryProvider = createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class);
 
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
-                .name("READ_UNIQUE_EC")
+                .name("READ_UNIQUE_EC_" + DATE)
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getPageSize())
                 .queryProvider(queryProvider)
@@ -85,7 +86,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     @Override
     public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new EnzymeProcessor();
+        return new EnzymeProcessor(proteinXmlRepository);
 
     }
 
@@ -94,7 +95,6 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
-        //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);

@@ -24,8 +24,6 @@ import uk.ac.ebi.ep.xml.util.Preconditions;
 @Slf4j
 public class XmlHeaderCallback implements StaxWriterCallback {
 
-
-    //TODO move to a data class
     static final String DB_NAME_ELEMENT = "name";
     static final String DB_DESCRIPTION_ELEMENT = "description";
     static final String RELEASE_VERSION_ELEMENT = "release";
@@ -77,7 +75,5 @@ public class XmlHeaderCallback implements StaxWriterCallback {
     protected String createTodayDate() {
         return DateTimeUtil.convertDateToString(LocalDate.now());
     }
-    
-    
 
 }

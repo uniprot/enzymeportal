@@ -51,9 +51,6 @@ public abstract class AbstractBatchConfig<T, S> {
     }
 
     abstract ItemReadListener itemReadListener();
-//    protected ItemReadListener itemReadListener() {
-//        return new DatabaseReaderListener<T>();
-//    }
 
     protected ItemProcessListener itemProcessListener() {
         return new XmlProcessorListener<T,S>();

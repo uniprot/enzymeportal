@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.xml.transformer;
+package uk.ac.ebi.ep.xml.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,7 +95,6 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
     public Integer computeFamilyNameToEc(String family) {
 
         if (family.equalsIgnoreCase(EnzymeFamily.OXIDOREDUCTASES.getName())) {
-            //return 1;
             return EnzymeClass.OXIDOREDUCTASES.getFamilyName();
         }
         if (family.equalsIgnoreCase(EnzymeFamily.TRANSFERASES.getName())) {
@@ -156,7 +155,6 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
     public String computeEc(String family) {
 
         if (family.equalsIgnoreCase(EnzymeFamily.OXIDOREDUCTASES.getName())) {
-            //return "1";
             return EcClass.OXIDOREDUCTASES.getName();
         }
         if (family.equalsIgnoreCase(EnzymeFamily.TRANSFERASES.getName())) {

@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
-import uk.ac.ebi.ep.xml.entity.enzyme.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entities.EnzymePortalUniqueEc;
+import uk.ac.ebi.ep.xml.entities.repositories.ProteinXmlRepository;
 import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
@@ -50,10 +51,13 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
 
     private final XmlFileProperties xmlFileProperties;
 
+    private final ProteinXmlRepository proteinXmlRepository;
+
     @Autowired
-    public MockEnzymeCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties) {
+    public MockEnzymeCentricConfig(EntityManagerFactory entityManagerFactory, XmlFileProperties xmlFileProperties, ProteinXmlRepository proteinXmlRepository) {
         this.entityManagerFactory = entityManagerFactory;
         this.xmlFileProperties = xmlFileProperties;
+        this.proteinXmlRepository = proteinXmlRepository;
     }
 
     @Bean(destroyMethod = "", name = "enzymeDatabaseReaderTest")
@@ -61,7 +65,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     public ItemReader<EnzymePortalUniqueEc> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
-                .name("READ_UNIQUE_EC")
+                .name("READ_UNIQUE_EC_"+ DATE)
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class))
@@ -74,7 +78,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     @Override
     public ItemProcessor<EnzymePortalUniqueEc, Entry> entryProcessor() {
 
-        return new EnzymeProcessor();
+        return new EnzymeProcessor(proteinXmlRepository);
 
     }
 

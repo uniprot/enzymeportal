@@ -15,6 +15,7 @@
  */
 package uk.ac.ebi.ep.xml.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-//@Data
+@Data
 @Configuration
 @ConfigurationProperties(prefix = "ep.xml")
 public class XmlFileProperties {
@@ -35,71 +36,5 @@ public class XmlFileProperties {
     private int chunkSize;
     private String dir;
     private int pageSize;
-
-    public String getReleaseNumber() {
-        return releaseNumber;
-    }
-
-    public void setReleaseNumber(String releaseNumber) {
-        this.releaseNumber = releaseNumber;
-    }
-
-    public String getEnzymeCentric() {
-        return enzymeCentric;
-    }
-
-    public void setEnzymeCentric(String enzymeCentric) {
-        this.enzymeCentric = enzymeCentric;
-    }
-
-    public String getProteinCentric() {
-        return proteinCentric;
-    }
-
-    public void setProteinCentric(String proteinCentric) {
-        this.proteinCentric = proteinCentric;
-    }
-
-    public String getProteinEntry() {
-        return proteinEntry;
-    }
-
-    public void setProteinEntry(String proteinEntry) {
-        this.proteinEntry = proteinEntry;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
-    public int getChunkSize() {
-        return chunkSize;
-    }
-
-    public void setChunkSize(int chunkSize) {
-        this.chunkSize = chunkSize;
-    }
-
-    public String getDir() {
-        return dir;
-    }
-
-    public void setDir(String dir) {
-        this.dir = dir;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-    
-    
 
 }

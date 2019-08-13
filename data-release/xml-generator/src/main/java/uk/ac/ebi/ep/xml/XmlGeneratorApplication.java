@@ -9,4 +9,5 @@ public class XmlGeneratorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(XmlGeneratorApplication.class, args);
 	}
+
 }

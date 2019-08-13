@@ -15,7 +15,6 @@ import uk.ac.ebi.ep.xml.util.Preconditions;
  */
 @Slf4j
 public class LogChunkListener implements ChunkListener {
-   // private static final Logger logger = LoggerFactory.getLogger(LogChunkListener.class);
 
     private long counter;
     private long startProcessingTime;

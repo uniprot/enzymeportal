@@ -19,7 +19,7 @@ import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 @Slf4j
 public class GlobalListener<T, S> implements StepExecutionListener, ItemReadListener<T>, ItemProcessListener<T, S>, ItemWriteListener<T> {
 
-     private long readStartTime;
+    private long readStartTime;
     private long processorStartTime;
     private long writeStartTime;
 
@@ -30,7 +30,7 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
 
     @Override
     public ExitStatus afterStep(StepExecution se) {
-        log.warn("Step Execution Exit Status Info :: " + se);
+        log.debug("Step Execution Exit Status Info :: " + se);
         return se.getExitStatus();
     }
 
@@ -41,14 +41,13 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
 
     @Override
     public void afterRead(T t) {
-        String timeText = printTime(readStartTime);
 
-        log.warn("Time taken to read the entry [" + t + "]: " + timeText);
+        log.debug("Time taken to read the entry [" + t + "]: " + printTime(readStartTime));
     }
 
     @Override
     public void onReadError(Exception excptn) {
-        log.error("Read Error :: " + excptn);
+        log.debug("Read Error :: " + excptn);
     }
 
     @Override
@@ -59,14 +58,13 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
 
     @Override
     public void afterProcess(T t, S s) {
-        String timeText = printTime(processorStartTime);
 
-        //log.error("Time taken to process the entry [" + t + "]: " + timeText);
+        log.debug("Time taken to process the entry [" + t + "]: " + printTime(processorStartTime));
     }
 
     @Override
     public void onProcessError(T t, Exception excptn) {
-        log.error("Error while Processing Entry ::  " + t + " :: " + excptn);
+        log.debug("Error while Processing Entry ::  " + t + " :: " + excptn);
     }
 
     @Override
@@ -76,14 +74,13 @@ public class GlobalListener<T, S> implements StepExecutionListener, ItemReadList
 
     @Override
     public void afterWrite(List<? extends T> list) {
-        String timeText = printTime(writeStartTime);
 
-       // log.error("Time taken to write the entry size [" + list.size() + "]: " + timeText);
+        log.debug("Time taken to write the entry size [" + list.size() + "]: " + printTime(writeStartTime));
     }
 
     @Override
     public void onWriteError(Exception excptn, List<? extends T> list) {
-        log.error("writer Error :: " + excptn);
+        log.debug("writer Error :: " + excptn);
     }
 
     private String printTime(long time) {

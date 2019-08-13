@@ -21,12 +21,7 @@ import uk.ac.ebi.ep.xml.config.DataConfig;
 public class ProteinCentricBatchJob {
 
     public static void main(String[] args) throws Exception {
-// System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "34");
- //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "22767"); 
-  //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "100"); 
-         //ForkJoinPool forkJoinPool =  new ForkJoinPool();
-                //log.error("ForkJoinPool.getCommonPoolParallelism() : " + ForkJoinPool.getCommonPoolParallelism() +"  Available Processor : "+ Runtime.getRuntime().availableProcessors());
-                log.error("Available Processor : "+ Runtime.getRuntime().availableProcessors());
+
         ConfigurableApplicationContext context = SpringApplication.run(ProteinCentricBatchJob.class, args);
 
         Job xmlJob = context.getBean("proteinXmlJob", Job.class);

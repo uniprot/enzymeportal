@@ -7,7 +7,7 @@
 echo "[INFO] Request to start generating protein-centric XML - $(date)"
 echo "[INFO] *******************************************************************"
 #fine-tune memory for this job.
-export MAVEN_OPTS="-Xmx64g -Xss512m"
+#export MAVEN_OPTS="-Xmx64g -Xss512m"
 WD=$(pwd)
 cd $(dirname $0)/..
 

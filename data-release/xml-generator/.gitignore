@@ -1,5 +1,8 @@
-/target/
+HELP.md
+target/
 !.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -18,26 +21,11 @@
 
 ### NetBeans ###
 /nbproject/private/
-/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
+build/
 
-
-### Projects Specifics ###
-*.properties
-*.log
-/data-release/ep-config/target/
-/data-release/ep-model/target/
-/data-release/centralService/target/
-/data-release/PDBeAdapter/target/
-/data-release/DataAnalysis/target/
-/data-release/ep-parser/target/
-/data-release/SitemapGenerator/target/
-/data-release/SitemapGenerator/SitemapGenerator.iml
-#/data-release/.idea*
-/data-release/.idea/checkstyle-idea.xml
-/data-release/.idea/codeStyles/Project.xml
-/data-release/.idea/dbnavigator.xml
-!/src/main/resources/config/application.properties
+### VS Code ###
+.vscode/

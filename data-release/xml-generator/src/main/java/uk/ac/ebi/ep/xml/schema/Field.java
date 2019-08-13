@@ -12,25 +12,25 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType
 public class Field {
 
-    private String field;
+    private String fieldName;
     private String value;
 
     public Field() {
     }
     
 
-    public Field(String field, String value) {
-        this.field = field;
+    public Field(String name, String value) {
+        this.fieldName = name;
         this.value = value;
     }
 
-    public String getField() {
-        return field;
+    public String getFieldName() {
+        return fieldName;
     }
 
     @XmlAttribute(name = "name")
-    public void setField(String field) {
-        this.field = field;
+    public void setFieldName(String name) {
+        this.fieldName = name;
     }
 
     @XmlValue
