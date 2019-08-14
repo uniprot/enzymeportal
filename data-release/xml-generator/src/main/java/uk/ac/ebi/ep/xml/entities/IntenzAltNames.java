@@ -82,9 +82,5 @@ public class IntenzAltNames implements Serializable {
         return !((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId)));
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.xml.entities.IntenzAltNames[ internalId=" + internalId + " ]";
-    }
 
 }

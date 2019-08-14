@@ -507,9 +507,5 @@ public class ProteinXml implements Serializable {
         return !((this.proteinXmlId == null && other.proteinXmlId != null) || (this.proteinXmlId != null && !this.proteinXmlId.equals(other.proteinXmlId)));
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.xml.entities.ProteinXml[ proteinXmlId=" + proteinXmlId + " ]";
-    }
 
 }

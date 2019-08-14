@@ -95,9 +95,5 @@ public class ProteinGroups implements Serializable {
         return !((this.proteinGroupId == null && other.proteinGroupId != null) || (this.proteinGroupId != null && !this.proteinGroupId.equals(other.proteinGroupId)));
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.xml.entities.ProteinGroups[ proteinGroupId=" + proteinGroupId + " ]";
-    }
 
 }

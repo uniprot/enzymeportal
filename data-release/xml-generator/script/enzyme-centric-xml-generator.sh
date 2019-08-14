@@ -6,7 +6,8 @@
 echo "[INFO] Request to start generating enzyme-centric XML - $(date)"
 echo "[INFO] *******************************************************************"
 #fine-tune memory for this job.
-export MAVEN_OPTS="-Xmx64g -Xss512m"
+#export MAVEN_OPTS="-Xmx64g -Xss512m"
+export MAVEN_OPTS="-Xms1G -Xmx64G -XX:-UseGCOverheadLimit -XX:+UseStringDeduplication"
 WD=$(pwd)
 cd $(dirname $0)/..
 #mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.xml.EnzymeCentricBatchJob" -Dexec.cleanupDaemonThreads=false

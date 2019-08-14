@@ -41,6 +41,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
 
     private static final String ROOT_TAG_NAME = "database";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'"; // 9_815_362 entries to process
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups p JOIN uniprot_entry u ON u.protein_group_id = p.protein_group_id and p.protein_group_id = 'ESLAHW'";
    // private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups where  rownum <=300";
     private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p";

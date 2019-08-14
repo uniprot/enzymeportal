@@ -118,6 +118,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         return entry;
     }
+//ID to investigate - E99MXF  entry count : 3997
 
     private void addProteinInformation(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
         try (Stream<ProteinXml> protein = proteinXmlRepository.streamProteinDataByProteinGroupId(proteinGroups.getProteinGroupId())) {
@@ -130,11 +131,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
         if (primaryProtein != null) {
 
-         
             addPrimaryProteinField(primaryProtein, fields);
             addPrimaryImage(primaryProtein, fields);
             addEntryTypeFields(primaryProtein, fields);
-      
 
             addPrimaryFunctionFields(primaryProtein, fields);
 
@@ -143,7 +142,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void processEntries(ProteinXml uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
-
         String scientificName = uniprotEntry.getScientificName();
         String commonName = uniprotEntry.getCommonName();
         if (Objects.isNull(commonName)) {
@@ -239,7 +237,5 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         }
     }
-
-
 
 }

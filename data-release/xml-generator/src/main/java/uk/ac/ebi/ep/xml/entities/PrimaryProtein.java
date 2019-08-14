@@ -205,9 +205,6 @@ public class PrimaryProtein implements Serializable {
         return !((this.proteinGroupId == null && other.proteinGroupId != null) || (this.proteinGroupId != null && !this.proteinGroupId.equals(other.proteinGroupId)));
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.xml.entities.PrimaryProtein[ proteinGroupId=" + proteinGroupId + " ]";
-    }
+
     
 }

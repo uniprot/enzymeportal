@@ -128,9 +128,6 @@ public class EnzymePortalUniqueEc implements Serializable {
         return !((this.ecNumber == null && other.ecNumber != null) || (this.ecNumber != null && !this.ecNumber.equals(other.ecNumber)));
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.xml.entities.EnzymePortalUniqueEc[ ecNumber=" + ecNumber + " ]";
-    }
+
 
 }
