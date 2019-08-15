@@ -2,15 +2,20 @@ package uk.ac.ebi.ep.xml.transformer;
 
 import java.math.BigInteger;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.jpa.QueryHints;
+import org.hibernate.query.Query;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import uk.ac.ebi.ep.xml.dao.FieldAndRef;
 import uk.ac.ebi.ep.xml.entities.PrimaryProtein;
 import uk.ac.ebi.ep.xml.entities.ProteinGroups;
 import uk.ac.ebi.ep.xml.entities.ProteinXml;
@@ -32,12 +37,14 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
-    private final AtomicInteger count = new AtomicInteger(1);
+   // private final AtomicInteger count = new AtomicInteger(1);
 
     private final ProteinXmlRepository proteinXmlRepository;
+    private final EntityManagerFactory entityManagerFactory;
 
-    public ProteinGroupsProcessor(ProteinXmlRepository repository) {
+    public ProteinGroupsProcessor(ProteinXmlRepository repository, EntityManagerFactory emf) {
         this.proteinXmlRepository = repository;
+        this.entityManagerFactory = emf;
     }
 
     private void addPrimaryProteinField(PrimaryProtein primaryProtein, Set<Field> fields) {
@@ -99,7 +106,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         Set<Field> fields = new HashSet<>();
         Set<Ref> refs = new HashSet<>();
         Set<String> relSpecies = new HashSet<>();
-        log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
+        //log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
 
         Entry entry = new Entry();
 
@@ -109,22 +116,65 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         addPrimaryProtein(proteinGroups, fields);
 
-        addProteinInformation(proteinGroups, fields, refs, relSpecies);
+        //FieldAndRef fieldAndRef = new FieldAndRef();
 
+        // addProteinInformation(fieldAndRef, proteinGroups, fields, refs, relSpecies);
+        addProteinInformation(proteinGroups, fields, refs, relSpecies);
         additionalFields.setField(fields);
         entry.setAdditionalFields(additionalFields);
         cr.setRef(refs);
         entry.setCrossReferences(cr);
-
         return entry;
     }
 //ID to investigate - E99MXF  entry count : 3997
+//""2019-08-15 06:04:52 [uk.ac.ebi.ep.xml.ProteinCentricBatchJob.main()] INFO  u.a.e.e.x.t.ProteinGroupsProcessor - Processor 16 current entry : E3CHQJ  entry count : 165840
+    // Processor 16 current entry : 4.2.1.136  entry count : 4969
 
+    @Transactional(readOnly = true)
     private void addProteinInformation(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
         try (Stream<ProteinXml> protein = proteinXmlRepository.streamProteinDataByProteinGroupId(proteinGroups.getProteinGroupId())) {
             protein.parallel().forEach(data -> processEntries(data, relSpecies, fields, refs));
+            addRelatedSpeciesField(relSpecies, fields);
         }
-        addRelatedSpeciesField(relSpecies, fields);
+        //addRelatedSpeciesField(relSpecies, fields);
+    }
+
+    @Transactional(readOnly = true)
+    private void addProteinInformationHibernate(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
+
+        String query = "SELECT * FROM protein_xml WHERE protein_group_id=" + "'" + proteinGroups.getProteinGroupId() + "'";
+        try (Stream<ProteinXml> stream = entityManagerFactory.createEntityManager().createNativeQuery(query, ProteinXml.class)
+                .setHint(QueryHints.HINT_FETCH_SIZE, 1)
+                .unwrap(Query.class)
+                .stream()) {
+
+            stream.forEach(data -> processEntries(data, relSpecies, fields, refs));
+            addRelatedSpeciesField(relSpecies, fields);
+        }
+
+//        try (Stream<ProteinXml> protein = proteinXmlRepository.streamProteinDataByProteinGroupId(proteinGroups.getProteinGroupId())) {
+//            protein.parallel().forEach(data -> processEntries(data, relSpecies, fields, refs));
+//            addRelatedSpeciesField(relSpecies, fields);
+//        }
+        //addRelatedSpeciesField(relSpecies, fields);
+    }
+
+    @Deprecated
+    private void addProteinInformation(FieldAndRef fieldAndRef, ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
+
+//            Stream<ProteinXml> protein1 = proteinXmlRepository.streamProteinDataByProteinGroupId(proteinGroups.getProteinGroupId());
+//     List<FieldAndRef> ff = protein1.parallel()
+//                    .map(data -> processEntries(fieldAndRef,data, relSpecies, fields, refs)).collect(Collectors.toList());
+//            
+        try (Stream<ProteinXml> protein = proteinXmlRepository.streamProteinDataByProteinGroupId(proteinGroups.getProteinGroupId())) {
+            //protein.parallel().forEach(data -> processEntries(data, relSpecies, fields, refs));
+            List<FieldAndRef> ff = protein.parallel()
+                    .map(data -> processEntries(fieldAndRef, data, relSpecies, fields, refs)).collect(Collectors.toList());
+            addRelatedSpeciesField(relSpecies, fields);
+        }
+//        addRelatedSpeciesField(relSpecies, fields);
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
     }
 
     private void addPrimaryProtein(ProteinGroups proteinGroups, Set<Field> fields) {
@@ -142,14 +192,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void processEntries(ProteinXml uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
-        String scientificName = uniprotEntry.getScientificName();
-        String commonName = uniprotEntry.getCommonName();
-        if (Objects.isNull(commonName)) {
-            commonName = scientificName;
-        }
-
-        addScientificNameFields(scientificName, fields);
-        addCommonNameFields(commonName, fields);
+        addScientificNameFields(uniprotEntry.getScientificName(), fields);
+        addCommonNameFields(uniprotEntry.getCommonName(), fields);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
         addRelatedSpecies(uniprotEntry, relSpecies);
 
@@ -167,6 +211,38 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addUniprotFamilyFieldsAndXrefs(uniprotEntry, fields, refs);
         addPathwayFieldsAndXrefs(uniprotEntry, fields, refs);
         addReactionFieldsAndXrefs(uniprotEntry, fields, refs);
+
+    }
+
+    private FieldAndRef processEntries(FieldAndRef fieldAndRef, ProteinXml uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
+        addScientificNameFields(uniprotEntry.getScientificName(), fields);
+        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+        addAccessionXrefs(uniprotEntry.getAccession(), refs);
+        addRelatedSpecies(uniprotEntry, relSpecies);
+
+        addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
+
+        addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+
+        addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
+
+        addPrimaryEntities(uniprotEntry, fields);
+
+        addEcXrefs(uniprotEntry, refs);
+        addTaxonomyFieldAndXrefs(uniprotEntry, fields, refs);
+
+        addUniprotFamilyFieldsAndXrefs(uniprotEntry, fields, refs);
+        addPathwayFieldsAndXrefs(uniprotEntry, fields, refs);
+        addReactionFieldsAndXrefs(uniprotEntry, fields, refs);
+
+        fieldAndRef.setField(fields);
+        fieldAndRef.setRefs(refs);
+
+//        additionalFields.setField(fields);
+//        cr.setRef(refs);
+//        entry.setAdditionalFields(additionalFields);
+//        entry.setCrossReferences(cr);
+        return fieldAndRef;
 
     }
 
@@ -232,8 +308,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void addRelatedSpecies(ProteinXml uniprotEntry, Set<String> relSpecies) {
         if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
 
-            String species = uniprotEntry.getAccession() + ";" + uniprotEntry.getCommonName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId();
-            relSpecies.add(species);
+            //String species = uniprotEntry.getAccession() + ";" + uniprotEntry.getCommonName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId();
+            relSpecies.add(uniprotEntry.getAccession() + ";" + uniprotEntry.getCommonName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId());
 
         }
     }

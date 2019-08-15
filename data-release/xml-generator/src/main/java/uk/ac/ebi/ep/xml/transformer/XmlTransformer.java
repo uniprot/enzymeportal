@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.xml.transformer;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.xml.entities.ProteinXml;
@@ -27,21 +26,23 @@ public abstract class XmlTransformer extends Transformer {
     static final String ACTIVATOR = "ACTIVATOR";
 
     private String withResourceField(String resourceId, String accession, String commonName, int entryType) {
-        return String.format("%s;%s;%s;%d", resourceId, accession, commonName, entryType);
+       return resourceId+";"+accession+";"+commonName+";"+entryType;
+        
+        //return String.format("%s;%s;%s;%d", resourceId, accession, commonName, entryType);
     }
 
     protected void addProteinNameFields(String proteinName, Set<Field> fields) {
         if (!StringUtils.isEmpty(proteinName)) {
-            Field field = new Field(FieldName.PROTEIN_NAME.getName(), proteinName);
-            fields.add(field);
+            //Field field = new Field(FieldName.PROTEIN_NAME.getName(), proteinName);
+            fields.add(new Field(FieldName.PROTEIN_NAME.getName(), proteinName));
 
         }
     }
 
     protected void addScientificNameFields(String scientificName, Set<Field> fields) {
         if (!StringUtils.isEmpty(scientificName)) {
-            Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), scientificName);
-            fields.add(field);
+            //Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), scientificName);
+            fields.add(new Field(FieldName.SCIENTIFIC_NAME.getName(), scientificName));
 
         }
     }
@@ -49,8 +50,8 @@ public abstract class XmlTransformer extends Transformer {
     protected void addCommonNameFields(String commonName, Set<Field> fields) {
 
         if (!StringUtils.isEmpty(commonName)) {
-            Field field = new Field(FieldName.COMMON_NAME.getName(), commonName + " ");
-            fields.add(field);
+            //Field field = new Field(FieldName.COMMON_NAME.getName(), commonName);
+            fields.add(new Field(FieldName.COMMON_NAME.getName(), commonName));
 
         }
     }
@@ -76,26 +77,26 @@ public abstract class XmlTransformer extends Transformer {
 
     protected void addAccessionXrefs(String accession, Set<Ref> refs) {
         if (!StringUtils.isEmpty(accession)) {
-            Ref xref = new Ref(accession, DatabaseName.UNIPROTKB.getDbName());
-            refs.add(xref);
+            //Ref xref = new Ref(accession, DatabaseName.UNIPROTKB.getDbName());
+            refs.add(new Ref(accession, DatabaseName.UNIPROTKB.getDbName()));
 
         }
     }
 
     protected void addTaxonomyFieldAndXrefs(ProteinXml taxonomy, Set<Field> fields, Set<Ref> refs) {
 
-        String accession = taxonomy.getAccession();
-        String commonName = taxonomy.getCommonName();
-        int entryType = taxonomy.getEntryType();
+//        String accession = taxonomy.getAccession();
+//        String commonName = taxonomy.getCommonName();
+//        int entryType = taxonomy.getEntryType();
         if (Objects.nonNull(taxonomy.getTaxId())) {
 
-            String taxId = Long.toString(taxonomy.getTaxId());
+            //String taxId = Long.toString(taxonomy.getTaxId());
 
-            String withTaxonomy = withResourceField(taxId, accession, commonName, entryType);
-            Field field = new Field(FieldName.WITH_TAXONOMY.getName(), withTaxonomy);
-            fields.add(field);
-            Ref xref = new Ref(taxId, DatabaseName.TAXONOMY.getDbName());
-            refs.add(xref);
+            //String withTaxonomy = withResourceField(taxId, accession, commonName, entryType);
+            //Field field = new Field(FieldName.WITH_TAXONOMY.getName(), withTaxonomy);
+            fields.add(new Field(FieldName.WITH_TAXONOMY.getName(), withResourceField(Long.toString(taxonomy.getTaxId()), taxonomy.getAccession(), taxonomy.getCommonName(), taxonomy.getEntryType())));
+           // Ref xref = new Ref(taxId, DatabaseName.TAXONOMY.getDbName());
+            refs.add(new Ref(Long.toString(taxonomy.getTaxId()), DatabaseName.TAXONOMY.getDbName()));
 
         }
     }
@@ -103,30 +104,30 @@ public abstract class XmlTransformer extends Transformer {
     protected void addReactantFieldsAndXrefs(ProteinXml reactant, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(reactant.getReactantSource())) {
-            Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
-            fields.add(field);
+            //Field field = new Field(FieldName.REACTANT.getName(), reactant.getReactantName());
+            fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
             if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
-                Field chebi = new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId());
-                fields.add(chebi);
+                //Field chebi = new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId());
+                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
             } else {
-                Field rheaComp = new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId());
-                fields.add(rheaComp);
+                //Field rheaComp = new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId());
+                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
             }
 
-            Ref xref = new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
-            refs.add(xref);
+           // Ref xref = new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase());
+            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
         }
     }
 
     protected void addCompoundDataFieldsAndXrefs(ProteinXml compound, Set<Field> fields, Set<Ref> refs) {
-        String accession = compound.getAccession();
-        String commonName = compound.getCommonName();
-        int entryType = compound.getEntryType();
+//        String accession = compound.getAccession();
+//        String commonName = compound.getCommonName();
+//        int entryType = compound.getEntryType();
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
             switch (compound.getCompoundRole()) {
                 case COFACTOR:
                     addChebiField(compound, fields, refs);
-                    addCofactorField(compound, accession, commonName, entryType, fields);
+                    addCofactorField(compound, compound.getAccession(), compound.getCommonName(), compound.getEntryType(), fields);
                     break;
                 case INHIBITOR:
                     addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
@@ -135,10 +136,10 @@ public abstract class XmlTransformer extends Transformer {
                     addCompoundFieldAndXref(compound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
                     break;
                 default:
-                    Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
-                    fields.add(field);
-                    Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
-                    refs.add(xref);
+                   // Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
+                    fields.add(new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName()));
+                    //Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+                    refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
                     break;
             }
         }
@@ -147,47 +148,47 @@ public abstract class XmlTransformer extends Transformer {
 
     private void addChebiField(ProteinXml compound, Set<Field> fields, Set<Ref> refs) {
 
-        Field chebi = new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId());
-        fields.add(chebi);
-        Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
-        refs.add(xref);
+        //Field chebi = new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId());
+        fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
+        //Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
 
     }
 
     private void addCompoundFieldAndXref(ProteinXml compound, String fieldIdkey, String fieldNameKey, Set<Field> fields, Set<Ref> refs) {
-        Field fieldId = new Field(fieldIdkey, compound.getCompoundId());
-        fields.add(fieldId);
-        Field fieldName = new Field(fieldNameKey, compound.getCompoundName());
-        fields.add(fieldName);
-        Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
-        refs.add(xref);
+        //Field fieldId = new Field(fieldIdkey, compound.getCompoundId());
+        fields.add(new Field(fieldIdkey, compound.getCompoundId()));
+        //Field fieldName = new Field(fieldNameKey, compound.getCompoundName());
+        fields.add(new Field(fieldNameKey, compound.getCompoundName()));
+       // Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase());
+        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
     }
 
     private void addCofactorField(ProteinXml compound, String accession, String commonName, int entryType, Set<Field> fields) {
 
-        String cofactorId = compound.getCompoundId().replace("CHEBI:", "");
+        //String cofactorId = compound.getCompoundId().replace("CHEBI:", "");
 
-        Field cofactor = new Field(FieldName.COFACTOR.getName(), cofactorId);
+        Field cofactor = new Field(FieldName.COFACTOR.getName(), compound.getCompoundId().replace("CHEBI:", ""));
         fields.add(cofactor);
         Field cofactorName = new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName());
         fields.add(cofactorName);
-        String withCofactor = withResourceField(cofactorId, accession, commonName, entryType);
+        String withCofactor = withResourceField(compound.getCompoundId().replace("CHEBI:", ""), accession, commonName, entryType);
         Field identityField = new Field(FieldName.WITH_COFACTOR.getName(), withCofactor);
         fields.add(identityField);
 
     }
 
     protected void addDiseaseFieldsAndXrefs(ProteinXml disease, Set<Field> fields, Set<Ref> refs) {
-        String accession = disease.getAccession();
-        String commonName = disease.getCommonName();
-        int entryType = disease.getEntryType();
+//        String accession = disease.getAccession();
+//        String commonName = disease.getCommonName();
+//        int entryType = disease.getEntryType();
 
         if (Objects.nonNull(disease.getOmimNumber()) && Objects.nonNull(disease.getDiseaseName())) {
             Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
             fields.add(field);
 
-            String withDisease = withResourceField(disease.getOmimNumber(), accession, commonName, entryType);
-            Field identityField = new Field(FieldName.WITH_DISEASE.getName(), withDisease);
+            //String withDisease = withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getCommonName(), disease.getEntryType());
+            Field identityField = new Field(FieldName.WITH_DISEASE.getName(), withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getCommonName(), disease.getEntryType()));
             fields.add(identityField);
 
             Ref xref = new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
@@ -196,12 +197,12 @@ public abstract class XmlTransformer extends Transformer {
     }
 
     protected void addPathwayFieldsAndXrefs(ProteinXml pathway, Set<Field> fields, Set<Ref> refs) {
-        String accession = pathway.getAccession();
-        String commonName = pathway.getCommonName();
-        int entryType = pathway.getEntryType();
+//        String accession = pathway.getAccession();
+//        String commonName = pathway.getCommonName();
+//        int entryType = pathway.getEntryType();
         if (Objects.nonNull(pathway.getPathwayId())) {
-            String withPathway = withResourceField(pathway.getPathwayId(), accession, commonName, entryType);
-            Field identityField = new Field(FieldName.WITH_PATHWAY.getName(), withPathway);
+            //String withPathway = withResourceField(pathway.getPathwayId(), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType());
+            Field identityField = new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(pathway.getPathwayId(), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType()));
             fields.add(identityField);
             Ref ref = new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName());
             refs.add(ref);
@@ -209,7 +210,7 @@ public abstract class XmlTransformer extends Transformer {
     }
 
     protected String parseReactomePathwayId(String reactomePathwayId) {
-       Pattern.compile(REACTOME_PATHWAY_ID_REGEX, Pattern.CASE_INSENSITIVE);
+       //Pattern.compile(REACTOME_PATHWAY_ID_REGEX, Pattern.CASE_INSENSITIVE);
         
         if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
             String[] sections = reactomePathwayId.split("-");
@@ -229,9 +230,9 @@ public abstract class XmlTransformer extends Transformer {
     }
 
     protected void addUniprotFamilyFieldsAndXrefs(ProteinXml family, Set<Field> fields, Set<Ref> refs) {
-        String accession = family.getAccession();
-        String commonName = family.getCommonName();
-        int entryType = family.getEntryType();
+//        String accession = family.getAccession();
+//        String commonName = family.getCommonName();
+//        int entryType = family.getEntryType();
 
         if (Objects.nonNull(family.getFamilyGroupId()) && Objects.nonNull(family.getFamilyName())) {
             Field field = new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName());
@@ -239,8 +240,8 @@ public abstract class XmlTransformer extends Transformer {
             Field fieldId = new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId());
             fields.add(fieldId);
 
-            String withFamily = withResourceField(family.getFamilyGroupId(), accession, commonName, entryType);
-            Field identityField = new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withFamily);
+            //String withFamily = withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType());
+            Field identityField = new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType()));
             fields.add(identityField);
 
             Ref xref = new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName());

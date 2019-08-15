@@ -78,7 +78,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor(proteinXmlRepository);
+        return new ProteinGroupsProcessor(proteinXmlRepository,entityManagerFactory);
 
     }
 

@@ -10,11 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author joseph
  */
+@Data
+@NoArgsConstructor
+//@RequiredArgsConstructor
 @Entity
 @Table(name = "PROTEIN_XML")
 @XmlRootElement
@@ -151,361 +156,364 @@ public class ProteinXml implements Serializable {
     @Column(name = "PROTEIN_XML_ID")
     private BigDecimal proteinXmlId;
 
-    public ProteinXml() {
-    }
-
-    public ProteinXml(BigDecimal proteinXmlId) {
-        this.proteinXmlId = proteinXmlId;
-    }
-
-    public ProteinXml(BigDecimal proteinXmlId, String accession) {
-        this.proteinXmlId = proteinXmlId;
-        this.accession = accession;
-    }
-
-    public String getProteinGroupId() {
-        return proteinGroupId;
-    }
-
-    public void setProteinGroupId(String proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
-    }
-
-    public String getProteinName() {
-        return proteinName;
-    }
-
-    public void setProteinName(String proteinName) {
-        this.proteinName = proteinName;
-    }
-
-    public String getAccession() {
-        return accession;
-    }
-
-    public void setAccession(String accession) {
-        this.accession = accession;
-    }
-
-    public Long getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(Long taxId) {
-        this.taxId = taxId;
-    }
-
-    public String getScientificName() {
-        return scientificName;
-    }
-
-    public void setScientificName(String scientificName) {
-        this.scientificName = scientificName;
-    }
+//    public ProteinXml() {
+//    }
+//
+//    public ProteinXml(BigDecimal proteinXmlId) {
+//        this.proteinXmlId = proteinXmlId;
+//    }
+//
+//    public ProteinXml(BigDecimal proteinXmlId, String accession) {
+//        this.proteinXmlId = proteinXmlId;
+//        this.accession = accession;
+//    }
+//
+//    public String getProteinGroupId() {
+//        return proteinGroupId;
+//    }
+//
+//    public void setProteinGroupId(String proteinGroupId) {
+//        this.proteinGroupId = proteinGroupId;
+//    }
+//
+//    public String getProteinName() {
+//        return proteinName;
+//    }
+//
+//    public void setProteinName(String proteinName) {
+//        this.proteinName = proteinName;
+//    }
+//
+//    public String getAccession() {
+//        return accession;
+//    }
+//
+//    public void setAccession(String accession) {
+//        this.accession = accession;
+//    }
+//
+//    public Long getTaxId() {
+//        return taxId;
+//    }
+//
+//    public void setTaxId(Long taxId) {
+//        this.taxId = taxId;
+//    }
+//
+//    public String getScientificName() {
+//        return scientificName;
+//    }
+//
+//    public void setScientificName(String scientificName) {
+//        this.scientificName = scientificName;
+//    }
 
     public String getCommonName() {
+       if(commonName == null){
+           commonName = scientificName;
+       }
         return commonName;
     }
 
     public void setCommonName(String commonName) {
         this.commonName = commonName;
     }
-
-    public String getSynonymNames() {
-        return synonymNames;
-    }
-
-    public void setSynonymNames(String synonymNames) {
-        this.synonymNames = synonymNames;
-    }
-
-    public BigInteger getExpEvidenceFlag() {
-        return expEvidenceFlag;
-    }
-
-    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
-        this.expEvidenceFlag = expEvidenceFlag;
-    }
-
-    public Character getPdbFlag() {
-        return pdbFlag;
-    }
-
-    public void setPdbFlag(Character pdbFlag) {
-        this.pdbFlag = pdbFlag;
-    }
-
-    public BigInteger getRelatedProteinsId() {
-        return relatedProteinsId;
-    }
-
-    public void setRelatedProteinsId(BigInteger relatedProteinsId) {
-        this.relatedProteinsId = relatedProteinsId;
-    }
-
-    public Short getEntryType() {
-        return entryType;
-    }
-
-    public void setEntryType(Short entryType) {
-        this.entryType = entryType;
-    }
-
-    public String getGeneName() {
-        return geneName;
-    }
-
-    public void setGeneName(String geneName) {
-        this.geneName = geneName;
-    }
-
-    public String getPrimaryAccession() {
-        return primaryAccession;
-    }
-
-    public void setPrimaryAccession(String primaryAccession) {
-        this.primaryAccession = primaryAccession;
-    }
-
-    public BigInteger getPrimaryTaxId() {
-        return primaryTaxId;
-    }
-
-    public void setPrimaryTaxId(BigInteger primaryTaxId) {
-        this.primaryTaxId = primaryTaxId;
-    }
-
-    public String getPrimaryCommonName() {
-        return primaryCommonName;
-    }
-
-    public void setPrimaryCommonName(String primaryCommonName) {
-        this.primaryCommonName = primaryCommonName;
-    }
-
-    public String getPrimaryScientificName() {
-        return primaryScientificName;
-    }
-
-    public void setPrimaryScientificName(String primaryScientificName) {
-        this.primaryScientificName = primaryScientificName;
-    }
-
-    public String getPrimaryPdbId() {
-        return primaryPdbId;
-    }
-
-    public void setPrimaryPdbId(String primaryPdbId) {
-        this.primaryPdbId = primaryPdbId;
-    }
-
-    public String getPrimaryFunction() {
-        return primaryFunction;
-    }
-
-    public void setPrimaryFunction(String primaryFunction) {
-        this.primaryFunction = primaryFunction;
-    }
-
-    public String getPrimaryPdbSpecies() {
-        return primaryPdbSpecies;
-    }
-
-    public void setPrimaryPdbSpecies(String primaryPdbSpecies) {
-        this.primaryPdbSpecies = primaryPdbSpecies;
-    }
-
-    public String getPrimaryPdbLinkedAcc() {
-        return primaryPdbLinkedAcc;
-    }
-
-    public void setPrimaryPdbLinkedAcc(String primaryPdbLinkedAcc) {
-        this.primaryPdbLinkedAcc = primaryPdbLinkedAcc;
-    }
-
-    public BigInteger getPrimaryEntryType() {
-        return primaryEntryType;
-    }
-
-    public void setPrimaryEntryType(BigInteger primaryEntryType) {
-        this.primaryEntryType = primaryEntryType;
-    }
-
-    public BigInteger getPrimaryRelatedProteinsId() {
-        return primaryRelatedProteinsId;
-    }
-
-    public void setPrimaryRelatedProteinsId(BigInteger primaryRelatedProteinsId) {
-        this.primaryRelatedProteinsId = primaryRelatedProteinsId;
-    }
-
-    public String getOmimNumber() {
-        return omimNumber;
-    }
-
-    public void setOmimNumber(String omimNumber) {
-        this.omimNumber = omimNumber;
-    }
-
-    public String getDiseaseName() {
-        return diseaseName;
-    }
-
-    public void setDiseaseName(String diseaseName) {
-        this.diseaseName = diseaseName;
-    }
-
-    public String getCompoundId() {
-        return compoundId;
-    }
-
-    public void setCompoundId(String compoundId) {
-        this.compoundId = compoundId;
-    }
-
-    public String getCompoundName() {
-        return compoundName;
-    }
-
-    public void setCompoundName(String compoundName) {
-        this.compoundName = compoundName;
-    }
-
-    public String getCompoundRole() {
-        return compoundRole;
-    }
-
-    public void setCompoundRole(String compoundRole) {
-        this.compoundRole = compoundRole;
-    }
-
-    public String getCompoundSource() {
-        return compoundSource;
-    }
-
-    public void setCompoundSource(String compoundSource) {
-        this.compoundSource = compoundSource;
-    }
-
-    public String getReactantId() {
-        return reactantId;
-    }
-
-    public void setReactantId(String reactantId) {
-        this.reactantId = reactantId;
-    }
-
-    public String getReactantName() {
-        return reactantName;
-    }
-
-    public void setReactantName(String reactantName) {
-        this.reactantName = reactantName;
-    }
-
-    public String getReactantSource() {
-        return reactantSource;
-    }
-
-    public void setReactantSource(String reactantSource) {
-        this.reactantSource = reactantSource;
-    }
-
-    public String getEcNumber() {
-        return ecNumber;
-    }
-
-    public void setEcNumber(String ecNumber) {
-        this.ecNumber = ecNumber;
-    }
-
-    public Short getEcFamily() {
-        return ecFamily;
-    }
-
-    public void setEcFamily(Short ecFamily) {
-        this.ecFamily = ecFamily;
-    }
-
-    public String getCatalyticActivity() {
-        return catalyticActivity;
-    }
-
-    public void setCatalyticActivity(String catalyticActivity) {
-        this.catalyticActivity = catalyticActivity;
-    }
-
-    public String getPathwayId() {
-        return pathwayId;
-    }
-
-    public void setPathwayId(String pathwayId) {
-        this.pathwayId = pathwayId;
-    }
-
-    public String getPathwayName() {
-        return pathwayName;
-    }
-
-    public void setPathwayName(String pathwayName) {
-        this.pathwayName = pathwayName;
-    }
-
-    public String getReactionId() {
-        return reactionId;
-    }
-
-    public void setReactionId(String reactionId) {
-        this.reactionId = reactionId;
-    }
-
-    public String getReactionSource() {
-        return reactionSource;
-    }
-
-    public void setReactionSource(String reactionSource) {
-        this.reactionSource = reactionSource;
-    }
-
-    public String getFamilyGroupId() {
-        return familyGroupId;
-    }
-
-    public void setFamilyGroupId(String familyGroupId) {
-        this.familyGroupId = familyGroupId;
-    }
-
-    public String getFamilyName() {
-        return familyName;
-    }
-
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
-
-    public BigDecimal getProteinXmlId() {
-        return proteinXmlId;
-    }
-
-    public void setProteinXmlId(BigDecimal proteinXmlId) {
-        this.proteinXmlId = proteinXmlId;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (proteinXmlId != null ? proteinXmlId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof ProteinXml)) {
-            return false;
-        }
-        ProteinXml other = (ProteinXml) object;
-        return !((this.proteinXmlId == null && other.proteinXmlId != null) || (this.proteinXmlId != null && !this.proteinXmlId.equals(other.proteinXmlId)));
-    }
+//
+//    public String getSynonymNames() {
+//        return synonymNames;
+//    }
+//
+//    public void setSynonymNames(String synonymNames) {
+//        this.synonymNames = synonymNames;
+//    }
+//
+//    public BigInteger getExpEvidenceFlag() {
+//        return expEvidenceFlag;
+//    }
+//
+//    public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
+//        this.expEvidenceFlag = expEvidenceFlag;
+//    }
+//
+//    public Character getPdbFlag() {
+//        return pdbFlag;
+//    }
+//
+//    public void setPdbFlag(Character pdbFlag) {
+//        this.pdbFlag = pdbFlag;
+//    }
+//
+//    public BigInteger getRelatedProteinsId() {
+//        return relatedProteinsId;
+//    }
+//
+//    public void setRelatedProteinsId(BigInteger relatedProteinsId) {
+//        this.relatedProteinsId = relatedProteinsId;
+//    }
+//
+//    public Short getEntryType() {
+//        return entryType;
+//    }
+//
+//    public void setEntryType(Short entryType) {
+//        this.entryType = entryType;
+//    }
+//
+//    public String getGeneName() {
+//        return geneName;
+//    }
+//
+//    public void setGeneName(String geneName) {
+//        this.geneName = geneName;
+//    }
+//
+//    public String getPrimaryAccession() {
+//        return primaryAccession;
+//    }
+//
+//    public void setPrimaryAccession(String primaryAccession) {
+//        this.primaryAccession = primaryAccession;
+//    }
+//
+//    public BigInteger getPrimaryTaxId() {
+//        return primaryTaxId;
+//    }
+//
+//    public void setPrimaryTaxId(BigInteger primaryTaxId) {
+//        this.primaryTaxId = primaryTaxId;
+//    }
+//
+//    public String getPrimaryCommonName() {
+//        return primaryCommonName;
+//    }
+//
+//    public void setPrimaryCommonName(String primaryCommonName) {
+//        this.primaryCommonName = primaryCommonName;
+//    }
+//
+//    public String getPrimaryScientificName() {
+//        return primaryScientificName;
+//    }
+//
+//    public void setPrimaryScientificName(String primaryScientificName) {
+//        this.primaryScientificName = primaryScientificName;
+//    }
+//
+//    public String getPrimaryPdbId() {
+//        return primaryPdbId;
+//    }
+//
+//    public void setPrimaryPdbId(String primaryPdbId) {
+//        this.primaryPdbId = primaryPdbId;
+//    }
+//
+//    public String getPrimaryFunction() {
+//        return primaryFunction;
+//    }
+//
+//    public void setPrimaryFunction(String primaryFunction) {
+//        this.primaryFunction = primaryFunction;
+//    }
+//
+//    public String getPrimaryPdbSpecies() {
+//        return primaryPdbSpecies;
+//    }
+//
+//    public void setPrimaryPdbSpecies(String primaryPdbSpecies) {
+//        this.primaryPdbSpecies = primaryPdbSpecies;
+//    }
+//
+//    public String getPrimaryPdbLinkedAcc() {
+//        return primaryPdbLinkedAcc;
+//    }
+//
+//    public void setPrimaryPdbLinkedAcc(String primaryPdbLinkedAcc) {
+//        this.primaryPdbLinkedAcc = primaryPdbLinkedAcc;
+//    }
+//
+//    public BigInteger getPrimaryEntryType() {
+//        return primaryEntryType;
+//    }
+//
+//    public void setPrimaryEntryType(BigInteger primaryEntryType) {
+//        this.primaryEntryType = primaryEntryType;
+//    }
+//
+//    public BigInteger getPrimaryRelatedProteinsId() {
+//        return primaryRelatedProteinsId;
+//    }
+//
+//    public void setPrimaryRelatedProteinsId(BigInteger primaryRelatedProteinsId) {
+//        this.primaryRelatedProteinsId = primaryRelatedProteinsId;
+//    }
+//
+//    public String getOmimNumber() {
+//        return omimNumber;
+//    }
+//
+//    public void setOmimNumber(String omimNumber) {
+//        this.omimNumber = omimNumber;
+//    }
+//
+//    public String getDiseaseName() {
+//        return diseaseName;
+//    }
+//
+//    public void setDiseaseName(String diseaseName) {
+//        this.diseaseName = diseaseName;
+//    }
+//
+//    public String getCompoundId() {
+//        return compoundId;
+//    }
+//
+//    public void setCompoundId(String compoundId) {
+//        this.compoundId = compoundId;
+//    }
+//
+//    public String getCompoundName() {
+//        return compoundName;
+//    }
+//
+//    public void setCompoundName(String compoundName) {
+//        this.compoundName = compoundName;
+//    }
+//
+//    public String getCompoundRole() {
+//        return compoundRole;
+//    }
+//
+//    public void setCompoundRole(String compoundRole) {
+//        this.compoundRole = compoundRole;
+//    }
+//
+//    public String getCompoundSource() {
+//        return compoundSource;
+//    }
+//
+//    public void setCompoundSource(String compoundSource) {
+//        this.compoundSource = compoundSource;
+//    }
+//
+//    public String getReactantId() {
+//        return reactantId;
+//    }
+//
+//    public void setReactantId(String reactantId) {
+//        this.reactantId = reactantId;
+//    }
+//
+//    public String getReactantName() {
+//        return reactantName;
+//    }
+//
+//    public void setReactantName(String reactantName) {
+//        this.reactantName = reactantName;
+//    }
+//
+//    public String getReactantSource() {
+//        return reactantSource;
+//    }
+//
+//    public void setReactantSource(String reactantSource) {
+//        this.reactantSource = reactantSource;
+//    }
+//
+//    public String getEcNumber() {
+//        return ecNumber;
+//    }
+//
+//    public void setEcNumber(String ecNumber) {
+//        this.ecNumber = ecNumber;
+//    }
+//
+//    public Short getEcFamily() {
+//        return ecFamily;
+//    }
+//
+//    public void setEcFamily(Short ecFamily) {
+//        this.ecFamily = ecFamily;
+//    }
+//
+//    public String getCatalyticActivity() {
+//        return catalyticActivity;
+//    }
+//
+//    public void setCatalyticActivity(String catalyticActivity) {
+//        this.catalyticActivity = catalyticActivity;
+//    }
+//
+//    public String getPathwayId() {
+//        return pathwayId;
+//    }
+//
+//    public void setPathwayId(String pathwayId) {
+//        this.pathwayId = pathwayId;
+//    }
+//
+//    public String getPathwayName() {
+//        return pathwayName;
+//    }
+//
+//    public void setPathwayName(String pathwayName) {
+//        this.pathwayName = pathwayName;
+//    }
+//
+//    public String getReactionId() {
+//        return reactionId;
+//    }
+//
+//    public void setReactionId(String reactionId) {
+//        this.reactionId = reactionId;
+//    }
+//
+//    public String getReactionSource() {
+//        return reactionSource;
+//    }
+//
+//    public void setReactionSource(String reactionSource) {
+//        this.reactionSource = reactionSource;
+//    }
+//
+//    public String getFamilyGroupId() {
+//        return familyGroupId;
+//    }
+//
+//    public void setFamilyGroupId(String familyGroupId) {
+//        this.familyGroupId = familyGroupId;
+//    }
+//
+//    public String getFamilyName() {
+//        return familyName;
+//    }
+//
+//    public void setFamilyName(String familyName) {
+//        this.familyName = familyName;
+//    }
+//
+//    public BigDecimal getProteinXmlId() {
+//        return proteinXmlId;
+//    }
+//
+//    public void setProteinXmlId(BigDecimal proteinXmlId) {
+//        this.proteinXmlId = proteinXmlId;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int hash = 0;
+//        hash += (proteinXmlId != null ? proteinXmlId.hashCode() : 0);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object object) {
+//        if (!(object instanceof ProteinXml)) {
+//            return false;
+//        }
+//        ProteinXml other = (ProteinXml) object;
+//        return !((this.proteinXmlId == null && other.proteinXmlId != null) || (this.proteinXmlId != null && !this.proteinXmlId.equals(other.proteinXmlId)));
+//    }
 
 
 }

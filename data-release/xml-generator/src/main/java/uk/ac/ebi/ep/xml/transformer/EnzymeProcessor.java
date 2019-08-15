@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.xml.transformer;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -27,7 +26,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 @Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
-    private final AtomicInteger count = new AtomicInteger(1);
+   // private final AtomicInteger count = new AtomicInteger(1);
     private final ProteinXmlRepository proteinXmlRepository;
 
     public EnzymeProcessor(ProteinXmlRepository proteinXmlRepository) {
@@ -44,7 +43,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
 
-        log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + enzyme.getEcNumber() + "  entry count : " + count.getAndIncrement());
+        //log.warn("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + enzyme.getEcNumber() + "  entry count : " + count.getAndIncrement());
 
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());

@@ -104,10 +104,11 @@
                             <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass>
                             <arguments>
                                 <argument>-XX:+UseG1GC</argument>
-                                <argument>-Xms2G</argument>
-                                <argument>-Xmx64G</argument>  
+                                <argument>-Xms512M</argument>
+                                <argument>-Xmx200G</argument>  
                                 <argument>-XX:-UseGCOverheadLimit</argument> 
-                                <argument>-XX:+UseStringDeduplication</argument>                                   
+                                <argument>-XX:+UseStringDeduplication</argument>  
+                                <argument>-XX:+OptimizeStringConcat</argument>                                  
                             </arguments>
                         </configuration>
                     </execution>
@@ -120,10 +121,15 @@
                             <mainClass>uk.ac.ebi.ep.xml.ProteinCentricBatchJob</mainClass>
                             <arguments>
                                 <argument>-XX:+UseG1GC</argument>
-                                <argument>-Xms2G</argument>
-                                <argument>-Xmx64G</argument>  
+                                <argument>-Xms512M</argument>
+                                <argument>-Xmx200G</argument>  
                                 <argument>-XX:-UseGCOverheadLimit</argument> 
-                                <argument>-XX:+UseStringDeduplication</argument>                                   
+                                <argument>-XX:+UseStringDeduplication</argument> 
+                                <argument>-XX:+OptimizeStringConcat</argument>  
+                                <!--                                <argument>-XX:+UseCompressedStrings</argument> -->
+                                <!--                                <argument>-XX:+UseStringCache</argument>  
+                                <argument>-XX:G1ReservePercent=20</argument> -->
+                                                              
                             </arguments>
                         </configuration>
                     </execution>

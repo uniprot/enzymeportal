@@ -42,10 +42,11 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     private static final String ROOT_TAG_NAME = "database";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'"; // 9_815_362 entries to process
+    // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E3CHQJ'"; // 45_561_085 entries to process
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups p JOIN uniprot_entry u ON u.protein_group_id = p.protein_group_id and p.protein_group_id = 'ESLAHW'";
-   // private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups where  rownum <=300";
+    //private static final String NATIVE_READ_QUERY = "SELECT * FROM protein_groups where  rownum <=1000";
     private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p";
-    // private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='E069GJ'";//11345
+     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='E069GJ'";//11345
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='E76XC1'";
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p WHERE p.proteinGroupId='EIY847'";
     //private static final String JPA_QUERY = "SELECT p FROM ProteinGroups p JOIN FETCH p.uniprotEntrySet";
@@ -110,7 +111,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor(proteinXmlRepository);
+        return new ProteinGroupsProcessor(proteinXmlRepository,entityManagerFactory);
 
     }
 
