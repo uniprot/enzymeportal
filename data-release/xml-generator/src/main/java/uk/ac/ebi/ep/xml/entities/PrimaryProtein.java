@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.entities;
 
 import java.io.Serializable;
@@ -21,20 +20,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "PRIMARY_PROTEIN")
 @XmlRootElement
 
-    @NamedQuery(name = "PrimaryProtein.findAll", query = "SELECT p FROM PrimaryProtein p")
-    @NamedQuery(name = "PrimaryProtein.findByRelatedProteinsId", query = "SELECT p FROM PrimaryProtein p WHERE p.relatedProteinsId = :relatedProteinsId")
-    @NamedQuery(name = "PrimaryProtein.findByAccession", query = "SELECT p FROM PrimaryProtein p WHERE p.accession = :accession")
-    @NamedQuery(name = "PrimaryProtein.findByTaxId", query = "SELECT p FROM PrimaryProtein p WHERE p.taxId = :taxId")
-    @NamedQuery(name = "PrimaryProtein.findByCommonName", query = "SELECT p FROM PrimaryProtein p WHERE p.commonName = :commonName")
-    @NamedQuery(name = "PrimaryProtein.findByScientificName", query = "SELECT p FROM PrimaryProtein p WHERE p.scientificName = :scientificName")
-    @NamedQuery(name = "PrimaryProtein.findByPriorityCode", query = "SELECT p FROM PrimaryProtein p WHERE p.priorityCode = :priorityCode")
-    @NamedQuery(name = "PrimaryProtein.findByPdbFlag", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbFlag = :pdbFlag")
-    @NamedQuery(name = "PrimaryProtein.findByPdbId", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbId = :pdbId")
-    @NamedQuery(name = "PrimaryProtein.findByFunction", query = "SELECT p FROM PrimaryProtein p WHERE p.function = :function")
-    @NamedQuery(name = "PrimaryProtein.findByPdbSpecies", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbSpecies = :pdbSpecies")
-    @NamedQuery(name = "PrimaryProtein.findByProteinGroupId", query = "SELECT p FROM PrimaryProtein p WHERE p.proteinGroupId = :proteinGroupId")
-    @NamedQuery(name = "PrimaryProtein.findByEntryType", query = "SELECT p FROM PrimaryProtein p WHERE p.entryType = :entryType")
-    @NamedQuery(name = "PrimaryProtein.findByPdbLinkedAcc", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbLinkedAcc = :pdbLinkedAcc")
+@NamedQuery(name = "PrimaryProtein.findAll", query = "SELECT p FROM PrimaryProtein p")
+@NamedQuery(name = "PrimaryProtein.findByRelatedProteinsId", query = "SELECT p FROM PrimaryProtein p WHERE p.relatedProteinsId = :relatedProteinsId")
+@NamedQuery(name = "PrimaryProtein.findByAccession", query = "SELECT p FROM PrimaryProtein p WHERE p.accession = :accession")
+@NamedQuery(name = "PrimaryProtein.findByTaxId", query = "SELECT p FROM PrimaryProtein p WHERE p.taxId = :taxId")
+@NamedQuery(name = "PrimaryProtein.findByCommonName", query = "SELECT p FROM PrimaryProtein p WHERE p.commonName = :commonName")
+@NamedQuery(name = "PrimaryProtein.findByScientificName", query = "SELECT p FROM PrimaryProtein p WHERE p.scientificName = :scientificName")
+@NamedQuery(name = "PrimaryProtein.findByPriorityCode", query = "SELECT p FROM PrimaryProtein p WHERE p.priorityCode = :priorityCode")
+@NamedQuery(name = "PrimaryProtein.findByPdbFlag", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbFlag = :pdbFlag")
+@NamedQuery(name = "PrimaryProtein.findByPdbId", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbId = :pdbId")
+@NamedQuery(name = "PrimaryProtein.findByFunction", query = "SELECT p FROM PrimaryProtein p WHERE p.function = :function")
+@NamedQuery(name = "PrimaryProtein.findByPdbSpecies", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbSpecies = :pdbSpecies")
+@NamedQuery(name = "PrimaryProtein.findByProteinGroupId", query = "SELECT p FROM PrimaryProtein p WHERE p.proteinGroupId = :proteinGroupId")
+@NamedQuery(name = "PrimaryProtein.findByEntryType", query = "SELECT p FROM PrimaryProtein p WHERE p.entryType = :entryType")
+@NamedQuery(name = "PrimaryProtein.findByPdbLinkedAcc", query = "SELECT p FROM PrimaryProtein p WHERE p.pdbLinkedAcc = :pdbLinkedAcc")
 public class PrimaryProtein implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,7 +70,7 @@ public class PrimaryProtein implements Serializable {
     private ProteinGroups proteinGroups;
 
     public PrimaryProtein() {
-    }
+}
 
     public PrimaryProtein(String proteinGroupId) {
         this.proteinGroupId = proteinGroupId;

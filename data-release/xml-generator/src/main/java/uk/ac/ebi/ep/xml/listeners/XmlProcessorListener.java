@@ -22,7 +22,7 @@ public class XmlProcessorListener<T,S> implements ItemProcessListener<T, S> {
     public void afterProcess(T t, S s) {
         String timeText = printTime(processorStartTime);
 
-        log.error("Time taken to process the entry [" + t + "]: " + timeText);
+        log.info("Time taken to process the entry [" + t + "]: " + timeText);
        
     }
 

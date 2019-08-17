@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
 import uk.ac.ebi.ep.xml.transformer.ProteinGroupsProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 
 /**
  *
@@ -78,7 +79,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     @Override
     public ItemProcessor<ProteinGroups, Entry> entryProcessor() {
 
-        return new ProteinGroupsProcessor(proteinXmlRepository,entityManagerFactory);
+        return new ProteinGroupsProcessor(proteinXmlRepository);
 
     }
 
@@ -87,7 +88,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
-        //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
+        XmlFileUtils.createDirectory(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);

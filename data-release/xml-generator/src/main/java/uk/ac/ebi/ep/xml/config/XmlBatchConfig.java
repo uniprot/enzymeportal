@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.xml.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -20,7 +19,6 @@ import uk.ac.ebi.ep.xml.schema.Entry;
  */
 @Configuration
 @EnableBatchProcessing
-@Slf4j
 public class XmlBatchConfig {
 
     private final XmlFileProperties xmlFileProperties;

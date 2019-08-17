@@ -2,15 +2,13 @@ package uk.ac.ebi.ep.xml.transformer;
 
 import java.util.Set;
 import uk.ac.ebi.ep.xml.dao.EcNumber;
-import uk.ac.ebi.ep.xml.entities.ProteinXml;
 import uk.ac.ebi.ep.xml.schema.Field;
-import uk.ac.ebi.ep.xml.util.FieldName;
 
 /**
  *
  * @author joseph
  */
-public class Transformer {
+public class XmlProcessorUtil {
 
     protected void addField(String fieldId, String value, Set<Field> fields) {
         Field field = new Field(fieldId, value);
@@ -78,8 +76,5 @@ public class Transformer {
         return "Invalid Ec Number";
     }
 
-    protected void addGeneNameFields(ProteinXml entry, Set<Field> fields) {
-        addField(FieldName.GENE_NAME.getName(), entry.getGeneName(), fields);
 
-    }
 }

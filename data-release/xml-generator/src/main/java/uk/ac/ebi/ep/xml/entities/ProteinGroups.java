@@ -41,7 +41,7 @@ public class ProteinGroups implements Serializable {
     private PrimaryProtein primaryProtein;
 
     public ProteinGroups() {
-    }
+}
 
     public ProteinGroups(String proteinGroupId) {
         this.proteinGroupId = proteinGroupId;

@@ -36,7 +36,7 @@ public class IntenzAltNames implements Serializable {
     private EnzymePortalUniqueEc ecNumber;
 
     public IntenzAltNames() {
-    }
+}
 
     public IntenzAltNames(BigDecimal internalId) {
         this.internalId = internalId;

@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
 import uk.ac.ebi.ep.xml.transformer.EnzymeProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 
 /**
  *
@@ -87,7 +88,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
-        //XmlFileUtils.createDirectory(xmlFileProperties.getDir());
+        XmlFileUtils.createDirectory(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);

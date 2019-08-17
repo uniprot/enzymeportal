@@ -20,7 +20,7 @@ public class XmlStepExecutionListener implements StepExecutionListener {
 
     @Override
     public ExitStatus afterStep(StepExecution se) {
-        log.warn("Step Execution Exit Status Info :: " + se);
+        log.debug("Step Execution Exit Status Info :: " + se);
         return se.getExitStatus();
     }
 }

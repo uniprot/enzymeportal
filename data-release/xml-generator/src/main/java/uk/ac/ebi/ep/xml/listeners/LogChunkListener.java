@@ -36,7 +36,7 @@ public class LogChunkListener implements ChunkListener {
 
         String timeText = DateTimeUtil.convertToText(startProcessingTime, finishProcessing);
 
-        log.warn("Time taken to process current chunk [" + chunkSize + "]: " + timeText + ". Total processed: "
+        log.info("Time taken to process current chunk [" + chunkSize + "]: " + timeText + ". Total processed: "
                 + counter);
     }
 

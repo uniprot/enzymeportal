@@ -30,6 +30,7 @@ import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
 import uk.ac.ebi.ep.xml.transformer.EnzymeProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 
 /**
  *
@@ -42,14 +43,6 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
     private static final String ROOT_TAG_NAME = "database";
-
-    ////------- TEST QUERY --------
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null and rownum<=1";
-    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='1.1.1.1'"; //3.2.1.21
-    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.1.4.35'"; //3.2.1.21
-    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.7.7.7'"; //3.2.1.21
-    //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.5.1.-'"; //3.2.1.21
-    /// end TEST QUERY /////
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
     public static final String ENZYME_CENTRIC_XML_JOB = "ENZYME_CENTRIC_XML_JOB_" + DATE;
@@ -108,6 +101,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     @Bean(name = "enzymeXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
+        XmlFileUtils.createDirectory(xmlFileProperties.getEnzymeCentric());
         return new FileSystemResource(xmlFileProperties.getEnzymeCentric());
     }
 

@@ -23,7 +23,7 @@ public class DatabaseReaderListener<T> implements ItemReadListener<T> {
     public void afterRead(T t) {
         String timeText = printTime(readStartTime);
 
-        log.warn("Time taken to read the entry :: [" + t + "]: " + timeText);
+        log.debug("Time taken to read the entry :: [" + t + "]: " + timeText);
     }
 
     @Override

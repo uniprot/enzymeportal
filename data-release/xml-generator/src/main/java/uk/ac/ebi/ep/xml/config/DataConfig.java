@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.xml.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Created by joseph on 2/26/18.
  */
-@Slf4j
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.xml.entities.repositories"})

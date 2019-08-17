@@ -1,71 +1,30 @@
-
 package uk.ac.ebi.ep.xml.dao;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  *
  * @author joseph
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class EcNumberTest {
-    
-    public EcNumberTest() {
-    }
 
-    /**
-     * Test of isSelected method, of class EcNumber.
-     */
-    @Test
-    public void testIsSelected() {
-    }
-
-    /**
-     * Test of setSelected method, of class EcNumber.
-     */
-    @Test
-    public void testSetSelected() {
-    }
-
-    /**
-     * Test of getEc method, of class EcNumber.
-     */
-    @Test
-    public void testGetEc() {
-    }
-
-    /**
-     * Test of setEc method, of class EcNumber.
-     */
-    @Test
-    public void testSetEc() {
-    }
-
-    /**
-     * Test of getFamily method, of class EcNumber.
-     */
-    @Test
-    public void testGetFamily() {
-    }
-
-    /**
-     * Test of setFamily method, of class EcNumber.
-     */
-    @Test
-    public void testSetFamily() {
-    }
-
-    /**
-     * Test of getFamilies method, of class EcNumber.
-     */
-    @Test
-    public void testGetFamilies() {
-    }
+    private final EcNumber ecNumber = new EcNumber();
 
     /**
      * Test of computeEcToFamilyName method, of class EcNumber.
      */
     @Test
     public void testComputeEcToFamilyName() {
+
+        String familyName = ecNumber.computeEcToFamilyName(4);
+        String expResult = "Lyases";
+        assertThat(expResult).isEqualTo(familyName);
     }
 
     /**
@@ -73,6 +32,10 @@ public class EcNumberTest {
      */
     @Test
     public void testComputeFamilyNameToEc() {
+
+        int ec = ecNumber.computeFamilyNameToEc("Oxidoreductases");
+        int expResult = 1;
+        assertThat(ec).isEqualTo(expResult);
     }
 
     /**
@@ -80,6 +43,9 @@ public class EcNumberTest {
      */
     @Test
     public void testComputeFamily() {
+        String familyName = ecNumber.computeFamily("2.1.2.1");
+        String expResult = "Transferases";
+        assertThat(familyName).isEqualTo(expResult);
     }
 
     /**
@@ -87,34 +53,9 @@ public class EcNumberTest {
      */
     @Test
     public void testComputeEc() {
+        String familyName = ecNumber.computeEc("Ligases");
+        String expResult = "6";
+        assertThat(expResult).isEqualTo(familyName);
     }
 
-    /**
-     * Test of compareTo method, of class EcNumber.
-     */
-    @Test
-    public void testCompareTo() {
-    }
-
-    /**
-     * Test of hashCode method, of class EcNumber.
-     */
-    @Test
-    public void testHashCode() {
-    }
-
-    /**
-     * Test of equals method, of class EcNumber.
-     */
-    @Test
-    public void testEquals() {
-    }
-
-    /**
-     * Test of toString method, of class EcNumber.
-     */
-    @Test
-    public void testToString() {
-    }
-    
 }

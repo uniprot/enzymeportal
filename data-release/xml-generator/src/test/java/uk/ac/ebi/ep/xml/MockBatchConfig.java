@@ -26,14 +26,11 @@ public class MockBatchConfig {
     protected EntityManagerFactory entityManagerFactory;
     @Autowired
     private XmlFileProperties xmlFileProperties;
-    
-
 
     @Bean(name = "enzymeXmlJobTest")
     public Job enzymeXmlJobTest(JobBuilderFactory jobBuilderFactory,
             StepBuilderFactory stepBuilderFactory, MockEnzymeCentricConfig ecConfig) throws Exception {
 
-   
         Step uniqueEcStep = stepBuilderFactory.get(MockEnzymeCentricConfig.ENZYME_READ_PROCESS_WRITE_XML_STEP)
                 .<EnzymePortalUniqueEc, Entry>chunk(xmlFileProperties.getChunkSize())
                 .reader(ecConfig.databaseReader())

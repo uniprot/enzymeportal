@@ -22,6 +22,8 @@ import uk.ac.ebi.ep.xml.listeners.GlobalListener;
 /**
  *
  * @author Joseph
+ * @param <T>
+ * @param <S>
  */
 @Slf4j
 public abstract class MockAbstractBatchConfig<T, S> {
@@ -87,8 +89,5 @@ public abstract class MockAbstractBatchConfig<T, S> {
         return marshaller;
     }
 
-//            @Bean
-//    public JobLauncherTestUtils utils()  {
-//        return new JobLauncherTestUtils();
-//    }
+
 }
