@@ -29,8 +29,7 @@ public class XmlFileUtils {
         String permission = "rwxr-xr--";
         try {
             createDirectory(directory, permission);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             log.error("IOException while creating directory " + directory, ex);
         }
 
@@ -48,11 +47,9 @@ public class XmlFileUtils {
                 = PosixFilePermissions.fromString(permission);
         FileAttribute<Set<PosixFilePermission>> attr
                 = PosixFilePermissions.asFileAttribute(perms);
-       // boolean fileExist = Files.exists(Paths.get(directory), LinkOption.NOFOLLOW_LINKS);
-          boolean fileExist = Paths.get(directory).toFile().exists();
-       
+        boolean fileExist = Paths.get(directory).toFile().exists();
+
         if (!fileExist) {
-            //Files.createDirectories(Paths.get(directory), attr);
             Files.createDirectory(Paths.get(directory), attr);
         }
 

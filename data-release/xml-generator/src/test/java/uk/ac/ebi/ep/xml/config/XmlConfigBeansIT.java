@@ -13,6 +13,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.ep.xml.entities.repositories.ProteinXmlRepository;
 
 /**
  *
@@ -38,6 +39,8 @@ public class XmlConfigBeansIT {
     private XmlDatasourceProperties xmlDatasourceProperties;
     @Autowired
     private XmlFileProperties xmlFileProperties;
+    @Autowired
+    private ProteinXmlRepository proteinXmlRepository;
 
     @Test
     public void injectedComponentsAreNotNull() {
@@ -48,6 +51,7 @@ public class XmlConfigBeansIT {
         assertThat(dataSource).isNotNull();
         assertThat(xmlDatasourceProperties).isNotNull();
         assertThat(xmlFileProperties).isNotNull();
+        assertThat(proteinXmlRepository).isNotNull();
 
     }
 

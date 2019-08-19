@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.xml.entities.PrimaryProtein;
 import uk.ac.ebi.ep.xml.entities.Protein;
@@ -31,7 +31,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
-    //private final AtomicInteger count = new AtomicInteger(1);
+    private final AtomicInteger count = new AtomicInteger(1);
 
     private final ProteinXmlRepository proteinXmlRepository;
 
@@ -88,10 +88,10 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         Set<Ref> refs = new HashSet<>();
         Set<String> relSpecies = new HashSet<>();
 
-//        if (log.isDebugEnabled()) {
-//            log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
-//
-//        }
+        if (log.isDebugEnabled()) {
+            log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
+
+        }
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -108,7 +108,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         return entry;
     }
 
-    @Transactional(readOnly = true)
     private void addProteinInformation(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByProteinGroupId(proteinGroups.getProteinGroupId())) {
 

@@ -5,6 +5,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
@@ -20,48 +21,48 @@ import lombok.NoArgsConstructor;
 @Table(name = "PROTEIN_XML")
 @XmlRootElement
 
-//@NamedQuery(name = "ProteinXml.findAll", query = "SELECT p FROM ProteinXml p")
-//@NamedQuery(name = "ProteinXml.findByProteinGroupId", query = "SELECT p FROM ProteinXml p WHERE p.proteinGroupId = :proteinGroupId")
-//@NamedQuery(name = "ProteinXml.findByProteinName", query = "SELECT p FROM ProteinXml p WHERE p.proteinName = :proteinName")
-//@NamedQuery(name = "ProteinXml.findByAccession", query = "SELECT p FROM ProteinXml p WHERE p.accession = :accession")
-//@NamedQuery(name = "ProteinXml.findByTaxId", query = "SELECT p FROM ProteinXml p WHERE p.taxId = :taxId")
-//@NamedQuery(name = "ProteinXml.findByScientificName", query = "SELECT p FROM ProteinXml p WHERE p.scientificName = :scientificName")
-//@NamedQuery(name = "ProteinXml.findByCommonName", query = "SELECT p FROM ProteinXml p WHERE p.commonName = :commonName")
-//@NamedQuery(name = "ProteinXml.findBySynonymNames", query = "SELECT p FROM ProteinXml p WHERE p.synonymNames = :synonymNames")
-//@NamedQuery(name = "ProteinXml.findByExpEvidenceFlag", query = "SELECT p FROM ProteinXml p WHERE p.expEvidenceFlag = :expEvidenceFlag")
-//@NamedQuery(name = "ProteinXml.findByPdbFlag", query = "SELECT p FROM ProteinXml p WHERE p.pdbFlag = :pdbFlag")
-//@NamedQuery(name = "ProteinXml.findByRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.relatedProteinsId = :relatedProteinsId")
-//@NamedQuery(name = "ProteinXml.findByEntryType", query = "SELECT p FROM ProteinXml p WHERE p.entryType = :entryType")
-//@NamedQuery(name = "ProteinXml.findByGeneName", query = "SELECT p FROM ProteinXml p WHERE p.geneName = :geneName")
-//@NamedQuery(name = "ProteinXml.findByPrimaryAccession", query = "SELECT p FROM ProteinXml p WHERE p.primaryAccession = :primaryAccession")
-//@NamedQuery(name = "ProteinXml.findByPrimaryTaxId", query = "SELECT p FROM ProteinXml p WHERE p.primaryTaxId = :primaryTaxId")
-//@NamedQuery(name = "ProteinXml.findByPrimaryCommonName", query = "SELECT p FROM ProteinXml p WHERE p.primaryCommonName = :primaryCommonName")
-//@NamedQuery(name = "ProteinXml.findByPrimaryScientificName", query = "SELECT p FROM ProteinXml p WHERE p.primaryScientificName = :primaryScientificName")
-//@NamedQuery(name = "ProteinXml.findByPrimaryPdbId", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbId = :primaryPdbId")
-//@NamedQuery(name = "ProteinXml.findByPrimaryFunction", query = "SELECT p FROM ProteinXml p WHERE p.primaryFunction = :primaryFunction")
-//@NamedQuery(name = "ProteinXml.findByPrimaryPdbSpecies", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbSpecies = :primaryPdbSpecies")
-//@NamedQuery(name = "ProteinXml.findByPrimaryPdbLinkedAcc", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbLinkedAcc = :primaryPdbLinkedAcc")
-//@NamedQuery(name = "ProteinXml.findByPrimaryEntryType", query = "SELECT p FROM ProteinXml p WHERE p.primaryEntryType = :primaryEntryType")
-//@NamedQuery(name = "ProteinXml.findByPrimaryRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.primaryRelatedProteinsId = :primaryRelatedProteinsId")
-//@NamedQuery(name = "ProteinXml.findByOmimNumber", query = "SELECT p FROM ProteinXml p WHERE p.omimNumber = :omimNumber")
-//@NamedQuery(name = "ProteinXml.findByDiseaseName", query = "SELECT p FROM ProteinXml p WHERE p.diseaseName = :diseaseName")
-//@NamedQuery(name = "ProteinXml.findByCompoundId", query = "SELECT p FROM ProteinXml p WHERE p.compoundId = :compoundId")
-//@NamedQuery(name = "ProteinXml.findByCompoundName", query = "SELECT p FROM ProteinXml p WHERE p.compoundName = :compoundName")
-//@NamedQuery(name = "ProteinXml.findByCompoundRole", query = "SELECT p FROM ProteinXml p WHERE p.compoundRole = :compoundRole")
-//@NamedQuery(name = "ProteinXml.findByCompoundSource", query = "SELECT p FROM ProteinXml p WHERE p.compoundSource = :compoundSource")
-//@NamedQuery(name = "ProteinXml.findByReactantId", query = "SELECT p FROM ProteinXml p WHERE p.reactantId = :reactantId")
-//@NamedQuery(name = "ProteinXml.findByReactantName", query = "SELECT p FROM ProteinXml p WHERE p.reactantName = :reactantName")
-//@NamedQuery(name = "ProteinXml.findByReactantSource", query = "SELECT p FROM ProteinXml p WHERE p.reactantSource = :reactantSource")
-//@NamedQuery(name = "ProteinXml.findByEcNumber", query = "SELECT p FROM ProteinXml p WHERE p.ecNumber = :ecNumber")
-//@NamedQuery(name = "ProteinXml.findByEcFamily", query = "SELECT p FROM ProteinXml p WHERE p.ecFamily = :ecFamily")
-//@NamedQuery(name = "ProteinXml.findByCatalyticActivity", query = "SELECT p FROM ProteinXml p WHERE p.catalyticActivity = :catalyticActivity")
-//@NamedQuery(name = "ProteinXml.findByPathwayId", query = "SELECT p FROM ProteinXml p WHERE p.pathwayId = :pathwayId")
-//@NamedQuery(name = "ProteinXml.findByPathwayName", query = "SELECT p FROM ProteinXml p WHERE p.pathwayName = :pathwayName")
-//@NamedQuery(name = "ProteinXml.findByReactionId", query = "SELECT p FROM ProteinXml p WHERE p.reactionId = :reactionId")
-//@NamedQuery(name = "ProteinXml.findByReactionSource", query = "SELECT p FROM ProteinXml p WHERE p.reactionSource = :reactionSource")
-//@NamedQuery(name = "ProteinXml.findByFamilyGroupId", query = "SELECT p FROM ProteinXml p WHERE p.familyGroupId = :familyGroupId")
-//@NamedQuery(name = "ProteinXml.findByFamilyName", query = "SELECT p FROM ProteinXml p WHERE p.familyName = :familyName")
-//@NamedQuery(name = "ProteinXml.findByProteinXmlId", query = "SELECT p FROM ProteinXml p WHERE p.proteinXmlId = :proteinXmlId")
+@NamedQuery(name = "ProteinXml.findAll", query = "SELECT p FROM ProteinXml p")
+@NamedQuery(name = "ProteinXml.findByProteinGroupId", query = "SELECT p FROM ProteinXml p WHERE p.proteinGroupId = :proteinGroupId")
+@NamedQuery(name = "ProteinXml.findByProteinName", query = "SELECT p FROM ProteinXml p WHERE p.proteinName = :proteinName")
+@NamedQuery(name = "ProteinXml.findByAccession", query = "SELECT p FROM ProteinXml p WHERE p.accession = :accession")
+@NamedQuery(name = "ProteinXml.findByTaxId", query = "SELECT p FROM ProteinXml p WHERE p.taxId = :taxId")
+@NamedQuery(name = "ProteinXml.findByScientificName", query = "SELECT p FROM ProteinXml p WHERE p.scientificName = :scientificName")
+@NamedQuery(name = "ProteinXml.findByCommonName", query = "SELECT p FROM ProteinXml p WHERE p.commonName = :commonName")
+@NamedQuery(name = "ProteinXml.findBySynonymNames", query = "SELECT p FROM ProteinXml p WHERE p.synonymNames = :synonymNames")
+@NamedQuery(name = "ProteinXml.findByExpEvidenceFlag", query = "SELECT p FROM ProteinXml p WHERE p.expEvidenceFlag = :expEvidenceFlag")
+@NamedQuery(name = "ProteinXml.findByPdbFlag", query = "SELECT p FROM ProteinXml p WHERE p.pdbFlag = :pdbFlag")
+@NamedQuery(name = "ProteinXml.findByRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.relatedProteinsId = :relatedProteinsId")
+@NamedQuery(name = "ProteinXml.findByEntryType", query = "SELECT p FROM ProteinXml p WHERE p.entryType = :entryType")
+@NamedQuery(name = "ProteinXml.findByGeneName", query = "SELECT p FROM ProteinXml p WHERE p.geneName = :geneName")
+@NamedQuery(name = "ProteinXml.findByPrimaryAccession", query = "SELECT p FROM ProteinXml p WHERE p.primaryAccession = :primaryAccession")
+@NamedQuery(name = "ProteinXml.findByPrimaryTaxId", query = "SELECT p FROM ProteinXml p WHERE p.primaryTaxId = :primaryTaxId")
+@NamedQuery(name = "ProteinXml.findByPrimaryCommonName", query = "SELECT p FROM ProteinXml p WHERE p.primaryCommonName = :primaryCommonName")
+@NamedQuery(name = "ProteinXml.findByPrimaryScientificName", query = "SELECT p FROM ProteinXml p WHERE p.primaryScientificName = :primaryScientificName")
+@NamedQuery(name = "ProteinXml.findByPrimaryPdbId", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbId = :primaryPdbId")
+@NamedQuery(name = "ProteinXml.findByPrimaryFunction", query = "SELECT p FROM ProteinXml p WHERE p.primaryFunction = :primaryFunction")
+@NamedQuery(name = "ProteinXml.findByPrimaryPdbSpecies", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbSpecies = :primaryPdbSpecies")
+@NamedQuery(name = "ProteinXml.findByPrimaryPdbLinkedAcc", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbLinkedAcc = :primaryPdbLinkedAcc")
+@NamedQuery(name = "ProteinXml.findByPrimaryEntryType", query = "SELECT p FROM ProteinXml p WHERE p.primaryEntryType = :primaryEntryType")
+@NamedQuery(name = "ProteinXml.findByPrimaryRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.primaryRelatedProteinsId = :primaryRelatedProteinsId")
+@NamedQuery(name = "ProteinXml.findByOmimNumber", query = "SELECT p FROM ProteinXml p WHERE p.omimNumber = :omimNumber")
+@NamedQuery(name = "ProteinXml.findByDiseaseName", query = "SELECT p FROM ProteinXml p WHERE p.diseaseName = :diseaseName")
+@NamedQuery(name = "ProteinXml.findByCompoundId", query = "SELECT p FROM ProteinXml p WHERE p.compoundId = :compoundId")
+@NamedQuery(name = "ProteinXml.findByCompoundName", query = "SELECT p FROM ProteinXml p WHERE p.compoundName = :compoundName")
+@NamedQuery(name = "ProteinXml.findByCompoundRole", query = "SELECT p FROM ProteinXml p WHERE p.compoundRole = :compoundRole")
+@NamedQuery(name = "ProteinXml.findByCompoundSource", query = "SELECT p FROM ProteinXml p WHERE p.compoundSource = :compoundSource")
+@NamedQuery(name = "ProteinXml.findByReactantId", query = "SELECT p FROM ProteinXml p WHERE p.reactantId = :reactantId")
+@NamedQuery(name = "ProteinXml.findByReactantName", query = "SELECT p FROM ProteinXml p WHERE p.reactantName = :reactantName")
+@NamedQuery(name = "ProteinXml.findByReactantSource", query = "SELECT p FROM ProteinXml p WHERE p.reactantSource = :reactantSource")
+@NamedQuery(name = "ProteinXml.findByEcNumber", query = "SELECT p FROM ProteinXml p WHERE p.ecNumber = :ecNumber")
+@NamedQuery(name = "ProteinXml.findByEcFamily", query = "SELECT p FROM ProteinXml p WHERE p.ecFamily = :ecFamily")
+@NamedQuery(name = "ProteinXml.findByCatalyticActivity", query = "SELECT p FROM ProteinXml p WHERE p.catalyticActivity = :catalyticActivity")
+@NamedQuery(name = "ProteinXml.findByPathwayId", query = "SELECT p FROM ProteinXml p WHERE p.pathwayId = :pathwayId")
+@NamedQuery(name = "ProteinXml.findByPathwayName", query = "SELECT p FROM ProteinXml p WHERE p.pathwayName = :pathwayName")
+@NamedQuery(name = "ProteinXml.findByReactionId", query = "SELECT p FROM ProteinXml p WHERE p.reactionId = :reactionId")
+@NamedQuery(name = "ProteinXml.findByReactionSource", query = "SELECT p FROM ProteinXml p WHERE p.reactionSource = :reactionSource")
+@NamedQuery(name = "ProteinXml.findByFamilyGroupId", query = "SELECT p FROM ProteinXml p WHERE p.familyGroupId = :familyGroupId")
+@NamedQuery(name = "ProteinXml.findByFamilyName", query = "SELECT p FROM ProteinXml p WHERE p.familyName = :familyName")
+@NamedQuery(name = "ProteinXml.findByProteinXmlId", query = "SELECT p FROM ProteinXml p WHERE p.proteinXmlId = :proteinXmlId")
 public class ProteinXml implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -150,12 +151,7 @@ public class ProteinXml implements Serializable {
     @Basic(optional = false)
     @Column(name = "PROTEIN_XML_ID")
     private long proteinXmlId;
-    
-//    String q ="u.accession as accession, u.taxId as taxId,u.proteinName as proteinName,u.scientificName as scientificName, u.commonName as commonName,u.relatedProteinsId as relatedProteinsId, u.primaryFunction as primaryFunction, u.entryType as entryType,u.synonymNames as synonymNames,u.expEvidenceFlag as expEvidenceFlag,"
-//        +"u.pdbFlag as pdbFlag, u.geneName as geneName, u.primaryAccession as primaryAccession, u.primaryTaxId as primaryTaxId, u.primaryCommonName as primaryCommonName, u.primaryScientificName as primaryScientificName, u.primaryPdbId as primaryPdbId, u.primaryPdbSpecies as primaryPdbSpecies,"
-//        + "u.primaryPdbLinkedAcc as primaryPdbLinkedAcc, u.primaryEntryType as primaryEntryType, u.primaryRelatedProteinsId as primaryRelatedProteinsId, u.omimNumber as omimNumber, u.diseaseName as diseaseName, u.compoundId as compoundId, u.compoundName as compoundName, u.compoundRole as compoundRole, u.compoundSource as compoundSource,"
-//        + "u.reactantId as reactantId, u.reactantName as reactantName,u.reactantSource as reactantSource, u.ecNumber as ecNumber, u.ecFamily as ecFamily,u.catalyticActivity as catalyticActivity, u.pathwayId as pathwayId,u.pathwayName as pathwayName,u.reactionId as reactionId, u.reactionSource as reactionSource, u.familyGroupId as familyGroupId, u.familyName as familyName";
-//    
+
     public String getCommonName() {
         if (commonName == null) {
             commonName = scientificName;
@@ -166,8 +162,5 @@ public class ProteinXml implements Serializable {
     public void setCommonName(String commonName) {
         this.commonName = commonName;
     }
-
-      
-    
 
 }

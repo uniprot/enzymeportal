@@ -29,23 +29,6 @@ public interface Protein {
     public String getGeneName();
 
     public String getPrimaryAccession();
-    // public char getPdbFlag();
-
-//    public int getPrimaryTaxId();
-//
-//    public String getPrimaryCommonName();
-//
-//    public String getPrimaryScientificName();
-//
-//    public String getPrimaryPdbId();
-//
-//    public String getPrimaryFunction();
-//
-//    public String getPrimaryPdbSpecies();
-//
-//    public String getPrimaryPdbLinkedAcc();
-//
-//    public int getPrimaryEntryType();
 
     public int getPrimaryRelatedProteinsId();
 
