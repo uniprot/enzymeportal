@@ -190,8 +190,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addEnzymeFamilyToProteinField(Protein entry, Set<Field> fields) {
-        addField(FieldName.ENZYME_FAMILY.getName(), computeEcToFamilyName(entry.getEcFamily()), fields);
-
+        if (Objects.nonNull(entry.getEcFamily())) {
+            addField(FieldName.ENZYME_FAMILY.getName(), computeEcToFamilyName(entry.getEcFamily()), fields);
+        }
     }
 
     private void addPrimaryGeneNameFields(Protein entry, Set<Field> fields) {
@@ -200,8 +201,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addPrimaryCatalyticActivityFields(Protein entry, Set<Field> fields) {
-
-        addField(FieldName.CATALYTIC_ACTIVITY.getName(), entry.getCatalyticActivity(), fields);
+        if (Objects.nonNull(entry.getCatalyticActivity())) {
+            addField(FieldName.CATALYTIC_ACTIVITY.getName(), entry.getCatalyticActivity(), fields);
+        }
     }
 
     private void addRelatedSpeciesField(Set<String> relSpecies, Set<Field> fields) {

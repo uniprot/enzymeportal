@@ -113,7 +113,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     }
 
     private void addCatalyticActivityField(String catalyticActivity, Set<Field> fields) {
-        if (catalyticActivity != null) {
+        if (Objects.nonNull(catalyticActivity)) {
             fields.add(new Field(FieldName.CATALYTIC_ACTIVITY.getName(), catalyticActivity));
         }
     }
