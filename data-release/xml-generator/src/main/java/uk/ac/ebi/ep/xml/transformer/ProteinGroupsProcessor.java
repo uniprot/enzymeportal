@@ -230,7 +230,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             fields.add(new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName()));
 
             fields.add(new Field(FieldName.WITH_DISEASE.getName(), withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getCommonName(), disease.getEntryType())));
-
+            fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
             refs.add(new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName()));
         }
     }
@@ -244,7 +244,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
 
             fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType())));
-
+            fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
         }
     }

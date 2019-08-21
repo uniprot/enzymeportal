@@ -138,6 +138,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
+            fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
         }
     }
 
@@ -147,6 +148,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         if (Objects.nonNull(disease.getOmimNumber()) && Objects.nonNull(disease.getDiseaseName())) {
 
             fields.add(new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName()));
+            fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
             refs.add(new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName()));
         }
 
@@ -165,8 +167,15 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
 
+            if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
+                fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
+
+            }
+
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName()));
+            fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
             refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
+
         }
 
     }

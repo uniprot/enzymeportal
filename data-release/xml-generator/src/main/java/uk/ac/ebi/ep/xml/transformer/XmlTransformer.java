@@ -163,6 +163,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
         fields.add(new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName()));
 
         fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace("CHEBI:", ""), accession, commonName, entryType)));
+        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
 
     }
 
@@ -171,7 +172,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
         if (Objects.nonNull(pathway.getPathwayId())) {
 
             fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(pathway.getPathwayId(), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
-
+            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
         }
     }

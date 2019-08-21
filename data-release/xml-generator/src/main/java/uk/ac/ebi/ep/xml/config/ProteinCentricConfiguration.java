@@ -28,6 +28,7 @@ import uk.ac.ebi.ep.xml.listeners.LogChunkListener;
 import uk.ac.ebi.ep.xml.schema.Entry;
 import uk.ac.ebi.ep.xml.transformer.ProteinGroupsProcessor;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 
 /**
  *
@@ -99,6 +100,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Bean(name = "proteinXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
+        XmlFileUtils.createDirectory(xmlFileProperties.getProteinCentric());
         return new FileSystemResource(xmlFileProperties.getProteinCentric());
     }
 
