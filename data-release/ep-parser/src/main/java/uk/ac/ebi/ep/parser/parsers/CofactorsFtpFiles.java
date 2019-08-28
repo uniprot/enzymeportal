@@ -10,8 +10,8 @@ import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.model.ChebiCompound;
-import uk.ac.ebi.ep.model.search.model.Compound;
-import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.dao.Compound;
+import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
 /**

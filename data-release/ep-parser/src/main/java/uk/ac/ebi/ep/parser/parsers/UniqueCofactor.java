@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import uk.ac.ebi.ep.model.search.model.CofactorView;
+import uk.ac.ebi.ep.model.dao.CofactorView;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
 /**
