@@ -22,17 +22,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!--    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>Cairo-RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>-->
     <modules>
         <module>xml-generator</module>
         <module>ep-config</module>          
