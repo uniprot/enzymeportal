@@ -42,7 +42,7 @@
         <module>PDBeAdapter</module>
         <module>ep-parser</module>
         <module>SitemapGenerator</module>
-       
+        <module>metaboliteService</module>
     </modules>
     <repositories>
 

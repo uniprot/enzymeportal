@@ -1,7 +1,8 @@
 package uk.ac.ebi.ep.centralservice.helper;
 
-import uk.ac.ebi.ep.model.search.model.Compound;
+
 import uk.ac.ebi.ep.model.EnzymePortalCompound;
+import uk.ac.ebi.ep.model.dao.Compound;
 
 /**
  *
