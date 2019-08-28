@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.dao.Summary;
 
 
 /**

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uk.ac.ebi.ep.model.EnzymeReactionInfo;
-import uk.ac.ebi.ep.model.search.model.ReactionInfoView;
+import uk.ac.ebi.ep.model.dao.ReactionInfoView;
 
 /**
  *
@@ -19,8 +19,8 @@ public interface EnzymeReactionInfoRepository extends JpaRepository<EnzymeReacti
 
     @Query(value = "SELECT  uniprotAccession, xref FROM EnzymeReactionInfo WHERE xrefType=:xrefType")
     List<ReactionInfoView> findReactionInfoViewByXrefType(@Param("xrefType") String xrefType);
-
-    //@Query("SELECT e FROM EnzymeReactionInfo e WHERE e.xrefType=:xrefType AND xref='CHEBI:30839'")
+    
+      //@Query("SELECT e FROM EnzymeReactionInfo e WHERE e.xrefType=:xrefType AND xref='CHEBI:30839'")
     @Query("SELECT e FROM EnzymeReactionInfo e WHERE e.xrefType=:xrefType")
     Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(@Param("xrefType") String xrefType);
 

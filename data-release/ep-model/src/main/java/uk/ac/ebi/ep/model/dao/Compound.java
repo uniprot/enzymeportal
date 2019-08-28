@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.model.search.model;
+package uk.ac.ebi.ep.model.dao;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,8 +7,9 @@ import java.util.Objects;
  *
  * @author joseph
  */
-public class Compound  implements  Serializable {
- private static final long serialVersionUID = 1L;
+public class Compound implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private Compound.Role role;
     protected boolean selected;
 
@@ -22,18 +23,12 @@ public class Compound  implements  Serializable {
     public Compound() {
     }
 
-    public Compound( String id, String name, Object url,String role) {
+    public Compound(String id, String name, Object url, String role) {
         this.role = Role.valueOf(role);
         this.id = id;
         this.name = name;
         this.url = url;
     }
-    
-    
-    
-    
-    
-    
 
     @Override
     public int hashCode() {
@@ -54,9 +49,6 @@ public class Compound  implements  Serializable {
         return Objects.equals(this.name, other.name);
     }
 
-
-
-
     public enum Role {
 
         SUBSTRATE_OR_PRODUCT,
@@ -65,6 +57,7 @@ public class Compound  implements  Serializable {
         INHIBITOR,
         DRUG,
         REACTANT,
+        METABOLITE,
         BIOACTIVE;
 
         public String value() {

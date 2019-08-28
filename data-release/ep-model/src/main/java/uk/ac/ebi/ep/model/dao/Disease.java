@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.model.search.model;
+package uk.ac.ebi.ep.model.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;

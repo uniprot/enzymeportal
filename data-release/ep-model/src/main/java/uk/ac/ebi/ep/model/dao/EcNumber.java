@@ -1,5 +1,5 @@
 
-package uk.ac.ebi.ep.model.search.model;
+package uk.ac.ebi.ep.model.dao;
 
 import com.querydsl.core.annotations.QueryProjection;
 import java.io.Serializable;

@@ -14,6 +14,9 @@ import uk.ac.ebi.ep.model.EnzymeReactionInfo;
 import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.model.UniprotXref;
+import uk.ac.ebi.ep.model.dao.CofactorView;
+import uk.ac.ebi.ep.model.dao.ReactionInfoView;
+import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.repositories.ChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.ChemblTargetsRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
@@ -25,15 +28,12 @@ import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
 import uk.ac.ebi.ep.model.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.model.repositories.UniprotXrefRepository;
-import uk.ac.ebi.ep.model.search.model.CofactorView;
-import uk.ac.ebi.ep.model.search.model.ReactionInfoView;
-import uk.ac.ebi.ep.model.search.model.Summary;
 
 /**
  *
  * @author joseph
  */
-//@Transactional
+@Transactional
 @Service
 public class EnzymePortalParserService {
 
@@ -76,7 +76,7 @@ public class EnzymePortalParserService {
 
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<CofactorView> findCofactors() {
 
         return compoundRepository.findCofactors();
@@ -88,7 +88,7 @@ public class EnzymePortalParserService {
         return enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType);
 //        try (Stream<EnzymeReactionInfo> reactionInfo = enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType)) {
 //            reactionInfo.forEach(data -> System.out.println(" unique " + data));
-//            
+//
 //        }
 //        return Stream.empty();
     }
@@ -127,7 +127,6 @@ public class EnzymePortalParserService {
 //        return Stream.empty();
 //        // return enzymeReactionInfoRepository.streamReactionInfoByPartitionAndXrefType(xrefType);
 //    }
-
     @Transactional
     public Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(String xrefType) {
 

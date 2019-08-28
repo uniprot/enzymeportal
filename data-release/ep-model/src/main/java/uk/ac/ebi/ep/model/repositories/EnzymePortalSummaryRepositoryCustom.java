@@ -3,7 +3,7 @@ package uk.ac.ebi.ep.model.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.dao.Summary;
 
 /**
  *

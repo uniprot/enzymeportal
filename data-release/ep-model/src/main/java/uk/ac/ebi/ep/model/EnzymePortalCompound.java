@@ -26,7 +26,7 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import uk.ac.ebi.ep.model.search.model.Compound;
+import uk.ac.ebi.ep.model.dao.Compound;
 
 /**
  *

@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.model.search.model;
+package uk.ac.ebi.ep.model.dao;
 
 import org.springframework.data.web.ProjectedPayload;
 

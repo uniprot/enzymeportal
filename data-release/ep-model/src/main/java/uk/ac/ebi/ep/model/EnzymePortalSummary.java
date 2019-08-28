@@ -21,7 +21,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.dao.Summary;
 
 /**
  *
