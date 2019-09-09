@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.parser.parsers;
 
-import uk.ac.ebi.ep.parser.model.LiteCompound;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +17,7 @@ import uk.ac.ebi.ep.model.dao.CofactorView;
 import uk.ac.ebi.ep.model.dao.Compound;
 import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.parser.model.LiteCompound;
 
 /**
  *
@@ -180,7 +180,7 @@ public class ChebiCofactors {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
-                log.debug("cofactor name search in CHEBI Compound Table " + cofactorName);
+                log.info("cofactor name search in CHEBI Compound Table " + cofactorName);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByCompoundName(cofactorName));
 
                 if (liteCompound.isPresent()) {
