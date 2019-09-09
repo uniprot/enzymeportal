@@ -18,7 +18,7 @@ import uk.ac.ebi.ep.metaboliteService.model.Metabolite;
 @Service
 public class MetabolightServiceImpl implements MetabolightService {
 
-    private static final String METABOLIGHT_URL = "https://wwwdev.ebi.ac.uk/metabolights/ws/ebi-internal/";
+    private static final String METABOLIGHT_URL = "https://www.ebi.ac.uk/metabolights/ws/ebi-internal/";
     private final String ENDPOINT = "check_if_metabolite/";
     private final RestTemplate restTemplate;
 
