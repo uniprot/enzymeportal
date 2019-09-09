@@ -1,5 +1,4 @@
-
-package uk.ac.ebi.ep.parser.parsers;
+package uk.ac.ebi.ep.parser.model;
 
 /**
  *
@@ -10,6 +9,7 @@ public class LiteCompound {
     private String compoundId;
 
     private String compoundName;
+    private String synonym;
 
     private String compoundSource;
 
@@ -87,14 +87,17 @@ public class LiteCompound {
         this.note = note;
     }
 
+    public String getSynonym() {
+        return synonym;
+    }
+
+    public void setSynonym(String synonym) {
+        this.synonym = synonym;
+    }
+
     @Override
     public String toString() {
         return "LiteCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
-    
-    
-    
-    
-    
-    
+
 }

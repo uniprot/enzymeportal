@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.parser.parsers;
 
+import uk.ac.ebi.ep.parser.model.LiteCompound;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

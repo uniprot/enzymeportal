@@ -13,7 +13,7 @@ import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
  * @author joseph
  */
 @Slf4j
-public class MetabolightParser {
+public class ChebiCofactorParser {
 
     public static void main(String... args) {
         if (args == null || args.length == 0) {
@@ -31,10 +31,13 @@ public class MetabolightParser {
         context.scan("uk.ac.ebi.ep.parser.config", "uk.ac.ebi.ep.metaboliteService");
         context.refresh();
 
-        ChebiCompounds chebiCompound = context.getBean(ChebiCompounds.class);
-        chebiCompound.loadUniqueMetabolitesToDatabase();
 
-        log.info("Done loading metabolites to the database");
+         ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
+        chebiCofactor.loadChebiCofactorToDatabase();
+
+        log.info("Done Loading Chebi cofactors to ENZYME_PORTAL database ");
+        chebiCofactor.loadUniqueCofactorsToDatabase();
+        log.info("Done Loading Unique Chebi cofactors to ENZYME_PORTAL database ");
 
     }
 }

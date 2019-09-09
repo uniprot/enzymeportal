@@ -13,7 +13,7 @@ import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
  * @author joseph
  */
 @Slf4j
-public class MetabolightParser {
+public class ChebiCompoundParser {
 
     public static void main(String... args) {
         if (args == null || args.length == 0) {
@@ -32,6 +32,11 @@ public class MetabolightParser {
         context.refresh();
 
         ChebiCompounds chebiCompound = context.getBean(ChebiCompounds.class);
+        chebiCompound.loadChebiCompoundsToDatabase();
+
+        log.info("Done Loading Chebi compounds to ENZYME_PORTAL_CHEBI_COMPOUND table");
+
+        log.info("About to load metabolites to the database .....");
         chebiCompound.loadUniqueMetabolitesToDatabase();
 
         log.info("Done loading metabolites to the database");

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.Arrays;
@@ -22,6 +18,7 @@ import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.parser.model.LiteCompound;
 
 /**
  *

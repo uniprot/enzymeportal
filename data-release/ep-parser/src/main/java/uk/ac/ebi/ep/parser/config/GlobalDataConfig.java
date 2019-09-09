@@ -14,11 +14,14 @@ import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.chembl.config.ChemblServiceUrl;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblRestService;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.model.repositories.EnzymePortalReactantRepository;
+import uk.ac.ebi.ep.metaboliteService.service.ChebiService;
+import uk.ac.ebi.ep.metaboliteService.service.MetabolightService;
+import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
-import uk.ac.ebi.ep.parser.parsers.MetaboliteParser;
 import uk.ac.ebi.ep.parser.parsers.RheaReaction;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
@@ -36,11 +39,18 @@ public class GlobalDataConfig {
     @Autowired
     private Environment env;
     @Autowired
-    private EnzymePortalReactantRepository enzymePortalReactantRepository;
+    private EnzymeReactionInfoRepository enzymeReactionInfoRepository;
+    @Autowired
+    private ChebiService chebiService;
+    @Autowired
+    private MetabolightService metabolightService;
+    @Autowired
+    private EnzymePortalParserService enzymePortalParserService;
+    
 
     @Bean
-    public MetaboliteParser metaboliteParser() {
-        return new MetaboliteParser(enzymePortalReactantRepository);
+    public ChebiCompounds chebiCompounds() {
+        return new ChebiCompounds(metabolightService, chebiService, enzymeReactionInfoRepository, enzymePortalParserService);
     }
 
     @Bean
