@@ -53,11 +53,12 @@ public class DataConfig {
 //        properties.setProperty("hibernate.default_batch_fetch_size", "30");
 
 
-       // properties.setProperty("hibernate.generate_statistics", "true");
-        properties.setProperty("hibernate.jdbc.batch_size", "20");
-
-        properties.put("hibernate.order_updates", "true");
-        properties.put("hibernate.batch_versioned_data", "true");
+//        properties.setProperty("hibernate.generate_statistics", "false");
+//        properties.setProperty("hibernate.jdbc.batch_size", "100");
+//
+//         properties.put("hibernate.order_inserts", "true");
+//        properties.put("hibernate.order_updates", "true");
+//        properties.put("hibernate.batch_versioned_data", "true");
 
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setShowSql(Boolean.FALSE);
