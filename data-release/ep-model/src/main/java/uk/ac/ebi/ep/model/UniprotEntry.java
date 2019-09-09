@@ -43,7 +43,6 @@ import org.springframework.util.StringUtils;
 
 public class UniprotEntry implements Serializable {
 
-
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
@@ -115,6 +114,8 @@ public class UniprotEntry implements Serializable {
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<ChemblTargets> chemblTargetsSet;
 
+    @OneToMany(mappedBy = "uniprotAccession")
+    private Set<EnzymePortalChebiCompound> enzymePortalChebiCompoundSet;
 
     public String getUniprotid() {
         return name;
@@ -364,6 +365,15 @@ public class UniprotEntry implements Serializable {
 
     public void setEnzymePortalReactantSet(Set<EnzymePortalReactant> enzymePortalReactantSet) {
         this.enzymePortalReactantSet = enzymePortalReactantSet;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalChebiCompound> getEnzymePortalChebiCompoundSet() {
+        return enzymePortalChebiCompoundSet;
+    }
+
+    public void setEnzymePortalChebiCompoundSet(Set<EnzymePortalChebiCompound> enzymePortalChebiCompoundSet) {
+        this.enzymePortalChebiCompoundSet = enzymePortalChebiCompoundSet;
     }
 
 }

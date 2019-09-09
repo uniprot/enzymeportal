@@ -4,8 +4,9 @@ package uk.ac.ebi.ep.model.dao;
  *
  * @author joseph
  */
-@Deprecated
 public interface ChebiReactant {
+
+    Long getReactantInternalId();
 
     String getChebiId();
 

@@ -23,22 +23,21 @@ public interface EnzymePortalReactantRepository extends JpaRepository<EnzymePort
     void createReactantIgnoreDup(String reactantId, String reactantName, String reactantSource, String relationship, String accession, String url, String reactantRole, String reactionDirection);
 
     @Transactional
-    //@Query("SELECT DISTINCT e.reactantId FROM EnzymePortalReactant e WHERE e.reactantSource='ChEBI' AND e.reactantId='CHEBI:30839'")
     @Query("SELECT DISTINCT e.reactantId FROM EnzymePortalReactant e WHERE e.reactantSource='ChEBI'")
     Stream<String> streamChebiIds();
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Query("SELECT e FROM EnzymePortalReactant e WHERE e.reactantSource='ChEBI'")
     Stream<EnzymePortalReactant> findChebiReactantsAndStream();
 
-    @Transactional
-    @Query("SELECT e.reactantId as chebiId,e.reactantName as chebiName,e.uniprotAccession.accession as accession FROM EnzymePortalReactant e WHERE e.reactantSource='ChEBI'")
+    @Transactional(readOnly = true)
+    @Query("SELECT e.reactantInternalId as reactantInternalId, e.reactantId as chebiId,e.reactantName as chebiName,e.uniprotAccession.accession as accession FROM EnzymePortalReactant e WHERE e.reactantSource='ChEBI'")
     Stream<ChebiReactant> streamChebiReactants();
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true,flushAutomatically = true)
     @Transactional
-    @Query(value = "UPDATE enzyme_portal_reactant SET reactant_role = :reactant_role,relationship=:relationship WHERE reactant_id = :reactant_id", nativeQuery = true)
-    void updateReactant(@Param("reactant_role") String reactant_role, @Param("relationship") String relationship, @Param("reactant_id") String reactant_id);
+    @Query(value = "UPDATE enzyme_portal_reactant SET reactant_role = :reactant_role,relationship=:relationship WHERE reactant_id = :reactant_id AND reactant_internal_id = :reactant_internal_id", nativeQuery = true)
+    void updateReactant(@Param("reactant_role") String reactant_role, @Param("relationship") String relationship, @Param("reactant_id") String reactant_id, @Param("reactant_internal_id") Long reactant_internal_id);
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT * FROM ENZYME_PORTAL_REACTANT WHERE reactant_id = :reactant_id", nativeQuery = true)

@@ -15,11 +15,14 @@ import uk.ac.ebi.ep.model.TempCompoundCompare;
 import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.model.UniprotXref;
 import uk.ac.ebi.ep.model.dao.CofactorView;
+import uk.ac.ebi.ep.model.dao.MetaboliteView;
 import uk.ac.ebi.ep.model.dao.ReactionInfoView;
 import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.repositories.ChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.ChemblTargetsRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalMetaboliteRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalReactantRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
@@ -68,6 +71,32 @@ public class EnzymePortalParserService {
 
     @Autowired
     private EnzymePortalReactantRepository enzymePortalReactantRepository;
+
+    @Autowired
+    private EnzymePortalChebiCompoundRepository enzymePortalChebiCompoundRepository;
+
+    @Autowired
+    private EnzymePortalMetaboliteRepository enzymePortalMetaboliteRepository;
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void createMetabolite(String metaboliteId, String metaboliteName, String metaboliteUrl) {
+        enzymePortalMetaboliteRepository.createMetabolite(metaboliteId, metaboliteName, metaboliteUrl);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<MetaboliteView> findMetabolites() {
+
+        return enzymePortalMetaboliteRepository.findMetabolites();
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void createChebiCompound(String chebiId, String chebiName, String synonyms, String relationship, String accession, String url, String role, String note) {
+        enzymePortalChebiCompoundRepository.createChebiCompoundIgnoreDup(chebiId, chebiName, synonyms, relationship, accession, url, role, note);
+
+    }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
