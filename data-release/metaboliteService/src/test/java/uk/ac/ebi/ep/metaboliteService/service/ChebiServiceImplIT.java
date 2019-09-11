@@ -50,6 +50,7 @@ public class ChebiServiceImplIT extends MetaboliteServiceApplicationTests {
     public void testGetChebiSynonyms() throws Exception {
         log.info("testGetChebiSynonyms");
         String chebiId = "CHEBI:27732";
+        //chebiId = "CHEBI:17544";
         List<String> synonyms = chebiService.getChebiSynonyms(chebiId);
         assertThat(synonyms).isNotNull();
         assertThat(synonyms, hasSize(greaterThanOrEqualTo(1)));

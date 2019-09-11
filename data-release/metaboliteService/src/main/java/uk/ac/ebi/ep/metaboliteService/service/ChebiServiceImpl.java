@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.metaboliteService.service;
 
+import com.sun.xml.ws.server.UnsupportedMediaException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -29,13 +30,15 @@ public class ChebiServiceImpl implements ChebiService {
 
     @Override
     public Entity getCompleteChebiEntityInformation(String chebiId) {
+        Entity entity = null;
         try {
 
-            return chebiWebServiceClient.getCompleteEntity(chebiId);
-        } catch (ChebiWebServiceFault_Exception ex) {
-            log.error(ex.getMessage());
+            entity = chebiWebServiceClient.getCompleteEntity(chebiId);
+
+        } catch (ChebiWebServiceFault_Exception | UnsupportedMediaException ex) {
+            log.error("ChEBI webservice error for ID " + chebiId + " Reason :: " + ex.getMessage());
         }
-        return null;
+        return entity;
     }
 
     @Override
