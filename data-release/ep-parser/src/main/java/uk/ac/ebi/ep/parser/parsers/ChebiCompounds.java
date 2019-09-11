@@ -113,7 +113,7 @@ public class ChebiCompounds extends ChebiCofactors {
         try (Stream<ChebiReactant> reactionInfo = enzymeReactionInfoRepository.streamChebiReactantInfo()) {
 
             reactionInfo
-                    .parallel()
+                   // .parallel()
                     .forEach(data -> processChebiIdInReactionInfo(data.getChebiId(), data.getAccession(), counter));
 
         }
