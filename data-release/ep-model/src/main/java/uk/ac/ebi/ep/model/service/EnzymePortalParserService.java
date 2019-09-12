@@ -100,6 +100,20 @@ public class EnzymePortalParserService {
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)
+    public void createChebiCompound() {
+        enzymePortalChebiCompoundRepository.createChebiCompoundIgnoreDup();
+
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void createUniqueChebiCompound(String chebiId, String chebiName, String synonyms, String relationship, String url, String role, String note) {
+        enzymePortalChebiCompoundRepository.createUniqueChebiCompound(chebiId, chebiName, synonyms, relationship, url, role, note);
+
+    }
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
     public void createCofactor(String cofactorId, String cofactorName, String cofactorUrl) {
         compoundRepository.createCofactor(cofactorId, cofactorName, cofactorUrl);
 

@@ -19,6 +19,14 @@ import uk.ac.ebi.ep.model.dao.ReactionInfoView;
 public interface EnzymeReactionInfoRepository extends JpaRepository<EnzymeReactionInfo, Long> {
 
     @Transactional(readOnly = true)
+    @Query("SELECT DISTINCT e.xref FROM EnzymeReactionInfo e WHERE e.xrefType='CHEBI'")
+    Stream<String> streamUniqueChebiIds();
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT COUNT(DISTINCT xref) FROM enzyme_reaction_info WHERE xref_type='CHEBI'", nativeQuery = true)
+    Long countUniqueChebiIds();
+
+    @Transactional(readOnly = true)
     @Query("SELECT  e.xref as chebiId,e.uniprotAccession as accession FROM EnzymeReactionInfo e WHERE e.xrefType='CHEBI'")
     Stream<ChebiReactant> streamChebiReactantInfo();
 
