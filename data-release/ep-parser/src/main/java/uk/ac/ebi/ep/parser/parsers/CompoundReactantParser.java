@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  *
  * @author joseph
  */
+@Deprecated // no longer needed. Rhea reactants are pulled by database pipeline
 @Slf4j
 public class CompoundReactantParser extends GenericCompound {
 

@@ -11,6 +11,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author joseph
  */
+@Deprecated
 public class ReactantParser {
 
     public static void main(String... args) {

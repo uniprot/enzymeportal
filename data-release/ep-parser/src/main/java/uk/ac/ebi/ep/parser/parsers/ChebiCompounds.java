@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.parser.parsers;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.metaboliteService.service.ChebiService;
 import uk.ac.ebi.ep.metaboliteService.service.MetabolightService;
 import uk.ac.ebi.ep.model.ChebiCompound;
-import uk.ac.ebi.ep.model.dao.ChebiReactant;
 import uk.ac.ebi.ep.model.dao.Compound;
 import uk.ac.ebi.ep.model.dao.MetaboliteView;
 import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
@@ -55,7 +53,7 @@ public class ChebiCompounds extends ChebiCofactors {
         enzymePortalParserService.createMetabolite(metabolite.getCompoundId(), metabolite.getCompoundName(), url);
     }
 
-    private void processChebiIdInReactionInfo(String chebi, String accession, AtomicInteger counter) {
+    private void processChebiIdInReactionInfo(String chebi, AtomicInteger counter) {
         log.info("Processing CHEBI ID : " + chebi + " Num processed so far : " + counter.getAndIncrement());
 
         ChebiCompound chebiCompound = findChebiCompoundById(chebi);
@@ -65,8 +63,10 @@ public class ChebiCompounds extends ChebiCofactors {
 
         if (Objects.isNull(chebiCompound)) {
             Entity entity = chebiService.getCompleteChebiEntityInformation(chebi);
-            chebiId = entity.getChebiId();
-            chebiName = entity.getChebiAsciiName();
+            if (entity != null) {
+                chebiId = entity.getChebiId();
+                chebiName = entity.getChebiAsciiName();
+            }
         } else {
 
             chebiId = chebiCompound.getChebiAccession();
@@ -74,12 +74,10 @@ public class ChebiCompounds extends ChebiCofactors {
         }
 
         final String preferredName = chebiName;
-
-        String synonyms = chebiService.getChebiSynonyms(chebi)
-                .stream()
-                .filter(c -> !c.equalsIgnoreCase(preferredName))
-                .limit(1_000)
-                .collect(Collectors.joining(";"));
+        String synonyms = null;
+        if (preferredName != null) {
+            synonyms = getChebiSynonyms(chebi, preferredName);
+        }
 
         boolean isMetabolite = metabolightService.isMetabolite(chebi);
         String relationship = Relationship.is_reactant_of.name();
@@ -95,26 +93,26 @@ public class ChebiCompounds extends ChebiCofactors {
             chebiName = chebiId;
         }
 
-        if (Objects.nonNull(chebiId) && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
-            enzymePortalParserService.createChebiCompound(chebiId, chebiName, synonyms, relationship, accession, url, role, note);
+        if (Objects.nonNull(chebiId) && !StringUtils.isEmpty(chebiName) && !blackList.contains(chebiName)) {
+            enzymePortalParserService.createUniqueChebiCompound(chebiId, chebiName, synonyms, relationship, url, role, note);
         }
 
     }
 
     @Transactional(readOnly = true)
-    public void loadChebiCompoundsToDatabase() {
+    public void loadUniqueChebiCompoundsToDatabase() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         AtomicInteger counter = new AtomicInteger(1);
-        long total = enzymeReactionInfoRepository.countChebiReactantInfo();
+        long total = enzymeReactionInfoRepository.countUniqueChebiIds();
 
-        log.info("About to start streaming and processing " + total + " reactionInfo entries.");
+        log.info("About to start streaming and processing " + total + " CHEBI entries.");
 
-        try (Stream<ChebiReactant> reactionInfo = enzymeReactionInfoRepository.streamChebiReactantInfo()) {
+        try (Stream<String> chebiIds = enzymeReactionInfoRepository.streamUniqueChebiIds()) {
 
-            reactionInfo
-                   // .parallel()
-                    .forEach(data -> processChebiIdInReactionInfo(data.getChebiId(), data.getAccession(), counter));
+            chebiIds
+                    .parallel()
+                    .forEach(chebiId -> processChebiIdInReactionInfo(chebiId, counter));
 
         }
 
@@ -122,6 +120,10 @@ public class ChebiCompounds extends ChebiCofactors {
 
         log.info("Time taken to process " + total + " entries:  " + stopWatch.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch.getTotalTimeSeconds() / 3600 + " hrs");
 
+    }
+
+    public void loadChebiCompoundsToDatabase() {
+        enzymePortalParserService.createChebiCompound();
     }
 
 }

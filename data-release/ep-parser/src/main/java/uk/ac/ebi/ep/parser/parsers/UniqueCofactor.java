@@ -9,6 +9,7 @@ import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
  *
  * @author joseph
  */
+@Deprecated // see ChebiCofactors
 @Slf4j
 public class UniqueCofactor extends GenericCompound {
     

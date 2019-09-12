@@ -48,6 +48,7 @@ public class EnzymePortalCompoundParser {
 
     }
 
+    @Deprecated
     public void loadUniqueCofactors() {
         GenericCompound cofactor = new UniqueCofactor(parserService);
         cofactor.loadCompoundToDatabase();
