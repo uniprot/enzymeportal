@@ -16,14 +16,14 @@ import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
 public class ChebiCompoundParser {
 
     public static void main(String... args) {
-//        if (args == null || args.length == 0) {
-//            System.out.println("Please provide required parameters");
-//            System.exit(0);
-//        }
+        if (args == null || args.length == 0) {
+            System.out.println("Please provide required parameters");
+            System.exit(0);
+        }
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        //context.getEnvironment().setActiveProfiles(args[0]);
-        context.getEnvironment().setActiveProfiles("uzprel");
+        context.getEnvironment().setActiveProfiles(args[0]);
+        //context.getEnvironment().setActiveProfiles("uzprel");
         context.register(DataConfig.class);
         context.register(ProdDataConfig.class);
         context.register(DevDataConfig.class);
