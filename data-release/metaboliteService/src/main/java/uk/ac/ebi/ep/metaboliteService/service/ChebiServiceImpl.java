@@ -46,7 +46,7 @@ public class ChebiServiceImpl implements ChebiService {
         Entity chebiEntity = getCompleteChebiEntityInformation(chebiId);
         if ((chebiEntity != null)) {
 
-            return getCompleteChebiEntityInformation(chebiId)
+            return chebiEntity
                     .getSynonyms()
                     .stream()
                     .filter(Objects::nonNull)
