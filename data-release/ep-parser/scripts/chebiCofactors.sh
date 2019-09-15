@@ -12,6 +12,6 @@ WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.ChebiCofactorParser" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
-echo "[INFO] Finished updating metabolites in Enzyme Portal database  - $(date)"
+echo "[INFO] Finished loading cofactors in Enzyme Portal database  - $(date)"
 
 
