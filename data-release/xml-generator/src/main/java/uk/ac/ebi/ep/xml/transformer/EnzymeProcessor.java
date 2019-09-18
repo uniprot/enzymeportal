@@ -53,7 +53,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
 
-        addCofactorsField(enzyme.getCofactor(), fields);
+        addIntenzCofactorsField(enzyme.getCofactor(), fields);
         addCatalyticActivityField(enzyme.getCatalyticActivity(), fields);
         addAltNamesField(enzyme.getIntenzAltNamesSet(), fields);
         addEcSource(enzyme.getEcNumber(), refs);
@@ -89,7 +89,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
         addTaxonomyXrefs(uniprotEntry, refs);
-
+        addChebiSynonymField(uniprotEntry, fields);
+        addChebiCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
         addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         addPathwaysXrefs(uniprotEntry, refs);
@@ -106,7 +107,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    private void addCofactorsField(String cofactor, Set<Field> fields) {
+    private void addIntenzCofactorsField(String cofactor, Set<Field> fields) {
         if (Objects.nonNull(cofactor)) {
             fields.add(new Field(FieldName.INTENZ_COFACTORS.getName(), cofactor));
         }
@@ -163,18 +164,56 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         }
     }
 
+    private void addChebiSynonymField(Protein chebiCompound, Set<Field> fields) {
+        if (Objects.nonNull(chebiCompound.getChebiSynonyms())) {
+            Stream.of(chebiCompound.getChebiSynonyms()
+                    .split(";"))
+                    .distinct()
+                    .map(syn -> new Field(FieldName.CHEBI_SYNONYMS.getName(), syn))
+                    .forEach(fields::add);
+        }
+
+    }
+
     private void addCompoundFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
 
             if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
                 fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
+                String cofactorId = compound.getCompoundId().replace("CHEBI:", "cofactor");
+                fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
 
             }
 
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName()));
             fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
             refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
+
+        }
+
+    }
+
+    private void addChebiCompoundFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
+
+//            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(COFACTOR)) {
+//                fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
+//                String cofactorId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "cofactor");
+//                fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
+//
+//            }
+            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
+                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
+                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
+
+            }
+
+            fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
+            fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
+            refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
 
         }
 

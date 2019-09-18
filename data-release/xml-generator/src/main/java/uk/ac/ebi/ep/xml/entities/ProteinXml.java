@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.xml.entities;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,19 +31,19 @@ import lombok.NoArgsConstructor;
 @NamedQuery(name = "ProteinXml.findByCommonName", query = "SELECT p FROM ProteinXml p WHERE p.commonName = :commonName")
 @NamedQuery(name = "ProteinXml.findBySynonymNames", query = "SELECT p FROM ProteinXml p WHERE p.synonymNames = :synonymNames")
 @NamedQuery(name = "ProteinXml.findByExpEvidenceFlag", query = "SELECT p FROM ProteinXml p WHERE p.expEvidenceFlag = :expEvidenceFlag")
-@NamedQuery(name = "ProteinXml.findByPdbFlag", query = "SELECT p FROM ProteinXml p WHERE p.pdbFlag = :pdbFlag")
+//@NamedQuery(name = "ProteinXml.findByPdbFlag", query = "SELECT p FROM ProteinXml p WHERE p.pdbFlag = :pdbFlag")
 @NamedQuery(name = "ProteinXml.findByRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.relatedProteinsId = :relatedProteinsId")
 @NamedQuery(name = "ProteinXml.findByEntryType", query = "SELECT p FROM ProteinXml p WHERE p.entryType = :entryType")
 @NamedQuery(name = "ProteinXml.findByGeneName", query = "SELECT p FROM ProteinXml p WHERE p.geneName = :geneName")
 @NamedQuery(name = "ProteinXml.findByPrimaryAccession", query = "SELECT p FROM ProteinXml p WHERE p.primaryAccession = :primaryAccession")
-@NamedQuery(name = "ProteinXml.findByPrimaryTaxId", query = "SELECT p FROM ProteinXml p WHERE p.primaryTaxId = :primaryTaxId")
-@NamedQuery(name = "ProteinXml.findByPrimaryCommonName", query = "SELECT p FROM ProteinXml p WHERE p.primaryCommonName = :primaryCommonName")
-@NamedQuery(name = "ProteinXml.findByPrimaryScientificName", query = "SELECT p FROM ProteinXml p WHERE p.primaryScientificName = :primaryScientificName")
-@NamedQuery(name = "ProteinXml.findByPrimaryPdbId", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbId = :primaryPdbId")
-@NamedQuery(name = "ProteinXml.findByPrimaryFunction", query = "SELECT p FROM ProteinXml p WHERE p.primaryFunction = :primaryFunction")
-@NamedQuery(name = "ProteinXml.findByPrimaryPdbSpecies", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbSpecies = :primaryPdbSpecies")
-@NamedQuery(name = "ProteinXml.findByPrimaryPdbLinkedAcc", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbLinkedAcc = :primaryPdbLinkedAcc")
-@NamedQuery(name = "ProteinXml.findByPrimaryEntryType", query = "SELECT p FROM ProteinXml p WHERE p.primaryEntryType = :primaryEntryType")
+//@NamedQuery(name = "ProteinXml.findByPrimaryTaxId", query = "SELECT p FROM ProteinXml p WHERE p.primaryTaxId = :primaryTaxId")
+//@NamedQuery(name = "ProteinXml.findByPrimaryCommonName", query = "SELECT p FROM ProteinXml p WHERE p.primaryCommonName = :primaryCommonName")
+//@NamedQuery(name = "ProteinXml.findByPrimaryScientificName", query = "SELECT p FROM ProteinXml p WHERE p.primaryScientificName = :primaryScientificName")
+//@NamedQuery(name = "ProteinXml.findByPrimaryPdbId", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbId = :primaryPdbId")
+//@NamedQuery(name = "ProteinXml.findByPrimaryFunction", query = "SELECT p FROM ProteinXml p WHERE p.primaryFunction = :primaryFunction")
+//@NamedQuery(name = "ProteinXml.findByPrimaryPdbSpecies", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbSpecies = :primaryPdbSpecies")
+//@NamedQuery(name = "ProteinXml.findByPrimaryPdbLinkedAcc", query = "SELECT p FROM ProteinXml p WHERE p.primaryPdbLinkedAcc = :primaryPdbLinkedAcc")
+//@NamedQuery(name = "ProteinXml.findByPrimaryEntryType", query = "SELECT p FROM ProteinXml p WHERE p.primaryEntryType = :primaryEntryType")
 @NamedQuery(name = "ProteinXml.findByPrimaryRelatedProteinsId", query = "SELECT p FROM ProteinXml p WHERE p.primaryRelatedProteinsId = :primaryRelatedProteinsId")
 @NamedQuery(name = "ProteinXml.findByOmimNumber", query = "SELECT p FROM ProteinXml p WHERE p.omimNumber = :omimNumber")
 @NamedQuery(name = "ProteinXml.findByDiseaseName", query = "SELECT p FROM ProteinXml p WHERE p.diseaseName = :diseaseName")
@@ -65,6 +66,23 @@ import lombok.NoArgsConstructor;
 @NamedQuery(name = "ProteinXml.findByProteinXmlId", query = "SELECT p FROM ProteinXml p WHERE p.proteinXmlId = :proteinXmlId")
 public class ProteinXml implements Serializable {
 
+    @Column(name = "TAX_ID")
+    private Long taxId;
+    @Column(name = "EXP_EVIDENCE_FLAG")
+    private BigInteger expEvidenceFlag;
+    @Column(name = "RELATED_PROTEINS_ID")
+    private BigInteger relatedProteinsId;
+    @Column(name = "PRIMARY_RELATED_PROTEINS_ID")
+    private BigInteger primaryRelatedProteinsId;
+    @Column(name = "CHEBI_COMPOUND_ID")
+    private String chebiCompoundId;
+    @Column(name = "CHEBI_COMPOUND_NAME")
+    private String chebiCompoundName;
+    @Column(name = "CHEBI_COMPOUND_ROLE")
+    private String chebiCompoundRole;
+    @Column(name = "CHEBI_SYNONYMS")
+    private String chebiSynonyms;
+
     private static final long serialVersionUID = 1L;
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
@@ -73,44 +91,18 @@ public class ProteinXml implements Serializable {
     @Basic(optional = false)
     @Column(name = "ACCESSION")
     private String accession;
-    @Column(name = "TAX_ID")
-    private long taxId;
     @Column(name = "SCIENTIFIC_NAME")
     private String scientificName;
     @Column(name = "COMMON_NAME")
     private String commonName;
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
-    @Column(name = "EXP_EVIDENCE_FLAG")
-    private int expEvidenceFlag;
-    @Column(name = "PDB_FLAG")
-    private Character pdbFlag;
-    @Column(name = "RELATED_PROTEINS_ID")
-    private int relatedProteinsId;
     @Column(name = "ENTRY_TYPE")
     private Short entryType;
     @Column(name = "GENE_NAME")
     private String geneName;
     @Column(name = "PRIMARY_ACCESSION")
     private String primaryAccession;
-    @Column(name = "PRIMARY_TAX_ID")
-    private int primaryTaxId;
-    @Column(name = "PRIMARY_COMMON_NAME")
-    private String primaryCommonName;
-    @Column(name = "PRIMARY_SCIENTIFIC_NAME")
-    private String primaryScientificName;
-    @Column(name = "PRIMARY_PDB_ID")
-    private String primaryPdbId;
-    @Column(name = "PRIMARY_FUNCTION")
-    private String primaryFunction;
-    @Column(name = "PRIMARY_PDB_SPECIES")
-    private String primaryPdbSpecies;
-    @Column(name = "PRIMARY_PDB_LINKED_ACC")
-    private String primaryPdbLinkedAcc;
-    @Column(name = "PRIMARY_ENTRY_TYPE")
-    private int primaryEntryType;
-    @Column(name = "PRIMARY_RELATED_PROTEINS_ID")
-    private int primaryRelatedProteinsId;
     @Column(name = "OMIM_NUMBER")
     private String omimNumber;
     @Column(name = "DISEASE_NAME")
@@ -121,7 +113,7 @@ public class ProteinXml implements Serializable {
     private String compoundName;
     @Column(name = "COMPOUND_ROLE")
     private String compoundRole;
-    @Column(name = "COMPOUND_SOURCE")
+    @Column(name = "COMPOUND_SOURCE")//
     private String compoundSource;
     @Column(name = "REACTANT_ID")
     private String reactantId;
@@ -141,7 +133,7 @@ public class ProteinXml implements Serializable {
     private String pathwayName;
     @Column(name = "REACTION_ID")
     private String reactionId;
-    @Column(name = "REACTION_SOURCE")
+    @Column(name = "REACTION_SOURCE")//
     private String reactionSource;
     @Column(name = "FAMILY_GROUP_ID")
     private String familyGroupId;

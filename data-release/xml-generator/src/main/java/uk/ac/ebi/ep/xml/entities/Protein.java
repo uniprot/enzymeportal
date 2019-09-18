@@ -6,66 +6,74 @@ package uk.ac.ebi.ep.xml.entities;
  */
 public interface Protein {
 
-    String getAccession();
-
-    String getCommonName();
-
-    String getScientificName();
-
     String getProteinGroupId();
 
     String getProteinName();
 
-    public long getTaxId();
+    String getAccession();
 
-    public String getSynonymNames();
+    long getTaxId();
 
-    public int getExpEvidenceFlag();
+    String getScientificName();
 
-    public int getRelatedProteinsId();
+    String getCommonName();
 
-    public Short getEntryType();
+    String getSynonymNames();
 
-    public String getGeneName();
+    int getExpEvidenceFlag();
 
-    public String getPrimaryAccession();
+    int getRelatedProteinsId();
 
-    public int getPrimaryRelatedProteinsId();
+    Short getEntryType();
 
-    public String getOmimNumber();
+    String getGeneName();
 
-    public String getDiseaseName();
+    String getPrimaryAccession();
 
-    public String getCompoundId();
+    int getPrimaryRelatedProteinsId();
 
-    public String getCompoundName();
+    String getOmimNumber();
 
-    public String getCompoundRole();
+    String getDiseaseName();
 
-    public String getCompoundSource();
+    String getCompoundId();
 
-    public String getReactantId();
+    String getCompoundName();
 
-    public String getReactantName();
+    String getCompoundRole();
 
-    public String getReactantSource();
+    String getCompoundSource();
 
-    public String getEcNumber();
+    String getReactantId();
 
-    public Short getEcFamily();
+    String getReactantName();
 
-    public String getCatalyticActivity();
+    String getReactantSource();
 
-    public String getPathwayId();
+    String getEcNumber();
 
-    public String getPathwayName();
+    Short getEcFamily();
 
-    public String getReactionId();
+    String getCatalyticActivity();
 
-    public String getReactionSource();
+    String getPathwayId();
 
-    public String getFamilyGroupId();
+    String getPathwayName();
 
-    public String getFamilyName();
+    String getReactionId();
+
+    String getReactionSource();
+
+    String getFamilyGroupId();
+
+    String getFamilyName();
+
+    String getChebiCompoundId();
+
+    String getChebiCompoundName();
+
+    String getChebiCompoundRole();
+
+    String getChebiSynonyms();
 
 }

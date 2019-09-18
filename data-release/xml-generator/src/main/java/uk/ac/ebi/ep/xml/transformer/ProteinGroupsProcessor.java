@@ -141,6 +141,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+        addChebiCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
 

@@ -14,6 +14,7 @@ public class XmlProcessorUtil {
     protected static final String HAS_DISEASE = "true_disease";
     protected static final String HAS_PATHWAY = "true_pathway";
     protected static final String HAS_PROTEIN_FAMILY = "true_protein_family";
+    protected static final String HAS_METABOLITE = "true_metabolite";
 
     protected void addField(String fieldId, String value, Set<Field> fields) {
         Field field = new Field(fieldId, value);
