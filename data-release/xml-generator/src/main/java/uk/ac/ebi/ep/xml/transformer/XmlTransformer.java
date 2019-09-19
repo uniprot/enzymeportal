@@ -34,6 +34,9 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
     abstract void addDiseaseFieldsAndXrefs(Protein disease, Set<Field> fields, Set<Ref> refs);
 
+    abstract void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs);
+    abstract void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs);
+
     protected String withResourceField(String resourceId, String accession, String commonName, int entryType) {
         return String.format("%s;%s;%s;%d", resourceId, accession, commonName, entryType).intern();
     }
@@ -103,26 +106,25 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
         }
     }
 
-    protected void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs) {
-
-        if (Objects.nonNull(reactant.getReactantSource())) {
-
-            fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
-            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
-                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
-            }
-//            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
+//    protected void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs) {
 //
-//                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
-//            } else {
+//        if (Objects.nonNull(reactant.getReactantSource())) {
 //
+//            fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
+//            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
 //                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
 //            }
-
-            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
-        }
-    }
-
+////            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
+////
+////                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
+////            } else {
+////
+////                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
+////            }
+//
+//            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
+//        }
+//    }
     protected void addCompoundDataFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
@@ -175,15 +177,15 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
     }
 
-    protected void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs) {
-
-        if (Objects.nonNull(pathway.getPathwayId())) {
-
-            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
-            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
-            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
-        }
-    }
+//    protected void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs) {
+//
+//        if (Objects.nonNull(pathway.getPathwayId())) {
+//
+//            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
+//            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
+//            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
+//        }
+//    }
 
     protected String parseReactomePathwayId(String reactomePathwayId) {
 

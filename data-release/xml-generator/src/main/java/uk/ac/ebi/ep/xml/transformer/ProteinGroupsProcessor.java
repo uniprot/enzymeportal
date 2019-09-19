@@ -88,10 +88,10 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         Set<Ref> refs = new HashSet<>();
         Set<String> relSpecies = new HashSet<>();
 
-        if (log.isDebugEnabled()) {
-            log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
+        // if (log.isDebugEnabled()) {
+        log.info("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + proteinGroups.getProteinGroupId() + "  entry count : " + count.getAndIncrement());
 
-        }
+        //}
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());
@@ -241,14 +241,38 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     @Override
     void addUniprotFamilyFieldsAndXrefs(Protein family, Set<Field> fields, Set<Ref> refs) {
 
-        if (Objects.nonNull(family.getFamilyGroupId()) && Objects.nonNull(family.getFamilyName())) {
+        if (Objects.nonNull(family.getFamilyGroupId())) {
 
-            fields.add(new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName()));
+            //fields.add(new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
 
             fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType())));
             fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
+        }
+    }
+
+    @Override
+    void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(reactant.getReactantSource())) {
+
+            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
+                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
+            }
+
+            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
+        }
+    }
+
+    @Override
+    void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(pathway.getPathwayId())) {
+
+            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
+            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
+            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
         }
     }
 

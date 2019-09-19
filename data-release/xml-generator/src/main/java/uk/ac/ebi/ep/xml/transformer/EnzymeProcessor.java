@@ -155,6 +155,41 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
+    @Override
+    void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(reactant.getReactantSource())) {
+
+            fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
+            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
+                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
+            }
+//            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
+//
+//                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
+//            } else {
+//
+//                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
+//            }
+
+            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
+        }
+    }
+
+    @Override
+    void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(pathway.getPathwayId())) {
+
+            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
+            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
+            if (Objects.nonNull(pathway.getPathwayName())) {
+                fields.add(new Field(FieldName.PATHWAY_NAME.getName(), pathway.getPathwayName()));
+            }
+            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
+        }
+    }
+
     private void addTaxonomyXrefs(Protein taxonomy, Set<Ref> refs) {
 
         if (Objects.nonNull(taxonomy.getTaxId())) {

@@ -14,7 +14,7 @@ public enum FieldName {
     COMPOUND_NAME("compound_name"), COMPOUND_TYPE("compound_type"), DISEASE_NAME("disease_name"), ENZYME_FAMILY("enzyme_family"),
     TRANSFER_FLAG("transfer_flag"), INTENZ_COFACTORS("intenz_cofactors"), INTENZ_ALT_NAMES("alt_names"),
     RELATED_SPECIES("related_species"), PRIMARY_ACCESSION("primary_accession"), PRIMARY_ORGANISM("primary_organism"),
-    CHEBI_SYNONYMS("chebi_synonyms"),METABOLITE("metabolite"),METABOLITE_NAME("metabolite_name");
+    CHEBI_SYNONYMS("chebi_synonyms"),METABOLITE("metabolite"),METABOLITE_NAME("metabolite_name"),PATHWAY_NAME("pathway_name");
 
     FieldName(String name) {
         this.name = name;
