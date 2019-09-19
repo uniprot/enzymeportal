@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.xml.entities;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,13 +66,13 @@ import lombok.NoArgsConstructor;
 public class ProteinXml implements Serializable {
 
     @Column(name = "TAX_ID")
-    private Long taxId;
+    private long taxId;
     @Column(name = "EXP_EVIDENCE_FLAG")
-    private BigInteger expEvidenceFlag;
+    private int expEvidenceFlag;
     @Column(name = "RELATED_PROTEINS_ID")
-    private BigInteger relatedProteinsId;
+    private int relatedProteinsId;
     @Column(name = "PRIMARY_RELATED_PROTEINS_ID")
-    private BigInteger primaryRelatedProteinsId;
+    private int primaryRelatedProteinsId;
     @Column(name = "CHEBI_COMPOUND_ID")
     private String chebiCompoundId;
     @Column(name = "CHEBI_COMPOUND_NAME")
