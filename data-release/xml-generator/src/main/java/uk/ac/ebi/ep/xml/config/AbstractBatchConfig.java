@@ -15,7 +15,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.core.io.Resource;
-import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.ac.ebi.ep.xml.listeners.GlobalListener;
 import uk.ac.ebi.ep.xml.listeners.XmlProcessorListener;
@@ -77,7 +76,7 @@ public abstract class AbstractBatchConfig<T, S> {
      * @param clazz class to be bound
      * @return marshaller
      */
-    protected Marshaller xmlMarshaller(Class<S> clazz) {
+    protected Jaxb2Marshaller xmlMarshaller(Class<S> clazz) {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setClassesToBeBound(clazz);
 

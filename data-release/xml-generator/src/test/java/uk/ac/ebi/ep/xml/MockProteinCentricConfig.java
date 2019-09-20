@@ -19,7 +19,7 @@ import org.springframework.core.io.Resource;
 import uk.ac.ebi.ep.xml.config.XmlFileProperties;
 import uk.ac.ebi.ep.xml.entities.ProteinGroups;
 import uk.ac.ebi.ep.xml.entities.repositories.ProteinXmlRepository;
-import uk.ac.ebi.ep.xml.helper.CustomStaxEventItemWriter;
+import uk.ac.ebi.ep.xml.helper.PrettyPrintStaxEventItemWriter;
 import uk.ac.ebi.ep.xml.helper.XmlFooterCallback;
 import uk.ac.ebi.ep.xml.helper.XmlHeaderCallback;
 import uk.ac.ebi.ep.xml.listeners.JobCompletionNotificationListener;
@@ -86,7 +86,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     @Bean(destroyMethod = "", name = "proteinXmlWriterTest")
     @Override
     public ItemWriter<Entry> xmlWriter() {
-        StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
+        StaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();// new CustomStaxEventItemWriter<>();
 
         XmlFileUtils.createDirectory(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
