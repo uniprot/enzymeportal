@@ -243,7 +243,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         if (Objects.nonNull(family.getFamilyGroupId())) {
 
-            //fields.add(new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName()));
+            //fields.add(new Field(FieldName.PROTEIN_FAMILY_NAME.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
 
             fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType())));

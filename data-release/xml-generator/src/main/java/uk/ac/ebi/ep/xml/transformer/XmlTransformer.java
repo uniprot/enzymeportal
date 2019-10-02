@@ -35,6 +35,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
     abstract void addDiseaseFieldsAndXrefs(Protein disease, Set<Field> fields, Set<Ref> refs);
 
     abstract void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs);
+
     abstract void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs);
 
     protected String withResourceField(String resourceId, String accession, String commonName, int entryType) {
@@ -186,7 +187,6 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 //            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
 //        }
 //    }
-
     protected String parseReactomePathwayId(String reactomePathwayId) {
 
         if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
@@ -214,9 +214,11 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 //                    addCofactorField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
 //                    break;
                 case METABOLITE:
+                    addChebiCompoundField(chebiCompound, fields, refs);
                     addMetaboliteField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
                     break;
                 case REACTANT:
+                    addChebiCompoundField(chebiCompound, fields, refs);
                     fields.add(new Field(FieldName.REACTANT.getName(), chebiCompound.getChebiCompoundName()));
                     //addCompoundFieldAndXref(chebiCompound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
                     break;
@@ -231,13 +233,13 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
     }
 
-//        private void addChebiField(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
-//
-//        fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
-//
-//        refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-//
-//    }
+    private void addChebiCompoundField(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
+
+        refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
+
+    }
 //    private void addCofactorField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
 //
 //        fields.add(new Field(FieldName.COFACTOR.getName(), chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId())));
@@ -248,6 +250,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 //        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
 //
 //    }
+
     private void addMetaboliteField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
 
         fields.add(new Field(FieldName.METABOLITE.getName(), chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId())));

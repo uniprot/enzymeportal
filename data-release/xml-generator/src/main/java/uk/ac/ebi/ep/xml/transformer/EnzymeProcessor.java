@@ -136,7 +136,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         if (Objects.nonNull(family.getFamilyGroupId()) && Objects.nonNull(family.getFamilyName())) {
 
-            fields.add(new Field(FieldName.PROTEIN_FAMILY.getName(), family.getFamilyName()));
+            fields.add(new Field(FieldName.PROTEIN_FAMILY_NAME.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
             fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
