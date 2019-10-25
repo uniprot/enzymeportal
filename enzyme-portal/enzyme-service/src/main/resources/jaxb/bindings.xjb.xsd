@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings version="2.1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb
+		http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd">
+
+    <jaxb:bindings schemaLocation="intenz.xsd">
+    	<jaxb:schemaBindings>
+<!--    		<jaxb:package name="uk.ac.ebi.intenz.xml.jaxb" />-->
+<jaxb:package name="uk.ac.ebi.ep.enzymeservice.intenz.model" />
+                
+    	</jaxb:schemaBindings>
+	</jaxb:bindings>
+
+</jaxb:bindings>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ebi.ac.uk/intenz"
+	elementFormDefault="qualified"
+	version="0.2"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:i="http://www.ebi.ac.uk/intenz">
+    
+    <xs:include schemaLocation="enzyme.xsd" />
+
+    <xs:complexType name="ecClassType">
+        <xs:annotation>
+            <xs:documentation>Enzyme class type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="i:name" minOccurs="0" />
+            <xs:element ref="i:description" minOccurs="0" />
+            <xs:element ref="i:ec_subclass" maxOccurs="unbounded" minOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="ec1" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The first digit of the EC number.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <xs:complexType name="ecSubclassType">
+        <xs:annotation>
+            <xs:documentation>Enzyme subclass type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="i:name" minOccurs="0" />
+            <xs:element ref="i:description" minOccurs="0" />
+            <xs:element ref="i:ec_sub-subclass" maxOccurs="unbounded" minOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="ec2" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    The second digit of the EC number.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="ecSubsubclassType">
+        <xs:annotation>
+            <xs:documentation>Enzyme subsubclass type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="i:name" minOccurs="0" />
+            <xs:element ref="i:description" minOccurs="0" />
+            <xs:element name="enzyme" type="i:entryType" maxOccurs="unbounded" minOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>An enzyme within the subsubclass.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="ec3" type="xs:positiveInteger" use="required">
+            <xs:annotation>
+                <xs:documentation>The third digit of the EC number.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <xs:complexType name="entryType">
+    	<xs:complexContent>
+    		<xs:extension base="i:enzymeType">
+    			<xs:attribute name="ec4" use="required"
+    				type="xs:positiveInteger">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The fourth digit of the EC number.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    			<xs:attribute name="preliminary" type="xs:boolean"
+                    default="false">
+    				<xs:annotation>
+    					<xs:documentation>
+    						Is this a preliminary - neither proposed nor
+                            accepted by NC-IUBMB yet - EC number issued
+                            by UniProt?
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="xmlContentType" mixed="true">
+        <xs:sequence>
+            <xs:any processContents="skip" maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Any markup is allowed here.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:any>
+        </xs:sequence>        
+    </xs:complexType>
+    
+    <xs:element name="intenz">
+        <xs:annotation>
+            <xs:documentation>The IntEnz database.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="1" minOccurs="1">
+                <xs:element name="data_description" type="i:xmlContentType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Description of the data included in the XML file.</xs:documentation>
+                </xs:annotation>
+                </xs:element>
+                <xs:element ref="i:ec_class" maxOccurs="unbounded" minOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="release" type="xs:positiveInteger" use="required">
+                <xs:annotation>
+                    <xs:documentation>The IntEnz release from which data come.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="date" type="xs:date" use="required">
+                <xs:annotation>
+                    <xs:documentation>Date of the IntEnz release.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+        <xs:unique name="uniqueEc1">
+        	<xs:selector xpath="i:class" />
+        	<xs:field xpath="@ec1" />
+        </xs:unique>
+    </xs:element>
+    
+    <xs:element name="ec_class" type="i:ecClassType">
+        <xs:annotation>
+            <xs:documentation>
+                A class of enzymes according to the NC-IUBMB.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:unique name="uniqueEc2">
+        	<xs:selector xpath="i:sub-class" />
+        	<xs:field xpath="@ec2"></xs:field>
+        </xs:unique>
+    </xs:element>
+    
+    <xs:element name="ec_subclass" type="i:ecSubclassType">
+        <xs:annotation>
+            <xs:documentation>
+                A subclass within the class.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:unique name="uniqueEc3">
+        	<xs:selector xpath="i:sub-sub-class" />
+        	<xs:field xpath="@ec3"></xs:field>
+        </xs:unique>
+    </xs:element>
+    
+    <xs:element name="ec_sub-subclass" type="i:ecSubsubclassType">
+        <xs:annotation>
+            <xs:documentation>
+                A subsubclass within the subclass.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:unique name="uniqueEc4">
+        	<xs:selector xpath="i:enzyme" />
+        	<xs:field xpath="@ec4"></xs:field>
+        	<xs:field xpath="@preliminary"></xs:field>
+        </xs:unique>
+    </xs:element>
+    
+    <xs:element name="description" type="i:xmlContentType">
+        <xs:annotation>
+            <xs:documentation>
+                A text description.
+            </xs:documentation>
+        </xs:annotation>    
+    </xs:element>
+    
+    <xs:element name="name" type="i:xmlContentType">
+        <xs:annotation>
+            <xs:documentation>
+                The name of a class, subclass or subsubclass of enzymes.
+            </xs:documentation>
+        </xs:annotation>    
+    </xs:element>
+    
+</xs:schema>

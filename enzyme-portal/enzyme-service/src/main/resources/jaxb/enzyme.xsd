@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.ebi.ac.uk/intenz"
+	elementFormDefault="qualified"
+	version="0.2"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:i="http://www.ebi.ac.uk/intenz"
+	xmlns:cml="http://www.xml-cml.org/schema/cml2/react">
+
+	<xs:import namespace="http://www.xml-cml.org/schema/cml2/react"
+		schemaLocation="cmlreact.xsd"/>
+
+    <!--  Attributes: -->
+
+    <xs:attributeGroup name="viewAtrGrp">
+        <xs:attribute name="view" type="i:viewType">
+            <xs:annotation>
+                <xs:documentation>
+                    Database(s) in which data are visible.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <!-- Simple types: -->
+
+    <xs:simpleType name="enzymeNameQualifierType">
+        <xs:annotation>
+            <xs:documentation>Qualifier to the enzyme name.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ambiguous">
+                <xs:annotation>
+                    <xs:documentation>Ambiguous</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="incorrect">
+                <xs:annotation>
+                    <xs:documentation>Incorrect</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="misleading">
+                <xs:annotation>
+                    <xs:documentation>Misleading</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="misprint">
+                <xs:annotation>
+                    <xs:documentation>Misprint</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="obsolete">
+                <xs:annotation>
+                    <xs:documentation>Obsolete</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="viewType">
+        <xs:annotation>
+            <xs:documentation>List of databases with different views of enzyme data.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INTENZ">
+                <xs:annotation>
+                    <xs:documentation>IntEnz</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IUBMB">
+                <xs:annotation>
+                    <xs:documentation>
+                        IUBMB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="SIB">
+                <xs:annotation>
+                    <xs:documentation>
+                        SIB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="INTENZ,IUBMB">
+                <xs:annotation>
+                    <xs:documentation>
+                        IntEnz and IUBMB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="INTENZ,SIB">
+                <xs:annotation>
+                    <xs:documentation>
+                        IntEnz and SIB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IUBMB,SIB">
+                <xs:annotation>
+                    <xs:documentation>
+                        IUBMB and SIB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="INTENZ,IUBMB,SIB">
+                <xs:annotation>
+                    <xs:documentation>
+                        IntEnz, IUBMB and SIB
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ecNumberType">
+        <xs:annotation>
+            <xs:documentation>The EC four-digit code.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="EC \d+\.\d+\.\d+\.n?\d+"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="databaseType">
+        <xs:annotation>
+            <xs:documentation>Controlled vocabulary for databases.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BRENDA">
+                <xs:annotation>
+                    <xs:documentation>BRENDA</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="CAS">
+                <xs:annotation>
+                    <xs:documentation>CAS number</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Diagram">
+                <xs:annotation>
+                    <xs:documentation>Diagram</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="ERGO">
+                <xs:annotation>
+                    <xs:documentation>ERGO</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="ExPASy">
+                <xs:annotation>
+                    <xs:documentation>SIB's ExPASy</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GO">
+                <xs:annotation>
+                    <xs:documentation>Gene Ontology</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="KEGG ENZYME">
+                <xs:annotation>
+                    <xs:documentation>KEGG ENZYME</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MEROPS">
+                <xs:annotation>
+                    <xs:documentation>MEROPS</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIM">
+                <xs:annotation>
+                    <xs:documentation>MIM</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NIST 74">
+                <xs:annotation>
+                    <xs:documentation>NIST 74</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="PROSITE">
+                <xs:annotation>
+                    <xs:documentation>PROSITE</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Rhea">
+                <xs:annotation>
+                    <xs:documentation>Rhea</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UM-BBD">
+                <xs:annotation>
+                    <xs:documentation>UM-BBD</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UniProt">
+                <xs:annotation>
+                    <xs:documentation>UniProtKB/Swiss-Prot</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="WIT">
+                <xs:annotation>
+                    <xs:documentation>WIT</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- Complex types: -->
+
+    <xs:complexType name="viewableType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>Data which is only visible in some databases.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:any processContents="skip" maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Any markup is allowed here.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:any>
+        </xs:sequence>
+        <xs:attributeGroup ref="i:viewAtrGrp" />
+    </xs:complexType>
+
+    <xs:complexType name="enzymeNameType">
+        <xs:annotation>
+            <xs:documentation>A name for the enzyme.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="i:viewableType">
+                <xs:attribute name="qualifier" type="i:enzymeNameQualifierType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Qualifier (if any) to this name.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="reactionType">
+    	<xs:annotation>
+    		<xs:documentation>
+    			For now, only a free text and a 'view' attribute.
+    		</xs:documentation>
+    	</xs:annotation>
+    	<xs:complexContent>
+    		<xs:extension base="i:viewableType">
+    			<xs:attribute name="iubmb" type="xs:boolean"></xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="cofactorType">
+    	<xs:annotation>
+    		<xs:documentation>
+    			For now, only a free text and a 'view' attribute.
+    		</xs:documentation>
+    	</xs:annotation>
+    	<xs:complexContent>
+    		<xs:extension base="i:viewableType">
+    			<xs:attribute name="db" type="xs:string"></xs:attribute>
+    			<xs:attribute name="accession" type="xs:string"></xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="linkType">
+        <xs:annotation>
+            <xs:documentation>
+                A link to other databases.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="i:viewableType">
+                <xs:attribute name="db" type="i:databaseType" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Foreign database.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="accession_number" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Accession number within the foreign
+                            database.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="href" type="xs:anyURI">
+                    <xs:annotation>
+                        <xs:documentation>
+                            URI pointing to the external entry.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="comment" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Comment on the link.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="referenceType" abstract="true">
+        <xs:annotation>
+            <xs:documentation>A bibliographic reference related to the enzyme.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="authors" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Authors of the reference.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="title" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Title of the reference.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="year" type="xs:gYear">
+                <xs:annotation>
+                    <xs:documentation>
+                        Year of publication.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="i:viewAtrGrp" />
+    </xs:complexType>
+
+    <xs:complexType name="paperRefType" abstract="true">
+        <xs:annotation>
+            <xs:documentation></xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="i:referenceType">
+                <xs:sequence>
+                    <xs:element name="name" type="xs:string">
+                    </xs:element>
+                    <xs:element name="volume" type="xs:string">
+                    </xs:element>
+                    <xs:element name="first_page" type="xs:string">
+                    </xs:element>
+                    <xs:element name="last_page" type="xs:string">
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="bookType">
+        <xs:complexContent>
+            <xs:extension base="i:paperRefType">
+                <xs:sequence>
+                    <xs:element ref="i:editorial"></xs:element>
+                    <xs:element name="edition" type="xs:string">
+                    </xs:element>
+                    <xs:element name="editor" type="xs:string">
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="journalType">
+        <xs:complexContent>
+            <xs:extension base="i:paperRefType">
+                <xs:sequence>
+                    <xs:element name="pubmed" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The PubMed id
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="medline" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The MedLine id
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="patentType">
+        <xs:complexContent>
+            <xs:extension base="i:referenceType">
+                <xs:sequence>
+                    <xs:element name="number" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+                                A patent number
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="inactiveStatusType">
+        <xs:annotation>
+            <xs:documentation>Inactive EC number.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="note" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The note must specify when/why was the deletion or
+                        transfer, and the destination EC for transferred
+                        entries.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="enzymeType">
+        <xs:annotation>
+            <xs:documentation>An enzyme entry.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="i:ec"></xs:element>
+            <xs:choice>
+                <xs:element ref="i:deleted"></xs:element>
+                <xs:element ref="i:transferred"></xs:element>
+                <xs:sequence>
+                    <xs:element ref="i:accepted_name" maxOccurs="unbounded" minOccurs="1"></xs:element>
+                    <xs:element ref="i:systematic_name" maxOccurs="1" minOccurs="0"></xs:element>
+                    <xs:element ref="i:synonyms" maxOccurs="1" minOccurs="0"></xs:element>
+                    <xs:element ref="i:reactions"></xs:element>
+                    <xs:element ref="i:cofactors" maxOccurs="1" minOccurs="0"></xs:element>
+                    <xs:element ref="i:comments" maxOccurs="1" minOccurs="0"></xs:element>
+                    <xs:element ref="i:links" maxOccurs="1" minOccurs="0"></xs:element>
+                    <xs:element ref="i:references"></xs:element>
+                </xs:sequence>
+            </xs:choice>
+            <xs:element name="history" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The history line of the EC number.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <!-- Elements: -->
+
+    <xs:element name="enzyme" type="i:enzymeType">
+        <xs:annotation>
+            <xs:documentation>Enzyme entry.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+
+    <xs:element name="ec" type="i:ecNumberType">
+        <xs:annotation>
+            <xs:documentation>The EC number assigned by NC-IUBMB.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    
+    <xs:element name="deleted" type="i:inactiveStatusType">
+        <xs:annotation>
+            <xs:documentation>Deleted EC bumber.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="transferred" type="i:inactiveStatusType">
+        <xs:annotation>
+            <xs:documentation>Transferred EC bumber.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    
+    <xs:element name="systematic_name" type="i:enzymeNameType">
+        <xs:annotation>
+            <xs:documentation>Systematic name (if any).</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="accepted_name" type="i:enzymeNameType">
+        <xs:annotation>
+            <xs:documentation>
+                The commonly accepted name of the enzyme
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="synonyms">
+        <xs:annotation>
+            <xs:documentation>List of synonyms (if any) of the enzyme.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="i:synonym" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="synonym" type="i:enzymeNameType">
+        <xs:annotation>
+            <xs:documentation>A synonym for the enzyme common name.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="reaction" type="i:reactionType">
+        <xs:annotation>
+            <xs:documentation>A reaction catalyzed by the enzyme.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="reactions">
+        <xs:annotation>
+            <xs:documentation>List of reaction(s) catalyzed by the enzyme.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+            	<xs:choice minOccurs="1" maxOccurs="unbounded">
+	                <xs:element ref="i:reaction" maxOccurs="1" minOccurs="1"/>
+                	<xs:element ref="cml:reaction" minOccurs="1" maxOccurs="1"/>
+            	</xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="cofactor" type="i:cofactorType">
+        <xs:annotation>
+            <xs:documentation>A cofactor.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="cofactors">
+        <xs:annotation>
+            <xs:documentation>List of cofactors.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+        	<xs:sequence>
+        		<xs:element ref="i:cofactor" maxOccurs="unbounded"
+        			minOccurs="1">
+        		</xs:element>
+        	</xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="comment" type="i:viewableType">
+        <xs:annotation>
+            <xs:documentation>A comment on the enzyme entry.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="comments">
+        <xs:annotation>
+            <xs:documentation>List of comments on the enzyme entry.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="i:comment" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="link" type="i:linkType">
+        <xs:annotation>
+            <xs:documentation>Link to other databases.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="links">
+        <xs:annotation>
+            <xs:documentation>List of links and cross-references to other databases.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="i:link" maxOccurs="unbounded" minOccurs="1"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="editorial">
+        <xs:annotation>
+            <xs:documentation>The editorial of a book.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attribute name="place" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The home town of the editorial
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="book" type="i:bookType">
+        <xs:annotation>
+            <xs:documentation>A book reference.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="journal" type="i:journalType">
+        <xs:annotation>
+            <xs:documentation>A journal reference.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="patent" type="i:patentType">
+        <xs:annotation>
+            <xs:documentation>A patent related to the enzyme entry.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    
+    <xs:element name="references">
+        <xs:annotation>
+            <xs:documentation>Bibliographic references to the enzyme.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="i:book"></xs:element>
+                <xs:element ref="i:journal"></xs:element>
+                <xs:element ref="i:patent"></xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
