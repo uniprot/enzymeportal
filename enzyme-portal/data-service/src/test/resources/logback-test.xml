@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <!--    <pattern>%msg%n</pattern>-->
+            <pattern> %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</pattern>
+            <!--      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        </encoder>
+    </appender>
+ 
+    <appender name="File" class="ch.qos.logback.core.FileAppender">
+        <file>log/data.log</file>
+
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+
+    <appender name="logFile" class="ch.qos.logback.core.FileAppender">
+        <file>log/data-json.log</file>
+
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <prettyPrint>true</prettyPrint>
+                </jsonFormatter>
+                <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+            </layout>
+        </encoder>
+    </appender>
+ 
+    <!--<logger name="jsonLogger" level="WARN">
+        <appender-ref ref="json" />
+    </logger>-->
+  
+    <!--    <logger name="uk.ac.ebi.reaction.mechanism.service" level="WARN"/>
+    -->
+
+    <root level="info">
+        <appender-ref ref="logFile" />
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="File" />
+    </root>
+</configuration>
