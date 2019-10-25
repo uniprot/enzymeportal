@@ -42,3 +42,15 @@
 /data-release/ep-config/target/
 /enzyme-portal/reaction-mechanism/target/
 /enzyme-portal/index-service/nbproject/
+/data-release/xml-generator/src/main/resources/config/application-uzpdev.properties
+/data-release/xml-generator/src/main/resources/config/release.info
+/enzyme-portal/reaction-mechanism/nbproject/
+/enzyme-portal/data-service/nbproject/
+/data-release/centralService/nbproject/
+/enzyme-portal/enzyme-service/nbproject/
+/enzyme-portal/enzymeportal-website/nbproject/
+/enzyme-portal/comparison-service/nbproject/
+/enzyme-portal/ep-restclient/nbproject/
+/xml-generator/nbproject/
+/data-release/xml-generator/nbproject/
+/data-release/metaboliteService/nbproject/
