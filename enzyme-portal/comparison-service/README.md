@@ -34,4 +34,3 @@ Please make sure to update tests as appropriate.
 
 [Enzyme Portal](https://www.ebi.ac.uk/enzymeportal/) software released under the [Apache 2.0 license.](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-[MIT](https://choosealicense.com/licenses/mit/)
