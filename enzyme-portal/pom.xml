@@ -251,10 +251,10 @@
 
         <module>reaction-mechanism</module>
         <module>data-service</module>
-<!--        <module>index-service</module>
+        <module>index-service</module>
         <module>enzyme-service</module>
         <module>comparison-service</module>
-        <module>enzymeportal-website</module>-->
+<!--        <module>enzymeportal-website</module>-->
    
     </modules>
     
