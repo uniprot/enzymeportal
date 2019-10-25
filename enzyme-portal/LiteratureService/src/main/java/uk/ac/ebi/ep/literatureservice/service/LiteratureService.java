@@ -1,27 +1,25 @@
 package uk.ac.ebi.ep.literatureservice.service;
 
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
-import uk.ac.ebi.ep.uniprotservice.transferObjects.CitationLabel;
-import uk.ac.ebi.ep.uniprotservice.transferObjects.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.transferObjects.CitationLabel;
+import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
 
 /**
  *
  * @author joseph
  */
-@Service
 public class LiteratureService {
 
     private final PmcRestService pmcRestService;
-    private static final Comparator<LabelledCitation> SORT_BY_DATE_ASC = (LabelledCitation key1, LabelledCitation key2) -> -(key1.getCitation().getDateOfCreation().compareTo(key2.getCitation().getDateOfCreation()));
 
+    @Autowired
     public LiteratureService(PmcRestService pmcRestService) {
         this.pmcRestService = pmcRestService;
     }
@@ -82,30 +80,35 @@ public class LiteratureService {
         return computeLabelledCitation(pmc)
                 .stream()
                 .distinct()
-                .sorted(SORT_BY_DATE_ASC)
+                .sorted()
                 .limit(limit)
                 .collect(Collectors.toList());
     }
 
     private List<LabelledCitation> computeLabelledCitation(EuropePMC pmc) {
         List<LabelledCitation> citations = new LinkedList<>();
-        pmc.getResultList().getResult().stream().forEach(result -> {
-            EnumSet<CitationLabel> labels = getLabels(result);
-            LabelledCitation citation = new LabelledCitation(result, labels);
+        pmc.getResultList().getResult()
+                .stream()
+                .forEach(result -> getLabelledCitation(citations, result));
+
+        return citations;
+    }
+
+    private List<LabelledCitation> getLabelledCitation(List<LabelledCitation> citations, Result result) {
+        EnumSet<CitationLabel> labels = getLabels(result);
+        LabelledCitation citation = new LabelledCitation(result, labels);
 //add only citations with label
-            if (citations.contains(citation)) {
-                if (!citation.getLabels().isEmpty()) {
-                    citations.get(citations.indexOf(citation))
-                            .addLabels(labels);
+        if (citations.contains(citation)) {
+            if (!citation.getLabels().isEmpty()) {
+                citations.get(citations.indexOf(citation))
+                        .addLabels(labels);
 
-                }
-            } else {
-                if (!citation.getLabels().isEmpty()) {
-                    citations.add(citation);
-                }
             }
-        });
-
+        } else {
+            if (!citation.getLabels().isEmpty()) {
+                citations.add(citation);
+            }
+        }
         return citations;
     }
 

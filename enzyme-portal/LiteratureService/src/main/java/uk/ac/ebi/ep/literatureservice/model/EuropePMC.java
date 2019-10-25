@@ -93,6 +93,9 @@ public class EuropePMC {
      */
     @JsonProperty("resultList")
     public ResultList getResultList() {
+        if(resultList == null){
+            resultList = new ResultList();
+        }
         return resultList;
     }
 

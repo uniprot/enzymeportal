@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.uniprotservice.transferObjects;
+package uk.ac.ebi.ep.literatureservice.transferObjects;
 
 /**
  *
@@ -49,6 +49,8 @@ public enum CitationLabel {
             label = SMALL_MOLECULES;
         } else if (dbName.equalsIgnoreCase("OMIM")) {
             label = DISEASES;
+        } else if (dbName.equalsIgnoreCase("EMBL")) {
+            label = ENZYME;
         }
         return label;
     }

@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.uniprotservice.transferObjects;
+package uk.ac.ebi.ep.literatureservice.transferObjects;
 
 import java.util.EnumSet;
 import uk.ac.ebi.ep.literatureservice.model.Result;
@@ -39,9 +39,11 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
     }
 
     /**
-     * Equals method based on bibliography identifier, namely PubMed ID. If
+     * Equals method based on bibliography identifier, namely PubMed ID.If
      * missing from both compared objects, the title is used.<br/>
      * This method does not take labels into account.
+     *
+     * @param o
      */
     @Override
     public boolean equals(Object o) {
@@ -111,7 +113,7 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         } else if (other.citation.getDateOfCreation() == null) {
             return -1;
         }
-        return this.citation.getDateOfCreation().compareTo(other.citation.getDateOfCreation());
+        return -this.citation.getDateOfCreation().compareTo(other.citation.getDateOfCreation());
     }
 
 }

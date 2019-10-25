@@ -1,7 +1,8 @@
 package uk.ac.ebi.ep.literatureservice.service;
 
 import java.util.Optional;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.literatureservice.config.PmcServiceUrl;
@@ -11,14 +12,15 @@ import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
  *
  * @author joseph
  */
+@Slf4j
 public class PmcRestService {
 
-    private final Logger LOGGER = Logger.getLogger(PmcRestService.class);
-    private final RestTemplate restTemplate;
+    private final RestTemplate pmcRestTemplate;
     private final PmcServiceUrl pmcServiceUrl;
 
-    public PmcRestService(PmcServiceUrl pmcServiceUrl, RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    @Autowired
+    public PmcRestService(PmcServiceUrl pmcServiceUrl, RestTemplate pmcRestTemplate) {
+        this.pmcRestTemplate = pmcRestTemplate;
         this.pmcServiceUrl = pmcServiceUrl;
     }
 
@@ -38,12 +40,12 @@ public class PmcRestService {
         Optional<EuropePMC> pmc = Optional.empty();
         try {
 
-            pmc = Optional.ofNullable(restTemplate.getForObject(url.trim(), EuropePMC.class));
+            pmc = Optional.ofNullable(pmcRestTemplate.getForObject(url.trim(), EuropePMC.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return pmc;
     }
@@ -53,12 +55,12 @@ public class PmcRestService {
         Optional<EuropePMC> pmc = Optional.empty();
         try {
 
-            pmc = Optional.ofNullable(restTemplate.getForObject(url.trim(), EuropePMC.class));
+            pmc = Optional.ofNullable(pmcRestTemplate.getForObject(url.trim(), EuropePMC.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return pmc;
 
