@@ -7,8 +7,9 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.9-SNAPSHOT</version>
     <name>Enzyme Portal</name>
+    
     <description>
         The Enzyme Portal is for people who are interested in the biology of
         enzymes and proteins with enzymatic activity.
@@ -35,8 +36,8 @@
                 <role>Lead Developer</role>
             </roles>
         </developer>
-           <developer>
-            <id>xwatkins</id>
+        <developer>
+            <id>mbingley</id>
             <name>Mark Bingley</name>
             <email>mbingley@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
@@ -55,24 +56,23 @@
         </developer>
     </developers>
     <properties>
-     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-     <github.global.server>github</github.global.server>
-                 <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
-    <ebi.maven.repo.deploy.url>
-         scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
-    </ebi.maven.repo.deploy.url>
-    <ebi.maven.repo.snapshots.deploy.url>
-         scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
-    </ebi.maven.repo.snapshots.deploy.url>
-    <biobabel.maven.repo.url>
-           http://www.ebi.ac.uk/~biobabel/maven2_repo
-<!--         http://www.ebi.ac.uk/~biobabel/public_html/maven2_repo-->
-    </biobabel.maven.repo.url>
-    <biobabel.maven.repo.deploy.url>
-         scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
-    </biobabel.maven.repo.deploy.url>  
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <github.global.server>github</github.global.server>
+        <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
+        <ebi.maven.repo.deploy.url>
+            scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
+        </ebi.maven.repo.deploy.url>
+        <ebi.maven.repo.snapshots.deploy.url>
+            scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+        </ebi.maven.repo.snapshots.deploy.url>
+        <biobabel.maven.repo.url>
+            http://www.ebi.ac.uk/~biobabel/maven2_repo
+        </biobabel.maven.repo.url>
+        <biobabel.maven.repo.deploy.url>
+            scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
+        </biobabel.maven.repo.deploy.url>  
     
-      <failsafe-version>2.16</failsafe-version>
+        <failsafe-version>2.16</failsafe-version>
 
         <!--Unit and Integration testing settings-->
         <skipITs>false</skipITs>
@@ -80,9 +80,7 @@
 
         <!-- Test coverage -->
        
-<!--        <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>-->
-         
-          <jacoco.outputDir>${project.basedir}/../target</jacoco.outputDir>
+        <jacoco.outputDir>${project.basedir}/../target</jacoco.outputDir>
 
         <!-- Unit test report path -->
         <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
@@ -95,53 +93,22 @@
     </properties>
     <repositories>
         
-<!--          <repository>
-        <id>uniprot-artifactory-release</id>
-        <name>UniProt Artifactory for Releases</name>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <url>${http-uniprot-private-url}/release</url>
-    </repository>
- 
-    <repository>
-        <id>uniprot-artifactory-snapshots</id>
-        <name>UniProt Artifactory for Snapshots</name>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <checksumPolicy>warn</checksumPolicy>
-        </snapshots>
-        <url>${http-uniprot-private-url}/snapshot</url>
-    </repository>      -->
         
-               <repository>
+        <repository>
             <releases/>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
-<!--            http://www.ebi.ac.uk/~maven/m2repo/uk/ac/ebi/ep/  (enzyme portal repo web view)-->
+            <!--            http://www.ebi.ac.uk/~maven/m2repo/uk/ac/ebi/ep/  (enzyme portal repo web view)-->
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-<!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo</url>-->
         </repository> 
         
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-<!--        <repository>
-            <id>ibiblio</id>
-            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
-        </repository>-->
         <repository>
             <releases>
                 <enabled>false</enabled>
@@ -150,7 +117,7 @@
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
-<!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo_snapshots</url>-->
+            <!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo_snapshots</url>-->
         </repository>
         <repository>
             <id>biobabel-repo</id>
@@ -195,33 +162,7 @@
             <url>${ebi.maven.repo.deploy.url}</url>
         </repository>
         
-<!--         <repository>
-        <id>uniprot-artifactory-release</id>
-        <name>UniProt Artifactory for Releases</name>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <url>${http-uniprot-private-url}/release</url>
-    </repository>
- 
-        <snapshotRepository>
-            <id>uniprot-artifactory-snapshots</id>
-            <name>UniProt Artifactory for Snapshots</name>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <url>${http-uniprot-private-url}/snapshot</url>
-        </snapshotRepository> -->
-        
+       
         <snapshotRepository>
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
@@ -248,336 +189,73 @@
         <url>https://github.com/ebi-cheminf/enzymeportal</url>
     </scm>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
-                    <configuration>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-                <!--                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
-                    <configuration>
-                        <argLine>-Xmx512m</argLine>
-                    </configuration>
-                </plugin>-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.2</version>
-                    <configuration>
-                        <skipDeploy>true</skipDeploy>
-                        <outputDirectory>${basedir}/target/site</outputDirectory>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.6</version>
-                    <configuration>
-                        <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.github</groupId>
-                    <artifactId>site-maven-plugin</artifactId>
-                    <version>0.8</version>
-                    <configuration>
-                        <message>
-                            Creating site for ${project.name}-${project.version}
-                        </message>
-                        <merge>true</merge>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>site</goal>
-                            </goals>
-                            <phase>site-deploy</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jxr-plugin</artifactId>
-                    <version>2.3</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.5.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-changes-plugin</artifactId>
-                    <version>2.8</version>
-                </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e
-                settings only. It has no influence on the Maven build itself
-                so please leave it here for eclipse users.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.codehaus.mojo
-                                        </groupId>
-                                        <artifactId>
-                                            properties-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.0-alpha-2,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>
-                                                read-project-properties
-                                            </goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.apache.maven.plugins
-                                        </groupId>
-                                        <artifactId>
-                                            maven-dependency-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [2.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>
-                                                copy-dependencies
-                                            </goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-                
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${failsafe-version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <!--                    <version>0.7.2.201409121644</version>-->
-                    <version>0.7.8</version>
-                    <executions>
-                        <!-- Sets up jacaco for unit test coverage analysis (jacoco.agent.ut.arg) -->
-                        <execution>
-                            <id>prepare-ut-agent</id>
-                            <phase>process-test-classes</phase>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                            <configuration>
-                                <destFile>${jacoco.reportPath}</destFile>
-                                <propertyName>jacoco.agent.ut.arg</propertyName>
-                            </configuration>
-                        </execution>
-                        <!-- Sets up jacaco for integration test coverage analysis (jacoco.agent.it.arg) -->
-                        <execution>
-                            <id>prepare-it-agent</id>
-                            <phase>pre-integration-test</phase>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                            <configuration>
-                                <destFile>${jacoco.itReportPath}</destFile>
-                                <propertyName>jacoco.agent.it.arg</propertyName>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>     
-                
-            </plugins>
-        </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-<!--                <configuration>
-                    <reportPlugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <reports>
-                                <report>index</report>
-                                <report>summary</report>
-                                <report>project-team</report>
-                                <report>issue-tracking</report>
-                                <report>license</report>
-                                <report>scm</report>
-                            </reports>
-                        </plugin>
-  
-                    </reportPlugins>
-                </configuration>-->
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <configuration>
-                    <path>${project.artifactId}</path>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             
-            <!-- Generate the source jar. -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.6.0.1398</version>
             </plugin>
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-help-plugin</artifactId>
-                <version>2.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
-                <configuration>
-                    <!-- Exclude integration tests from unit test run-->
-                    <excludes>
-                        <skipITs>${skipUTs}</skipITs>
-                        <exclude>**/*IT.java</exclude>
-                        <exclude>**/IT*.java</exclude>
-                    </excludes>
-                    <argLine>${jacoco.agent.ut.arg}</argLine>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${failsafe-version}</version>
-                <configuration>
-                    <skipITs>${skipITs}</skipITs>
-                    <argLine>${jacoco.agent.it.arg}</argLine>
-                </configuration>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.4</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>    
 
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>2.10</version>
-            </extension>
-        </extensions>
     </build>
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>Brussels-SR4</version>
-                <!--                <version>Athens-SR6</version>-->
-                <!--                                                <version>2.0.3.RELEASE</version>-->
-                <!--                                <version>2.0.3.RELEASE</version>-->
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>5.1.7.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
     
+    
     <modules>
-       
-        <module>EnzymePortalTestKit</module>
-        <!--        <module>ep-solr</module>-->
-        <module>ep-config</module>
-        <module>ep-model</module>
-        <module>ep-xml</module>
-        <module>xml-pipeline</module>
-        <module>DataAnalysis</module>      
-        <module>PDBeAdapter</module>
-        <module>centralService</module>
-        <module>ep-parser</module>
-        <module>SitemapGenerator</module>
-        <module>enzyme-portal-data</module>
-        <!--                <module>epTools</module>-->
-        <module>ebeye-rest-adapter</module>
-        <module>chembl-adapter</module>
-        <module>enzymeservices</module>
+
+        <module>ep-restclient</module>
         <module>LiteratureService</module>
-        <module>ep-base</module>
-        <module>ep-website</module>
-        <module>ep-benchmarks</module>
-        
+
+        <module>reaction-mechanism</module>
+        <module>data-service</module>
+        <module>index-service</module>
+        <module>enzyme-service</module>
+        <module>comparison-service</module>
+        <module>enzymeportal-website</module>
+   
     </modules>
     
     <profiles>

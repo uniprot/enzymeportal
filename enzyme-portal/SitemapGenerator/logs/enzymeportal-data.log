@@ -1,4 +1,0 @@
-[ WARN] [main 10:45:32] (JdbcServicesImpl.java:configure:204) HHH000342: Could not obtain connection to query metadata : ORA-01017: invalid username/password; logon denied
-
-[ WARN] [main 11:34:37] (JdbcServicesImpl.java:configure:204) HHH000342: Could not obtain connection to query metadata : ORA-01017: invalid username/password; logon denied
-

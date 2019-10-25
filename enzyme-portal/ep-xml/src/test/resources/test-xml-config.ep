@@ -1,5 +1,0 @@
-release.number=2018_01
-ep.enzyme.centric.xml.dir=${java.io.tmpdir}/${release.number}/enzyme.xml
-ep.protein.centric.xml.dir=${java.io.tmpdir}/${release.number}/protein.xml
-ep.ebeye.xsd=http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd
-ep.xml.dir=${java.io.tmpdir}/${release.number}/
