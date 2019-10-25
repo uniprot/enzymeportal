@@ -1,6 +1,6 @@
 # Index-Service
 
-Rest client config for the Enzyme Portal web project.
+Index service for the Enzyme Portal web project. This is a wrapper for the EBI Search service.
 
 ## Built With
 
@@ -23,7 +23,7 @@ import.*
 ```
 ## Authors
 
-* Joseph Sampson [linkedin](https://www.linkedin.com/in/joseph-sampson-o-66399b30/)
+* [Joseph Sampson](https://www.linkedin.com/in/joseph-sampson-o-66399b30/)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -34,4 +34,3 @@ Please make sure to update tests as appropriate.
 
 [Enzyme Portal](https://www.ebi.ac.uk/enzymeportal/) software released under the [Apache 2.0 license.](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-[MIT](https://choosealicense.com/licenses/mit/)
