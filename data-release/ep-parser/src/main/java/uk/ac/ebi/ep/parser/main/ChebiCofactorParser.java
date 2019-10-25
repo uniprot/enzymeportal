@@ -31,13 +31,12 @@ public class ChebiCofactorParser {
         context.scan("uk.ac.ebi.ep.parser.config", "uk.ac.ebi.ep.metaboliteService");
         context.refresh();
 
-
-         ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
+        ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
         chebiCofactor.loadChebiCofactorToDatabase();
 
         log.info("Done Loading Chebi cofactors to ENZYME_PORTAL database ");
-       // chebiCofactor.loadUniqueCofactorsToDatabase();
-        //log.info("Done Loading Unique Chebi cofactors to ENZYME_PORTAL database ");
+        chebiCofactor.loadUniqueCofactorsToDatabase();
+        log.info("Done Loading Unique Chebi cofactors to ENZYME_PORTAL database ");
 
     }
 }
