@@ -1,0 +1,3 @@
+//https://www.ebi.ac.uk/thornton-srv/m-csa/api/entries/?entries.proteins.sequences.uniprot_ids=P27830
+
+mcsa.url=https://www.ebi.ac.uk/thornton-srv/m-csa/api/entries/?
