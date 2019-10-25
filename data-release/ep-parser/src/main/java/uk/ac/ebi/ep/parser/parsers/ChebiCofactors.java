@@ -1,9 +1,10 @@
 package uk.ac.ebi.ep.parser.parsers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,12 +44,13 @@ public class ChebiCofactors {
     protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
     protected final EnzymePortalParserService enzymePortalParserService;
     protected final ChebiService chebiService;
-    private List<LiteCompound> compounds = null;
+    private CopyOnWriteArrayList<LiteCompound> compounds = null;
+    AtomicInteger count = new AtomicInteger(0);
 
     public ChebiCofactors(EnzymePortalParserService enzymePortalParserService, ChebiService chebiService) {
         this.enzymePortalParserService = enzymePortalParserService;
         this.chebiService = chebiService;
-        compounds = new ArrayList<>();
+        compounds = new CopyOnWriteArrayList<>();
     }
 
     public void loadUniqueCofactorsToDatabase() {
@@ -66,7 +68,7 @@ public class ChebiCofactors {
 
     public void loadChebiCofactorToDatabase() {
         List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
-        //.stream().limit(10).collect(Collectors.toList());
+                //.stream().limit(100).collect(Collectors.toList());
 
         log.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
@@ -159,16 +161,14 @@ public class ChebiCofactors {
 
     }
 
-    AtomicInteger count = new AtomicInteger(1);
-
     private void parseCofactorText(List<Summary> enzymeSummary) {
-        enzymeSummary.stream().forEach(summary -> processCofactors(summary));
+        enzymeSummary.parallelStream().forEach(summary -> processCofactors(summary));
         //save compounds
         log.info("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
-                .stream()
-                .filter(compound -> compound != null)
+                .parallelStream()
+                .filter(compound -> Objects.nonNull(compound))
                 .forEach(compound -> loadCompound(compound, count));
         log.info("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
