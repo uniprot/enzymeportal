@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles("uzprel")
+@ActiveProfiles("uzpdev")
 public class DataServiceBaseIT {
     
 }
