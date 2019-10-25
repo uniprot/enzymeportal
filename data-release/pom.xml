@@ -29,9 +29,10 @@
         <module>centralService</module>
         <module>DataAnalysis</module>
         <module>PDBeAdapter</module>
+        <module>metaboliteService</module>
         <module>ep-parser</module>
         <module>SitemapGenerator</module>
-        <module>metaboliteService</module>
+   
     </modules>
     <repositories>
 
