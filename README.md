@@ -17,4 +17,4 @@ The Enzyme Portal brings together lots of diverse information about enzymes and 
 
 
 
-`The Enzyme Portal is distributed under the [Apache 2.0 license.](https://www.apache.org/licenses/LICENSE-2.0.html)`
+`The Enzyme Portal is distributed under the` [Apache 2.0 license.](https://www.apache.org/licenses/LICENSE-2.0.html)
