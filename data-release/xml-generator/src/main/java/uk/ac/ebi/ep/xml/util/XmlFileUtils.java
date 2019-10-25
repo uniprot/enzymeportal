@@ -48,15 +48,11 @@ public class XmlFileUtils {
                 = PosixFilePermissions.fromString(permission);
         FileAttribute<Set<PosixFilePermission>> attr
                 = PosixFilePermissions.asFileAttribute(perms);
-        //boolean fileExist = Paths.get(directory).toFile().exists();
         Path path = Paths.get(directory);
         if (!path.toFile().exists()) {
-            Files.createDirectory(path, attr);
+            Files.createDirectories(path, attr);
         }
 
-//        if (!fileExist) {
-//            Files.createDirectory(Paths.get(directory), attr);
-//        }
     }
 
 }

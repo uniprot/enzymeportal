@@ -163,6 +163,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
             if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
                 fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
+                String rheaId = reactant.getReactionId().replace(RHEA_PREFIX, "rhea");
+                fields.add(new Field(FieldName.RHEAID.getName(), rheaId));
             }
 //            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
 //
@@ -249,6 +251,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
             fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
             refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
+            String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "chebi");
+            fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
 
         }
 
