@@ -1,6 +1,6 @@
 # data-service
 
-Enzyme Portal data service module.
+Data service module for the [Enzyme Portal website](https://www.ebi.ac.uk/enzymeportal/). This service provides endpoints to access the Enzyme Portal database.
 
 ## Built With
 
@@ -17,10 +17,10 @@ Test use-cases to demonstrate how to use this module.
 ```java
 import.*
 
-    @Autowired
-    private DataService dataService;
+  @Autowired
+  private DataService dataService;
 
- <TYPE> dataService.findProteinViewBy<params> #return TYPE
+ <DATA_TYPE> dataService.findProteinViewBy<params> #returns DATA_TYPE
 	
  ### example 
  String accession = "P18545";
