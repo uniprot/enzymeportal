@@ -12,7 +12,7 @@ This comprises of a set of modules developed as independent services for [The En
 ```
 ## Authors
 
-* Joseph Sampson [https://www.linkedin.com/in/joseph-sampson-o-66399b30/]
+* [Joseph Sampson](https://www.linkedin.com/in/joseph-sampson-o-66399b30/)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
