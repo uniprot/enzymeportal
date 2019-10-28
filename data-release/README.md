@@ -19,7 +19,11 @@ Key features includes ;
 
 
 ```bash
+
 > mvn clean install
+
+# running in LSF
+> sh build@LSF.sh
 ```
 
 ## Usage
@@ -30,8 +34,10 @@ An overview on how to run the accompanied scripts.
 # Experimental evidence
 > sh eev.sh $db_config
 
-# To run in LSF
+# The scripts to run in LSF can be found in the ep-parser module.
+
 > sh submitOneLFS.sh $db_config ./${script-name}
+
 # ${script-name} includes the following ;
 1. pdb.sh
 2. chembl.sh
