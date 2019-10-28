@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+    <tlib-version>1.0</tlib-version>
+    <short-name>eptaglibray</short-name>
+    <uri>/WEB-INF/epTagLibray</uri>
+    
+    <function>
+        <name>withMetabolite</name>
+        <description>selects protein with matching metaboliteId</description>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List withMetabolite(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>withCofactor</name>
+        <description>selects protein with matching cofactorId</description>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List withCofactor(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <name>withProteinFamily</name>
+        <description>selects protein with matching familyId</description>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List withProteinFamily(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <name>withTaxonomy</name>
+        <description>selects protein with matching taxId</description>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List withTaxonomy(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>withPathway</name>
+        <description>selects protein with matching pathwayId</description>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List withPathway(java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>removeIdPrefix</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String removeIdPrefix(java.lang.String,java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>startsWithDigit</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean startsWithDigit(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>startsWithLowerCase</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean startsWithLowerCase(java.lang.String, java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>contains</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean contains(java.util.Collection, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>alphaOmegaIsNotNull</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean alphaOmegaIsNotNull(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>omegaIsNull</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean omegaIsNull(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <name>lastInList</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>boolean lastInList(java.util.List, java.lang.Object)</function-signature>
+    </function>
+    <function>
+        <description>
+            Enzyme Portal HTML Escape function
+        </description>
+        <name>escapeHTML</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>sortBlast</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.util.List sortBlastResult(java.util.List)</function-signature>
+    </function>
+    <function>
+        <name>removeSlash</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String removeSlash(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>splitAndGetValue</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String splitAndGetValue(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>replaceSpacesWithUnderScore</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String replaceSpacesWithUnderScore(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>splitHyphen</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String splitHyphen(java.lang.String)</function-signature>
+    </function>
+</taglib>
