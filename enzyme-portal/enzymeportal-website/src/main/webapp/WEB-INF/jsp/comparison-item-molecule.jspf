@@ -1,0 +1,29 @@
+<%--
+    Shows one molecule.
+    Requires page scope variable:
+        Molecule molecule: the molecule to show.
+ --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
+
+<c:choose>
+    <c:when test="${molecule.source eq 'ChEBI'}">
+        <c:set var="compoundUrl" value="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=${molecule.id}"/>
+        <c:set var="compoundImgUrl" value="https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=${molecule.id}"/>  
+    </c:when>
+    <c:when test="${molecule.source eq 'ChEMBL'}">
+        <c:set var="compoundUrl" value="https://www.ebi.ac.uk/chembl/compound_report_card/${molecule.id}"/>
+        <c:set var="compoundImgUrl" value="https://www.ebi.ac.uk/chembl/api/data/image/${molecule.id}.svg?engine=indigo"/>   
+    </c:when>
+</c:choose>
+
+<a href="${compoundUrl}">${molecule.name}</a>
+
+<div style="margin-left: 2em">
+    <img src="${compoundImgUrl}" class="molecule"
+        style="float: left; margin-right: 1em;"/>
+ </div>
+
+<br clear="all"/>

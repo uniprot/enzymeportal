@@ -1,0 +1,145 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!--<div id="beta-banner"></div>-->
+<div id="skip-to">
+    <ul>
+        <li><a href="#content">Skip to main content</a></li>
+        <li><a href="#local-nav">Skip to local navigation</a></li>
+        <li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
+        <li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
+    </ul>
+</div>
+
+<div data-sticky-container>
+    <div id="local-masthead">
+        <header>
+
+            <div id="global-masthead" class="clearfix">
+                <!--This has to be one line and no newline characters-->
+                <a href="//www.ebi.ac.uk/" title="Go to the EMBL-EBI homepage"><span class="ebi-logo"></span></a>
+
+
+
+                <nav>
+                    <div class="row">
+                        <ul id="global-nav" class="menu">
+                            <!-- set active class as appropriate -->
+                            <li id="home-mobile" class=""><a href="//www.ebi.ac.uk"></a></li>
+                            <li id="home" class="active"><a href="//www.ebi.ac.uk"><i class="icon icon-generic" data-icon="H"></i> EMBL-EBI</a></li>
+                            <li id="services"><a href="//www.ebi.ac.uk/services"><i class="icon icon-generic" data-icon="("></i> Services</a></li>
+                            <li id="research"><a href="//www.ebi.ac.uk/research"><i class="icon icon-generic" data-icon=")"></i> Research</a></li>
+                            <li id="training"><a href="//www.ebi.ac.uk/training"><i class="icon icon-generic" data-icon="t"></i> Training</a></li>
+                            <li id="about"><a href="//www.ebi.ac.uk/about"><i class="icon icon-generic" data-icon="i"></i> About us</a></li>
+                            <li id="search">
+                                <a href="#" data-toggle="search-global-dropdown" aria-controls="search-global-dropdown" data-is-focus="false" data-yeti-box="search-global-dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon icon-functional" data-icon="1"></i> <span class="show-for-small-only">Search</span></a>
+                                <div id="search-global-dropdown" class="dropdown-pane" data-dropdown="cns0yq-dropdown" data-options="closeOnClick:true;" aria-hidden="true" data-yeti-box="search-global-dropdown" data-resize="search-global-dropdown" aria-labelledby="cj6gpy-dd-anchor" data-events="resize">
+                                    <form id="global-search" name="global-search" action="/ebisearch/search.ebi" method="GET">
+                                        <fieldset>
+                                            <div class="input-group">
+                                                <input type="text" name="query" id="global-searchbox" class="input-group-field" placeholder="Search all of EMBL-EBI">
+                                                <div class="input-group-button">
+                                                    <input type="submit" name="submit" value="Search" class="button">
+                                                    <input type="hidden" name="db" value="allebi" checked="checked">
+                                                    <input type="hidden" name="requestFrom" value="global-masthead" checked="checked">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="float-right show-for-medium embl-selector">
+                                <button class="button float-right" type="button" data-toggle="embl-dropdown" aria-controls="embl-dropdown" data-is-focus="false" data-yeti-box="embl-dropdown" aria-haspopup="true" aria-expanded="false">Hinxton</button>
+                                <!-- The dropdown menu will be programatically added by script.js -->
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+
+            </div>
+
+            <div class="row">
+
+                <!-- local-title -->
+                <div class="row">
+                    <div class="columns medium-4" id="local-title">
+                        <a href="${pageContext.request.contextPath}" title="Back to Enzyme Portal homepage">
+                            <img src="${pageContext.request.contextPath}/resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px; height: 64px; margin-right: 0px">
+                            <span style="margin-top: 30px; display:inline-block"> <h1 style="padding-left: 0px">Enzyme Portal</h1></span>
+                        </a>
+                    </div>
+
+                    <div class="columns medium-7">
+
+                    </div>
+                    <div class="columns medium-1">&nbsp;</div>
+                </div>
+                <!-- /local-title -->
+
+                <!-- local-nav -->
+                <nav >
+                    <ul class="dropdown menu " data-description="navigational">
+                        <%-- <li class="first ${fn:containsIgnoreCase(pageTitle, 'home')?
+                                           'active' : ''}"><a href="${pageContext.request.contextPath}"
+                            title="">Home</a></li> --%>
+                        <li class=" ${fn:containsIgnoreCase(pageTitle, 'about')?
+                                      'active' : ''}">
+                            <a href="${pageContext.request.contextPath}/about"
+                               title="About Enzyme Portal">About</a>
+                        </li>
+
+                        <li class="${fn:containsIgnoreCase(pageTitle, 'FAQ')?
+                                     'active' : ''}"><a
+                                href="${pageContext.request.contextPath}/faq"
+                                title="Frequently Asked questions">FAQ</a>
+                        </li>
+<!--                        <li>
+                            <a target="_blank" href="https://www.youtube.com/watch?v=QuyZFNFO1aM"
+                               class="icon icon-socialmedia" data-icon="Y"   >
+                                Video
+                            </a>
+                        </li>-->
+
+
+                        <li class="functional ">
+                            <a target="_blank" href="https://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=https://www.ebi.ac.uk/enzymeportal/"
+                               class="icon icon-generic" data-icon="f"> Feedback</a>
+                        </li>
+                      <li class="functional last">
+                          <a target="_blank" href="https://www.surveymonkey.com/r/EMBL-EBI_EnzymePortal"
+                               class="icon icon-generic has-tip" data-icon="f" data-tooltip aria-haspopup="true" title="We'd like your input in shaping the Enzymeportal. Please, can you spare 2 minutes of your time to fill in a short survey so we know what data is important to you?"> Survey</a>
+                        </li>
+                        <li class="functional
+                            ${fn:containsIgnoreCase(pageTitle, 'compare')?
+                              'active' : ''}">
+                            <a href="${pageContext.request.contextPath}/basket"
+                               title="Enzymes selected to compare"
+                               class="icon icon-generic" data-icon="b">Basket
+                                (<span class="basketSize"></span>)</a>
+                        </li>
+<!--                         <li class="float-right">
+                            <a target="_blank" href="https://www.ebi.ac.uk/enzymeportal/legacy/"
+                               class="icon icon-socialmedia  " data-icon="w" style="color: #777777"> Old Enzyme Portal</a>
+                        </li>-->
+                        <li class=" float-right">
+                            <a target="_blank" href="https://twitter.com/enzymeportal"
+                               class="icon icon-socialmedia " data-icon="T"> Twitter</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /local-nav -->
+
+            </div>
+
+        </header>
+
+    </div>
+</div>
+
+<script>
+    window.onpageshow = function () {
+        showBasketSize();
+    };
+</script>
