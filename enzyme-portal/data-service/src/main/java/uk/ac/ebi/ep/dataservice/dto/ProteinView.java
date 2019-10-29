@@ -42,17 +42,6 @@ public interface ProteinView {
 
     Long getRelatedProteinsId();
 
-    //experiemtal
-//    String getDiseaseId();
-//
-//    String getDiseaseName();
-//
-//    default List<Disease> getDiseases() {
-//        Disease d = new Disease(getDiseaseId(), getDiseaseName());
-//        return Arrays.asList(d);
-//    }
-//end exp
-    
     default Species getSpecies() {
         return new Species(getScientificName(), getCommonName(), getTaxId());
     }

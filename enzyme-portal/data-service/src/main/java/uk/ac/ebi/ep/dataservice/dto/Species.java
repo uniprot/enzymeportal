@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.dataservice.dto;
 
 import java.io.Serializable;

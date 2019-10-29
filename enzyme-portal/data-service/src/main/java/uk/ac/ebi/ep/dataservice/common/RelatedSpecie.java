@@ -14,8 +14,7 @@ import uk.ac.ebi.ep.dataservice.dto.Species;
 @Data
 public class RelatedSpecie implements Serializable {
 
-    //@Singular
-    protected List<String> uniprotaccessions;// = new ArrayList<>();
+    private List<String> uniprotaccessions;
 
     protected Species species;
     protected Long taxId;

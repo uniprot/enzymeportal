@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.dataservice.config;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -27,23 +26,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.dataservice.repositories"})
 public class DataConfig {
-    
-     private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.dataservice.entities";
-    
+
+    private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.dataservice.entities";
+
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource")
     public DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }
-    
+
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource dataSource(DataSourceProperties properties) {
-        return (HikariDataSource) properties.initializeDataSourceBuilder()
+        return properties.initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();
     }
-    
+
     @Bean
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
@@ -51,20 +50,19 @@ public class DataConfig {
                 .dataSource(dataSource)
                 .packages(PACKAGES_TO_SCAN)
                 .build();
-        
+
     }
-    
+
     @Bean//(name = "TransactionManager")
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
-        //return new DataSourceTransactionManager(dataSource(dataSourceProperties()));
     }
-    
+
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-    
+
     @Bean
     @ConfigurationProperties("spring.jpa")
     public JpaProperties jpaProperties() {
