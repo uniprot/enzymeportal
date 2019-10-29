@@ -61,7 +61,6 @@ public class UniprotEntry implements Serializable {
     @Column(name = "ACCESSION")
     private String accession;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
     @Size(max = 30)
@@ -122,10 +121,6 @@ public class UniprotEntry implements Serializable {
 
     public UniprotEntry(String accession) {
         this.accession = accession;
-    }
-
-    public UniprotEntry(long dbentryId) {
-        this.dbentryId = dbentryId;
     }
 
     public UniprotEntry(String accession, long dbentryId) {

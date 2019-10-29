@@ -14,7 +14,5 @@ import org.springframework.context.annotation.Configuration;
 public class EnzymeServiceProperties {
 
     private String reactomeUrl;
-//    private String proxyHost;
-//    private int proxyPort;
 
 }

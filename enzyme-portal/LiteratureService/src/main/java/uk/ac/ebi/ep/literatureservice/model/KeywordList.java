@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.literatureservice.model;
 
 
@@ -30,7 +25,7 @@ public class KeywordList {
 @JsonProperty("keyword")
 private List<String> keyword = new ArrayList<>();
 @JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+private final Map<String, Object> additionalProperties = new HashMap<>();
 
 /**
 * 

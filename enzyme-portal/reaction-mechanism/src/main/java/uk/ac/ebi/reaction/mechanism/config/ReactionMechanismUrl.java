@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Joseph
  */
 @Data
-public class McsaUrl {
+public class ReactionMechanismUrl {
     private String mcsaUrl;
     
 }

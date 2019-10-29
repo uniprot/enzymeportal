@@ -1,5 +1,4 @@
 package uk.ac.ebi.ep.indexservice.model.enzyme;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -102,7 +101,7 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
 
     @Override
     public String getEc() {
-        return id;
+        return getId();
     }
 
     @Override

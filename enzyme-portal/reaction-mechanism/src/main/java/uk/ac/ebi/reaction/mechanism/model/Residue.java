@@ -1,5 +1,4 @@
 package uk.ac.ebi.reaction.mechanism.model;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,21 +22,6 @@ import java.util.List;
  */
 public class Residue {
 
-//    @JsonProperty("mcsa_id")
-//    private Integer mcsaId;
-//    @JsonProperty("function_location")
-//    private String functionLocation;
-//    @JsonProperty("function_location_abv")
-//    private String functionLocationAbv;
-//    @JsonProperty("roles_summary")
-//    private String rolesSummary;
-//    //@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-//    @JsonProperty("roles")
-//    private List<Role> roles = new ArrayList<Role>();
-//    @JsonProperty("residue_sequences")
-//    private List<ResidueSequence> residueSequences = new ArrayList<ResidueSequence>();
-//    @JsonProperty("residue_chains")
-//    private List<ResidueChain> residueChains = new ArrayList<ResidueChain>();
     @JsonProperty("mcsa_id")
     private Integer mcsaId;
     @JsonProperty("roles_summary")
@@ -60,16 +44,6 @@ public class Residue {
     public void setMcsaId(Integer mcsaId) {
         this.mcsaId = mcsaId;
     }
-
-//    @JsonProperty("function_location")
-//    public String getFunctionLocation() {
-//        return functionLocation;
-//    }
-//
-//    @JsonProperty("function_location")
-//    public void setFunctionLocation(String functionLocation) {
-//        this.functionLocation = functionLocation;
-//    }
 
     @JsonProperty("function_location_abv")
     public String getFunctionLocationAbv() {

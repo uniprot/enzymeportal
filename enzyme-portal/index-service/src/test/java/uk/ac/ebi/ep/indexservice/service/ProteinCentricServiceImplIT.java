@@ -127,7 +127,7 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .filter(h -> h.getLabel().equalsIgnoreCase("Homo sapiens"))
                 .findAny().get().getCount();
 
-        assertEquals(taxFacet, 4);
+        assertEquals(4,taxFacet);
 
         List<String> facetList = Arrays.asList("TAXONOMY:9606");
         String facets = facetList.stream().collect(Collectors.joining(","));
@@ -157,8 +157,8 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .filter(h -> h.getLabel().equalsIgnoreCase("Homo sapiens"))
                 .findAny().get().getCount();
 
-        assertEquals(numFacets, 4);
-        assertEquals(result.getHitCount().longValue(), 4);
+        assertEquals(4,numFacets);
+        assertEquals(4,result.getHitCount().longValue());
 
     }
 
@@ -216,7 +216,7 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .findAny().get().getCount();
 
         assertEquals(3, numFacets);
-        assertEquals(result.getHitCount().longValue(), 3);
+        assertEquals(3,result.getHitCount().longValue());
 
     }
 

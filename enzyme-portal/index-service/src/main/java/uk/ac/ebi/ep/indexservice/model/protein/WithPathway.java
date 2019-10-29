@@ -15,5 +15,8 @@ import lombok.ToString;
 @ToString
 public class WithPathway {
 
-    String pathwayId, accession, commonName, entryType;
+    String pathwayId;
+    String accession;
+    String commonName;
+    String entryType;
 }

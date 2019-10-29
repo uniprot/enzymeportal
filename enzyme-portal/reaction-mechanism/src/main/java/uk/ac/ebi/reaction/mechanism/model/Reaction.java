@@ -20,7 +20,7 @@ public class Reaction {
     @JsonProperty("ec")
     private String ec;
     @JsonProperty("mechanisms")
-    private List<Mechanism> mechanisms = new ArrayList<Mechanism>();
+    private List<Mechanism> mechanisms = new ArrayList<>();
 
     @JsonProperty("ec")
     public String getEc() {

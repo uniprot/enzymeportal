@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.indexservice.model.protein;
 
 import lombok.AllArgsConstructor;
@@ -15,5 +14,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class WithDisease {
-      String omimId, accession, commonName,entryType;
+
+    String omimId;
+    String accession;
+    String commonName;
+    String entryType;
 }

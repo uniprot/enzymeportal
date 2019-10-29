@@ -125,7 +125,7 @@ public class LiteratureService {
         if (citation.getDbCrossReferenceList() != null) {
             citation.getDbCrossReferenceList().getDbName().stream()
                     .map(dbName -> Optional.ofNullable(CitationLabel.forDatabase(dbName)))
-                    .filter(label -> label.isPresent())
+                    .filter(Optional::isPresent)
                     .forEach(label -> labels.add(label.get()));
         }
         return labels;

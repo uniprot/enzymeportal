@@ -19,26 +19,26 @@ import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
 @Slf4j
 public abstract class AbstractIndexService<T> {
 
-    String QUERY = "query";
-    String QUERY_PARAM = "{queryParam}";
-    String QUERY_STRING = "&facetcount=%d&facets=%s&start=%d&size=%d&fields=%s&sort=%s&reverse=%s&format=%s";
-    String QUERY_STRING_NO_FACET = "&facetcount=%d&start=%d&size=%d&fields=%s&sort=%s&reverse=%s&format=%s";
+    String query = "query";
+    String queryParam = "{queryParam}";
+    String queryString = "&facetcount=%d&facets=%s&start=%d&size=%d&fields=%s&sort=%s&reverse=%s&format=%s";
+    String queryStringNoFacet = "&facetcount=%d&start=%d&size=%d&fields=%s&sort=%s&reverse=%s&format=%s";
 
     protected URI buildURI(QueryBuilder queryBuilder, String indexUrl) {
         log.debug("search term $ " + queryBuilder.getQuery());
         String fields = queryBuilder.getFields().stream().collect(Collectors.joining(","));
-        String query = String.format(QUERY_STRING_NO_FACET,
+        String query = String.format(queryStringNoFacet,
                 queryBuilder.getFacetcount(), queryBuilder.getStart(), queryBuilder.getSize(), fields, queryBuilder.getSort(), queryBuilder.getReverse(), queryBuilder.getFormat());
 
         if (!StringUtils.isEmpty(queryBuilder.getFacets()) && StringUtils.hasText(queryBuilder.getFacets())) {
-            query = String.format(QUERY_STRING,
+            query = String.format(queryString,
                     queryBuilder.getFacetcount(), queryBuilder.getFacets(), queryBuilder.getStart(), queryBuilder.getSize(), fields, queryBuilder.getSort(), queryBuilder.getReverse(), queryBuilder.getFormat());
 
         }
 
         return UriComponentsBuilder
                 .fromUriString(indexUrl)
-                .queryParam(QUERY, QUERY_PARAM)
+                .queryParam(this.query, queryParam)
                 .query(query)
                 .build(queryBuilder.getQuery());
 

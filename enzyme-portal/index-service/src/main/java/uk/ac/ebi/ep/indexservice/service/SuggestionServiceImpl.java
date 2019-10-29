@@ -31,6 +31,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     private static final String ENDPOINT = "/autocomplete";
 
     private final RestConfigService restConfigService;
+    private static final String MSG = "autocomplete search term : ";
 
     @Autowired
     public SuggestionServiceImpl(IndexProperties properties, RestConfigService restConfigService) {
@@ -40,7 +41,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     }
 
     private URI buildURI(String searchTerm) {
-        log.debug("autocomplete search term : " + searchTerm);
+        log.debug(MSG + searchTerm);
         if (searchTerm != null) {
             searchTerm = searchTerm.toLowerCase();
         }
@@ -54,7 +55,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
     @Override
     public Mono<Autocomplete> autocomplete(String searchTerm) {
-        log.debug("autocomplete search term : " + searchTerm);
+        log.debug(MSG + searchTerm);
         WebClient webclient = restConfigService.getWebClient();
 
         return webclient.get()
@@ -67,7 +68,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
     @Override
     public Mono<Autocomplete> autocompleteSearch(String searchTerm) {
-        log.debug("autocomplete search term : " + searchTerm);
+        log.debug(MSG + searchTerm);
         WebClient webclient = restConfigService.getWebClient();
 
         return webclient.get()

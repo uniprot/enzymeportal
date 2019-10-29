@@ -7,12 +7,13 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Joseph
  */
-
 @Configuration
 @ConfigurationProperties(prefix = "ep.index")
 public class IndexProperties {
 
-    private String baseUrl,enzymeCentricUrl, proteinCentricUrl;
+    private String baseUrl;
+    private String enzymeCentricUrl;
+    private String proteinCentricUrl;
 
     public String getBaseUrl() {
         return baseUrl;
@@ -37,9 +38,5 @@ public class IndexProperties {
     public void setProteinCentricUrl(String proteinCentricUrl) {
         this.proteinCentricUrl = proteinCentricUrl;
     }
-
-
-    
-    
 
 }

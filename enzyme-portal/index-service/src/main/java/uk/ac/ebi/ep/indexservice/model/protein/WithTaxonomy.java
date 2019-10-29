@@ -15,6 +15,9 @@ import lombok.ToString;
 @ToString
 public class WithTaxonomy {
 
-    String taxonomyId, accession, commonName, entryType;
+    String taxonomyId;
+    String accession;
+    String commonName;
+    String entryType;
 
 }

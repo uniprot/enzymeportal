@@ -43,5 +43,5 @@ public class Brenda {
         final Brenda other = (Brenda) obj;
         return Objects.equals(this.organism, other.organism);
     }
-    
+
 }

@@ -19,9 +19,6 @@ import uk.ac.ebi.ep.literatureservice.service.PmcRestService;
 @PropertySource({"classpath:pmc.configUrl"})
 public class PmcConfig {
 
-    @Autowired
-    private Environment env;
-
     @Bean
     public LiteratureService literatureService(PmcRestService pmcRestService) {
         return new LiteratureService(pmcRestService);
@@ -33,7 +30,8 @@ public class PmcConfig {
     }
 
     @Bean
-    public PmcServiceUrl pmcServiceUrl() {
+    @Autowired
+    public PmcServiceUrl pmcServiceUrl(Environment env) {
         PmcServiceUrl serviceUrl = new PmcServiceUrl();
 
         String accessionUrl = env.getProperty("pmc.specific.url");

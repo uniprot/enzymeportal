@@ -9,6 +9,7 @@ import uk.ac.ebi.ep.indexservice.helper.IndexFields;
 import uk.ac.ebi.ep.indexservice.helper.IndexQueryType;
 import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeSearchResult;
 import uk.ac.ebi.ep.indexservice.model.protein.ProteinGroupSearchResult;
 
 /**
@@ -32,7 +33,7 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public Mono<List<EnzymeEntry>> getEnzymeEntries(QueryBuilder enzymeQueryBuilder, String resourceQuery) {
         return enzymeCentricService.searchForEnzymesNonBlocking(enzymeQueryBuilder)
-                .map(e -> e.getEntries())
+                .map(EnzymeSearchResult::getEntries)
                 .flatMapIterable(x -> x)
                 .flatMap(data -> addProtein(data, resourceQuery))
                 .collectList();
@@ -67,7 +68,7 @@ public class IndexServiceImpl implements IndexService {
                 .stream()
                 .findFirst()
                 .orElse(new EnzymeEntry()))
-                .flatMap(data -> addProtein(data));
+                .flatMap(this::addProtein);
 
     }
 

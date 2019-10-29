@@ -28,24 +28,6 @@ import lombok.ToString;
  */
 public class Result {
 
-//    @JsonProperty("mcsa_id")
-//    private Integer mcsaId;
-//    @JsonProperty("enzyme_name")
-//    private String enzymeName;
-//    @JsonProperty("url")
-//    private String url;
-//    @JsonProperty("description")
-//    private String description;
-//    @JsonProperty("protein")
-//    private Protein protein;
-//    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-//    @JsonProperty("all_ecs")
-//    private List<String> allEcs;// = new ArrayList<String>();
-//    //@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-//    @JsonProperty("residues")
-//    private List<Residue> residues;// = new ArrayList<Residue>();
-//    @JsonProperty("reaction")
-//    private Reaction reaction;
     @JsonProperty("mcsa_id")
     private Integer mcsaId;
     @JsonProperty("enzyme_name")
@@ -56,13 +38,11 @@ public class Result {
     private String description;
     @JsonProperty("protein")
     private Protein protein;
-    //@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    //@JsonDeserialize(as = String.class)
+
     @JsonProperty("all_ecs")
-   // private String allEcs;
-    private List<String> allEcs;// = new ArrayList<String>();
+    private List<String> allEcs;
     @JsonProperty("residues")
-    private List<Residue> residues;// = new ArrayList<>();
+    private List<Residue> residues;
     @JsonProperty("reaction")
     private Reaction reaction;
 
@@ -128,15 +108,6 @@ public class Result {
     public void setAllEcs(List<String> allEcs) {
         this.allEcs = allEcs;
     }
-//    @JsonProperty("all_ecs")
-//    public String getAllEcs() {
-//        return allEcs;
-//    }
-//
-//    @JsonProperty("all_ecs")
-//    public void setAllEcs(String allEcs) {
-//        this.allEcs = allEcs;
-//    }
 
     @JsonProperty("residues")
     public List<Residue> getResidues() {
@@ -180,10 +151,7 @@ public class Result {
             return false;
         }
         final Result other = (Result) obj;
-        if (!Objects.equals(this.mcsaId, other.mcsaId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.mcsaId, other.mcsaId);
     }
 
 }

@@ -30,8 +30,8 @@ class ReactomeServiceImpl implements ReactomeService {
 
     private final RestConfigService restConfigService;
     private final EnzymeServiceProperties enzymeServiceProperties;
-    // private static final String REACTOME_CONTENT_SERVICE_PATH = "/ContentService/data/query/{reactomeId}";
-    private static final String REACTOME_CONTENT_SERVICE_PATH = "/ContentService/data/query/";
+    private static final String ENDPOINT = "/ContentService/data/query/";
+    private static final String REACTOME_CONTENT_SERVICE_PATH = ENDPOINT;
 
     @Autowired
     public ReactomeServiceImpl(RestConfigService restConfigService, EnzymeServiceProperties enzymeServiceProperties) {
@@ -70,42 +70,38 @@ class ReactomeServiceImpl implements ReactomeService {
     @Override
     public Mono<PathWay> findPathwayById(String pathwayId) {
         return reactomeContentService(pathwayId)
-                .map(p -> buildPathWay(p));
+                .map(this::buildPathWay);
     }
 
     @Override
     public Mono<List<PathWay>> findPathwaysByIds(List<String> pathwayIds) {
 
         List< Mono<ReactomeResult>> data = pathwayIds.stream()
-                .map((pathwayId) -> reactomeContentService(pathwayId))
+                .map(this::reactomeContentService)
                 .collect(Collectors.toList());
 
         return Flux.merge(data)
-                .map(p -> buildPathWay(p))
+                .map(this::buildPathWay)
                 .collectList();
 
     }
 
     private PathWay buildPathWay(ReactomeResult result) {
         PathWay pathway = null;
-        if (result.getSchemaClass() != null && result.getSpeciesName() != null) {
-            if (result.getSchemaClass().equalsIgnoreCase(PATHWAY) || result.getSpeciesName().equalsIgnoreCase(PATHWAY)) {
-                pathway = new PathWay();
-                pathway.setId(result.getStId());
-                pathway.setName(result.getDisplayName());
-                String url = String.format("%s%s", "https://www.reactome.org/content/detail/", result.getStId());
-                pathway.setUrl(url);
-                String text = result.getSummation().stream().findFirst().orElse(new Summation()).getText();
-                pathway.setDescription(text);
-                //image exporter
-                //https://reactome.org/ContentService/exporter/diagram/R-HSA-169911.png
-                Figure figure = result.getFigure().stream().findFirst().orElse(new Figure());
-                String image = String.format("%s%s", "https://www.reactome.org", figure.getUrl()); //"https://www.reactome.org/figures/SAM_formation.jpg"
-                if (figure.getUrl() != null) {
-                    pathway.setImage(image);
-                }
-
+        if (result.getSchemaClass() != null && result.getSpeciesName() != null && (result.getSchemaClass().equalsIgnoreCase(PATHWAY) || result.getSpeciesName().equalsIgnoreCase(PATHWAY))) {
+            pathway = new PathWay();
+            pathway.setId(result.getStId());
+            pathway.setName(result.getDisplayName());
+            String url = String.format("%s%s", "https://www.reactome.org/content/detail/", result.getStId());
+            pathway.setUrl(url);
+            String text = result.getSummation().stream().findFirst().orElse(new Summation()).getText();
+            pathway.setDescription(text);
+            Figure figure = result.getFigure().stream().findFirst().orElse(new Figure());
+            String image = String.format("%s%s", "https://www.reactome.org", figure.getUrl()); //"https://www.reactome.org/figures/SAM_formation.jpg"
+            if (figure.getUrl() != null) {
+                pathway.setImage(image);
             }
+
         }
         return pathway;
     }

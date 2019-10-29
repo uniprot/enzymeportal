@@ -24,7 +24,7 @@ public class EnzymeFields implements Serializable {
     @JsonProperty("description")
     private List<String> description = new ArrayList<>();
     @JsonProperty("UNIPROTKB")
-    private List<String> UNIPROTKB = new ArrayList<>();
+    private List<String> uniprotKB = new ArrayList<>();
     @JsonProperty("protein_name")
     private Set<String> proteinName = new HashSet<>();
     @JsonProperty("common_name")

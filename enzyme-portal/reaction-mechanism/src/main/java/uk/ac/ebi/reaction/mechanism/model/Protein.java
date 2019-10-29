@@ -17,7 +17,7 @@ import java.util.List;
 public class Protein {
 
     @JsonProperty("sequences")
-    private List<Sequence> sequences = new ArrayList<Sequence>();
+    private List<Sequence> sequences = new ArrayList<>();
 
     @JsonProperty("sequences")
     public List<Sequence> getSequences() {

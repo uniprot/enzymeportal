@@ -42,6 +42,10 @@ public class IntenzCallable {
         }
     }
 
+    private IntenzCallable() {
+
+    }
+
     public static class GetIntenzCaller implements Callable<Intenz> {
 
         protected String ecUrl;

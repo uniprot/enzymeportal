@@ -40,7 +40,7 @@ public class RestClientConfig {
                 .errorHandler(errorHandler)
                 .setConnectTimeout(Duration.ofSeconds(30))
                 .setReadTimeout(Duration.ofSeconds(30))
-                .requestFactory(() -> getClientHttpRequestFactory())
+                .requestFactory(this::getClientHttpRequestFactory)
                 .build();
     }
 

@@ -28,7 +28,7 @@ public class MechanismResult {
     @JsonProperty("previous")
     private Object previous;
     @JsonProperty("results")
-    private LinkedList<Result> results = new LinkedList<Result>();
+    private List<Result> results = new LinkedList<>();
 
     @JsonProperty("count")
     public Integer getCount() {
@@ -62,14 +62,11 @@ public class MechanismResult {
 
     @JsonProperty("results")
     public List<Result> getResults() {
-//        if(results == null){
-//            results = new ArrayList<>();
-//        }
         return results;
     }
 
     @JsonProperty("results")
-    public void setResults(LinkedList<Result> results) {
+    public void setResults(List<Result> results) {
         this.results = results;
     }
 }

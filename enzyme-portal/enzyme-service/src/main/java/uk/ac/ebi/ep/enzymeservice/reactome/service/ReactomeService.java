@@ -13,16 +13,8 @@ public interface ReactomeService {
 
     Mono<ReactomeResult> findReactomeResultById(String reactomeId);
 
-    //ResponseEntity<ReactomeResult> findReactomeResultByPathwayId(String pathwayId);
-
-//    PathWay findPathwayById(String pathwayId);
-//
-//    List<PathWay> findPathwaysByIds(List<String> pathwayIds);
-
     Mono<PathWay> findPathwayById(String pathwayId);
 
     Mono<List<PathWay>> findPathwaysByIds(List<String> pathwayIds);
-
-    //Mono<List<PathWay>> findPathwaysByIdsMono(List<String> pathwayIds);
 
 }

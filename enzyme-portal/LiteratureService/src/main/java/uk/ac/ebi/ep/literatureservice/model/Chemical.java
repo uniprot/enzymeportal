@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.literatureservice.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -33,7 +29,7 @@ private String name;
 @JsonProperty("registryNumber")
 private String registryNumber;
 @JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+private final Map<String, Object> additionalProperties = new HashMap<>();
 
 /**
 * 

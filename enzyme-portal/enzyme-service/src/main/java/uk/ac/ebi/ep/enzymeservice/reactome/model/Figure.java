@@ -1,9 +1,4 @@
 package uk.ac.ebi.ep.enzymeservice.reactome.model;
-
-/**
- *
- * @author joseph
- */
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -16,6 +11,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "schemaClass",
     "className"
 })
+/**
+ *
+ * @author joseph
+ */
 public class Figure {
 
     @JsonProperty("dbId")

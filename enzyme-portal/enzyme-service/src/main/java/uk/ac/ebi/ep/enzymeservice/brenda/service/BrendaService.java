@@ -29,6 +29,9 @@ import uk.ac.ebi.ep.enzymeservice.brenda.dto.Temperature;
 public class BrendaService {
 
     private final BrendaProperties brendaProperties;
+    private final String SOAP_URL = "http://soapinterop.org/";
+    private final String EC_NUMBER = ",ecNumber*";
+    private final String ORGANISM = "#organism*";
 
     @Autowired
     public BrendaService(BrendaProperties brendaProperties) {
@@ -79,15 +82,23 @@ public class BrendaService {
 
     //temperature
     private String getTemperatureRange(Call call, String parameters) {
-        call.setOperationName(new QName("http://soapinterop.org/", "getTemperatureRange"));
+        call.setOperationName(new QName(SOAP_URL, "getTemperatureRange"));
         return invokeBrendaSoapService(call, parameters);
+    }
+
+    private String replaceDegree(String data) {
+        return data.replace("&deg;C", "'C");
+    }
+
+    private String replaceAcirc(String data) {
+        return data.replace("&Acirc;", "");
     }
 
     private Stream<Temperature> processTemperature(String data) {
         return Stream.of(data.split("#!"))
-                .map(x -> x.replaceAll("\\*", ""))
-                .map(x -> x.replaceAll("&deg;C", "'C"))
-                .map(x -> x.replaceAll("&Acirc;", ""))
+                .map(x -> x.replace("\\*", ""))
+                .map(this::replaceDegree)
+                .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
                 .map(queryString -> buildTemperature(queryString));
@@ -97,7 +108,7 @@ public class BrendaService {
     public Temperature findTemperatureByEcAndOrganism(String ecNumber, String organism) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber + "#organism*" + organism;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber + ORGANISM + organism;
         String result = getTemperatureRange(brendaConfig.getCall(), parameters);
         return processTemperature(result)
                 .findFirst()
@@ -107,7 +118,7 @@ public class BrendaService {
     public List<Temperature> findTemperatureByEcAndOrganism(String ecNumber, String organism, int limit) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber + "#organism*" + organism;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber + ORGANISM + organism;
         String result = getTemperatureRange(brendaConfig.getCall(), parameters);
         return processTemperature(result)
                 .limit(limit)
@@ -117,7 +128,7 @@ public class BrendaService {
     public List<Temperature> findTemperatureByEc(String ecNumber, int limit) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
         String result = getTemperatureRange(brendaConfig.getCall(), parameters);
         return processTemperature(result)
                 .limit(limit)
@@ -127,23 +138,23 @@ public class BrendaService {
     public Stream<Temperature> findTemperatureByEc(String ecNumber) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
         String result = getTemperatureRange(brendaConfig.getCall(), parameters);
         return processTemperature(result);
     }
 
     //ph
     private String getPhRange(Call call, String parameters) {
-        call.setOperationName(new QName("http://soapinterop.org/", "getPhRange"));
+        call.setOperationName(new QName(SOAP_URL, "getPhRange"));
         return invokeBrendaSoapService(call, parameters);
     }
 
     private Stream<Ph> processPh(String data) {
 
         return Stream.of(data.split("#!"))
-                .map(x -> x.replaceAll("\\*", ""))
-                .map(x -> x.replaceAll("&deg;C", "'C"))
-                .map(x -> x.replaceAll("&Acirc;", ""))
+                .map(x -> x.replace("\\*", ""))
+                .map(this::replaceDegree)
+                .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
                 .map(queryString -> buildPh(queryString));
@@ -153,7 +164,7 @@ public class BrendaService {
     public Ph findPhByEcAndOrganism(String ecNumber, String organism) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber + "#organism*" + organism;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber + ORGANISM + organism;
         String result = getPhRange(brendaConfig.getCall(), parameters);
         return processPh(result)
                 .findFirst()
@@ -163,7 +174,7 @@ public class BrendaService {
     public List<Ph> findPhByEc(String ecNumber, int limit) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
         String result = getPhRange(brendaConfig.getCall(), parameters);
         return processPh(result)
                 .limit(limit)
@@ -173,7 +184,7 @@ public class BrendaService {
     public Stream<Ph> findPhByEc(String ecNumber) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
         String result = getPhRange(brendaConfig.getCall(), parameters);
         return processPh(result);
 
@@ -181,11 +192,11 @@ public class BrendaService {
 
     //brenda
     private String getKinetics(Call call, String parameters) {
-        call.setOperationName(new QName("http://soapinterop.org/", "getKcatKmValue"));
+        call.setOperationName(new QName(SOAP_URL, "getKcatKmValue"));
         String resultString = invokeBrendaSoapService(call, parameters);
 
         if (StringUtils.isEmpty(resultString)) {
-            call.setOperationName(new QName("http://soapinterop.org/", "getKmValue"));
+            call.setOperationName(new QName(SOAP_URL, "getKmValue"));
 
             return invokeBrendaSoapService(call, parameters);
         }
@@ -196,9 +207,9 @@ public class BrendaService {
     private Stream<Brenda> processKinetics(String data) {
 
         return Stream.of(data.split("#!"))
-                .map(x -> x.replaceAll("\\*", ""))
-                .map(x -> x.replaceAll("&deg;C", "'C"))
-                .map(x -> x.replaceAll("&Acirc;", ""))
+                .map(x -> x.replace("\\*", ""))
+                .map(this::replaceDegree)
+                .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
                 .map(queryString -> buildEnzymeInformation(queryString));
@@ -208,7 +219,7 @@ public class BrendaService {
     public Stream<Brenda> findKineticsByEc(String ecNumber) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
 
         String result = getKinetics(brendaConfig.getCall(), parameters);
         return processKinetics(result);
@@ -218,7 +229,7 @@ public class BrendaService {
     public List<Brenda> findKineticsByEc(String ecNumber, int limit) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber;
 
         String result = getKinetics(brendaConfig.getCall(), parameters);
         return processKinetics(result)

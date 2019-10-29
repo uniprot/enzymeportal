@@ -1,15 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.literatureservice.model;
 
-import uk.ac.ebi.ep.literatureservice.model.DbCrossReferenceList;
-import uk.ac.ebi.ep.literatureservice.model.GrantsList;
-import uk.ac.ebi.ep.literatureservice.model.ChemicalList;
-import uk.ac.ebi.ep.literatureservice.model.FullTextUrlList;
-import uk.ac.ebi.ep.literatureservice.model.AuthorList;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -135,7 +126,7 @@ public class Result {
     @JsonProperty("doi")
     private String doi;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *

@@ -36,7 +36,7 @@ public class Mechanism {
     @JsonProperty("components_summary")
     private String componentsSummary;
     @JsonProperty("steps")
-    private List<Step> steps = new ArrayList<Step>();
+    private List<Step> steps = new ArrayList<>();
 
     @JsonProperty("mechanism_id")
     public Integer getMechanismId() {

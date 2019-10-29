@@ -1,13 +1,9 @@
 package uk.ac.ebi.ep.enzymeservice.reactome.model;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-/**
- *
- * @author joseph
- */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "dbId",
@@ -16,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "schemaClass",
     "className"
 })
-
+/**
+ *
+ * @author joseph
+ */
 public class Summation {
 
     @JsonProperty("dbId")

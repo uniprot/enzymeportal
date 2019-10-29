@@ -68,16 +68,4 @@ public class Role {
         this.emo = emo;
     }
 
-//    @JsonProperty("function")
-//    private Function function;
-//
-//    @JsonProperty("function")
-//    public Function getFunction() {
-//        return function;
-//    }
-//
-//    @JsonProperty("function")
-//    public void setFunction(Function function) {
-//        this.function = function;
-//    }
 }

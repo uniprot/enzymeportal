@@ -88,7 +88,6 @@ public class ReactomeServiceTest {
 
         List<String> pathwayIds = Lists.list("R-HSA-4086398", "R-HSA-2514859", "R-HSA-2485179");
 
-        String expResult = "Ca2+ pathway";
         PathWay p = new PathWay();
         p.setId("R-HSA-2514859");
         p.setName("Inactivation, recovery and regulation of the phototransduction cascade");

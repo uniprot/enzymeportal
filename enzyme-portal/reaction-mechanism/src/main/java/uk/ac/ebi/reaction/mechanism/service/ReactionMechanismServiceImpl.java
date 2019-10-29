@@ -5,9 +5,10 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.reaction.mechanism.config.McsaUrl;
+import uk.ac.ebi.reaction.mechanism.config.ReactionMechanismUrl;
 import uk.ac.ebi.reaction.mechanism.model.Mechanism;
 import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
+import uk.ac.ebi.reaction.mechanism.model.Reaction;
 import uk.ac.ebi.reaction.mechanism.model.Result;
 
 /**
@@ -17,11 +18,11 @@ import uk.ac.ebi.reaction.mechanism.model.Result;
 @Slf4j
 public class ReactionMechanismServiceImpl implements ReactionMechanismService {
 
-    private final McsaUrl mcsaUrl;
+    private final ReactionMechanismUrl mcsaUrl;
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ReactionMechanismServiceImpl(McsaUrl mcsaUrl, RestTemplate restTemplate) {
+    public ReactionMechanismServiceImpl(ReactionMechanismUrl mcsaUrl, RestTemplate restTemplate) {
         this.mcsaUrl = mcsaUrl;
         this.restTemplate = restTemplate;
     }
@@ -49,8 +50,8 @@ public class ReactionMechanismServiceImpl implements ReactionMechanismService {
         return findMechanismResultByEc(ec)
                 .getResults()
                 .stream()
-                .map(r -> r.getReaction())
-                .map(m -> m.getMechanisms())
+                .map(Result::getReaction)
+                .map(Reaction::getMechanisms)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
@@ -62,8 +63,8 @@ public class ReactionMechanismServiceImpl implements ReactionMechanismService {
         return findMechanismResultByAccession(accession)
                 .getResults()
                 .stream()
-                .map(r -> r.getReaction())
-                .map(m -> m.getMechanisms())
+                .map(Result::getReaction)
+                .map(Reaction::getMechanisms)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }

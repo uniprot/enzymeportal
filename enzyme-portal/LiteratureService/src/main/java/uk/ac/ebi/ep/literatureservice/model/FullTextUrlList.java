@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.literatureservice.model;
-
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -23,43 +17,41 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"fullTextUrl"
+    "fullTextUrl"
 })
 public class FullTextUrlList {
 
-@JsonProperty("fullTextUrl")
-private List<FullTextUrl> fullTextUrl = new ArrayList<>();
-@JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonProperty("fullTextUrl")
+    private List<FullTextUrl> fullTextUrl = new ArrayList<>();
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The fullTextUrl
-*/
-@JsonProperty("fullTextUrl")
-public List<FullTextUrl> getFullTextUrl() {
-return fullTextUrl;
-}
+    /**
+     *
+     * @return The fullTextUrl
+     */
+    @JsonProperty("fullTextUrl")
+    public List<FullTextUrl> getFullTextUrl() {
+        return fullTextUrl;
+    }
 
-/**
-* 
-* @param fullTextUrl
-* The fullTextUrl
-*/
-@JsonProperty("fullTextUrl")
-public void setFullTextUrl(List<FullTextUrl> fullTextUrl) {
-this.fullTextUrl = fullTextUrl;
-}
+    /**
+     *
+     * @param fullTextUrl The fullTextUrl
+     */
+    @JsonProperty("fullTextUrl")
+    public void setFullTextUrl(List<FullTextUrl> fullTextUrl) {
+        this.fullTextUrl = fullTextUrl;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

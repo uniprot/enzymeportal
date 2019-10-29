@@ -74,8 +74,6 @@ public class ProteinGroupEntry implements ProteinView {
                     .orElse(new RelSpecies()).getCommonName();
         }
         return fields.getPrimaryOrganism().stream().limit(1).findFirst().orElse("");
-        // .orElse(getRelatedSpecies().stream().limit(1).findFirst()
-        //.orElse(new RelSpecies()).getCommonName());
 
     }
 
@@ -142,7 +140,6 @@ public class ProteinGroupEntry implements ProteinView {
     }
 
     private List<RelSpecies> buildRelSpecies() {
-        // Set<RelSpecies> specieList = new LinkedHashSet<>();
         // List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
 
         List<RelSpecies> species = fields.getRelatedSpecies()

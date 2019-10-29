@@ -41,7 +41,7 @@ class IntenzServiceImpl implements IntenzService {
         List<Intenz> intenzList = getIntenz(ecList);
 
         List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<>();
-        if (intenzList.size() > 0) {
+        if (!intenzList.isEmpty()) {
 
             intenzList.forEach(intenz -> processEnzymeHierarchy(intenz, enzymeHierarchies));
 

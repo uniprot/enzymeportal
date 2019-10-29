@@ -19,19 +19,18 @@ import uk.ac.ebi.reaction.mechanism.service.ReactionMechanismServiceImpl;
 @PropertySource({"classpath:mcsa.urlConfig"})
 public class McsaConfig {
 
-    @Autowired
-    private Environment env;
-
     @Bean
-    public McsaUrl mcsaUrl() {
-        McsaUrl url = new McsaUrl();
+    @Autowired
+    public ReactionMechanismUrl reactionMechanismUrl(Environment env) {
+        ReactionMechanismUrl url = new ReactionMechanismUrl();
         url.setMcsaUrl(env.getProperty("mcsa.url"));
         return url;
 
     }
+
     @Bean
-    public ReactionMechanismService reactionMechanismService(McsaUrl mcsaUrl, RestTemplate restTemplate){
-        return new ReactionMechanismServiceImpl(mcsaUrl, restTemplate);
+    public ReactionMechanismService reactionMechanismService(ReactionMechanismUrl reactionMechanismUrl, RestTemplate restTemplate) {
+        return new ReactionMechanismServiceImpl(reactionMechanismUrl, restTemplate);
     }
 
 }

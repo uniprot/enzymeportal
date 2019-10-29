@@ -20,7 +20,7 @@ public class Fields {
     @JsonProperty("scientific_name")
     private List<String> scientificName;
     @JsonProperty("UNIPROTKB")
-    private List<String> UNIPROTKB;
+    private List<String> uniprotKB;
     @JsonProperty("primary_accession")
     private List<String> primaryAccession;
     @JsonProperty("primary_organism")
@@ -143,20 +143,20 @@ public class Fields {
      * @return The uniprot accession
      */
     @JsonProperty("UNIPROTKB")
-    public List<String> getUNIPROTKB() {
-        if (UNIPROTKB == null) {
-            UNIPROTKB = new ArrayList<>();
+    public List<String> getUniprotKB() {
+        if (uniprotKB == null) {
+            uniprotKB = new ArrayList<>();
         }
-        return UNIPROTKB;
+        return uniprotKB;
     }
 
     /**
      *
-     * @param UNIPROTKB The uniprot accession
+     * @param uniprotKB The uniprot accession
      */
     @JsonProperty("UNIPROTKB")
-    public void setUNIPROTKB(List<String> UNIPROTKB) {
-        this.UNIPROTKB = UNIPROTKB;
+    public void setUniprotKB(List<String> uniprotKB) {
+        this.uniprotKB = uniprotKB;
     }
 
     @JsonProperty("primary_accession")
