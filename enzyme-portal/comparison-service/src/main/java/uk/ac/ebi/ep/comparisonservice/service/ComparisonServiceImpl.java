@@ -165,7 +165,7 @@ class ComparisonServiceImpl implements ComparisonService {
                     .stream()
                     .map(entry -> sortSpecies(entry.getSpecies(), entry, priorityMapper, customKey, key))
                     .map(Map::entrySet)
-                    .flatMap(s -> s.stream())
+                    .flatMap(Set::stream)
                     .map(m -> buildEnzymeAccessionFromProteinView(m.getValue(), relatedspecies))
                     .flatMap(Set::stream)
                     .distinct()

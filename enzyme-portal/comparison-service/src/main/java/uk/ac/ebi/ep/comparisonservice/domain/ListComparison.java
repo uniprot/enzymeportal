@@ -22,6 +22,8 @@ import uk.ac.ebi.ep.enzymeservice.reactome.view.PathWay;
  */
 public class ListComparison extends AbstractComparison<List<?>> {
 
+    private static final String DIFF = "diff-";
+
     public ListComparison(final List<?> l1, final List<?> l2) {
         compared = new List<?>[]{l1, l2};
         init(l1, l2);
@@ -49,17 +51,17 @@ public class ListComparison extends AbstractComparison<List<?>> {
         final int min = Math.min(onlyL1.size(), onlyL2.size());
         int i = 0;
         for (; i < min; i++) {
-            subComparisons.put("diff-" + i,
+            subComparisons.put(DIFF + i,
                     getItemComparison(onlyL1.get(i), onlyL2.get(i)));
         }
         if (onlyL1.size() > onlyL2.size()) {
             for (; i < onlyL1.size(); i++) {
-                subComparisons.put("diff-" + i,
+                subComparisons.put(DIFF + i,
                         getItemComparison(onlyL1.get(i), null));
             }
         } else if (onlyL1.size() < onlyL2.size()) {
             for (; i < onlyL2.size(); i++) {
-                subComparisons.put("diff-" + i,
+                subComparisons.put(DIFF + i,
                         getItemComparison(null, onlyL2.get(i)));
             }
         }

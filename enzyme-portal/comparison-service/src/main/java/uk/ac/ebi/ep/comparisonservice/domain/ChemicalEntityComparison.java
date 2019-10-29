@@ -4,7 +4,7 @@ import uk.ac.ebi.ep.comparisonservice.model.Molecule;
 
 /**
  * Comparison for chemical entities related to an enzyme. This includes
- * activators, inhibitors, cofactors, drugs and bioactive ligands 
+ * activators, inhibitors, cofactors, drugs and bioactive ligands
  *
  * @author Joseph
  * @since 1.1.0
@@ -19,6 +19,12 @@ public class ChemicalEntityComparison
 
     @Override
     protected void getSubComparisons(Molecule ce1, Molecule ce2) {
+        activators(ce1, ce2);
+        inhibitors(ce1, ce2);
+        cofactors(ce1, ce2);
+    }
+
+    private void activators(Molecule ce1, Molecule ce2) {
         if (ce1.getActivators() != null || ce2.getActivators() != null) {
             subComparisons.put("Activators", new ListComparison(
                     ce1.getActivators() == null
@@ -26,6 +32,9 @@ public class ChemicalEntityComparison
                     ce2.getActivators() == null
                     ? null : ce2.getActivators()));
         }
+    }
+
+    private void inhibitors(Molecule ce1, Molecule ce2) {
         if (ce1.getInhibitors() != null || ce2.getInhibitors() != null) {
             subComparisons.put("Inhibitors", new ListComparison(
                     ce1.getInhibitors() == null
@@ -33,6 +42,9 @@ public class ChemicalEntityComparison
                     ce2.getInhibitors() == null
                     ? null : ce2.getInhibitors()));
         }
+    }
+
+    private void cofactors(Molecule ce1, Molecule ce2) {
         if (ce1.getCofactors() != null || ce2.getCofactors() != null) {
             subComparisons.put("Cofactors", new ListComparison(
                     ce1.getCofactors() == null
