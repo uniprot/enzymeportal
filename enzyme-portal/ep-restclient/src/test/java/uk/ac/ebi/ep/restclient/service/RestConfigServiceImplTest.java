@@ -11,8 +11,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.ac.ebi.ep.restclient.EpRestclientApplicationTests;
 import uk.ac.ebi.ep.restclient.config.EnzymePortalRestTemplateCustomizer;
+import uk.ac.ebi.ep.restclient.config.RestClientProperties;
 import uk.ac.ebi.ep.restclient.config.RestErrorHandler;
-
 
 /**
  *
@@ -30,6 +30,9 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
     @Autowired
     private RestErrorHandler restErrorHandler;
 
+    @Autowired
+    private RestClientProperties restClientProperties;
+
     @Test
     public void injectedComponentsAreNotNull() {
         log.info("injectedComponentsAreNotNull");
@@ -37,6 +40,7 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
         assertThat(restConfigService).isNotNull();
         assertThat(enzymePortalRestTemplateCustomizer).isNotNull();
         assertThat(restErrorHandler).isNotNull();
+        assertThat(restClientProperties).isNotNull();
     }
 
     /**
@@ -52,6 +56,15 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
     public void testGetRestTemplate() {
         log.info("testGetRestTemplate");
         assertThat(restConfigService.getRestTemplate()).isNotNull();
+    }
+
+    @Test
+    public void testGetRestClientPropertiesFields() {
+        log.info("testGetRestClientPropertiesFields");
+        assertThat(restClientProperties.getProxyHost()).isNotNull();
+        assertThat(restClientProperties.getProxyPort()).isNotNull();
+        assertThat(restClientProperties.isUseProxy()).isNotNull();
+
     }
 
     /**
