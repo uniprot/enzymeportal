@@ -3,14 +3,13 @@ package uk.ac.ebi.ep.pdbeadapter.molecule;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import javax.annotation.Generated;
+
 
 /**
  *
  * @author joseph
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
     "residue_number"
 })
