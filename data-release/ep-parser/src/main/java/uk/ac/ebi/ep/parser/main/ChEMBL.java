@@ -39,7 +39,8 @@ public class ChEMBL {
             context.register(ProdDataConfig.class);
             context.register(DevDataConfig.class);
             context.register(GlobalConfig.class);
-            context.scan("uk.ac.ebi.ep.parser.config");
+            //context.scan("uk.ac.ebi.ep.parser.config");
+             context.scan("uk.ac.ebi.ep.parser.config", "uk.ac.ebi.ep.metaboliteService");
             context.refresh();
 
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
