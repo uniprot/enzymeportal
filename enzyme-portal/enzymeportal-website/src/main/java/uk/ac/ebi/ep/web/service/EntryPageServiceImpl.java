@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.enzymeservice.intenz.dto.EcClass;
 import uk.ac.ebi.ep.enzymeservice.intenz.dto.EnzymeHierarchy;
 import uk.ac.ebi.ep.enzymeservice.intenz.service.IntenzService;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
-import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
 import uk.ac.ebi.ep.web.model.EnzymeEntryPage;
 import uk.ac.ebi.ep.web.model.EnzymeModel;
 import uk.ac.ebi.reaction.mechanism.model.MechanismResult;

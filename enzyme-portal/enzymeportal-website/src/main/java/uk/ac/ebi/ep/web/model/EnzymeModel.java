@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.ac.ebi.ep.dataservice.common.ProteinModel;
-import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
 import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 
 /**

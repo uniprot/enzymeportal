@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>LiteratureService</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
 
     
@@ -11,7 +11,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.9-SNAPSHOT</version>
+        <version>1.1.0</version>
     </parent>
     
     <properties>
@@ -26,26 +26,13 @@
     <name>LiteratureService</name>
     <description>Rest client for the Europe PMC service for the enzyme portal.</description>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     
     <dependencies>
          
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-restclient</artifactId>
-            <version>0.0.1-SNAPSHOT</version> 
+            <version>0.0.1</version> 
         </dependency>
         
         <dependency>
@@ -161,8 +148,74 @@
         </dependency> 
         
     </dependencies> 
+    
+        <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.7.0.174</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.4</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-    
-    
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+                <repository>
+            <id>codelds</id>
+            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+        </repository>
+    </repositories>
+ 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
     
 </project>

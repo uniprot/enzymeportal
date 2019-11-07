@@ -23,6 +23,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        
+        <ebi.maven.repo.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
+        </ebi.maven.repo.deploy.url>
+        <ebi.maven.repo.snapshots.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+        </ebi.maven.repo.snapshots.deploy.url>
     </properties>
 
     <dependencies>
@@ -171,7 +178,34 @@
             </plugin>
             
         </plugins>
+        <extensions>  
+            <extension>  
+                <groupId>org.apache.maven.wagon</groupId>  
+                <artifactId>wagon-ssh</artifactId>  
+                <version>3.3.3</version>  
+            </extension>  
+        </extensions>
     </build>
+    <distributionManagement>
+       
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Maven Repository</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        
+       
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Maven Snapshots Repository</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>github</id>
+            <url>http://ebi-cheminf.github.com/enzymeportal/</url>
+        </site>
 
+    </distributionManagement>
 
 </project>

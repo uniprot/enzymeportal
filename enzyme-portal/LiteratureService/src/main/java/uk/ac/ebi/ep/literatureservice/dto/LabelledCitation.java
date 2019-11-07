@@ -1,6 +1,8 @@
-package uk.ac.ebi.ep.literatureservice.transferObjects;
+
+package uk.ac.ebi.ep.literatureservice.dto;
 
 import java.util.EnumSet;
+import java.util.Set;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 
 /**
@@ -10,14 +12,14 @@ import uk.ac.ebi.ep.literatureservice.model.Result;
 public class LabelledCitation implements Comparable<LabelledCitation> {
 
     private final Result citation;
-    private final EnumSet<CitationLabel> labels;
+    private final Set<CitationLabel> labels;
 
     public LabelledCitation(Result citation, CitationLabel label) {
         this.citation = citation;
-        this.labels = EnumSet.of(label);
+        this.labels =  EnumSet.of(label);
     }
 
-    public LabelledCitation(Result citation, EnumSet<CitationLabel> labels) {
+    public LabelledCitation(Result citation, Set<CitationLabel> labels) {
         this.citation = citation;
         this.labels = labels;
     }
@@ -26,7 +28,7 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         return citation;
     }
 
-    public EnumSet<CitationLabel> getLabels() {
+    public Set<CitationLabel> getLabels() {
         return labels;
     }
 
@@ -34,7 +36,7 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         this.labels.add(label);
     }
 
-    public void addLabels(EnumSet<CitationLabel> labels) {
+    public void addLabels(Set<CitationLabel> labels) {
         this.labels.addAll(labels);
     }
 
@@ -56,13 +58,14 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         LabelledCitation other = (LabelledCitation) o;
         String tcei = this.citation.getId();
         String ocei = other.citation.getId();
-        if (tcei == null ^ ocei == null) {
-            return false;
-        }
+
         if (tcei != null && ocei != null) {
             String tcds = this.citation.getSource();
             String ocds = other.citation.getSource();
             return tcei.equals(ocei) && tcds.equals(ocds);
+        }
+        if (tcei == null ^ ocei == null) {
+            return false;
         }
         return this.citation.getTitle().equals(other.citation.getTitle());
     }
@@ -113,7 +116,7 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         } else if (other.citation.getDateOfCreation() == null) {
             return -1;
         }
-        return -this.citation.getDateOfCreation().compareTo(other.citation.getDateOfCreation());
+        return -(this.citation.getDateOfCreation().compareTo(other.citation.getDateOfCreation()));
     }
 
 }

@@ -14,7 +14,7 @@ import uk.ac.ebi.ep.dataservice.dto.CompoundView;
 import uk.ac.ebi.ep.dataservice.dto.DiseaseView;
 import uk.ac.ebi.ep.dataservice.dto.EnzymeReactionView;
 import uk.ac.ebi.ep.dataservice.dto.PdbView;
-import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
 import uk.ac.ebi.ep.web.EnzymeportalWebsiteApplicationTests;
 import uk.ac.ebi.ep.web.model.EnzymeEntryPage;
 import uk.ac.ebi.ep.web.model.EnzymeModel;

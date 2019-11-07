@@ -19,6 +19,13 @@
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
         <lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
+        
+        <ebi.maven.repo.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
+        </ebi.maven.repo.deploy.url>
+        <ebi.maven.repo.snapshots.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+        </ebi.maven.repo.snapshots.deploy.url>
     </properties>
 
     <dependencies>
@@ -225,6 +232,13 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>  
+            <extension>  
+                <groupId>org.apache.maven.wagon</groupId>  
+                <artifactId>wagon-ssh</artifactId>  
+                <version>3.3.3</version>  
+            </extension>  
+        </extensions>
     </build>
     <repositories>
         <repository>
@@ -233,5 +247,26 @@
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
         </repository>
     </repositories>
+    <distributionManagement>
+       
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Maven Repository</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        
+       
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Maven Snapshots Repository</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>github</id>
+            <url>http://ebi-cheminf.github.com/enzymeportal/</url>
+        </site>
+
+    </distributionManagement>
 
 </project>

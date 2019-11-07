@@ -14,9 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.literatureservice.config.PmcConfig;
+import uk.ac.ebi.ep.literatureservice.dto.CitationLabel;
+import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
-import uk.ac.ebi.ep.literatureservice.transferObjects.CitationLabel;
-import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.model.Result;
 
 /**
  *
@@ -24,13 +25,13 @@ import uk.ac.ebi.ep.literatureservice.transferObjects.LabelledCitation;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PmcConfig.class})
-public class LiteratureServiceIT {
+public class LiteratureServiceTest {
 
     @Autowired
     private LiteratureService literatureService;
 
     /**
-     * Test of getCitationsByAccession method, of class LiteratureService.
+     * Test of getCitationsByAccession method, of class LiteratureServiceTest.
      */
     @Test
     public void testGetCitationsByAccession() {
@@ -70,7 +71,7 @@ public class LiteratureServiceIT {
     }
 
     /**
-     * Test of getCitationsBySearchTerm method, of class LiteratureService.
+     * Test of getCitationsBySearchTerm method, of class LiteratureServiceTest.
      */
     @Test
     public void testGetCitationsBySearchTerm() {
@@ -83,6 +84,12 @@ public class LiteratureServiceIT {
         assertNotNull(result);
         assertThat(result.getResultList().getResult(), hasSize(greaterThan(1)));
         assertThat(result.getResultList().getResult(), hasSize(greaterThanOrEqualTo(estimatedResultSize)));
+
+        Result r = result.getResultList().getResult().stream().findFirst().orElse(new Result());
+        LabelledCitation citation = new LabelledCitation(r, CitationLabel.ENZYME);
+        assertNotNull(citation.getCitation());
+        assertThat(citation.getLabels(), hasSize(1));
+        citation.getLabels().forEach(s -> System.out.println(" dat " + s.getDisplayText()));
     }
 
 }

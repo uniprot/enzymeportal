@@ -23,7 +23,7 @@ import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PmcConfig.class})
-public class PmcRestServiceIT {
+public class PmcRestServiceTest {
 
     @Autowired
     private PmcRestService pmcRestService;

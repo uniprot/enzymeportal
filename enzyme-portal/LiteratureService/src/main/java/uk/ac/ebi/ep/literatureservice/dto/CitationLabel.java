@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.literatureservice.transferObjects;
+package uk.ac.ebi.ep.literatureservice.dto;
 
 /**
  *

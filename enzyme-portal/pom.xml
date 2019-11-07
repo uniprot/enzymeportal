@@ -7,7 +7,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.1.0</version>
     <name>Enzyme Portal</name>
     
     <description>
@@ -60,10 +60,10 @@
         <github.global.server>github</github.global.server>
         <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
         <ebi.maven.repo.deploy.url>
-            scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
         </ebi.maven.repo.deploy.url>
         <ebi.maven.repo.snapshots.deploy.url>
-            scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
         </ebi.maven.repo.snapshots.deploy.url>
         <biobabel.maven.repo.url>
             http://www.ebi.ac.uk/~biobabel/maven2_repo
@@ -194,7 +194,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -229,6 +229,13 @@
 
 
         </plugins>
+        <extensions>  
+            <extension>  
+                <groupId>org.apache.maven.wagon</groupId>  
+                <artifactId>wagon-ssh</artifactId>  
+                <version>3.3.3</version>  
+            </extension>  
+        </extensions>
     </build>
     
     <dependencyManagement>
@@ -247,7 +254,7 @@
     <modules>
 
         <module>ep-restclient</module>
-        <module>LiteratureService</module>
+                <module>LiteratureService</module>
 
         <module>reaction-mechanism</module>
         <module>data-service</module>
