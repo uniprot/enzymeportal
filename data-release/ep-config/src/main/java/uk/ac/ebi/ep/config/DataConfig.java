@@ -46,20 +46,6 @@ public class DataConfig {
         properties.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
         properties.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
 
-//        properties.setProperty("hibernate.cache.use_second_level_cache", "false");
-//        properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
-//        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
-//        properties.setProperty("hibernate.max_fetch_depth", "1");
-//        properties.setProperty("hibernate.default_batch_fetch_size", "30");
-
-
-//        properties.setProperty("hibernate.generate_statistics", "false");
-//        properties.setProperty("hibernate.jdbc.batch_size", "100");
-//
-//         properties.put("hibernate.order_inserts", "true");
-//        properties.put("hibernate.order_updates", "true");
-//        properties.put("hibernate.batch_versioned_data", "true");
-
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setShowSql(Boolean.FALSE);
         vendor.setDatabase(Database.ORACLE);
