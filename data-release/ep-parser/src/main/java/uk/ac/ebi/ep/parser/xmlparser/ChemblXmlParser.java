@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.parser.xmlparser;
 
 import java.io.File;
@@ -17,7 +12,7 @@ import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.parser.model.Targets;
 
@@ -26,9 +21,11 @@ import uk.ac.ebi.ep.parser.model.Targets;
  * @author joseph
  */
 @Service
+@Slf4j
 public class ChemblXmlParser {
 
-    private final Logger LOGGER = org.apache.log4j.Logger.getLogger(ChemblXmlParser.class);
+    private static final String ACCESSION = "accession";
+    private static final String COMPONENT_TYPE = "component_type";
     private final String targetXml;
 
     public ChemblXmlParser(String targetXml) {
@@ -49,13 +46,66 @@ public class ChemblXmlParser {
         return database;
     }
 
+    public Set<Targets> parseChemblTargets() throws FileNotFoundException {
+
+        Optional<Database> database = Optional.empty();
+        try {
+            database = Optional.ofNullable(setupParser());
+        } catch (JAXBException ex) {
+            log.error(ex.getMessage(), ex);
+        }
+
+        Set<Targets> targets = new HashSet<>();
+        if (database.isPresent()) {
+
+            Entries entries = database.get().getEntries();
+
+            List< Entry> entry = entries.getEntry();
+
+            entry.forEach(e -> processTargets(e, targets));
+            return targets;
+        }
+
+        return targets;
+    }
+
+    private void processTargets(Entry e, Set<Targets> targets) {
+        Targets target = new Targets();
+
+        e.getCross_references()
+                .stream()
+                .forEach(cr -> cr.getRef()
+                .stream()
+                .forEach(ref -> target.getChemblId().add(ref.getDbKey())));
+
+        e.getAdditional_fields()
+                .stream()
+                .forEach(af -> af.getField()
+                .stream()
+                .forEach(f -> processTargetFields(f, target)));
+
+        targets.add(target);
+    }
+
+    private void processTargetFields(Field f, Targets target) {
+        if (f.getName().equalsIgnoreCase(ACCESSION)) {
+
+            target.setAccession(f.getValue());
+        }
+        if (f.getName().equalsIgnoreCase(COMPONENT_TYPE)) {
+
+            target.setComponentType(f.getValue());
+        }
+    }
+
+    @Deprecated
     public Map<String, List<String>> parseChemblTarget() throws FileNotFoundException {
 
         Optional<Database> database = Optional.empty();
         try {
             database = Optional.ofNullable(setupParser());
         } catch (JAXBException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         }
 
         Map<String, List<String>> accessionTargetMapping = new LinkedHashMap<>();
@@ -95,56 +145,5 @@ public class ChemblXmlParser {
         }
 
         return accessionTargetMapping;
-    }
-
-    public Set<Targets> parseChemblTargets() throws FileNotFoundException {
-
-        Optional<Database> database = Optional.empty();
-        try {
-            database = Optional.ofNullable(setupParser());
-        } catch (JAXBException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-
-        Set<Targets> targets = new HashSet<>();
-        if (database.isPresent()) {
-
-            Entries entries = database.get().getEntries();
-
-            List< Entry> entry = entries.getEntry();
-
-            for (Entry e : entry) {
-
-                Targets target = new Targets();
-
-                e.getCross_references()
-                        .stream()
-                        .forEach(cr
-                                -> cr.getRef()
-                                .stream()
-                                .forEach(ref -> target.getChemblId().add(ref.getDbKey())));
-
-                for (AdditionalFields ad : e.getAdditional_fields()) {
-
-                    for (Field f : ad.getField()) {
-
-                        if ("accession".equalsIgnoreCase(f.getName())) {
-
-                            target.setAccession(f.getValue());
-                        }
-                        if ("component_type".equalsIgnoreCase(f.getName())) {
-
-                            target.setComponentType(f.getValue());
-                        }
-                    }
-
-                }
-
-                targets.add(target);
-            }
-            return targets;
-        }
-
-        return targets;
     }
 }
