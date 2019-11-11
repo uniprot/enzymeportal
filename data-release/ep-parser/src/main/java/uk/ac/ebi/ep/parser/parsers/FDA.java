@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
@@ -35,26 +34,25 @@ public class FDA extends SmallMolecules {
     public void loadChEMBL() {
 
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
-          //.stream().limit(100).collect(Collectors.toList());
+                //.stream().limit(100).collect(Collectors.toList());
 
         log.info(" Number of unique targeted proteins found for FDA : " + uniqueTargetedproteins.size());
 
-        AtomicInteger count = new AtomicInteger(1);
+       
         uniqueTargetedproteins
-                .stream()
-                .map(protein -> {
-                    chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein);
-                    return protein;
-                }).forEach((x) -> log.info(x + " Num processed FDA : " + count.getAndIncrement()));
+                .forEach(protein -> chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein));
 
-//        uniqueTargetedproteins
-//                .forEach(protein -> chemblService.getMoleculesByCuratedMechanism(findProteinTargetets(protein), protein));
-        loadToDatabase();
+        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds()
+                .stream()
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        
+        loadToDatabase(compounds);
 
     }
 
-    private void loadToDatabase() {
-        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds().stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
+    private void loadToDatabase(List<TempCompoundCompare> compounds) {
 
         //load into database
         if (compounds != null) {
@@ -63,7 +61,7 @@ public class FDA extends SmallMolecules {
             //UPDATE DB
 
             compounds.stream()
-                    .filter(compound -> compound != null)
+                    .filter(Objects::nonNull)
                     .forEach(compound -> parserService.addTempCompound(compound.getPrimaryTargetId(), compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote()));
 
             log.info("Finished loading temporal compound table ::::::  ");

@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.parser.parsers;
 
-import uk.ac.ebi.ep.parser.model.LiteCompound;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +13,7 @@ import uk.ac.ebi.ep.model.ChebiCompound;
 import uk.ac.ebi.ep.model.dao.Compound;
 import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.parser.model.LiteCompound;
 
 /**
  *
@@ -24,11 +24,11 @@ public class CofactorsFtpFiles extends GenericCompound {
 
     private List<LiteCompound> compounds = null;
 
-    
-       public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
+    public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
         super(enzymePortalParserService);
         compounds = new ArrayList<>();
     }
+
     private void loadCompound(LiteCompound compound) {
         enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
@@ -87,7 +87,7 @@ public class CofactorsFtpFiles extends GenericCompound {
     private void parseCofactorText(List<Summary> enzymeSummary) {
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
-         log.info("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
+        log.info("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
         compounds
                 .stream()

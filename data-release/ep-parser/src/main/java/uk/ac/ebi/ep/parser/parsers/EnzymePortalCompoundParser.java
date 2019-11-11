@@ -48,11 +48,11 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    @Deprecated
-    public void loadUniqueCofactors() {
-        GenericCompound cofactor = new UniqueCofactor(parserService);
-        cofactor.loadCompoundToDatabase();
-    }
+//    @Deprecated
+//    public void loadUniqueCofactors() {
+//        GenericCompound cofactor = new UniqueCofactor(parserService);
+//        cofactor.loadCompoundToDatabase();
+//    }
 
     @Transactional
     public void loadCofactorsFromFTPFiles() {
@@ -64,15 +64,16 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    @Transactional
-    public void loadReactants() {
-
-        // ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
-        //compoundParser.loadReactants();
-        GenericCompound reactant = new CompoundReactantParser(parserService);
-        reactant.loadCompoundToDatabase();
-
-    }
+//    @Transactional
+//    @Deprecated
+//    public void loadReactants() {
+//
+//        // ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
+//        //compoundParser.loadReactants();
+//        GenericCompound reactant = new CompoundReactantParser(parserService);
+//        reactant.loadCompoundToDatabase();
+//
+//    }
 
     @Transactional
     @Modifying

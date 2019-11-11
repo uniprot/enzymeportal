@@ -125,12 +125,12 @@ public class ChebiCofactors {
             synonyms = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
         }
 
-        log.info("writing cofactor " + compound.getCompoundId() + " count " + count.getAndIncrement());
+        log.debug("writing cofactor " + compound.getCompoundId() + " count " + count.getAndIncrement());
 
         enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), synonyms, compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
 
         //load Web enzyme_portal compound table
-        //enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+        enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
 
     private void computeSpecialCases(String text, Summary summary, String note) {

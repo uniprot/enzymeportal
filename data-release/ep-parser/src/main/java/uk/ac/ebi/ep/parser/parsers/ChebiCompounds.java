@@ -54,7 +54,7 @@ public class ChebiCompounds extends ChebiCofactors {
     }
 
     private void processChebiIdInReactionInfo(String chebi, AtomicInteger counter) {
-        log.info("Processing CHEBI ID : " + chebi + " Num processed so far : " + counter.getAndIncrement());
+        log.debug("Processing CHEBI ID : " + chebi + " Num processed so far : " + counter.getAndIncrement());
 
         ChebiCompound chebiCompound = findChebiCompoundById(chebi);
 
