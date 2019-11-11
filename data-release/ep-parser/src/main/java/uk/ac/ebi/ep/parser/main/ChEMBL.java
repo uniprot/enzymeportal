@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.parser.main;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +46,7 @@ public class ChEMBL {
             //activators & inhibitors
             compoundService.loadChemblFDA();
             log.info("Done loading FDA approved drugs to the database");
-            //log.info("Done running FDA and now about to process more inhibitors by running processChemblTargetsAndUpdateDatabase()");
-            //more activators & inhibitors
-            //compoundService.processChemblTargetsAndUpdateDatabase();
+
 
         }
 

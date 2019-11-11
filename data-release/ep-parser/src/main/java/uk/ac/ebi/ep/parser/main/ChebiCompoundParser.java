@@ -32,19 +32,19 @@ public class ChebiCompoundParser {
         context.refresh();
 
         ChebiCompounds chebiCompound = context.getBean(ChebiCompounds.class);
+        log.info("About to process ChEBI data from ReactionInfo Table and load UNIQUE_CHEBI_COMPOUND Table. ");
+        chebiCompound.loadUniqueChebiCompoundsToDatabase();
+        log.info("Done loading UNIQUE_CHEBI_COMPOUND (incl Role Type Metabolite, Reatant ) ");
 
-         chebiCompound.loadUniqueChebiCompoundsToDatabase();
-        log.info("Done loading unique chebi compounds. ");
-
-        log.info("About to load chebi compounds to the database .....");
+        log.info("About to reconcile data from ReactionInfo & UNIQUE_CHEBI_COMPOUND,remove duplicates and load ENZYME_PORTAL_CHEBI_COMPOUND Table .....");
         chebiCompound.loadChebiCompoundsToDatabase();
 
         log.info("Done Loading Chebi compounds to ENZYME_PORTAL_CHEBI_COMPOUND table");
 
-        log.info("About to load metabolites to the database .....");
+        log.info("About to load Unique metabolites to the database .....");
         chebiCompound.loadUniqueMetabolitesToDatabase();
 
-        log.info("Done loading metabolites to the database");
+        log.info("Done loading Unique metabolites to the database");
 
     }
 }

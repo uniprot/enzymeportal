@@ -36,8 +36,8 @@ public class CofactorParserFTP {
         compoundService.loadCofactorsFromFTPFiles();
 
         log.info("done populating compound table with cofactor information... and about to load unique cofactors.");
-        compoundService.loadUniqueCofactors();
-        log.info("Done loading unique cofactors.");
+        //compoundService.loadUniqueCofactors();
+        //log.info("Done loading unique cofactors.");
 
     }
 }

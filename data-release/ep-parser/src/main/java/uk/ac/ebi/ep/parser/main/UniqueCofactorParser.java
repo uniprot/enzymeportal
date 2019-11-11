@@ -10,7 +10,7 @@ import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
 
 /**
- *
+ *NOTE :
  * @author joseph
  */
 @Slf4j
