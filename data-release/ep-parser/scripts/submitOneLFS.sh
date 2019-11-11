@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#use this java setup
+export JAVA_HOME=/nfs/public/rw/webadmin/java/jdks/latest_1.8
+export PATH=$PATH:$JAVA_HOME/bin
+
 # e.g - how to run: sh submitOne.sh uzprel ./cofactor.sh
 # Param:
 # $1: database environment (uzpdev|uzprel)
