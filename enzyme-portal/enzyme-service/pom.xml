@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzyme-service</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>enzyme-service</name>
     <description>Service to retrieve enzyme related data from various resources</description>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-restclient</artifactId>
-            <version>0.0.1-SNAPSHOT</version> 
+            <version>0.0.1</version> 
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

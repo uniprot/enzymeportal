@@ -10,25 +10,32 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>comparison-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>comparison-service</name>
     <description>Service for comparing enzymes</description>
 
     <properties>
         <java.version>1.8</java.version>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
+        
+        <ebi.maven.repo.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
+        </ebi.maven.repo.deploy.url>
+        <ebi.maven.repo.snapshots.deploy.url>
+            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+        </ebi.maven.repo.snapshots.deploy.url>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>data-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-service</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -141,6 +148,40 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>  
+            <extension>  
+                <groupId>org.apache.maven.wagon</groupId>  
+                <artifactId>wagon-ssh</artifactId>  
+                <version>3.3.3</version>  
+            </extension>  
+        </extensions>
     </build>
+    <repositories>
+        <repository>
+            <id>ebi-repo</id>
+            <name>ebi-repo</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+       
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Maven Repository</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        
+       
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Maven Snapshots Repository</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>github</id>
+            <url>http://ebi-cheminf.github.com/enzymeportal/</url>
+        </site>
 
+    </distributionManagement>
 </project>
