@@ -4,7 +4,7 @@
 
 TODAY=$(date +%Y%m%d)
 
-LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/ep/bsub-enzyme-portal-$TODAY.log
+LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/ep/bsub-data-release-build-$TODAY.log
 
 echo
 echo "**************************** W A R N I N G ****************************"

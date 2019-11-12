@@ -29,12 +29,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <fork>true</fork>
-                    <executable>/nfs/public/rw/webadmin/java/jdks/jdk1.8.0_31/bin/javac</executable>
+<!--                    <fork>true</fork>
+                    <executable>/nfs/public/rw/webadmin/java/jdks/jdk1.8.0_31/bin/javac</executable>-->
                 </configuration>
             </plugin>
         </plugins>

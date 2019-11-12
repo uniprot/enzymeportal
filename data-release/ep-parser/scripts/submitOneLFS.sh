@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #use this java setup
-export JAVA_HOME=/nfs/public/rw/webadmin/java/jdks/latest_1.8
-export PATH=$PATH:$JAVA_HOME/bin
-source ~/.bashrc
+#export JAVA_HOME=/nfs/public/rw/webadmin/java/jdks/latest_1.8
+#export PATH=$PATH:$JAVA_HOME/bin
+#source ~/.bashrc
 echo $JAVA_HOME
 echo $MAVEN_HOME
 
@@ -12,7 +12,7 @@ echo $MAVEN_HOME
 # $1: database environment (uzpdev|uzprel)
 # $2 : the script to be submitted to the farm with extension e.g chebi.sh
 TODAY=$(date +%Y%m%d_%H-%M-%S)
-LOG_NAME=$(basename $1 .sh)
+LOG_NAME=$(basename $2 .sh)
 LOG_DIR=/ebi/uniprot/production/enzyme_portal/logs/parser/bsub-$LOG_NAME-$TODAY.log
 
 echo
