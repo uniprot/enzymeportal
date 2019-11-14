@@ -120,15 +120,14 @@ public class ChebiCofactors {
     }
 
     private void loadCompound(LiteCompound compound, AtomicInteger count) {
-        String synonyms = null;
-        if (compound.getCompoundId() != null && compound.getCompoundName() != null) {
-            synonyms = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
-        }
+//        String synonyms = null;
+//        if (compound.getCompoundId() != null && compound.getCompoundName() != null) {
+//            synonyms = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
+//        }
 
         log.debug("writing cofactor " + compound.getCompoundId() + " count " + count.getAndIncrement());
 
-        enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), synonyms, compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-
+        enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
         //load Web enzyme_portal compound table
         enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
@@ -164,15 +163,30 @@ public class ChebiCofactors {
     private void parseCofactorText(List<Summary> enzymeSummary) {
         enzymeSummary.parallelStream().forEach(summary -> processCofactors(summary));
         //save compounds
-        log.info("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
+        log.info("Done parsing regulation data... Number of cofactors per protein found  : " + compounds.size());
 
-        compounds
-                .parallelStream()
-                .filter(compound -> Objects.nonNull(compound))
-                .forEach(compound -> loadCompound(compound, count));
+        List<LiteCompound> data
+                = compounds.stream()
+                        .filter(compound -> Objects.nonNull(compound))
+                        .map(syn -> addChebiSynonym(syn)).collect(Collectors.toList());
+
+        log.info("Done adding Synonyms and about to load " + data.size() + " cofactors");
+        data.parallelStream().forEach(compound -> loadCompound(compound, count));
+//        compounds
+//                .stream()
+//                .filter(compound -> Objects.nonNull(compound))
+//                .map(syn -> addChebiSynonym(syn))
+//                .parallel()
+//                .forEach(compound -> loadCompound(compound, count));
         log.info("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
 
+    }
+
+    private LiteCompound addChebiSynonym(LiteCompound compound) {
+        String synonym = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
+        compound.setSynonym(synonym);
+        return compound;
     }
 
     private void processCofactors(Summary summary) {
