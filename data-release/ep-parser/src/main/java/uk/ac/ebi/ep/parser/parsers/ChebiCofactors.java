@@ -67,8 +67,8 @@ public class ChebiCofactors {
     }
 
     public void loadChebiCofactorToDatabase() {
-        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE)
-                .stream().limit(200).collect(Collectors.toList());
+        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
+               // .stream().limit(200).collect(Collectors.toList());
 
         log.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
@@ -171,7 +171,7 @@ public class ChebiCofactors {
                         .map(syn -> addChebiSynonym(syn)).collect(Collectors.toList());
 
         log.info("Done adding Synonyms and about to load " + data.size() + " cofactors");
-        data.parallelStream().forEach(compound -> loadCompound(compound, count));
+        data.forEach(compound -> loadCompound(compound, count));
 //        compounds
 //                .stream()
 //                .filter(compound -> Objects.nonNull(compound))
