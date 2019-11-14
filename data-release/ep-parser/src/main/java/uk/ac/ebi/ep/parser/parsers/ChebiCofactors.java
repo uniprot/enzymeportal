@@ -67,8 +67,8 @@ public class ChebiCofactors {
     }
 
     public void loadChebiCofactorToDatabase() {
-        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
-                //.stream().limit(100).collect(Collectors.toList());
+        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE)
+                .stream().limit(200).collect(Collectors.toList());
 
         log.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
@@ -161,7 +161,7 @@ public class ChebiCofactors {
     }
 
     private void parseCofactorText(List<Summary> enzymeSummary) {
-        enzymeSummary.parallelStream().forEach(summary -> processCofactors(summary));
+        enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
         log.info("Done parsing regulation data... Number of cofactors per protein found  : " + compounds.size());
 
