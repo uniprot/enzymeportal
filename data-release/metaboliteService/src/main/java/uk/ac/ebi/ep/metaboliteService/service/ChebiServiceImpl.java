@@ -32,11 +32,18 @@ public class ChebiServiceImpl implements ChebiService {
     @Override
     public Entity getCompleteChebiEntityInformation(String chebiId) {
         Entity entity = null;
+        if (chebiWebServiceClient == null) {
+            log.error("chebiWebServiceClient seem unavailable making requesting using ID " + chebiId);
+            return entity;
+        }
+
         try {
+            if (chebiId != null || !StringUtils.isEmpty(chebiId)) {
+                entity = chebiWebServiceClient.getCompleteEntity(chebiId);
+            }
 
-            entity = chebiWebServiceClient.getCompleteEntity(chebiId);
+        } catch (ChebiWebServiceFault_Exception | UnsupportedMediaException | ClientTransportException | IllegalArgumentException ex) {
 
-        } catch (ChebiWebServiceFault_Exception | UnsupportedMediaException | ClientTransportException ex) {
             log.error("ChEBI webservice error for ID " + chebiId + " Reason :: " + ex.getMessage());
         }
         return entity;

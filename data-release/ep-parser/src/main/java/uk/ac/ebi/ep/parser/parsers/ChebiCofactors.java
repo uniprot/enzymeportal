@@ -156,7 +156,6 @@ public class ChebiCofactors {
     }
 
     private void loadCompound(LiteCompound compound) {
-
         enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
 //load Web enzyme_portal compound table
         enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
@@ -192,13 +191,17 @@ public class ChebiCofactors {
     }
 
     private LiteCompound addChebiSynonym(LiteCompound compound) {
+        if (compound.getCompoundId() == null || StringUtils.isEmpty(compound.getCompoundId())) {
+            return compound;
+        }
         String synonym = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
         compound.setSynonym(synonym);
+
         return compound;
     }
 
     private void processCofactors(String cofactorText, String accession, AtomicInteger counter) {
-        log.info("Processing Accession " + accession + " count : " + counter.getAndIncrement());
+        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext "+ cofactorText);
 
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
@@ -218,18 +221,19 @@ public class ChebiCofactors {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
+                
                 log.debug("cofactor name search in CHEBI Compound Table " + cofactorName);
-                Optional<LiteCompound> liteCompound = Optional.ofNullable(findByCompoundName(cofactorName));
+                LiteCompound liteCompound = findByCompoundName(cofactorName);
 
-                if (liteCompound.isPresent()) {
+                if (liteCompound != null) {
 
-                    LiteCompound daoCompound = buildCompoundDao(liteCompound.get(), accession, note);
+                    LiteCompound daoCompound = buildCompoundDao(liteCompound, accession, note);
                     LiteCompound compound = addChebiSynonym(daoCompound);
                     loadCompound(compound);
                     //compounds.add(daoCompound);
 
-                }
-                if (!liteCompound.isPresent()) {
+                } else {
+                    //if (!liteCompound.isPresent()) {
                     computeSpecialCases(cofactorText, accession, note);
                 }
             }
