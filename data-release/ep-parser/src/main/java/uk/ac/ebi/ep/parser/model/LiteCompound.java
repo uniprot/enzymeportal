@@ -97,7 +97,7 @@ public class LiteCompound {
 
     @Override
     public String toString() {
-        return "LiteCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
+        return "LiteCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", synonym=" + synonym + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
 
 }
