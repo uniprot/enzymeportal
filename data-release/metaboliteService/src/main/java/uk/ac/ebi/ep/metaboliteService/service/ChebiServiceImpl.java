@@ -1,7 +1,5 @@
 package uk.ac.ebi.ep.metaboliteService.service;
 
-import com.sun.xml.ws.client.ClientTransportException;
-import com.sun.xml.ws.server.UnsupportedMediaException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 
 /**
@@ -41,8 +38,8 @@ public class ChebiServiceImpl implements ChebiService {
             if (chebiId != null || !StringUtils.isEmpty(chebiId)) {
                 entity = chebiWebServiceClient.getCompleteEntity(chebiId);
             }
-
-        } catch (ChebiWebServiceFault_Exception | UnsupportedMediaException | ClientTransportException | IllegalArgumentException ex) {
+             } catch (Exception ex){
+        //} catch (ChebiWebServiceFault_Exception | UnsupportedMediaException | ClientTransportException | IllegalArgumentException ex) {
 
             log.error("ChEBI webservice error for ID " + chebiId + " Reason :: " + ex.getMessage());
         }
