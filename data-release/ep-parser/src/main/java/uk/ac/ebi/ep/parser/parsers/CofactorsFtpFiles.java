@@ -53,7 +53,7 @@ public class CofactorsFtpFiles extends GenericCompound {
         //public void loadCofactors() {
         List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
 
-        log.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        log.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
     }
@@ -68,7 +68,7 @@ public class CofactorsFtpFiles extends GenericCompound {
 
             if (xref != null) {
 
-                log.info("Special case : xref search in CHEBI " + xref);
+                log.debug("Special case : xref search in CHEBI " + xref);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByChEBIiD(xref));
 
                 if (liteCompound.isPresent()) {
@@ -89,7 +89,7 @@ public class CofactorsFtpFiles extends GenericCompound {
                     compound.setCompoundRole(compoundRole);
                     compound.setNote(note);
                     compounds.add(compound);
-                    log.info("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
+                    log.debug("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
 
                 }
 
@@ -108,7 +108,7 @@ public class CofactorsFtpFiles extends GenericCompound {
                 .stream()
                 .filter(compound -> compound != null)
                 .forEach(compound -> loadCompound(compound));
-        log.warn("-------- Done populating the database with cofactors ---------------");
+        log.info("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
 
     }
@@ -133,7 +133,7 @@ public class CofactorsFtpFiles extends GenericCompound {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
-                log.info("cofactor name search in CHEBI Compound Table " + cofactorName);
+                log.debug("cofactor name search in CHEBI Compound Table " + cofactorName);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByCompoundName(cofactorName));
 
                 if (liteCompound.isPresent()) {
