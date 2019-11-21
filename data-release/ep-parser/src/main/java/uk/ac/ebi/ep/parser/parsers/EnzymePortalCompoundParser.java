@@ -53,7 +53,6 @@ public class EnzymePortalCompoundParser {
 //        GenericCompound cofactor = new UniqueCofactor(parserService);
 //        cofactor.loadCompoundToDatabase();
 //    }
-
     @Transactional
     public void loadCofactorsFromFTPFiles() {
 
@@ -61,6 +60,13 @@ public class EnzymePortalCompoundParser {
         //compoundParser.loadCofactors();
         GenericCompound cofactor = new CofactorsFtpFiles(parserService);
         cofactor.loadCompoundToDatabase();
+
+    }
+
+    @Transactional
+    public void loadUniqueCofactorsToDatabase() {
+        CofactorsFtpFiles cofactor = new CofactorsFtpFiles(parserService);
+        cofactor.loadUniqueCofactorsToDatabase();
 
     }
 
@@ -74,7 +80,6 @@ public class EnzymePortalCompoundParser {
 //        reactant.loadCompoundToDatabase();
 //
 //    }
-
     @Transactional
     @Modifying
     public void loadChemblTargets() {

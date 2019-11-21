@@ -13,4 +13,4 @@ echo "** Note ** LSF logs can be found here $LOG_DIR "
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 
-bsub -R "rusage[mem=16000]" -M 16000 -q production-rh74 -o $LOG_DIR mvn clean install
+bsub -R "rusage[mem=16000]" -M 16000 -q production-rh74 -o $LOG_DIR mvn clean install -DskipTests -rf :ep-config

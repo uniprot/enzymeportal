@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.model.ChebiCompound;
+import uk.ac.ebi.ep.model.dao.CofactorView;
 import uk.ac.ebi.ep.model.dao.Compound;
 import uk.ac.ebi.ep.model.dao.Summary;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
@@ -22,11 +23,25 @@ import uk.ac.ebi.ep.parser.model.LiteCompound;
 @Slf4j
 public class CofactorsFtpFiles extends GenericCompound {
 
+    private static final String COFACTOR_URL = "https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=";
+
     private List<LiteCompound> compounds = null;
 
     public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService) {
         super(enzymePortalParserService);
         compounds = new ArrayList<>();
+    }
+
+    public void loadUniqueCofactorsToDatabase() {
+        List<CofactorView> cofactors = enzymePortalParserService.findCofactors();
+        log.info(cofactors.size() + " cofactors was found and will be loaded to the database.");
+        cofactors.forEach(cofactor -> createCofactor(cofactor));
+        log.info("Done loading unique cofactors to database");
+    }
+
+    private void createCofactor(CofactorView cofactor) {
+        String url = COFACTOR_URL + cofactor.getCompoundId();
+        enzymePortalParserService.createCofactor(cofactor.getCompoundId(), cofactor.getCompoundName(), url);
     }
 
     private void loadCompound(LiteCompound compound) {

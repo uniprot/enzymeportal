@@ -23,13 +23,13 @@ public class CofactorParserFTP {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.getEnvironment().setActiveProfiles(args[0]);
-         //context.getEnvironment().setActiveProfiles("uzprel");
+        //context.getEnvironment().setActiveProfiles("uzprel");
         context.register(DataConfig.class);
         context.register(ProdDataConfig.class);
         context.register(DevDataConfig.class);
         context.register(GlobalConfig.class);
         //context.scan("uk.ac.ebi.ep.parser.config");
-         context.scan("uk.ac.ebi.ep.parser.config", "uk.ac.ebi.ep.metaboliteService");
+        context.scan("uk.ac.ebi.ep.parser.config", "uk.ac.ebi.ep.metaboliteService");
         context.refresh();
 
         EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
@@ -38,6 +38,9 @@ public class CofactorParserFTP {
         log.info("done populating compound table with cofactor information... and about to load unique cofactors.");
         //compoundService.loadUniqueCofactors();
         //log.info("Done loading unique cofactors.");
+
+        compoundService.loadUniqueCofactorsToDatabase();
+        log.info("Done Loading Unique Chebi cofactors to ENZYME_PORTAL database ");
 
     }
 }

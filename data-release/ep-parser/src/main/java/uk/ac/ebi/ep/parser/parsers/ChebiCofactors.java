@@ -156,9 +156,9 @@ public class ChebiCofactors {
     }
 
     private void loadCompound(LiteCompound compound) {
-       // enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-//load Web enzyme_portal compound table
-        enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+        enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+//load Web enzyme_portal compound table (TODO) uncomment if we need to add synonyms to the compound table
+        //enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
 
     private void computeSpecialCases(String text, String accession, String note) {
@@ -201,7 +201,7 @@ public class ChebiCofactors {
     }
 
     private void processCofactors(String cofactorText, String accession, AtomicInteger counter) {
-        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext "+ cofactorText);
+        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
 
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
@@ -221,7 +221,7 @@ public class ChebiCofactors {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
-                
+
                 log.debug("cofactor name search in CHEBI Compound Table " + cofactorName);
                 LiteCompound liteCompound = findByCompoundName(cofactorName);
 
