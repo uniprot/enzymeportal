@@ -156,7 +156,7 @@ public class ChebiCofactors {
     }
 
     private void loadCompound(LiteCompound compound) {
-        enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+       // enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
 //load Web enzyme_portal compound table
         enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
     }
