@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 @Slf4j
 public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<EnzymePortalUniqueEc, Entry> {
 
-    private final AtomicInteger count = new AtomicInteger(1);
+    private final AtomicInteger count = new AtomicInteger(0);
     private final ProteinXmlRepository proteinXmlRepository;
 
     public EnzymeProcessor(ProteinXmlRepository proteinXmlRepository) {
@@ -42,9 +42,9 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
 
-        if (log.isDebugEnabled()) {
+        //if (log.isDebugEnabled()) {
             log.debug("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + enzyme.getEcNumber() + "  entry count : " + count.getAndIncrement());
-        }
+        //}
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
@@ -71,7 +71,9 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     private void addProteinInformation(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByEcNumber(enzyme.getEcNumber())) {
-            protein.parallel().forEach(data -> processUniprotEntry(data, fields, refs));
+            protein
+                    //.parallel()
+                    .forEach(data -> processUniprotEntry(data, fields, refs));
         }
     }
 

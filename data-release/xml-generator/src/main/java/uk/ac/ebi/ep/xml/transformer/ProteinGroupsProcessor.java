@@ -31,7 +31,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
-    private final AtomicInteger count = new AtomicInteger(1);
+    private final AtomicInteger count = new AtomicInteger(0);
 
     private final ProteinXmlRepository proteinXmlRepository;
 
@@ -111,7 +111,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void addProteinInformation(ProteinGroups proteinGroups, Set<Field> fields, Set<Ref> refs, Set<String> relSpecies) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByProteinGroupId(proteinGroups.getProteinGroupId())) {
 
-            protein.parallel()
+            protein
+                    //.parallel()
                     .forEach(data -> processEntries(data, relSpecies, fields, refs));
             addRelatedSpeciesField(relSpecies, fields);
 
