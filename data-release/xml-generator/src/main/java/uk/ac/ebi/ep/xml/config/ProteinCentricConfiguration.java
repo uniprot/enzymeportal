@@ -40,12 +40,12 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     private static final String NATIVE_COUNT_QUERY = "SELECT COUNT(*) FROM PROTEIN_GROUPS";
 
     private static final String ROOT_TAG_NAME = "database";
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EOCUP4'";
     
-    private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E3CHQJ'";
+   // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E3CHQJ'";
 
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
