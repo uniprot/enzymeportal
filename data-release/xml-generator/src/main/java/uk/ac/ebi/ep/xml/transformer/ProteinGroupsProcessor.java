@@ -180,7 +180,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addPrimaryEc(Protein entry, Set<Field> fields) {
-        addField(FieldName.PRIMARY_EC.getName(), entry.getEcNumber(), fields);
+        addField(FieldName.PRIMARY_EC.getName(), "ec;"+entry.getEcNumber(), fields);
 
     }
 
