@@ -43,7 +43,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         CrossReferences cr = new CrossReferences();
 
         //if (log.isDebugEnabled()) {
-            log.debug("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + enzyme.getEcNumber() + "  entry count : " + count.getAndIncrement());
+        log.debug("Processor " + Runtime.getRuntime().availableProcessors() + " current entry : " + enzyme.getEcNumber() + "  entry count : " + count.getAndIncrement());
         //}
         Entry entry = new Entry();
         entry.setId(enzyme.getEcNumber());
@@ -72,7 +72,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     private void addProteinInformation(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByEcNumber(enzyme.getEcNumber())) {
             protein
-                    //.parallel()
+                    .parallel()
                     .forEach(data -> processUniprotEntry(data, fields, refs));
         }
     }
@@ -94,6 +94,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addChebiSynonymField(uniprotEntry, fields);
         addChebiCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
         addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+        addMetaboliteFieldsAndXrefs(uniprotEntry, fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         addPathwaysXrefs(uniprotEntry, refs);
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
@@ -243,18 +244,35 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 //                fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
 //
 //            }
-            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
-                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
-                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
-                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
-
-            }
-
+//            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
+//                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+//                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
+//                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
+//
+//            }
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
             fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
             refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
             String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "chebi");
             fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
+
+        }
+
+    }
+
+    private void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
+
+            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
+                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLITE.toLowerCase());
+                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
+                fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
+                String metabolightId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLIGHTS_PREFIX);
+                refs.add(new Ref(metabolightId, DatabaseName.METABOLIGHTS.getDbName()));
+
+            }
 
         }
 

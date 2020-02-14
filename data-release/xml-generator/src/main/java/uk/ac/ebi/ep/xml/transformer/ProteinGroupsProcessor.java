@@ -112,7 +112,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByProteinGroupId(proteinGroups.getProteinGroupId())) {
 
             protein
-                    //.parallel()
+                    .parallel()
                     .forEach(data -> processEntries(data, relSpecies, fields, refs));
             addRelatedSpeciesField(relSpecies, fields);
 
@@ -143,11 +143,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
         addChebiCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
-
+        addMetaboliteFieldsAndXrefs(uniprotEntry, fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addPrimaryEntities(uniprotEntry, fields);
-
+        addEcField(uniprotEntry, fields);
         addEcXrefs(uniprotEntry, refs);
         addTaxonomyFieldAndXrefs(uniprotEntry, fields, refs);
 
@@ -180,6 +180,11 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addPrimaryEc(Protein entry, Set<Field> fields) {
+        addField(FieldName.PRIMARY_EC.getName(), entry.getEcNumber(), fields);
+
+    }
+
+    private void addEcField(Protein entry, Set<Field> fields) {
         addField(FieldName.EC.getName(), entry.getEcNumber(), fields);
 
     }
@@ -275,6 +280,24 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
         }
+    }
+
+    private void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
+
+            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
+                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLITE.toLowerCase());
+                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
+                fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
+                String metabolightId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLIGHTS_PREFIX);
+                refs.add(new Ref(metabolightId, DatabaseName.METABOLIGHTS.getDbName()));
+
+            }
+
+        }
+
     }
 
 }

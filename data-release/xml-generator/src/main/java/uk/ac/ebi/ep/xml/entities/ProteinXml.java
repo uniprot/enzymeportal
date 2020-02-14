@@ -65,6 +65,10 @@ import lombok.NoArgsConstructor;
 @NamedQuery(name = "ProteinXml.findByProteinXmlId", query = "SELECT p FROM ProteinXml p WHERE p.proteinXmlId = :proteinXmlId")
 public class ProteinXml implements Serializable {
 
+    @Id
+    @Basic(optional = false)
+    @Column(name = "PROTEIN_XML_ID")
+    private long proteinXmlId;
     @Column(name = "TAX_ID")
     private long taxId;
     @Column(name = "EXP_EVIDENCE_FLAG")
@@ -138,10 +142,6 @@ public class ProteinXml implements Serializable {
     private String familyGroupId;
     @Column(name = "FAMILY_NAME")
     private String familyName;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "PROTEIN_XML_ID")
-    private long proteinXmlId;
 
     public String getCommonName() {
         if (commonName == null) {

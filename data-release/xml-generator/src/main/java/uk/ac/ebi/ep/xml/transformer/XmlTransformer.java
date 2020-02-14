@@ -18,6 +18,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 public abstract class XmlTransformer extends XmlProcessorUtil {
 
     static final String CHEBI_PREFIX = "CHEBI:";
+    static final String METABOLIGHTS_PREFIX ="MTBLC";
     static final String RHEA_PREFIX = "RHEA:";
     static final String CHEBI = "CHEBI";
     static final String RHEA = "RHEA";
@@ -218,10 +219,10 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 //                    addChebiField(chebiCompound, fields, refs);
 //                    addCofactorField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
 //                    break;
-                case METABOLITE:
-                    addChebiCompoundField(chebiCompound, fields, refs);
-                    addMetaboliteField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
-                    break;
+//                case METABOLITE:
+//                    addChebiCompoundField(chebiCompound, fields, refs);
+//                    addMetaboliteField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
+//                    break;
                 case REACTANT:
                     addChebiCompoundField(chebiCompound, fields, refs);
                     fields.add(new Field(FieldName.REACTANT.getName(), chebiCompound.getChebiCompoundName()));
@@ -260,18 +261,20 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 //
 //    }
 
-    private void addMetaboliteField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
+//    private void addMetaboliteField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
+//
+//        String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
+//        fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
+//
+//      
+//        fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
+//
+//        fields.add(new Field(FieldName.WITH_METABOLITE.getName(), withResourceField(chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId()), accession, commonName, entryType)));
+//        fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+//
+//    }
+    
 
-        String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
-        fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
-
-        //fields.add(new Field(FieldName.METABOLITE.getName(), chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId())));
-        fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
-
-        fields.add(new Field(FieldName.WITH_METABOLITE.getName(), withResourceField(chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId()), accession, commonName, entryType)));
-        fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
-
-    }
 
     private String chebiIdWithNoPrefix(String chebiId) {
         return chebiId.replace(CHEBI_PREFIX, "");
