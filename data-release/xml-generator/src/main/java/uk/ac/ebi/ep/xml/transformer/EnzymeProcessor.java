@@ -72,7 +72,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     private void addProteinInformation(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByEcNumber(enzyme.getEcNumber())) {
             protein
-                    .parallel()
+                    //.parallel()
                     .forEach(data -> processUniprotEntry(data, fields, refs));
         }
     }
@@ -166,7 +166,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
             if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
                 fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
-                String rheaId = reactant.getReactionId().replace(RHEA_PREFIX, "rhea");
+                String rheaId = reactant.getReactionId().replace(RHEA_PREFIX, RHEA.toLowerCase());
                 fields.add(new Field(FieldName.RHEAID.getName(), rheaId));
             }
 //            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
@@ -221,7 +221,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
             if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
                 fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
-                String cofactorId = compound.getCompoundId().replace("CHEBI:", "cofactor");
+                String cofactorId = compound.getCompoundId().replace(CHEBI_PREFIX, "cofactor");
                 fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
 
             }
@@ -253,7 +253,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
             fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
             refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-            String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "chebi");
+            String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
             fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
 
         }

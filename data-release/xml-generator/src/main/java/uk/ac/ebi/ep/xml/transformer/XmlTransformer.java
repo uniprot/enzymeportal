@@ -157,7 +157,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
         fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
 
         refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
-        String chebiId = compound.getCompoundId().replace(CHEBI_PREFIX, "chebi");
+        String chebiId = compound.getCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
         fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
 
     }
@@ -173,11 +173,11 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
     private void addCofactorField(Protein compound, String accession, String commonName, int entryType, Set<Field> fields) {
 
-        fields.add(new Field(FieldName.COFACTOR.getName(), compound.getCompoundId().replace("CHEBI:", "")));
+        fields.add(new Field(FieldName.COFACTOR.getName(), compound.getCompoundId().replace(CHEBI_PREFIX, "")));
 
         fields.add(new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName()));
 
-        fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace("CHEBI:", ""), accession, commonName, entryType)));
+        fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace(CHEBI_PREFIX, ""), accession, commonName, entryType)));
         fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
 
     }
@@ -206,7 +206,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
             fields.add(new Field(FieldName.RHEA_ID.getName(), reaction.getReactionId()));
             refs.add(new Ref(reaction.getReactionId(), reaction.getReactionSource()));
-            String rheaId = reaction.getReactionId().replace(RHEA_PREFIX, "rhea");
+            String rheaId = reaction.getReactionId().replace(RHEA_PREFIX, RHEA.toLowerCase());
             fields.add(new Field(FieldName.RHEAID.getName(), rheaId));
         }
     }
@@ -233,7 +233,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
                     fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
                     fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
                     refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-                    String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "chebi");
+                    String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
                     fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
                     break;
             }
@@ -246,7 +246,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
         fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
 
         refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-        String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "chebi");
+        String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
         fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
 
     }
@@ -276,8 +276,8 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
     
 
 
-    private String chebiIdWithNoPrefix(String chebiId) {
-        return chebiId.replace(CHEBI_PREFIX, "");
-    }
+//    private String chebiIdWithNoPrefix(String chebiId) {
+//        return chebiId.replace(CHEBI_PREFIX, "");
+//    }
 
 }

@@ -112,7 +112,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByProteinGroupId(proteinGroups.getProteinGroupId())) {
 
             protein
-                    .parallel()
+                    //.parallel()
                     .forEach(data -> processEntries(data, relSpecies, fields, refs));
             addRelatedSpeciesField(relSpecies, fields);
 
