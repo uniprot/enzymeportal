@@ -18,7 +18,7 @@ import uk.ac.ebi.ep.xml.util.FieldName;
 public abstract class XmlTransformer extends XmlProcessorUtil {
 
     static final String CHEBI_PREFIX = "CHEBI:";
-    static final String METABOLIGHTS_PREFIX ="MTBLC";
+    static final String METABOLIGHTS_PREFIX = "MTBLC";
     static final String RHEA_PREFIX = "RHEA:";
     static final String CHEBI = "CHEBI";
     static final String RHEA = "RHEA";
@@ -39,6 +39,12 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
     abstract void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs);
 
     abstract void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs);
+
+    abstract void addChebiCompoundFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
+
+    abstract void addCompoundFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
+
+    abstract void addMetaboliteFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
 
     protected String withResourceField(String resourceId, String accession, String commonName, int entryType) {
         return String.format("%s;%s;%s;%d", resourceId, accession, commonName, entryType).intern();
@@ -103,94 +109,12 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
         if (Objects.nonNull(taxonomy.getTaxId())) {
 
-            fields.add(new Field(FieldName.WITH_TAXONOMY.getName(), withResourceField(Long.toString(taxonomy.getTaxId()), taxonomy.getAccession(), taxonomy.getCommonName(), taxonomy.getEntryType())));
+            fields.add(new Field(FieldName.WITH_TAXONOMY.getName(), withResourceField(Long.toString(taxonomy.getTaxId()), taxonomy.getAccession(), taxonomy.getOrganismName(), taxonomy.getEntryType())));
             refs.add(new Ref(Long.toString(taxonomy.getTaxId()), DatabaseName.TAXONOMY.getDbName()));
 
         }
     }
 
-//    protected void addReactantFieldsAndXrefs(Protein reactant, Set<Field> fields, Set<Ref> refs) {
-//
-//        if (Objects.nonNull(reactant.getReactantSource())) {
-//
-//            fields.add(new Field(FieldName.REACTANT.getName(), reactant.getReactantName()));
-//            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase(RHEA)) {
-//                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
-//            }
-////            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
-////
-////                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
-////            } else {
-////
-////                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
-////            }
-//
-//            refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
-//        }
-//    }
-    protected void addCompoundDataFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
-
-        if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
-            switch (compound.getCompoundRole()) {
-                case COFACTOR:
-                    addChebiField(compound, fields, refs);
-                    addCofactorField(compound, compound.getAccession(), compound.getCommonName(), compound.getEntryType(), fields);
-                    break;
-                case INHIBITOR:
-                    addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
-                    break;
-                case ACTIVATOR:
-                    addCompoundFieldAndXref(compound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
-                    break;
-                default:
-
-                    fields.add(new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName()));
-                    refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
-                    break;
-            }
-        }
-
-    }
-
-    private void addChebiField(Protein compound, Set<Field> fields, Set<Ref> refs) {
-
-        fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
-
-        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
-        String chebiId = compound.getCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
-        fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
-
-    }
-
-    private void addCompoundFieldAndXref(Protein compound, String fieldIdkey, String fieldNameKey, Set<Field> fields, Set<Ref> refs) {
-
-        fields.add(new Field(fieldIdkey, compound.getCompoundId()));
-
-        fields.add(new Field(fieldNameKey, compound.getCompoundName()));
-
-        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
-    }
-
-    private void addCofactorField(Protein compound, String accession, String commonName, int entryType, Set<Field> fields) {
-
-        fields.add(new Field(FieldName.COFACTOR.getName(), compound.getCompoundId().replace(CHEBI_PREFIX, "")));
-
-        fields.add(new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName()));
-
-        fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace(CHEBI_PREFIX, ""), accession, commonName, entryType)));
-        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
-
-    }
-
-//    protected void addPathwayFieldsAndXrefs(Protein pathway, Set<Field> fields, Set<Ref> refs) {
-//
-//        if (Objects.nonNull(pathway.getPathwayId())) {
-//
-//            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
-//            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
-//            refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
-//        }
-//    }
     protected String parseReactomePathwayId(String reactomePathwayId) {
 
         if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
@@ -210,74 +134,5 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
             fields.add(new Field(FieldName.RHEAID.getName(), rheaId));
         }
     }
-
-    protected void addChebiCompoundDataFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
-
-        if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
-            switch (chebiCompound.getChebiCompoundRole()) {
-//                case COFACTOR:
-//                    addChebiField(chebiCompound, fields, refs);
-//                    addCofactorField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
-//                    break;
-//                case METABOLITE:
-//                    addChebiCompoundField(chebiCompound, fields, refs);
-//                    addMetaboliteField(chebiCompound, chebiCompound.getAccession(), chebiCompound.getCommonName(), chebiCompound.getEntryType(), fields);
-//                    break;
-                case REACTANT:
-                    addChebiCompoundField(chebiCompound, fields, refs);
-                    fields.add(new Field(FieldName.REACTANT.getName(), chebiCompound.getChebiCompoundName()));
-                    //addCompoundFieldAndXref(chebiCompound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
-                    break;
-                default:
-
-                    fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
-                    fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
-                    refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-                    String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
-                    fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
-                    break;
-            }
-        }
-
-    }
-
-    private void addChebiCompoundField(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
-
-        fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
-
-        refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
-        String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
-        fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
-
-    }
-//    private void addCofactorField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
-//
-//        fields.add(new Field(FieldName.COFACTOR.getName(), chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId())));
-//
-//        fields.add(new Field(FieldName.COFACTOR_NAME.getName(), chebiCompound.getChebiCompoundName()));
-//
-//        fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId()), accession, commonName, entryType)));
-//        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
-//
-//    }
-
-//    private void addMetaboliteField(Protein chebiCompound, String accession, String commonName, int entryType, Set<Field> fields) {
-//
-//        String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
-//        fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
-//
-//      
-//        fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
-//
-//        fields.add(new Field(FieldName.WITH_METABOLITE.getName(), withResourceField(chebiIdWithNoPrefix(chebiCompound.getChebiCompoundId()), accession, commonName, entryType)));
-//        fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
-//
-//    }
-    
-
-
-//    private String chebiIdWithNoPrefix(String chebiId) {
-//        return chebiId.replace(CHEBI_PREFIX, "");
-//    }
 
 }

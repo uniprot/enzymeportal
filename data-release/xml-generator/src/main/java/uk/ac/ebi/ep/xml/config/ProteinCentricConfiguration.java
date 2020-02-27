@@ -46,6 +46,9 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EOCUP4'";
     
    // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E3CHQJ'";
+   
+   // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EKM53B'";//metabolites
+        //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E6C1N7'";//cofactor
 
     private static final String PATTERN = "MMM_d_yyyy@hh:mma";
     private static final String DATE = DateTimeUtil.convertDateToString(LocalDateTime.now(), PATTERN);
@@ -107,7 +110,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     @Bean(name = "proteinXmlOutputDir")
     @Override
     public Resource xmlOutputDir() {
-        XmlFileUtils.createDirectory(xmlFileProperties.getProteinCentric());
+        XmlFileUtils.createDirectory(xmlFileProperties.getProteinCentric(),xmlFileProperties.getFilePermission());
         return new FileSystemResource(xmlFileProperties.getProteinCentric());
     }
 

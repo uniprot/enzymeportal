@@ -66,7 +66,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     public ItemReader<EnzymePortalUniqueEc> databaseReader() {
 
         return new JpaPagingItemReaderBuilder<EnzymePortalUniqueEc>()
-                .name("READ_UNIQUE_EC_"+ DATE)
+                .name("READ_UNIQUE_EC_" + DATE)
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(xmlFileProperties.getChunkSize())
                 .queryProvider(createQueryProvider(NATIVE_READ_QUERY, EnzymePortalUniqueEc.class))
@@ -88,7 +88,7 @@ public class MockEnzymeCentricConfig extends MockAbstractBatchConfig {
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new CustomStaxEventItemWriter<>();
 
-        XmlFileUtils.createDirectory(xmlFileProperties.getDir());
+        XmlFileUtils.createDirectoryWithDefaultPermission(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);

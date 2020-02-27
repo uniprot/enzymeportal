@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.xml.util;
 
 import java.time.LocalDate;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-
 import static uk.ac.ebi.ep.xml.util.DateTimeUtil.convertDateToString;
 import static uk.ac.ebi.ep.xml.util.DateTimeUtil.convertStringToDate;
 

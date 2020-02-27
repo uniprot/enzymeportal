@@ -76,4 +76,13 @@ public interface Protein {
 
     String getChebiSynonyms();
 
+    default String getOrganismName() {
+
+        String commonName = getCommonName();
+        if (commonName == null) {
+            commonName = getScientificName();
+        }
+        return commonName;
+    }
+
 }

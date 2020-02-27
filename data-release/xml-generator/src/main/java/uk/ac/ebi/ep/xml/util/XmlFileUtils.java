@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class XmlFileUtils {
-
+    private static final String DEFAULT_PERMISSION ="rwxr-xr-x";
     private XmlFileUtils() {
     }
 
@@ -26,13 +26,13 @@ public class XmlFileUtils {
      * @param directory file directory
      *
      */
-    public static void createDirectory(String directory) {
-        String permission = "rwxr-xr--";
-        try {
-            createDirectory(directory, permission);
-        } catch (IOException ex) {
-            log.error("IOException while creating directory " + directory, ex);
-        }
+    public static void createDirectoryWithDefaultPermission(String directory) {
+        //String permission = "rwxr-xr-x";
+//        try {
+            createDirectory(directory, DEFAULT_PERMISSION);
+//        } catch (IOException ex) {
+//            log.error("IOException while creating directory " + directory, ex);
+//        }
 
     }
 
@@ -40,10 +40,9 @@ public class XmlFileUtils {
      *
      * @param directory file directory
      * @param permission directory permission e.g. rwxr-x---
-     * @throws IOException
      */
-    public static void createDirectory(String directory, String permission) throws IOException {
-
+    public static void createDirectory(String directory, String permission) {
+         try {
         Set<PosixFilePermission> perms
                 = PosixFilePermissions.fromString(permission);
         FileAttribute<Set<PosixFilePermission>> attr
@@ -51,6 +50,9 @@ public class XmlFileUtils {
         Path path = Paths.get(directory);
         if (!path.toFile().exists()) {
             Files.createDirectories(path, attr);
+        }
+                } catch (IOException ex) {
+            log.error("IOException while creating directory " + directory, ex);
         }
 
     }

@@ -112,7 +112,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByProteinGroupId(proteinGroups.getProteinGroupId())) {
 
             protein
-                    //.parallel()
+                    .parallel()
                     .forEach(data -> processEntries(data, relSpecies, fields, refs));
             addRelatedSpeciesField(relSpecies, fields);
 
@@ -135,14 +135,14 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     private void processEntries(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
-        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+        addCommonNameFields(uniprotEntry.getOrganismName(), fields);
         addAccessionXrefs(uniprotEntry.getAccession(), refs);
         addRelatedSpecies(uniprotEntry, relSpecies);
 
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
 
-        addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
-        addChebiCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
+        addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+        addChebiCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
         addMetaboliteFieldsAndXrefs(uniprotEntry, fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
 
@@ -180,7 +180,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addPrimaryEc(Protein entry, Set<Field> fields) {
-        addField(FieldName.PRIMARY_EC.getName(), "ec;"+entry.getEcNumber(), fields);
+        addField(FieldName.PRIMARY_EC.getName(), "ec;" + entry.getEcNumber(), fields);
 
     }
 
@@ -226,7 +226,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void addRelatedSpecies(Protein uniprotEntry, Set<String> relSpecies) {
         if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
 
-            relSpecies.add(uniprotEntry.getAccession() + ";" + uniprotEntry.getCommonName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId());
+            relSpecies.add(uniprotEntry.getAccession() + ";" + uniprotEntry.getOrganismName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId());
 
         }
     }
@@ -238,7 +238,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
             fields.add(new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName()));
 
-            fields.add(new Field(FieldName.WITH_DISEASE.getName(), withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getCommonName(), disease.getEntryType())));
+            fields.add(new Field(FieldName.WITH_DISEASE.getName(), withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getOrganismName(), disease.getEntryType())));
             fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
             refs.add(new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName()));
         }
@@ -249,10 +249,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         if (Objects.nonNull(family.getFamilyGroupId())) {
 
-            //fields.add(new Field(FieldName.PROTEIN_FAMILY_NAME.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
 
-            fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getCommonName(), family.getEntryType())));
+            fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getOrganismName(), family.getEntryType())));
             fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
         }
@@ -276,18 +275,20 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
         if (Objects.nonNull(pathway.getPathwayId())) {
 
-            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
+            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getOrganismName(), pathway.getEntryType())));
             fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
         }
     }
 
-    private void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+    @Override
+    public void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
 
             if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
                 fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+                fields.add(new Field(FieldName.WITH_METABOLITE.getName(), withResourceField(chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, ""), chebiCompound.getAccession(), chebiCompound.getOrganismName(), chebiCompound.getEntryType())));
                 String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLITE.toLowerCase());
                 fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
                 fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
@@ -297,6 +298,94 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             }
 
         }
+
+    }
+
+    @Override
+    public void addChebiCompoundFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
+            switch (chebiCompound.getChebiCompoundRole()) {
+
+                case REACTANT:
+                    addChebiCompoundField(chebiCompound, fields, refs);
+                    fields.add(new Field(FieldName.REACTANT.getName(), chebiCompound.getChebiCompoundName()));
+                    break;
+                default:
+
+                    fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
+                    fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
+                    refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
+                    String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
+                    fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
+                    break;
+            }
+        }
+
+    }
+
+    private void addChebiCompoundField(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+
+        fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
+
+        refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
+        String chebiId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
+        fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
+
+    }
+
+    @Override
+    public void addCompoundFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
+            switch (compound.getCompoundRole()) {
+                case COFACTOR:
+                    addChebiField(compound, fields, refs);
+                    addCofactorField(compound, compound.getAccession(), compound.getOrganismName(), compound.getEntryType(), fields);
+                    break;
+                case INHIBITOR:
+                    addCompoundFieldAndXref(compound, FieldName.INHIBITOR.getName(), FieldName.INHIBITOR_NAME.getName(), fields, refs);
+                    break;
+                case ACTIVATOR:
+                    addCompoundFieldAndXref(compound, FieldName.ACTIVATOR.getName(), FieldName.ACTIVATOR_NAME.getName(), fields, refs);
+                    break;
+                default:
+
+                    fields.add(new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName()));
+                    refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
+                    break;
+            }
+        }
+
+    }
+
+    private void addChebiField(Protein compound, Set<Field> fields, Set<Ref> refs) {
+
+        fields.add(new Field(FieldName.CHEBI_ID.getName(), compound.getCompoundId()));
+
+        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
+        String chebiId = compound.getCompoundId().replace(CHEBI_PREFIX, CHEBI.toLowerCase());
+        fields.add(new Field(FieldName.CHEBIID.getName(), chebiId));
+
+    }
+
+    private void addCompoundFieldAndXref(Protein compound, String fieldIdkey, String fieldNameKey, Set<Field> fields, Set<Ref> refs) {
+
+        fields.add(new Field(fieldIdkey, compound.getCompoundId()));
+
+        fields.add(new Field(fieldNameKey, compound.getCompoundName()));
+
+        refs.add(new Ref(compound.getCompoundId(), compound.getCompoundSource().toUpperCase()));
+    }
+
+    private void addCofactorField(Protein compound, String accession, String commonName, int entryType, Set<Field> fields) {
+
+        fields.add(new Field(FieldName.COFACTOR.getName(), compound.getCompoundId().replace(CHEBI_PREFIX, "")));
+
+        fields.add(new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName()));
+
+        fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace(CHEBI_PREFIX, ""), accession, commonName, entryType)));
+        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
 
     }
 

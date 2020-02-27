@@ -88,7 +88,7 @@ public class MockProteinCentricConfig extends MockAbstractBatchConfig {
     public ItemWriter<Entry> xmlWriter() {
         StaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();// new CustomStaxEventItemWriter<>();
 
-        XmlFileUtils.createDirectory(xmlFileProperties.getDir());
+        XmlFileUtils.createDirectoryWithDefaultPermission(xmlFileProperties.getDir());
         xmlWriter.setName("WRITE_PROTEIN_CENTRIC_XML_TO_FILE");
         xmlWriter.setResource(xmlOutputDir());
         xmlWriter.setRootTagName(ROOT_TAG_NAME);

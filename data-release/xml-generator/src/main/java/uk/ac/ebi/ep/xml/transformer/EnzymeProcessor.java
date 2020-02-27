@@ -72,7 +72,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
     private void addProteinInformation(EnzymePortalUniqueEc enzyme, Set<Field> fields, Set<Ref> refs) {
         try (Stream<Protein> protein = proteinXmlRepository.streamProteinByEcNumber(enzyme.getEcNumber())) {
             protein
-                    //.parallel()
+                    .parallel()
                     .forEach(data -> processUniprotEntry(data, fields, refs));
         }
     }
@@ -82,7 +82,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         addProteinNameFields(uniprotEntry.getProteinName(), fields);
 
         addScientificNameFields(uniprotEntry.getScientificName(), fields);
-        addCommonNameFields(uniprotEntry.getCommonName(), fields);
+        addCommonNameFields(uniprotEntry.getOrganismName(), fields);
         addGeneNameFields(uniprotEntry, fields);
 
         addUniprotFamilyFieldsAndXrefs(uniprotEntry, fields, refs);
@@ -169,13 +169,6 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
                 String rheaId = reactant.getReactionId().replace(RHEA_PREFIX, RHEA.toLowerCase());
                 fields.add(new Field(FieldName.RHEAID.getName(), rheaId));
             }
-//            if (reactant.getReactantSource().toUpperCase().equalsIgnoreCase("CHEBI")) {
-//
-//                fields.add(new Field(FieldName.CHEBI_ID.getName(), reactant.getReactantId()));
-//            } else {
-//
-//                fields.add(new Field(FieldName.RHEA_ID.getName(), reactant.getReactantId()));
-//            }
 
             refs.add(new Ref(reactant.getReactantId(), reactant.getReactantSource().toUpperCase()));
         }
@@ -186,7 +179,6 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         if (Objects.nonNull(pathway.getPathwayId())) {
 
-            fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getCommonName(), pathway.getEntryType())));
             fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             if (Objects.nonNull(pathway.getPathwayName())) {
                 fields.add(new Field(FieldName.PATHWAY_NAME.getName(), pathway.getPathwayName()));
@@ -215,7 +207,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    private void addCompoundFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
+    @Override
+    public void addCompoundFieldsAndXrefs(Protein compound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
 
@@ -234,22 +227,11 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    private void addChebiCompoundFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+    @Override
+    public void addChebiCompoundFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
 
-//            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(COFACTOR)) {
-//                fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
-//                String cofactorId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "cofactor");
-//                fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
-//
-//            }
-//            if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
-//                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
-//                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, "metabolite");
-//                fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
-//
-//            }
             fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
             fields.add(new Field(FieldName.CHEBI_ID.getName(), chebiCompound.getChebiCompoundId()));
             refs.add(new Ref(chebiCompound.getChebiCompoundId(), CHEBI));
@@ -260,7 +242,8 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    private void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
+    @Override
+    public void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
 
@@ -268,7 +251,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
                 fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
                 String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLITE.toLowerCase());
                 fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
-                fields.add(new Field(FieldName.METABOLITE_NAME.getName(), chebiCompound.getChebiCompoundName()));
+                fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
                 String metabolightId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLIGHTS_PREFIX);
                 refs.add(new Ref(metabolightId, DatabaseName.METABOLIGHTS.getDbName()));
 
