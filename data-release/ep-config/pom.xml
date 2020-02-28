@@ -305,7 +305,7 @@
 
     </profiles>
     
-    <!--    <repositories>
+        <repositories>
         <repository>
             <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
             <id>eclipselink</id>
@@ -317,7 +317,7 @@
             <url>https://code.lds.org/nexus/content/groups/main-repo</url>
         </repository>
   
-    </repositories>-->
+    </repositories>
    
         
     
