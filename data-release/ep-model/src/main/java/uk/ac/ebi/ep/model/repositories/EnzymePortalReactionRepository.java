@@ -43,4 +43,16 @@ public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePort
     @Query(value = "alter table ENZYME_PORTAL_REACTION enable constraint REACTION_ACCESSION_FK", nativeQuery = true)
     void enableAccessionContraints();
 
+    @Query(value = "SELECT COUNT(DISTINCT reaction_id) FROM ENZYME_PORTAL_REACTION", nativeQuery = true)
+    long countUniqueRheaIds();
+
+    @Query(value = "SELECT COUNT(distinct uniprot_accession) FROM ENZYME_PORTAL_REACTION", nativeQuery = true)
+    long countEntriesWithRheaReaction();
+
+    @Query(value = "SELECT COUNT(distinct uniprot_accession) FROM ENZYME_PORTAL_REACTION WHERE kegg_id IS NOT NULL", nativeQuery = true)
+    long countEntriesWithKegg();
+
+    @Query(value = "SELECT COUNT(DISTINCT kegg_id) FROM ENZYME_PORTAL_REACTION", nativeQuery = true)
+    long countUniqueKeggIds();
+
 }

@@ -104,7 +104,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -123,7 +123,7 @@
             <version>2.8.5</version>
         </dependency>-->
         <!--needed for brenda soap service-->
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
@@ -134,12 +134,12 @@
             <artifactId>javax.xml.rpc-api</artifactId>
             <version>1.1.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-discovery/commons-discovery -->
+         https://mvnrepository.com/artifact/commons-discovery/commons-discovery 
         <dependency>
             <groupId>commons-discovery</groupId>
             <artifactId>commons-discovery</artifactId>
             <version>0.5</version>
-        </dependency>
+        </dependency>-->
 
         <!--end brenda-->
         <!--added for sabio-->

@@ -35,6 +35,13 @@
    
     </modules>
     <repositories>
+        <repository>
+            <id>io.spring.repo.maven.release</id>
+            <url>http://repo.spring.io/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
 
         <!--                 For main Spring releases -->
         <repository>

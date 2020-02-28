@@ -19,7 +19,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <oracle.version>11.2.0.3</oracle.version>
-        <querydsl.version>4.1.4</querydsl.version>
+        <querydsl.version>4.2.2</querydsl.version>
     
         <!-- Plugins -->
       
@@ -93,7 +93,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
         </dependency>
-    
+         
         <!--    spring data jpa-->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -114,7 +114,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-              <version>5.4.2.Final</version>
+            <version>5.4.2.Final</version>
     
         </dependency>
 
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-              <version>5.4.2.Final</version>
+            <version>5.4.2.Final</version>
         </dependency>
         
         <dependency>
@@ -151,7 +151,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.2</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
@@ -202,7 +202,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
+            <version>1.18.12</version>
             <!--            <optional>true</optional>-->
             <scope>provided</scope>
         </dependency>
@@ -231,7 +231,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -305,7 +305,7 @@
 
     </profiles>
     
-    <repositories>
+    <!--    <repositories>
         <repository>
             <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
             <id>eclipselink</id>
@@ -317,7 +317,7 @@
             <url>https://code.lds.org/nexus/content/groups/main-repo</url>
         </repository>
   
-    </repositories>
+    </repositories>-->
    
         
     

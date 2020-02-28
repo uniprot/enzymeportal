@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.model.service.AnalysisService;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.model.service.SitemapService;
+import uk.ac.ebi.ep.model.service.WebStatService;
+import uk.ac.ebi.ep.model.service.WebStatService;
 
 /**
  *
@@ -23,10 +25,13 @@ public class GlobalConfig {
         return new SitemapService();
     }
 
-
     @Bean
     public EnzymePortalParserService enzymePortalParserService() {
         return new EnzymePortalParserService();
     }
 
+    @Bean
+    public WebStatService webStatService() {
+        return new WebStatService();
+    }
 }

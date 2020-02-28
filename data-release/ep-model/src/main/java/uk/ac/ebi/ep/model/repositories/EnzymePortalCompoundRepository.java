@@ -39,10 +39,22 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
 
     @Query(value = "select DISTINCT c.compoundName as compoundName, c.compoundId as compoundId from EnzymePortalCompound c WHERE c.compoundRole='COFACTOR' order by c.compoundName, c.compoundId")
     List<CofactorView> findCofactors();
-    
-        @Modifying(clearAutomatically = true)
+
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "Insert INTO ENZYME_PORTAL_COFACTOR (COFACTOR_INTERNAL_ID,COFACTOR_ID,COFACTOR_NAME) VALUES (SEQ_COFACTOR_INTERNAL_ID.NEXTVAL,?1,?2) ", nativeQuery = true)
     void createCofactor(String cofactorId, String cofactorName, String cofactorUrl);
+
+    @Query(value = "SELECT count(distinct compound_id) from enzyme_portal_compound where compound_source='ChEMBL'", nativeQuery = true)
+    long countUniqueChemblIds();
+
+    @Query(value = "SELECT count(distinct uniprot_accession) from enzyme_portal_compound where compound_role='INHIBITOR'", nativeQuery = true)
+    long countEntriesWithInhibitors();
+
+    @Query(value = "SELECT count(distinct uniprot_accession) from enzyme_portal_compound where compound_role='ACTIVATOR'", nativeQuery = true)
+    long countEntriesWithActivators();
+
+    @Query(value = "SELECT count(distinct uniprot_accession) from enzyme_portal_compound where compound_role='COFACTOR'", nativeQuery = true)
+    long countEntriesWithCofactors();
 
 }

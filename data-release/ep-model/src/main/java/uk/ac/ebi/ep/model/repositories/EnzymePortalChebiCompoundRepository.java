@@ -31,4 +31,7 @@ public interface EnzymePortalChebiCompoundRepository extends JpaRepository<Enzym
             + "(COMPOUND_INTERNAL_ID,COMPOUND_ID,COMPOUND_NAME,SYNONYMS,RELATIONSHIP,UNIPROT_ACCESSION,URL,COMPOUND_ROLE,NOTE) VALUES (SEQ_EZP_CHEBI_COMP.NEXTVAL,?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
     void createChebiCompoundIgnoreDup(String compoundId, String compoundName, String synonyms, String relationship, String accession, String url, String compoundRole, String note);
 
+    @Query(value = "SELECT count( compound_id) from unique_chebi_compound", nativeQuery = true)
+    long countUniqueChebiIds();
+
 }

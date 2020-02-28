@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.model.repositories;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import uk.ac.ebi.ep.model.EnzymePortalPathways;
  *
  * @author joseph
  */
-public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>{
+public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long> {
 
     EnzymePortalPathways findByPathwayId(Long pathwayId);
 
@@ -32,5 +31,8 @@ public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePort
 
     @Query(value = "SELECT /*+ PARALLEL(auto) */  DISTINCT(UNIPROT_ACCESSION) FROM ENZYME_PORTAL_PATHWAYS WHERE PATHWAY_ID = :PATHWAY_ID", nativeQuery = true)
     List<String> findAccessionsByPathwayId(@Param("PATHWAY_ID") String pathwayId);
+
+    @Query(value = "SELECT COUNT(distinct uniprot_accession) FROM ENZYME_PORTAL_PATHWAYS", nativeQuery = true)
+    long countEntriesWithPathways();
 
 }

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
  *
@@ -42,21 +41,24 @@ public class DevDataConfig extends AbstractConfig {
 
     @Override
     public DataSource driverManagerDataSource() {
-        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
-                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
-
-        String username = env.getRequiredProperty("ep.db.username");
-        String password = env.getRequiredProperty("ep.db.password");
-        DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
-
-        ds.setDriverClassName("oracle.jdbc.OracleDriver");
-
-        return ds;
+//        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+//                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+//
+//        String username = env.getRequiredProperty("ep.db.username");
+//        String password = env.getRequiredProperty("ep.db.password");
+//        DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
+//
+//        ds.setDriverClassName("oracle.jdbc.OracleDriver");
+//
+//        return ds;
+         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   
     }
 
     @Override
     protected DataSource comboPooledDataSource() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   
     }
 
     @Override

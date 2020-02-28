@@ -22,4 +22,10 @@ public interface EnzymePortalMetaboliteRepository extends JpaRepository<EnzymePo
     @Transactional(readOnly = true)
     @Query(value = "select DISTINCT c.compoundName as compoundName, c.compoundId as compoundId from EnzymePortalChebiCompound c WHERE c.compoundRole='METABOLITE' order by c.compoundName, c.compoundId")
     List<MetaboliteView> findMetabolites();
+
+    @Query(value = "SELECT COUNT( metabolite_id) FROM enzyme_portal_metabolite", nativeQuery = true)
+    long countUniqueMetabolightsIds();
+
+    @Query(value = " SELECT count(distinct uniprot_accession) from enzyme_portal_chebi_compound where compound_role='METABOLITE'", nativeQuery = true)
+    long countEntriesWithMetabolites();
 }
