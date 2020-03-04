@@ -14,6 +14,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorResourceFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.ProxyProvider;
@@ -72,6 +73,11 @@ public class RestClientConfig {
         return WebClient
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
+                                .exchangeStrategies(ExchangeStrategies.builder()
+                                        .codecs(configurer -> configurer
+                                        .defaultCodecs()
+                                        .maxInMemorySize(16 * 1024 * 1024))//16MB
+                                        .build())
                 .build();
 
     }
@@ -92,7 +98,6 @@ public class RestClientConfig {
                 .tcpConfiguration(client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30_000));
 
     }
-
 
     @Bean
     public ReactorResourceFactory reactorResourceFactory() {

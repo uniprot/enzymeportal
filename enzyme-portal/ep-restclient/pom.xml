@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
+        <version>2.2.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
@@ -16,7 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <junit.jupiter.version>5.4.2</junit.jupiter.version>
+                <!--        <junit.jupiter.version>5.4.2</junit.jupiter.version>-->
+        <okhttp3.version>4.4.0</okhttp3.version>
         <ebi.maven.repo.deploy.url>
             scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
         </ebi.maven.repo.deploy.url>
@@ -29,7 +30,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>3.14.2</version>
+            <version>${okhttp3.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -64,19 +65,34 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <exclusions>
+<!--           <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
                     <artifactId>junit</artifactId>
                 </exclusion>
-            </exclusions>
+           </exclusions>-->
         </dependency>
-        <dependency>
+        <!--
+                <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>  
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
+        </dependency>-->
+        
+        <!--        junit 5 starts-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <!--        junit 5 ends-->
         
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -117,9 +133,7 @@
     <build>
         
         <plugins>
-            
-            
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -130,6 +144,17 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+            
+            <!--            for junit 5 starts-->    
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <!--            for junit 5 ends-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
