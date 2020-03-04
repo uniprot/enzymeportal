@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import lombok.ToString;
 
 @ToString
@@ -29,6 +30,13 @@ public class MechanismResult {
     private Object previous;
     @JsonProperty("results")
     private List<Result> results = new LinkedList<>();
+
+    public Result getFirstResult() {
+        return results.stream()
+                .filter(result -> Objects.nonNull(result))
+                .findFirst()
+                .orElse(new Result());
+    }
 
     @JsonProperty("count")
     public Integer getCount() {

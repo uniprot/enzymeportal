@@ -53,9 +53,10 @@ public class ReactionMechanismServiceIT {
     public void testFindMechanismResultByAccession() {
         log.info("findMechanismResultByAccession");
         String accession = "P00334";
-
+        accession = "P00326";
+        accession = "B2V9I5";
         MechanismResult result = reactionMechanismService.findMechanismResultByAccession(accession);
-
+        
         assertNotNull(result);
         assertThat(result.getResults(), hasSize(greaterThanOrEqualTo(1)));
 

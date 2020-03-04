@@ -45,6 +45,10 @@ public class Result {
     private List<Residue> residues;
     @JsonProperty("reaction")
     private Reaction reaction;
+    @JsonProperty("is_reference_uniprot_id")
+    private boolean reference;
+    @JsonProperty("reference_uniprot_id")
+    private String referenceUniprotId;
 
     @JsonProperty("mcsa_id")
     public Integer getMcsaId() {
@@ -152,6 +156,26 @@ public class Result {
         }
         final Result other = (Result) obj;
         return Objects.equals(this.mcsaId, other.mcsaId);
+    }
+
+    @JsonProperty("is_reference_uniprot_id")
+    public boolean isReference() {
+        return reference;
+    }
+
+    @JsonProperty("is_reference_uniprot_id")
+    public void setReference(boolean reference) {
+        this.reference = reference;
+    }
+
+    @JsonProperty("reference_uniprot_id")
+    public String getReferenceUniprotId() {
+        return referenceUniprotId;
+    }
+
+    @JsonProperty("reference_uniprot_id")
+    public void setReferenceUniprotId(String referenceUniprotId) {
+        this.referenceUniprotId = referenceUniprotId;
     }
 
 }
