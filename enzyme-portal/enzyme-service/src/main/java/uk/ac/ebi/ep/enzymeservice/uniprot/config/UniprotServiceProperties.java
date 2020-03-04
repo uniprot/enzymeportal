@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.enzymeservice.brenda.config;
+package uk.ac.ebi.ep.enzymeservice.uniprot.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,10 +10,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "ep.brenda")
-public class BrendaProperties {
+@ConfigurationProperties(prefix = "ep.uniprot")
+public class UniprotServiceProperties {
 
     private String url;
-    private String username;
-    private String password;
 }
