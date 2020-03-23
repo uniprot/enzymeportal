@@ -44,7 +44,7 @@ public abstract class XmlTransformer extends XmlProcessorUtil {
 
     abstract void addCompoundFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
 
-    abstract void addMetaboliteFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
+    //abstract void addMetaboliteFieldsAndXrefs(Protein entry, Set<Field> fields, Set<Ref> refs);
 
     protected String withResourceField(String resourceId, String accession, String commonName, int entryType) {
         return String.format("%s;%s;%s;%d", resourceId, accession, commonName, entryType).intern();

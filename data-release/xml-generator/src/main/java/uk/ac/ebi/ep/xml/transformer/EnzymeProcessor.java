@@ -242,14 +242,14 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-    @Override
+   // @Override
     public void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {
 
             if (chebiCompound.getChebiCompoundRole().equalsIgnoreCase(METABOLITE)) {
-                fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
-                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLITE.toLowerCase());
+                //fields.add(new Field(FieldName.HAS_METABOLITE.getName(), HAS_METABOLITE));
+                String metaboliteId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLIGHTS_PREFIX);
                 fields.add(new Field(FieldName.METABOLITE.getName(), metaboliteId));
                 fields.add(new Field(FieldName.COMPOUND_NAME.getName(), chebiCompound.getChebiCompoundName()));
                 String metabolightId = chebiCompound.getChebiCompoundId().replace(CHEBI_PREFIX, METABOLIGHTS_PREFIX);

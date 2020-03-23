@@ -44,7 +44,7 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     private static final String NATIVE_READ_QUERY = "SELECT * FROM ENZYME_PORTAL_UNIQUE_EC  WHERE TRANSFER_FLAG='N' OR TRANSFER_FLAG is null";
     //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='1.13.11.6'";
     //private static final String NATIVE_READ_QUERY ="SELECT * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='1.1.1.34'";
-   // private static final String NATIVE_READ_QUERY ="SELECT  * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='2.5.1.120'";
+    //private static final String NATIVE_READ_QUERY ="SELECT  * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='6.3.2.4'";
     //private static final String NATIVE_READ_QUERY ="SELECT  * FROM ENZYME_PORTAL_UNIQUE_EC where EC_NUMBER='3.5.1.16'";
     
     private static final String ROOT_TAG_NAME = "database";
