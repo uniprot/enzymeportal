@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class EnzymePortalRestTemplateCustomizer implements RestTemplateCustomizer {
 
+    private static final int TIME_OUT = 360;
+
     @Override
     public void customize(RestTemplate restTemplate) {
 
@@ -31,9 +33,9 @@ public class EnzymePortalRestTemplateCustomizer implements RestTemplateCustomize
     private OkHttpClient okHttpClient() {
 
         return new OkHttpClient.Builder()
-                .connectTimeout(360, TimeUnit.SECONDS)
-                .readTimeout(360, TimeUnit.SECONDS)
-                .writeTimeout(360, TimeUnit.SECONDS)
+                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .build();
     }
 

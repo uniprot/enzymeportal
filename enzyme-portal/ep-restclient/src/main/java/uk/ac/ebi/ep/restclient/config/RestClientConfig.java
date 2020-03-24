@@ -27,6 +27,8 @@ import reactor.netty.tcp.ProxyProvider;
 @Configuration
 public class RestClientConfig {
 
+    private static final int MAX_IN_MEMORY = 16 * 1024 * 1024;//16MB
+    private static final int TIMEOUT = 30_000;
     @Autowired
     private RestClientProperties restClientProperties;
 
@@ -46,12 +48,12 @@ public class RestClientConfig {
     }
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() {
-        int timeout = 30_000;
+
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
                 = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(timeout);
-        clientHttpRequestFactory.setConnectionRequestTimeout(timeout);
-        clientHttpRequestFactory.setReadTimeout(timeout);
+        clientHttpRequestFactory.setConnectTimeout(TIMEOUT);
+        clientHttpRequestFactory.setConnectionRequestTimeout(TIMEOUT);
+        clientHttpRequestFactory.setReadTimeout(TIMEOUT);
         return clientHttpRequestFactory;
     }
 
@@ -73,11 +75,11 @@ public class RestClientConfig {
         return WebClient
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
-                                .exchangeStrategies(ExchangeStrategies.builder()
-                                        .codecs(configurer -> configurer
-                                        .defaultCodecs()
-                                        .maxInMemorySize(16 * 1024 * 1024))//16MB
-                                        .build())
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(MAX_IN_MEMORY))
+                        .build())
                 .build();
 
     }
@@ -85,7 +87,7 @@ public class RestClientConfig {
     private HttpClient proxyHttpClient() {
         return HttpClient.create()
                 .compress(true)
-                .tcpConfiguration(client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30_000)
+                .tcpConfiguration(client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
                 .proxy(addressSpec -> addressSpec.type(ProxyProvider.Proxy.HTTP)
                 .address(InetSocketAddress
                         .createUnresolved(restClientProperties.getProxyHost(), restClientProperties.getProxyPort())))
@@ -95,7 +97,7 @@ public class RestClientConfig {
     private HttpClient httpClient() {
         return HttpClient.create()
                 .compress(true)
-                .tcpConfiguration(client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30_000));
+                .tcpConfiguration(client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT));
 
     }
 
