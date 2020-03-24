@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
-import uk.ac.ebi.ep.literatureservice.model.Result;
 import uk.ac.ebi.ep.literatureservice.dto.CitationLabel;
 import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
+import uk.ac.ebi.ep.literatureservice.model.Result;
 
 /**
  *
