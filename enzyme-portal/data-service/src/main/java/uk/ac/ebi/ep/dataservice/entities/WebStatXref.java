@@ -1,10 +1,7 @@
 package uk.ac.ebi.ep.dataservice.entities;
 
 import java.io.Serializable;
-import java.time.Month;
-import java.time.format.TextStyle;
 import java.util.Date;
-import java.util.Locale;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,30 +69,5 @@ public class WebStatXref implements Serializable {
     @Column(name = "RELEASE_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date releaseDate;
-
-    public String getMonthShortName() {
-
-        int monthInNumber = Integer.parseInt(getReleaseId().split("-")[0]);
-
-        Month month = Month.of(monthInNumber);
-
-        return month.getDisplayName(TextStyle.SHORT, Locale.UK);
-
-    }
-
-    public String getMonthFullName() {
-
-        int monthInNumber = Integer.parseInt(getReleaseId().split("-")[0]);
-
-        Month month = Month.of(monthInNumber);
-
-        return month.getDisplayName(TextStyle.FULL, Locale.UK);
-
-    }
-
-    public String getYear() {
-
-        return getReleaseId().split("-")[1];
-    }
 
 }

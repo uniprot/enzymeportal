@@ -25,7 +25,7 @@ public class EnzymePortalTaxonomyRepositoryImpl implements EnzymePortalTaxonomyR
     public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
 
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
-        List<Taxonomy> result = jpaQueryFactory
+        return jpaQueryFactory
                 .select(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()))
                 .from($)
                 .where($.taxId.in(taxids))
@@ -33,7 +33,6 @@ public class EnzymePortalTaxonomyRepositoryImpl implements EnzymePortalTaxonomyR
                 .groupBy($.taxId, $.scientificName, $.commonName)
                 .fetch();
 
-        return result;
     }
 
     @Override

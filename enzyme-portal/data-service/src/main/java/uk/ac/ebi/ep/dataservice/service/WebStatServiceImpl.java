@@ -64,7 +64,7 @@ public class WebStatServiceImpl implements WebStatService {
 
         return releaseIds
                 .stream()
-                .map(id -> monthNameFromReleaseId(id))
+                .map(this::monthNameFromReleaseId)
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -125,8 +125,8 @@ public class WebStatServiceImpl implements WebStatService {
         LocalDate last3months = LocalDate.now().minusMonths(3);
         Date past3Months = convertToDateViaInstant(last3months);
 
-        Predicate predicate = QWebStatXref.webStatXref.releaseDate.between(past3Months, date);
-        return predicate;
+        return QWebStatXref.webStatXref.releaseDate.between(past3Months, date);
+
     }
 
 }

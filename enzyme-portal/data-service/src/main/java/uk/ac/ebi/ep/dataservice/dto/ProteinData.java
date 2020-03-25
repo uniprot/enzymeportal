@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +19,7 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @ToString
+@RequiredArgsConstructor
 public class ProteinData implements ProteinView, Serializable {
 
     private String accession;
@@ -62,41 +64,6 @@ public class ProteinData implements ProteinView, Serializable {
         this.proteinGroupId = proteinGroupId;
     }
 
-//    @Override
-//    public String getAccession() {
-//        return accession;
-//    }
-//
-//    public void setAccession(String accession) {
-//        this.accession = accession;
-//    }
-//
-//    @Override
-//    public Long getTaxId() {
-//        return taxId;
-//    }
-//
-//    public void setTaxId(Long taxId) {
-//        this.taxId = taxId;
-//    }
-//
-//    @Override
-//    public String getProteinName() {
-//        return proteinName;
-//    }
-//
-//    public void setProteinName(String proteinName) {
-//        this.proteinName = proteinName;
-//    }
-//
-//    @Override
-//    public String getScientificName() {
-//        return scientificName;
-//    }
-//
-//    public void setScientificName(String scientificName) {
-//        this.scientificName = scientificName;
-//    }
     @Override
     public String getCommonName() {
         if (commonName == null) {

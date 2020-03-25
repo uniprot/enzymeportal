@@ -59,10 +59,7 @@ public class RelatedProteins implements Serializable {
             return false;
         }
         final RelatedProteins other = (RelatedProteins) obj;
-        if (!Objects.equals(this.relProtInternalId, other.relProtInternalId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.relProtInternalId, other.relProtInternalId);
     }
 
 }

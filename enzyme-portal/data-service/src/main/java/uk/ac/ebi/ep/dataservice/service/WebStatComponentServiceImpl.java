@@ -39,7 +39,7 @@ public class WebStatComponentServiceImpl implements WebStatComponentService {
 
         return releaseIds
                 .stream()
-                .map(id -> monthNameFromReleaseId(id))
+                .map(this::monthNameFromReleaseId)
                 .distinct()
                 .collect(Collectors.toList());
     }
