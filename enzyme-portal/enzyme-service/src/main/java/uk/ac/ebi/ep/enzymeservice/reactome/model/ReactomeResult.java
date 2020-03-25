@@ -46,8 +46,6 @@ public class ReactomeResult {
     @JsonProperty("className")
     private String className;
 
-    public ReactomeResult() {
-    }
 
     @JsonProperty("summation")
     public List<Summation> getSummation() {

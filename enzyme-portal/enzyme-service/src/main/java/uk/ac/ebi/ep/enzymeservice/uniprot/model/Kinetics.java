@@ -29,7 +29,7 @@ public class Kinetics {
     @JsonProperty("vmax")
     private List<Vmax> vmax;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("km")
     public List<Km> getKm() {

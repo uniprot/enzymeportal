@@ -88,7 +88,7 @@ public class UniprotServiceImpl implements UniprotService {
         if (data.getBody() != null && data.hasBody()) {
             return data.getBody();
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     private List<UniprotApi> responseEntity(String queryTerm, String endpoint) {
@@ -101,7 +101,7 @@ public class UniprotServiceImpl implements UniprotService {
         if (data.getBody() != null && data.hasBody()) {
             return data.getBody();
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     private UniprotApi byResponseEntity(String accession) {
@@ -134,7 +134,7 @@ public class UniprotServiceImpl implements UniprotService {
 
         return uniprotApiByAccession(accession).getComments()
                 .stream()
-                .filter(obj -> Objects.nonNull(obj))
+                .filter(Objects::nonNull)
                 .filter(type -> type.getType().equalsIgnoreCase(TYPE))
                 .findAny().orElse(new Comment());
     }

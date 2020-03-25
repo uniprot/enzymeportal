@@ -35,7 +35,7 @@ class IntenzServiceImpl implements IntenzService {
         this.intenzProperties = intenzProperties;
     }
 
-      @Override
+    @Override
     public List<EnzymeHierarchy> getEnzymeHierarchies(List<String> ecList) {
 
         List<Intenz> intenzList = getIntenz(ecList);
@@ -97,6 +97,7 @@ class IntenzServiceImpl implements IntenzService {
                 } catch (InterruptedException | ExecutionException e) {
                     // Don't stop the others
                     log.error("Callable " + (i + 1) + " of " + completeEcs + " - " + e.getMessage(), e);
+                    Thread.currentThread().interrupt();
                 }
             }
         } finally {

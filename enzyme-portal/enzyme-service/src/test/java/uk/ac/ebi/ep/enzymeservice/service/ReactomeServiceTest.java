@@ -170,19 +170,6 @@ public class ReactomeServiceTest {
 
     }
 
-//    @Test
-//    public void testFindPathwayByPathwayById_ResponseEntity() {
-//        log.info("testFindPathwayByPathwayById_ResponseEntity");
-//        String pathwayId = "R-HSA-4086398";
-//
-//        String expResult = "Ca2+ pathway";
-//        ResponseEntity<ReactomeResult> result = reactomeService.findReactomeResultByPathwayId(pathwayId);
-//        assertNotNull(result);
-//        assertNotNull(result.getBody());
-//        assertEquals(result.getStatusCode(), HttpStatus.OK);
-//        assertEquals(expResult, result.getBody().getDisplayName());
-//
-//    }
     @Test
     public void testFindPathwayByPathwayById_Mono() {
         log.info("testFindPathwayByPathwayById_Mono");

@@ -28,6 +28,7 @@ public class IntenzServiceTest extends EnzymeServiceBaseTest {
     private IntenzService intenzService;
 
     @Test
+    @Override
     void injectedComponentsAreNotNull() {
         assertThat(intenzService).isNotNull();
     }
