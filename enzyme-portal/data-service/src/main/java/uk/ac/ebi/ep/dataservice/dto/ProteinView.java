@@ -42,6 +42,8 @@ public interface ProteinView {
 
     Long getRelatedProteinsId();
 
+    String getProteinGroupId();
+
     default Species getSpecies() {
         return new Species(getScientificName(), getCommonName(), getTaxId());
     }

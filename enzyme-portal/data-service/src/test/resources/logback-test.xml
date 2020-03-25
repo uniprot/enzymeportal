@@ -5,9 +5,8 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 
         <encoder>
-            <!--    <pattern>%msg%n</pattern>-->
+
             <pattern> %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</pattern>
-            <!--      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
         </encoder>
     </appender>
  
@@ -34,12 +33,6 @@
         </encoder>
     </appender>
  
-    <!--<logger name="jsonLogger" level="WARN">
-        <appender-ref ref="json" />
-    </logger>-->
-  
-    <!--    <logger name="uk.ac.ebi.reaction.mechanism.service" level="WARN"/>
-    -->
 
     <root level="info">
         <appender-ref ref="logFile" />

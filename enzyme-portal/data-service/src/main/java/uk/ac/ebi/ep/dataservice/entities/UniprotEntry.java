@@ -115,6 +115,8 @@ public class UniprotEntry implements Serializable {
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession")
     private Set<UniprotXref> uniprotXrefSet;
+    @Column(name = "PROTEIN_GROUP_ID")
+    private String proteinGroupId;
 
     public UniprotEntry() {
     }
@@ -375,6 +377,14 @@ public class UniprotEntry implements Serializable {
 
     public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
         this.uniprotXrefSet = uniprotXrefSet;
+    }
+
+    public String getProteinGroupId() {
+        return proteinGroupId;
+    }
+
+    public void setProteinGroupId(String proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
     }
 
 }
