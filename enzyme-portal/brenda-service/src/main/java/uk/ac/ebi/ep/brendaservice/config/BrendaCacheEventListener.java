@@ -9,7 +9,7 @@ import org.ehcache.event.CacheEventListener;
  * @author joseph
  */
 @Slf4j
-public class WebCacheEventListener implements CacheEventListener<Object, Object> {
+public class BrendaCacheEventListener implements CacheEventListener<Object, Object> {
 
     @Override
     public void onEvent(CacheEvent<? extends Object, ? extends Object> cacheEvent) {

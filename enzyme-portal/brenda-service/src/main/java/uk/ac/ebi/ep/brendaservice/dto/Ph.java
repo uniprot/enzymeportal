@@ -17,7 +17,6 @@ public class Ph implements Serializable{
 
     private String ecNumber;
     private String phRange;
-    //private String phRangeMaximum;
     private String organism;
     private String comment;
     private String accession;

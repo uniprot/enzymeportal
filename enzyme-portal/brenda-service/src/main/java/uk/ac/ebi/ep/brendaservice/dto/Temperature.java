@@ -17,7 +17,6 @@ public class Temperature implements Serializable{
 
     private String ecNumber;
     private String temperatureRange;
-    //private String temperatureRangeMaximum;
     private String organism;
     private String comment;
     private String accession;

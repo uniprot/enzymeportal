@@ -38,8 +38,8 @@ public class BrendaServiceImpl implements BrendaService {
     private final String SOAP_URL = "http://soapinterop.org/";
     private final String EC_NUMBER = ",ecNumber*";
     private final String ORGANISM = "#organism*";
-    private final String MORE ="more";
-    private final String INVALID_NUMBER ="-999";
+    private final String MORE = "more";
+    private final String INVALID_NUMBER = "-999";
 
     @Autowired
     public BrendaServiceImpl(BrendaProperties brendaProperties) {
@@ -66,10 +66,10 @@ public class BrendaServiceImpl implements BrendaService {
                 hexString.append(hex);
             }
             call.setTargetEndpointAddress(new java.net.URL(endpoint));
-
+          
             parameters = String.format("%s,%s", brendaProperties.getUsername(), hexString);
 
-        } catch (ServiceException | NoSuchAlgorithmException | MalformedURLException ex) {
+        } catch (ServiceException | NoSuchAlgorithmException | MalformedURLException  ex) {
             log.error(ex.getMessage());
         }
         return BrendaConfig
@@ -81,11 +81,12 @@ public class BrendaServiceImpl implements BrendaService {
 
     private String invokeBrendaSoapService(Call call, String parameters) {
         try {
-            return (String) call.invoke(new Object[]{parameters});
+              call.setTimeout(30_000);
+            return  (String) call.invoke(new Object[]{parameters});
         } catch (RemoteException ex) {
             log.error(ex.getMessage(), ex);
         }
-        return null;
+        return "";
     }
 
     @Override
@@ -168,6 +169,7 @@ public class BrendaServiceImpl implements BrendaService {
         if (addAcc) {
             return processTemperature(result)
                     .distinct()
+                    .filter(n -> !n.getTemperatureRange().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .map(acc -> addAccession(acc))
                     .sorted(Comparator.comparing(Temperature::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
@@ -175,6 +177,7 @@ public class BrendaServiceImpl implements BrendaService {
         }
         return processTemperature(result)
                 .distinct()
+                .filter(n -> !n.getTemperatureRange().trim().equalsIgnoreCase(INVALID_NUMBER))
                 .limit(limit)
                 .collect(Collectors.toList());
     }
@@ -225,6 +228,7 @@ public class BrendaServiceImpl implements BrendaService {
         if (addAcc) {
             return processPh(result)
                     .distinct()
+                    .filter(n -> !n.getPhRange().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .map(acc -> addAccession(acc))
                     .sorted(Comparator.comparing(Ph::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
@@ -232,8 +236,7 @@ public class BrendaServiceImpl implements BrendaService {
         }
         return processPh(result)
                 .distinct()
-                //.map(acc -> addAccession(acc))
-                //.sorted(Comparator.comparing(Ph::getAccession, nullsLast(reverseOrder())))
+                .filter(n -> !n.getPhRange().trim().equalsIgnoreCase(INVALID_NUMBER))
                 .limit(limit)
                 .collect(Collectors.toList());
     }
@@ -306,9 +309,9 @@ public class BrendaServiceImpl implements BrendaService {
         String result = getKinetics(brendaConfig.getCall(), parameters);
         return processKinetics(result)
                 .distinct()
-                .filter(more -> !more.getSubstrate().equalsIgnoreCase(MORE))
-                .filter(n -> !n.getKcatKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                .filter(n -> !n.getKmValue().equalsIgnoreCase(INVALID_NUMBER))
+                .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
+                .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
+                .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                 //.parallel()
                 .map(acc -> addAccession(acc))
                 .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
@@ -328,9 +331,9 @@ public class BrendaServiceImpl implements BrendaService {
             return processKinetics(result)
                     .distinct()
                     //.parallel()
-                    .filter(more -> !more.getSubstrate().equalsIgnoreCase(MORE))
-                    .filter(n -> !n.getKcatKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                    .filter(n -> !n.getKmValue().equalsIgnoreCase(INVALID_NUMBER))
+                    .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
+                    .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
+                    .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .map(acc -> addAccession(acc))
                     .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
@@ -339,12 +342,9 @@ public class BrendaServiceImpl implements BrendaService {
 
         return processKinetics(result)
                 .distinct()
-                .filter(more -> !more.getSubstrate().equalsIgnoreCase(MORE))
-                .filter(n -> !n.getKcatKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                .filter(n -> !n.getKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                //.parallel()
-                //.map(acc -> addAccession(acc))
-                //.sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
+                .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
+                .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
+                .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                 .limit(limit)
                 .collect(Collectors.toList());
     }
@@ -361,9 +361,9 @@ public class BrendaServiceImpl implements BrendaService {
             return processKinetics(result)
                     .distinct()
                     //.parallel()
-                    .filter(more -> !more.getSubstrate().equalsIgnoreCase(MORE))
-                    .filter(n -> !n.getKcatKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                    .filter(n -> !n.getKmValue().equalsIgnoreCase(INVALID_NUMBER))
+                    .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
+                    .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
+                    .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .map(acc -> addAccession(acc))
                     .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
@@ -371,12 +371,9 @@ public class BrendaServiceImpl implements BrendaService {
         }
         return processKinetics(result)
                 .distinct()
-                .filter(more -> !more.getSubstrate().equalsIgnoreCase(MORE))
-                .filter(n -> !n.getKcatKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                .filter(n -> !n.getKmValue().equalsIgnoreCase(INVALID_NUMBER))
-                //.parallel()
-                //.map(acc -> addAccession(acc))
-                //.sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
+                .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
+                .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
+                .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                 .limit(limit)
                 .collect(Collectors.toList());
     }

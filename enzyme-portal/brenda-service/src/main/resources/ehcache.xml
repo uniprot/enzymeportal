@@ -18,7 +18,7 @@
 
         <listeners>
             <listener>
-                <class>uk.ac.ebi.ep.brendaservice.config.WebCacheEventListener</class>
+                <class>uk.ac.ebi.ep.brendaservice.config.BrendaCacheEventListener</class>
                 <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
                 <event-ordering-mode>UNORDERED</event-ordering-mode>
                 <events-to-fire-on>CREATED</events-to-fire-on>

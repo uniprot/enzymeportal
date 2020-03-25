@@ -26,16 +26,7 @@ public class Brenda implements Serializable {
     private boolean kmv;
     private String accession;
 
-//    public String getAccession() {
-//        if(accession == null){
-//            accession = "";
-//        }
-//        return accession;
-//    }
-//
-//    public void setAccession(String accession) {
-//        this.accession = accession;
-//    }
+
     @Override
     public int hashCode() {
         int hash = 3;

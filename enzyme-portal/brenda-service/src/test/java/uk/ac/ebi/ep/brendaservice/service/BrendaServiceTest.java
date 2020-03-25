@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class BrendaServiceTest {
         assertThat(brendaService).isNotNull();
     }
 
+    @Disabled
     @Test
     public void testCachedFindBrendaResultByEc() {
         log.info("testCachedFindBrendaResultByEc");
@@ -157,7 +159,6 @@ public class BrendaServiceTest {
         int limit = 5;
         boolean addAcc = false;
         List<Ph> result = brendaService.findPhByEc(ec, limit, addAcc);
-
         assertNotNull(result);
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
     }
