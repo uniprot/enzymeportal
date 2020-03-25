@@ -3,12 +3,14 @@ package uk.ac.ebi.ep.indexservice.service;
 import java.net.URI;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
+import uk.ac.ebi.ep.indexservice.exceptions.IndexServiceException;
 import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
 
 /**
@@ -27,11 +29,11 @@ public abstract class AbstractIndexService<T> {
     protected URI buildURI(QueryBuilder queryBuilder, String indexUrl) {
         log.debug("search term $ " + queryBuilder.getQuery());
         String fields = queryBuilder.getFields().stream().collect(Collectors.joining(","));
-        String query = String.format(queryStringNoFacet,
+        String q = String.format(queryStringNoFacet,
                 queryBuilder.getFacetcount(), queryBuilder.getStart(), queryBuilder.getSize(), fields, queryBuilder.getSort(), queryBuilder.getReverse(), queryBuilder.getFormat());
 
         if (!StringUtils.isEmpty(queryBuilder.getFacets()) && StringUtils.hasText(queryBuilder.getFacets())) {
-            query = String.format(queryString,
+            q = String.format(queryString,
                     queryBuilder.getFacetcount(), queryBuilder.getFacets(), queryBuilder.getStart(), queryBuilder.getSize(), fields, queryBuilder.getSort(), queryBuilder.getReverse(), queryBuilder.getFormat());
 
         }
@@ -39,7 +41,7 @@ public abstract class AbstractIndexService<T> {
         return UriComponentsBuilder
                 .fromUriString(indexUrl)
                 .queryParam(this.query, queryParam)
-                .query(query)
+                .query(q)
                 .build(queryBuilder.getQuery());
 
     }
@@ -52,10 +54,9 @@ public abstract class AbstractIndexService<T> {
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                //.onStatus(HttpStatus::is4xxClientError, response -> Mono.just(new IndexServiceException("client error with status : " + response.rawStatusCode())))
-                //.onStatus(HttpStatus::is5xxServerError, response -> response.bodyToMono(IndexServiceException.class))
+                .onStatus(HttpStatus::is4xxClientError, response -> Mono.just(new IndexServiceException("client error with status : " + response.rawStatusCode())))
+                .onStatus(HttpStatus::is5xxServerError, response -> response.bodyToMono(IndexServiceException.class))
                 .bodyToMono(resultType)
-                //.cache(Duration.ofHours(1))
                 .switchIfEmpty(Mono.empty());
 
     }

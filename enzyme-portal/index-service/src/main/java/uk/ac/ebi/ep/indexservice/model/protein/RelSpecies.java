@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RelSpecies {
 
-    private String accession = "";
-    private String commonName = "";
-    private String scientificName = "";
+    private String accession;
+    private String commonName;
+    private String scientificName;
     private BigInteger expEvidenceCode;
     private String taxId;
 

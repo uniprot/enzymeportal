@@ -154,7 +154,7 @@ public class EnzymeCentricServiceImplIT extends IndexServiceApplicationTests {
         Mono<EnzymeSearchResult> result = enzymeCentricService.searchForEnzymesNonBlocking(queryBuilder);
 
         assertNotNull(result);
-        result.subscribe(data -> System.out.println("Result : " + data.getEntries()));
+        result.subscribe(data -> log.info("Result : " + data.getEntries()));
         assertThat(result.blockOptional().orElse(new EnzymeSearchResult()).getEntries(), hasSize(greaterThanOrEqualTo(1)));
         assertThat(result.blockOptional().orElse(new EnzymeSearchResult()).getFacets(), hasSize(greaterThanOrEqualTo(1)));
 
@@ -179,7 +179,31 @@ public class EnzymeCentricServiceImplIT extends IndexServiceApplicationTests {
         assertThat(result.getEntries(), hasSize(greaterThanOrEqualTo(1)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(1)));
 
-        result.getEntries().forEach(x -> System.out.println(" With Cofactor " + x.getEnzymeName() + " " + x.getEc() + " " + x));
+        result.getEntries().forEach(x -> log.info(" With Cofactor " + x.getEnzymeName() + " " + x.getEc() + " " + x));
+    }
+
+    @Test
+    public void testSearchForEnzymes_by_Metabolite() {
+        log.info("testSearchForEnzymes_by_Metabolite");
+        String chebiId = "CHEBI:37565";
+
+        String chebiIdSuffix = chebiId.replace("CHEBI:", "");
+
+        String metaboliteId = String.format("MTBLC%s", chebiIdSuffix);
+
+        String query = String.format("%s%s", IndexQueryType.METABOLIGHTS.getQueryType(), metaboliteId);
+
+        List<String> facetList = new ArrayList<>();
+
+        QueryBuilder queryBuilder = defaultQueryBuilder(query, facetList);
+
+        EnzymeSearchResult result = enzymeCentricService.searchForEnzymes(queryBuilder);
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(greaterThanOrEqualTo(1)));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(1)));
+
+        result.getEntries().forEach(x -> log.info(" With Metabolite " + x.getEnzymeName() + " " + x.getEc() + " " + x));
     }
 
     public static String escape(String term) {

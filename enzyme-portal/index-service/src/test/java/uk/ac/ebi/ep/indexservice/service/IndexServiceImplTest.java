@@ -54,7 +54,7 @@ public class IndexServiceImplTest extends IndexServiceApplicationTests {
         Mono<EnzymeEntry> entry = indexService.getEnzymePageEntry(queryBuilder);
         
         assertNotNull(entry);
-        entry.subscribe(e -> System.out.println("Enzyme Page  " + e.getEnzymeName() + " Associated Protein : " + e.getProteinGroupEntry()));
+        entry.subscribe(e -> log.info("Enzyme Page  " + e.getEnzymeName() + " Associated Protein : " + e.getProteinGroupEntry()));
         assertThat(entry.blockOptional().orElse(new EnzymeEntry()).getProteinGroupEntry(), hasSize(greaterThanOrEqualTo(1)));
         
     }

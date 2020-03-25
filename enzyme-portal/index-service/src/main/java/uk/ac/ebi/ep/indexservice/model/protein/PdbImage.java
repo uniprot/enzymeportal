@@ -1,10 +1,12 @@
 package uk.ac.ebi.ep.indexservice.model.protein;
 
+import lombok.Data;
+
 /**
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
-
+@Data
 public class PdbImage {
 
     private String pdbId;
@@ -22,32 +24,6 @@ public class PdbImage {
     public PdbImage(String pdbId, String specie, String accession) {
         this.pdbId = pdbId;
         this.specie = specie;
-        this.accession = accession;
-    }
-
-    public String getPdbId() {
-        return pdbId;
-    }
-
-    public void setPdbId(String pdbId) {
-        this.pdbId = pdbId;
-    }
-    
-    
-
-    public String getSpecie() {
-        return specie;
-    }
-
-    public void setSpecie(String specie) {
-        this.specie = specie;
-    }
-
-    public String getAccession() {
-        return accession;
-    }
-
-    public void setAccession(String accession) {
         this.accession = accession;
     }
 

@@ -21,6 +21,7 @@ public class IndexServiceImpl implements IndexService {
 
     private static final String ENTRY_TYPE_ASC = "entry_type:ascending";
     private static final String FORMAT = "json";
+    private static final int DEFAULT_PROTEIN_SIZE = 7;
     private final EnzymeCentricService enzymeCentricService;
     private final ProteinCentricService proteinCentricService;
 
@@ -34,7 +35,7 @@ public class IndexServiceImpl implements IndexService {
     public Mono<List<EnzymeEntry>> getEnzymeEntries(QueryBuilder enzymeQueryBuilder, String resourceQuery) {
         return enzymeCentricService.searchForEnzymesNonBlocking(enzymeQueryBuilder)
                 .map(EnzymeSearchResult::getEntries)
-                .flatMapIterable(x -> x)
+                .flatMapIterable(entryList -> entryList)
                 .flatMap(data -> addProtein(data, resourceQuery))
                 .collectList();
 
@@ -42,14 +43,12 @@ public class IndexServiceImpl implements IndexService {
 
     private Mono<EnzymeEntry> addProtein(EnzymeEntry entry, String query) {
 
-        List<String> fieldList = Arrays.asList(IndexFields.id.name(), IndexFields.name.name(),
-                IndexFields.primary_accession.name(), IndexFields.primary_organism.name(), IndexFields.related_species.name(),
-                IndexFields.with_cofactor.name(), IndexFields.with_disease.name(), IndexFields.with_protein_family.name(), IndexFields.with_taxonomy.name());
+        List<String> fieldList = IndexFields.defaultFieldList(false);
         QueryBuilder queryBuilder = QueryBuilder
                 .builder()
                 .query(query)
                 .start(0)
-                .size(7)
+                .size(DEFAULT_PROTEIN_SIZE)
                 .fields(fieldList)
                 .sort(ENTRY_TYPE_ASC)
                 .reverse(Boolean.FALSE)
@@ -77,13 +76,12 @@ public class IndexServiceImpl implements IndexService {
         String query = String.format("%s%s", IndexQueryType.EC.getQueryType(), entry.getEc());
 
         List<String> fieldList = Arrays.asList(IndexFields.id.name(), IndexFields.name.name(),
-                IndexFields.primary_accession.name(), IndexFields.primary_organism.name(), IndexFields.related_species.name(),
-                IndexFields.with_cofactor.name(), IndexFields.with_disease.name(), IndexFields.with_protein_family.name(), IndexFields.with_taxonomy.name());
+                IndexFields.primary_accession.name(), IndexFields.primary_organism.name());
         QueryBuilder queryBuilder = QueryBuilder
                 .builder()
                 .query(query)
                 .start(0)
-                .size(7)
+                .size(DEFAULT_PROTEIN_SIZE)
                 .fields(fieldList)
                 .sort(ENTRY_TYPE_ASC)
                 .reverse(Boolean.FALSE)

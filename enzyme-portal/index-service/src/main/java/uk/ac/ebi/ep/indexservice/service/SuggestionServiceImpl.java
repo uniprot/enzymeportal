@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.indexservice.service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,26 +24,26 @@ import uk.ac.ebi.ep.restclient.service.RestConfigService;
 @Service
 @Slf4j
 public class SuggestionServiceImpl implements SuggestionService {
-
+    
     private final IndexProperties indexProperties;
-
+    
     private static final String QUERY_PARAM = "term";
     private static final String FORMAT = "&format=json";
     private static final String ENDPOINT = "/autocomplete";
-
+    
     private final RestConfigService restConfigService;
     private static final String MSG = "autocomplete search term : ";
-
+    
     @Autowired
     public SuggestionServiceImpl(IndexProperties properties, RestConfigService restConfigService) {
-
+        
         this.indexProperties = properties;
         this.restConfigService = restConfigService;
     }
-
+    
     private URI buildURI(String searchTerm) {
         log.debug(MSG + searchTerm);
-        if (searchTerm != null) {
+        if (Objects.nonNull(searchTerm)) {
             searchTerm = searchTerm.toLowerCase();
         }
         return UriComponentsBuilder
@@ -50,14 +51,14 @@ public class SuggestionServiceImpl implements SuggestionService {
                 .queryParam(QUERY_PARAM, "{searchTerm}")
                 .query(FORMAT)
                 .build(searchTerm);
-
+        
     }
-
+    
     @Override
     public Mono<Autocomplete> autocomplete(String searchTerm) {
         log.debug(MSG + searchTerm);
         WebClient webclient = restConfigService.getWebClient();
-
+        
         return webclient.get()
                 .uri(buildURI(searchTerm))
                 .accept(MediaType.APPLICATION_JSON)
@@ -65,12 +66,12 @@ public class SuggestionServiceImpl implements SuggestionService {
                 .flatMap(response -> response.bodyToMono(Autocomplete.class))
                 .switchIfEmpty(Mono.empty());
     }
-
+    
     @Override
     public Mono<Autocomplete> autocompleteSearch(String searchTerm) {
         log.debug(MSG + searchTerm);
         WebClient webclient = restConfigService.getWebClient();
-
+        
         return webclient.get()
                 .uri(buildURI(searchTerm))
                 .accept(MediaType.APPLICATION_JSON)
@@ -80,22 +81,22 @@ public class SuggestionServiceImpl implements SuggestionService {
                 .bodyToMono(Autocomplete.class)
                 .switchIfEmpty(Mono.empty());
     }
-
+    
     @Override
     public List<Suggestion> getSuggestions(String searchTerm) {
-
+        
         return autocomplete(searchTerm)
                 .blockOptional()
                 .orElse(new Autocomplete())
                 .getSuggestions();
     }
-
+    
     @Override
     public List<Suggestion> findSuggestions(String searchTerm) {
         return autocompleteSearch(searchTerm)
                 .blockOptional()
                 .orElse(new Autocomplete()).getSuggestions();
-
+        
     }
-
+    
 }

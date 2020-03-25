@@ -70,7 +70,10 @@ public class ProteinGroupEntry implements ProteinView {
     @Override
     public String getPrimaryOrganism() {
         if (fields.getPrimaryOrganism().isEmpty()) {
-            return getRelatedSpecies().stream().limit(1).findFirst()
+            return getRelatedSpecies()
+                    .stream()
+                    .limit(1)
+                    .findFirst()
                     .orElse(new RelSpecies()).getCommonName();
         }
         return fields.getPrimaryOrganism().stream().limit(1).findFirst().orElse("");
@@ -140,8 +143,6 @@ public class ProteinGroupEntry implements ProteinView {
     }
 
     private List<RelSpecies> buildRelSpecies() {
-        // List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
-
         List<RelSpecies> species = fields.getRelatedSpecies()
                 .stream()
                 .filter(Objects::nonNull)
@@ -196,6 +197,7 @@ public class ProteinGroupEntry implements ProteinView {
     public List<WithMetabolite> getWithMetabolite() {
         return fields.getWithMetabolite()
                 .stream()
+                //.parallel()
                 .filter(Objects::nonNull)
                 .map(c -> c.split(";"))
                 .map(p -> new WithMetabolite(p[0], p[1], p[2], p[3]))
@@ -252,7 +254,6 @@ public class ProteinGroupEntry implements ProteinView {
         LinkedList<RelSpecies> sortedSpecies = new LinkedList<>();
 
         species
-                //.stream()
                 .forEach(specie -> sortSpecies(specie, priorityMapper, customKey, key));
 
         priorityMapper.entrySet()
@@ -263,8 +264,6 @@ public class ProteinGroupEntry implements ProteinView {
                 .stream()
                 //.sorted(Comparator.comparing(RelSpecies::getExpEvidenceCode)
                 // .reversed())
-                //.sorted(Comparator.comparingInt(code -> code.getExpEvidenceCode()))
-                //.sorted(Comparator.comparing(evidence -> evidence.getExpEvidenceCode()))
                 .collect(Collectors.toList());
 
     }

@@ -1,12 +1,14 @@
 package uk.ac.ebi.ep.indexservice.service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.time.Duration;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.assertj.core.api.Assertions;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,6 +43,7 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
     private SuggestionService suggestionService;
     @Autowired
     private IndexProperties indexProperties;
+    private static final String CONTENT_TYPE ="application/json;charset=UTF-8";
 
     private final WebTestClient webTestClient = WebTestClient.bindToServer()
             .baseUrl("https://www.ebi.ac.uk/ebisearch/ws/rest")
@@ -65,10 +68,12 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
         webTestClient
                 .get()
                 .uri(indexProperties.getEnzymeCentricUrl() + AUTO_COMPLETE_URL, searchTerm)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
+                .acceptCharset(Charset.defaultCharset())
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader()
+                .contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Autocomplete.class)
                 .returnResult();
 
@@ -102,10 +107,12 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
         webTestClient.get()
                 .uri(indexProperties.getEnzymeCentricUrl() + AUTO_COMPLETE_URL, searchTerm)
                 .accept(MediaType.APPLICATION_JSON)
+                .acceptCharset(Charset.defaultCharset())
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectHeader()
+                .contentType(CONTENT_TYPE)
                 .expectBody()
                 .jsonPath("$.suggestions").isArray()
                 .jsonPath("$.suggestions[0]").isNotEmpty()
@@ -130,7 +137,7 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
                 .expectStatus()
                 .isOk()
                 .expectHeader()
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(CONTENT_TYPE)
                 .expectBodyList(Autocomplete.class)
                 .hasSize(1)
                 .consumeWith(result -> {
@@ -266,14 +273,18 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
         String url = indexProperties.getBaseUrl() + indexProperties.getEnzymeCentricUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
         try (Response response = okHttpClient.newCall(request(url)).execute()) {
+            Mono<String> result = Mono.empty();
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
 
-            Mono<String> result = Mono.just(response.body().string());
-            StepVerifier.create(result)
-                    .expectNext(content)
-                    .expectComplete()
-                    .verify(Duration.ofSeconds(3));
+                result = Mono.just(responseBody.string());
+                StepVerifier.create(result)
+                        .expectNext(content)
+                        .expectComplete()
+                        .verify(Duration.ofSeconds(3));
 
-            assertNotNull(result);
+                assertNotNull(result);
+            }
 
             result.subscribe(r -> {
                 assertEquals(r, content);

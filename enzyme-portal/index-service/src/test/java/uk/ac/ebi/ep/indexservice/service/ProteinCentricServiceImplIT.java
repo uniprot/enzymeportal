@@ -127,7 +127,7 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .filter(h -> h.getLabel().equalsIgnoreCase("Homo sapiens"))
                 .findAny().get().getCount();
 
-        assertEquals(4,taxFacet);
+        assertEquals(4, taxFacet);
 
         List<String> facetList = Arrays.asList("TAXONOMY:9606");
         String facets = facetList.stream().collect(Collectors.joining(","));
@@ -157,8 +157,8 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .filter(h -> h.getLabel().equalsIgnoreCase("Homo sapiens"))
                 .findAny().get().getCount();
 
-        assertEquals(4,numFacets);
-        assertEquals(4,result.getHitCount().longValue());
+        assertEquals(4, numFacets);
+        assertEquals(4, result.getHitCount().longValue());
 
     }
 
@@ -216,7 +216,7 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .findAny().get().getCount();
 
         assertEquals(3, numFacets);
-        assertEquals(3,result.getHitCount().longValue());
+        assertEquals(3, result.getHitCount().longValue());
 
     }
 
@@ -233,6 +233,30 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
         String associatedQuery = String.format("%s%s AND %s%s", IndexQueryType.COFACTOR.getQueryType(), cofactorId, IndexQueryType.EC.getQueryType(), ec);
 
         QueryBuilder defaultQueryBuilder = defaultQueryBuilder(associatedQuery, facetList);
+        ProteinGroupSearchResult result = proteinCentricService.searchForProteins(defaultQueryBuilder);
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(greaterThanOrEqualTo(1)));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(1)));
+
+    }
+
+    @Test
+    public void test_AssociatedProteinResult_with_facet_Metabolite() {
+        log.info("test_AssociatedProteinResult_with_facet_Metabolite");
+
+        String ec = "6.5.1.5";
+        String chebiId = "CHEBI:37565";
+
+        List<String> facetList = new ArrayList<>();
+
+        String chebiIdSuffix = chebiId.replace("CHEBI:", "");
+        String metaboliteId = String.format("MTBLC%s", chebiIdSuffix);
+
+        String associatedQuery = String.format("%s%s AND %s%s", IndexQueryType.METABOLIGHTS.getQueryType(), metaboliteId, IndexQueryType.INTENZ.getQueryType(), ec);
+
+        QueryBuilder defaultQueryBuilder = defaultQueryBuilder(associatedQuery, facetList);
+
         ProteinGroupSearchResult result = proteinCentricService.searchForProteins(defaultQueryBuilder);
 
         assertNotNull(result);
