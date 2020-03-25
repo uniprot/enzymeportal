@@ -205,7 +205,7 @@ public class EnzymeCentricServiceImplIT extends IndexServiceApplicationTests {
 
         result.getEntries().forEach(x -> log.info(" With Metabolite " + x.getEnzymeName() + " " + x.getEc() + " " + x));
     }
-
+   
     public static String escape(String term) {
         return "\"" + term + "\"";
     }

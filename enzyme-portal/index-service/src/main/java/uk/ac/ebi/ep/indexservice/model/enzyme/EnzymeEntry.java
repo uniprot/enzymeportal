@@ -1,4 +1,5 @@
 package uk.ac.ebi.ep.indexservice.model.enzyme;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,6 +16,7 @@ import lombok.ToString;
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -34,7 +37,6 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
     @JsonProperty("fields")
     private EnzymeFields fields;
 
-
     /**
      *
      * @param id ec number
@@ -42,60 +44,6 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
      */
     public EnzymeEntry(String id, EnzymeFields fields) {
         this.id = id;
-        this.fields = fields;
-    }
-
-    /**
-     *
-     * @return The id
-     */
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
-
-    /**
-     *
-     * @param id The id
-     */
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     *
-     * @return The source
-     */
-    @JsonProperty("source")
-    public String getSource() {
-        return source;
-    }
-
-    /**
-     *
-     * @param source The source
-     */
-    @JsonProperty("source")
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    /**
-     *
-     * @return The fields
-     */
-    @JsonProperty("fields")
-    public EnzymeFields getFields() {
-        return fields;
-    }
-
-    /**
-     *
-     * @param fields The fields
-     */
-    @JsonProperty("fields")
-    public void setFields(EnzymeFields fields) {
         this.fields = fields;
     }
 
@@ -136,7 +84,6 @@ public class EnzymeEntry extends AbstractPageView implements EnzymeView {
     public Set<String> getAltNames() {
         return fields.getAltNames();
     }
-
 
     /**
      *
