@@ -11,15 +11,15 @@ import uk.ac.ebi.reaction.mechanism.model.Result;
  */
 public interface ReactionMechanismService {
 
-    MechanismResult findMechanismResultByEc(String ec);
+    MechanismResult findMechanismResultByEc(String ec, int pageSize);
 
-    MechanismResult findMechanismResultByAccession(String accession);
+    MechanismResult findMechanismResultByAccession(String accession, int pageSize);
 
-    List<Mechanism> findMechanismsByEc(String ec);
+    List<Mechanism> findMechanismsByEc(String ec, int pageSize);
 
-    List<Mechanism> findMechanismsByAccession(String accession);
+    List<Mechanism> findMechanismsByAccession(String accession, int pageSize);
 
-    List<Result> findReactionMechanismByEc(String ec);
+    List<Result> findReactionMechanismByEc(String ec, int pageSize);
 
     Result findReactionMechanismByAccession(String accession);
 

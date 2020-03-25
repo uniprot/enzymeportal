@@ -25,7 +25,7 @@ import uk.ac.ebi.reaction.mechanism.model.Result;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {McsaConfig.class})
-public class ReactionMechanismServiceIT {
+public class ReactionMechanismServiceTest {
 
     @Autowired
     private ReactionMechanismService reactionMechanismService;
@@ -38,8 +38,8 @@ public class ReactionMechanismServiceIT {
     public void testFindMechanismResultByEc() {
         log.info("findMechanismResultByEc");
         String ec = "1.1.1.1";
-
-        MechanismResult result = reactionMechanismService.findMechanismResultByEc(ec);
+        int pageSize = 1;
+        MechanismResult result = reactionMechanismService.findMechanismResultByEc(ec, pageSize);
         assertNotNull(result);
         assertThat(result.getResults(), hasSize(greaterThanOrEqualTo(1)));
 
@@ -52,11 +52,12 @@ public class ReactionMechanismServiceIT {
     @Test
     public void testFindMechanismResultByAccession() {
         log.info("findMechanismResultByAccession");
+        int pageSize = 1;
         String accession = "P00334";
         accession = "P00326";
         accession = "B2V9I5";
-        MechanismResult result = reactionMechanismService.findMechanismResultByAccession(accession);
-        
+        MechanismResult result = reactionMechanismService.findMechanismResultByAccession(accession, pageSize);
+
         assertNotNull(result);
         assertThat(result.getResults(), hasSize(greaterThanOrEqualTo(1)));
 
@@ -69,8 +70,8 @@ public class ReactionMechanismServiceIT {
     public void testFindMechanismsByEc() {
         log.info("findMechanismsByEc");
         String ec = "1.1.1.1";
-
-        List<Mechanism> result = reactionMechanismService.findMechanismsByEc(ec);
+        int pageSize = 2;
+        List<Mechanism> result = reactionMechanismService.findMechanismsByEc(ec, pageSize);
         assertNotNull(result);
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
 
@@ -84,8 +85,8 @@ public class ReactionMechanismServiceIT {
     public void testFindMechanismsByAccession() {
         log.info("findMechanismsByAccession");
         String accession = "P00334";
-
-        List<Mechanism> result = reactionMechanismService.findMechanismsByAccession(accession);
+        int pageSize = 2;
+        List<Mechanism> result = reactionMechanismService.findMechanismsByAccession(accession, pageSize);
         assertNotNull(result);
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
 
@@ -99,8 +100,8 @@ public class ReactionMechanismServiceIT {
     public void testFindReactionMechanismByEc() {
         log.info("findReactionMechanismByEc");
         String ec = "1.1.1.1";
-
-        List<Result> result = reactionMechanismService.findReactionMechanismByEc(ec);
+        int pageSize = 2;
+        List<Result> result = reactionMechanismService.findReactionMechanismByEc(ec, pageSize);
         assertNotNull(result);
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
 
@@ -114,7 +115,6 @@ public class ReactionMechanismServiceIT {
     public void testFindReactionMechanismByAccession() {
         log.info("findReactionMechanismByAccession");
         String accession = "P00334";
-
         Result expResult = new Result();
         expResult.setMcsaId(255);
         expResult.setEnzymeName("alcohol dehydrogenase (SDR type)");

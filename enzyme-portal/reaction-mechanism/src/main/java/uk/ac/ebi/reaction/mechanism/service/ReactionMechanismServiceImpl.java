@@ -1,5 +1,6 @@
 package uk.ac.ebi.reaction.mechanism.service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -34,20 +35,20 @@ public class ReactionMechanismServiceImpl implements ReactionMechanismService {
     }
 
     @Override
-    public MechanismResult findMechanismResultByEc(String ec) {
-        String urlParam = "entries.reactions.ecs.codes=" + ec + "&format=json";
+    public MechanismResult findMechanismResultByEc(String ec, int pageSize) {
+        String urlParam = "entries.reactions.ecs.codes=" + ec + "&format=json&page_size" + pageSize;
         return getMechanismResult(urlParam);
     }
 
     @Override
-    public MechanismResult findMechanismResultByAccession(String accession) {
-        String urlParam = "entries.proteins.sequences.uniprot_ids=" + accession + "&format=json";
+    public MechanismResult findMechanismResultByAccession(String accession, int pageSize) {
+        String urlParam = "entries.proteins.sequences.uniprot_ids=" + accession + "&format=json&page_size" + pageSize;
         return getMechanismResult(urlParam);
     }
 
     @Override
-    public List<Mechanism> findMechanismsByEc(String ec) {
-        return findMechanismResultByEc(ec)
+    public List<Mechanism> findMechanismsByEc(String ec, int pageSize) {
+        return findMechanismResultByEc(ec, pageSize)
                 .getResults()
                 .stream()
                 .map(Result::getReaction)
@@ -58,9 +59,9 @@ public class ReactionMechanismServiceImpl implements ReactionMechanismService {
     }
 
     @Override
-    public List<Mechanism> findMechanismsByAccession(String accession) {
+    public List<Mechanism> findMechanismsByAccession(String accession, int pageSize) {
 
-        return findMechanismResultByAccession(accession)
+        return findMechanismResultByAccession(accession, pageSize)
                 .getResults()
                 .stream()
                 .map(Result::getReaction)
@@ -70,14 +71,14 @@ public class ReactionMechanismServiceImpl implements ReactionMechanismService {
     }
 
     @Override
-    public List<Result> findReactionMechanismByEc(String ec) {
-        return findMechanismResultByEc(ec)
+    public List<Result> findReactionMechanismByEc(String ec, int pageSize) {
+        return findMechanismResultByEc(ec, pageSize)
                 .getResults();
     }
 
     @Override
     public Result findReactionMechanismByAccession(String accession) {
-        return findMechanismResultByAccession(accession)
+        return findMechanismResultByAccession(accession, BigInteger.ONE.intValue())
                 .getResults()
                 .stream()
                 .findFirst()

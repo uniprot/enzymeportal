@@ -23,6 +23,7 @@ public class McsaConfig {
     @Autowired
     public ReactionMechanismUrl reactionMechanismUrl(Environment env) {
         ReactionMechanismUrl url = new ReactionMechanismUrl();
+        
         url.setMcsaUrl(env.getProperty("mcsa.url"));
         return url;
 

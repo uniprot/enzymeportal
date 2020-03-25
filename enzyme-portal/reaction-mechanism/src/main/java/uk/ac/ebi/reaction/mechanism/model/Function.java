@@ -22,7 +22,7 @@ public class Function {
     @JsonProperty("function_type")
     private String functionType;
     @JsonProperty("function")
-    private String function;
+    private String functionFunction;
     @JsonProperty("emo")
     private String emo;
     @JsonProperty("group_function")
@@ -39,13 +39,13 @@ public class Function {
     }
 
     @JsonProperty("function")
-    public String getFunction() {
-        return function;
+    public String getFunctionFunction() {
+        return functionFunction;
     }
 
     @JsonProperty("function")
-    public void setFunction(String function) {
-        this.function = function;
+    public void setFunctionFunction(String functionFunction) {
+        this.functionFunction = functionFunction;
     }
 
     @JsonProperty("emo")

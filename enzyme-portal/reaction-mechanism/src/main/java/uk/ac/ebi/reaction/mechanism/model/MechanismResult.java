@@ -33,7 +33,7 @@ public class MechanismResult {
 
     public Result getFirstResult() {
         return results.stream()
-                .filter(result -> Objects.nonNull(result))
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(new Result());
     }
