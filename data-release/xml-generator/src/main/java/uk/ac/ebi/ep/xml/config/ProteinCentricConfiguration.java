@@ -42,7 +42,7 @@ public class ProteinCentricConfiguration extends AbstractBatchConfig {
     private static final String ROOT_TAG_NAME = "database";
     private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E99MXF'";
-    //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
+   // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
     //private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='EOCUP4'";
     
    // private static final String NATIVE_READ_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E3CHQJ'";

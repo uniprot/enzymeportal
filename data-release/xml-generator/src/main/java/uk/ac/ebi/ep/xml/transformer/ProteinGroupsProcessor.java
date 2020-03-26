@@ -38,6 +38,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
 
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
+    protected static final String PRIMARY = "primary_";
     private final AtomicInteger count = new AtomicInteger(0);
 
     private final ProteinXmlRepository proteinXmlRepository;
@@ -53,10 +54,12 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         if (commonName == null || commonName.isEmpty()) {
             commonName = primaryProtein.getScientificName();
         }
+        String primaryOrganism = String.format("%s%s", PRIMARY, commonName);
+        String primaryAccession = String.format("%s%s", PRIMARY, accession);
 
-        fields.add(new Field(FieldName.PRIMARY_ORGANISM.getName(), commonName));
+        fields.add(new Field(FieldName.PRIMARY_ORGANISM.getName(), primaryOrganism));
 
-        fields.add(new Field(FieldName.PRIMARY_ACCESSION.getName(), accession));
+        fields.add(new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryAccession));
 
     }
 
@@ -189,7 +192,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addPrimaryEc(Protein entry, Set<Field> fields) {
-        addField(FieldName.PRIMARY_EC.getName(), "ec;" + entry.getEcNumber(), fields);
+        String primaryEc = String.format("%s%s", PRIMARY, entry.getEcNumber());
+        addField(FieldName.PRIMARY_EC.getName(), primaryEc, fields);
 
     }
 
@@ -250,7 +254,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             fields.add(new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName()));
 
             fields.add(new Field(FieldName.WITH_DISEASE.getName(), withResourceField(disease.getOmimNumber(), disease.getAccession(), disease.getOrganismName(), disease.getEntryType())));
-            fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
+            //fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
             refs.add(new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName()));
         }
     }
@@ -263,7 +267,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
 
             fields.add(new Field(FieldName.WITH_PROTEIN_FAMILY.getName(), withResourceField(family.getFamilyGroupId(), family.getAccession(), family.getOrganismName(), family.getEntryType())));
-            fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
+            //fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
         }
     }
@@ -287,7 +291,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         if (Objects.nonNull(pathway.getPathwayId())) {
 
             fields.add(new Field(FieldName.WITH_PATHWAY.getName(), withResourceField(parseReactomePathwayId(pathway.getPathwayId()), pathway.getAccession(), pathway.getOrganismName(), pathway.getEntryType())));
-            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
+            //fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             refs.add(new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()));
         }
     }
@@ -316,7 +320,6 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
                 .sorted(Comparator.comparing(ProteinMapper::getExpEvidence).reversed())
                 .forEach(s -> orderByModelOrganism(s, priorityMapper, counter));
 
-
         if (priorityMapper.isEmpty()) {
 
             proteinMapperSet.forEach(s -> orderByModelOrganism(s, priorityMapper, counter));
@@ -324,7 +327,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
 
         ProteinMapper pm = priorityMapper.firstEntry().getValue();
-   
+
         fields.add(new Field(FieldName.WITH_METABOLITE.getName(), withResourceField(key, pm.getAccession(), pm.getOrganismName(), pm.getExpEvidence())));
         priorityMapper.clear();
     }
@@ -491,7 +494,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         fields.add(new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName()));
 
         fields.add(new Field(FieldName.WITH_COFACTOR.getName(), withResourceField(compound.getCompoundId().replace(CHEBI_PREFIX, ""), accession, commonName, entryType)));
-        fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
+        //fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
 
     }
 
