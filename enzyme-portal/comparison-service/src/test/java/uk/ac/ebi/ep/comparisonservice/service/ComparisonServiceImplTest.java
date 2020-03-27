@@ -18,6 +18,7 @@ import uk.ac.ebi.ep.comparisonservice.model.Molecule;
 import uk.ac.ebi.ep.comparisonservice.model.Reaction;
 import uk.ac.ebi.ep.comparisonservice.model.ReactionPathway;
 import uk.ac.ebi.ep.dataservice.common.CompoundRole;
+import uk.ac.ebi.ep.dataservice.dto.ProteinData;
 
 /**
  *
@@ -39,9 +40,23 @@ public class ComparisonServiceImplTest {
         cpm.setAccession(accession);
         cpm.setProteinName(proteinName);
 
+        ProteinData data = new ProteinData();
+        data.setAccession(accession);
+        data.setCommonName("Human");
+        data.setProteinName(proteinName);
+        data.setScientificName("Homo Sapien");
+        data.setProteinGroupId("PG1234");
+        data.setRelatedProteinsId(1234L);
+        cpm.setRelatedspecies(Lists.emptyList());
+
+        cpm.setProteinView(data);
+
         assertNotNull(cpm);
         assertNotNull(cpm.getProteinName());
         assertNotNull(cpm.getAccession());
+        assertNotNull(cpm.getProteinView());
+        assertNotNull(cpm.getRelatedspecies());
+        assertNotNull(cpm.getProteinView().getProteinGroupId());
 
     }
 
