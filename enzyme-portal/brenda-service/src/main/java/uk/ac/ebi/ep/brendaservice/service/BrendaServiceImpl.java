@@ -17,6 +17,7 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.brendaservice.config.BrendaConfig;
 import uk.ac.ebi.ep.brendaservice.config.BrendaProperties;
@@ -35,11 +36,15 @@ import uk.ac.ebi.ep.brendaservice.dto.Temperature;
 public class BrendaServiceImpl implements BrendaService {
 
     private final BrendaProperties brendaProperties;
-    private final String SOAP_URL = "http://soapinterop.org/";
-    private final String EC_NUMBER = ",ecNumber*";
-    private final String ORGANISM = "#organism*";
-    private final String MORE = "more";
-    private final String INVALID_NUMBER = "-999";
+    private static final String SOAP_URL = "http://soapinterop.org/";
+    private static final String EC_NUMBER = ",ecNumber*";
+    private static final String ORGANISM = "#organism*";
+    private static final String MORE = "more";
+    private static final String INVALID_NUMBER = "-999";
+    private static final String EC = "ecNumber";
+
+    private static final String COMMENTARY = "commentary";
+    private static final String ORGANISMS = "organism";
 
     @Autowired
     public BrendaServiceImpl(BrendaProperties brendaProperties) {
@@ -54,9 +59,9 @@ public class BrendaServiceImpl implements BrendaService {
             call = (Call) service.createCall();
             String endpoint = brendaProperties.getUrl();
             String password = brendaProperties.getPassword();
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance(brendaProperties.getAlgorithm());
             md.update(password.getBytes());
-            byte byteData[] = md.digest();
+            byte[] byteData = md.digest();
             StringBuilder hexString = new StringBuilder();
             for (int i = 0; i < byteData.length; i++) {
                 String hex = Integer.toHexString(0xff & byteData[i]);
@@ -66,10 +71,10 @@ public class BrendaServiceImpl implements BrendaService {
                 hexString.append(hex);
             }
             call.setTargetEndpointAddress(new java.net.URL(endpoint));
-          
+
             parameters = String.format("%s,%s", brendaProperties.getUsername(), hexString);
 
-        } catch (ServiceException | NoSuchAlgorithmException | MalformedURLException  ex) {
+        } catch (ServiceException | NoSuchAlgorithmException | MalformedURLException ex) {
             log.error(ex.getMessage());
         }
         return BrendaConfig
@@ -81,8 +86,8 @@ public class BrendaServiceImpl implements BrendaService {
 
     private String invokeBrendaSoapService(Call call, String parameters) {
         try {
-              call.setTimeout(30_000);
-            return  (String) call.invoke(new Object[]{parameters});
+            call.setTimeout(30_000);
+            return (String) call.invoke(new Object[]{parameters});
         } catch (RemoteException ex) {
             log.error(ex.getMessage(), ex);
         }
@@ -100,13 +105,11 @@ public class BrendaServiceImpl implements BrendaService {
 
         if (kmKcat.isEmpty()) {
             List<Brenda> kmValue = findKmValueByEc(ecNumber, limit, addAcc);
-            BrendaResult brendaList = new BrendaResult(kmValue, phList, tempList, true);
-            return brendaList;
+            return new BrendaResult(kmValue, phList, tempList, true);
 
         }
 
-        BrendaResult brendaList = new BrendaResult(kmKcat, phList, tempList, false);
-        return brendaList;
+        return new BrendaResult(kmKcat, phList, tempList, false);
     }
 
     //temperature
@@ -116,21 +119,21 @@ public class BrendaServiceImpl implements BrendaService {
     }
 
     private String replaceDegree(String data) {
-        return data;//.replace("&deg;C", "'C");
+        return data;
     }
 
     private String replaceAcirc(String data) {
         return data.replace("&Acirc;", "");
     }
 
-    private Stream<Temperature> processTemperature(String data) {
+    private Stream<Temperature> processTemperature(@NonNull String data) {
         return Stream.of(data.split("#!"))
                 .map(x -> x.replaceAll("\\*", ""))
                 .map(this::replaceDegree)
                 .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
-                .map(queryString -> buildTemperature(queryString));
+                .map(this::buildTemperature);
 
     }
 
@@ -153,7 +156,7 @@ public class BrendaServiceImpl implements BrendaService {
         String result = getTemperatureRange(brendaConfig.getCall(), parameters);
         return processTemperature(result)
                 .distinct()
-                .map(acc -> addAccession(acc))
+                .map(this::addAccession)
                 .sorted(Comparator.comparing(Temperature::getAccession, nullsLast(reverseOrder())))
                 .limit(limit)
                 .collect(Collectors.toList());
@@ -170,7 +173,7 @@ public class BrendaServiceImpl implements BrendaService {
             return processTemperature(result)
                     .distinct()
                     .filter(n -> !n.getTemperatureRange().trim().equalsIgnoreCase(INVALID_NUMBER))
-                    .map(acc -> addAccession(acc))
+                    .map(this::addAccession)
                     .sorted(Comparator.comparing(Temperature::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
                     .collect(Collectors.toList());
@@ -196,7 +199,7 @@ public class BrendaServiceImpl implements BrendaService {
         return invokeBrendaSoapService(call, parameters);
     }
 
-    private Stream<Ph> processPh(String data) {
+    private Stream<Ph> processPh(@NonNull String data) {
 
         return Stream.of(data.split("#!"))
                 .map(x -> x.replaceAll("\\*", ""))
@@ -204,7 +207,7 @@ public class BrendaServiceImpl implements BrendaService {
                 .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
-                .map(queryString -> buildPh(queryString));
+                .map(this::buildPh);
 
     }
 
@@ -229,7 +232,7 @@ public class BrendaServiceImpl implements BrendaService {
             return processPh(result)
                     .distinct()
                     .filter(n -> !n.getPhRange().trim().equalsIgnoreCase(INVALID_NUMBER))
-                    .map(acc -> addAccession(acc))
+                    .map(this::addAccession)
                     .sorted(Comparator.comparing(Ph::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
                     .collect(Collectors.toList());
@@ -278,7 +281,7 @@ public class BrendaServiceImpl implements BrendaService {
 
     }
 
-    private Stream<Brenda> processKinetics(String data) {
+    private Stream<Brenda> processKinetics(@NonNull String data) {
 
         return Stream.of(data.split("#!"))
                 .map(x -> x.replaceAll("\\*", ""))
@@ -286,7 +289,7 @@ public class BrendaServiceImpl implements BrendaService {
                 .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
-                .map(queryString -> buildEnzymeInformation(queryString));
+                .map(this::buildEnzymeInformation);
 
     }
 
@@ -313,7 +316,7 @@ public class BrendaServiceImpl implements BrendaService {
                 .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                 .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                 //.parallel()
-                .map(acc -> addAccession(acc))
+                .map(this::addAccession)
                 .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
                 .limit(limit)
                 .collect(Collectors.toList());
@@ -334,7 +337,7 @@ public class BrendaServiceImpl implements BrendaService {
                     .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
                     .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
-                    .map(acc -> addAccession(acc))
+                    .map(this::addAccession)
                     .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
                     .collect(Collectors.toList());
@@ -364,7 +367,7 @@ public class BrendaServiceImpl implements BrendaService {
                     .filter(more -> !more.getSubstrate().trim().equalsIgnoreCase(MORE))
                     .filter(n -> !n.getKcatKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
                     .filter(n -> !n.getKmValue().trim().equalsIgnoreCase(INVALID_NUMBER))
-                    .map(acc -> addAccession(acc))
+                    .map(this::addAccession)
                     .sorted(Comparator.comparing(Brenda::getAccession, nullsLast(reverseOrder())))
                     .limit(limit)
                     .collect(Collectors.toList());
@@ -388,11 +391,11 @@ public class BrendaServiceImpl implements BrendaService {
                 .map(this::replaceAcirc)
                 .map(s -> s.split("#"))
                 .filter(queryString -> queryString.length > 1)
-                .map(queryString -> buildSequence(queryString));
+                .map(this::buildSequence);
 
     }
 
-    private Brenda addAccession(Brenda brenda) {
+    private Brenda addAccession(@NonNull Brenda brenda) {
         Sequence sequence = findSequenceByEcAndOrganism(brenda.getEcNumber(), brenda.getOrganism());
         return Brenda
                 .builder()
@@ -407,7 +410,7 @@ public class BrendaServiceImpl implements BrendaService {
                 .build();
     }
 
-    private Ph addAccession(Ph ph) {
+    private Ph addAccession(@NonNull Ph ph) {
         Sequence sequence = findSequenceByEcAndOrganism(ph.getEcNumber(), ph.getOrganism());
         return Ph
                 .builder()
@@ -419,7 +422,7 @@ public class BrendaServiceImpl implements BrendaService {
                 .build();
     }
 
-    private Temperature addAccession(Temperature temp) {
+    private Temperature addAccession(@NonNull Temperature temp) {
         Sequence sequence = findSequenceByEcAndOrganism(temp.getEcNumber(), temp.getOrganism());
         return Temperature
                 .builder()
@@ -440,8 +443,8 @@ public class BrendaServiceImpl implements BrendaService {
         String organism = "";
         boolean isKmV = false;
 
-        if (queryString[0].contains("ecNumber")) {
-            ec = queryString[0].replace("ecNumber", "");
+        if (queryString[0].contains(EC)) {
+            ec = queryString[0].replace(EC, "");
         }
 
         if (queryString[1].contains("kcatKmValue")) {
@@ -455,12 +458,12 @@ public class BrendaServiceImpl implements BrendaService {
             substrate = queryString[3].replace("substrate", "");
         }
 
-        if (queryString[4].contains("commentary")) {
-            commentary = queryString[4].replace("commentary", "");
+        if (queryString[4].contains(COMMENTARY)) {
+            commentary = queryString[4].replace(COMMENTARY, "");
         }
 
-        if (queryString[5].contains("organism")) {
-            organism = queryString[5].replace("organism", "").trim();
+        if (queryString[5].contains(ORGANISMS)) {
+            organism = queryString[5].replace(ORGANISMS, "").trim();
         }
         if (StringUtils.isEmpty(kcatKmValue) && !StringUtils.isEmpty(kmValue)) {
             isKmV = true;
@@ -486,8 +489,8 @@ public class BrendaServiceImpl implements BrendaService {
         String organism = "";
         String commentary = "";
 
-        if (queryString[0].contains("ecNumber")) {
-            ecNumber = queryString[0].replace("ecNumber", "");
+        if (queryString[0].contains(EC)) {
+            ecNumber = queryString[0].replace(EC, "");
         }
         if (queryString[1].contains("phRange")) {
             phRange = queryString[1].replace("phRange", "");
@@ -495,11 +498,11 @@ public class BrendaServiceImpl implements BrendaService {
         if (queryString[2].contains("phRangeMaximum")) {
             phRangeMaximum = queryString[2].replace("phRangeMaximum", "");
         }
-        if (queryString[3].contains("commentary")) {
-            commentary = queryString[3].replace("commentary", "");
+        if (queryString[3].contains(COMMENTARY)) {
+            commentary = queryString[3].replace(COMMENTARY, "");
         }
-        if (queryString[4].contains("organism")) {
-            organism = queryString[4].replace("organism", "");
+        if (queryString[4].contains(ORGANISMS)) {
+            organism = queryString[4].replace(ORGANISMS, "");
         }
 
         if (!StringUtils.isEmpty(phRange) && !StringUtils.isEmpty(phRangeMaximum)) {
@@ -526,8 +529,8 @@ public class BrendaServiceImpl implements BrendaService {
         String organism = "";
         String commentary = "";
 
-        if (queryString[0].contains("ecNumber")) {
-            ecNumber = queryString[0].replace("ecNumber", "");
+        if (queryString[0].contains(EC)) {
+            ecNumber = queryString[0].replace(EC, "");
         }
         if (queryString[1].contains("temperatureRange")) {
             temperatureRange = queryString[1].replace("temperatureRange", "");
@@ -535,11 +538,11 @@ public class BrendaServiceImpl implements BrendaService {
         if (queryString[2].contains("temperatureRangeMaximum")) {
             temperatureRangeMaximum = queryString[2].replace("temperatureRangeMaximum", "");
         }
-        if (queryString[3].contains("commentary")) {
-            commentary = queryString[3].replace("commentary", "");
+        if (queryString[3].contains(COMMENTARY)) {
+            commentary = queryString[3].replace(COMMENTARY, "");
         }
-        if (queryString[4].contains("organism")) {
-            organism = queryString[4].replace("organism", "").trim();
+        if (queryString[4].contains(ORGANISMS)) {
+            organism = queryString[4].replace(ORGANISMS, "").trim();
         }
 
         if (!StringUtils.isEmpty(temperatureRange) && !StringUtils.isEmpty(temperatureRangeMaximum)) {
@@ -568,7 +571,7 @@ public class BrendaServiceImpl implements BrendaService {
     private Sequence findSequenceByEcAndOrganism(String ecNumber, String organism) {
         BrendaConfig brendaConfig = getBrendaConfig();
 
-        String parameters = brendaConfig.getParameters() + ",ecNumber*" + ecNumber + "#organism*" + organism;
+        String parameters = brendaConfig.getParameters() + EC_NUMBER + ecNumber + ORGANISM + organism;
         String result = getSequence(brendaConfig.getCall(), parameters);
         return processSequence(result)
                 .findFirst().orElse(Sequence.builder().build());
@@ -582,16 +585,16 @@ public class BrendaServiceImpl implements BrendaService {
 
         String organism = "";
 
-        if (queryString[0].contains("ecNumber")) {
-            ecNumber = queryString[0].replace("ecNumber", "");
+        if (queryString[0].contains(EC)) {
+            ecNumber = queryString[0].replace(EC, "");
         }
 
         if (queryString[3].contains("firstAccessionCode")) {
             firstAccessionCode = queryString[3].replace("firstAccessionCode", "");
         }
 
-        if (queryString[6].contains("organism")) {
-            organism = queryString[6].replace("organism", "");
+        if (queryString[6].contains(ORGANISMS)) {
+            organism = queryString[6].replace(ORGANISMS, "");
         }
         return Sequence.builder()
                 .ecNumber(ecNumber)
