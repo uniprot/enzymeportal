@@ -70,7 +70,7 @@ public class ComparisonServiceImplTest {
         Compound cofactor = new Compound("CHEBI:18420", "Mg(2+)", "CHEBI", "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:18420", CompoundRole.COFACTOR.getName());
         Compound inhibitor = new Compound("CHEMBL1737", "SILDENAFIL CITRATE", "CHEMBL", "https://www.ebi.ac.uk/chembl/compound_report_card/CHEMBL1737/", CompoundRole.INHIBITOR.getName());
 
-        List<Compound> cp = Arrays.asList(cofactor, inhibitor);
+   
         Molecule molecule = new Molecule();
         molecule.setActivators(Lists.emptyList());
         molecule.setCofactors(Arrays.asList(cofactor));
