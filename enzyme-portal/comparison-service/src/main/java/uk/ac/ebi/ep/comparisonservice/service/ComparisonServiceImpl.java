@@ -149,8 +149,8 @@ class ComparisonServiceImpl implements ComparisonService {
         List<ProteinView> relatedProteins = new ArrayList<>();
         if (uniprotEntry.getRelatedProteinsId() != null) {
             Long relProtInternalId = uniprotEntry.getRelatedProteinsId();
-            relatedProteins = dataService.findProteinViewByRelatedProteinId(relProtInternalId);
-
+            String proteinGroupId = uniprotEntry.getProteinGroupId();
+            relatedProteins = dataService.findProteinViewByRelatedProteinIdAndProteinGroupId(relProtInternalId, proteinGroupId);
         }
 
         final Map<Integer, ProteinView> priorityMapper = new TreeMap<>();
