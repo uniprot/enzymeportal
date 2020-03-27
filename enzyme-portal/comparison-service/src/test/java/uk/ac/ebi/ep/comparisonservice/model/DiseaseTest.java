@@ -56,4 +56,10 @@ public class DiseaseTest {
         assertThat(disease.getEvidences(), hasSize(greaterThanOrEqualTo(1)));
     }
 
+    @Test
+    public void testToString() {
+        Disease disease = getDisease();
+        assertNotNull(disease.toString());
+    }
+
 }

@@ -69,4 +69,10 @@ public class ComparisonProteinModelTest {
         assertThat(result.getMolecule().getActivators(), hasSize(0));
     }
 
+    @Test
+    public void testToString() {
+        ComparisonProteinModel result = getComparisonProteinModel();
+        assertNotNull(result.toString());
+    }
+
 }
