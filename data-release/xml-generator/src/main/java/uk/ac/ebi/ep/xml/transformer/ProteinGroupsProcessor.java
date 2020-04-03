@@ -148,8 +148,8 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void processEntries(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs, MultiValueMap<String, ProteinMapper> multiValueProteinMapper) {
 //       now in related species addScientificNameFields(uniprotEntry.getScientificName(), fields);
 //       now in related species addCommonNameFields(uniprotEntry.getOrganismName(), fields);
-        addAccessionXrefs(uniprotEntry.getAccession(), refs);
-        addRelatedSpecies(uniprotEntry, relSpecies, fields);
+//       now in related species addAccessionXrefs(uniprotEntry.getAccession(), refs);
+        addRelatedSpecies(uniprotEntry, relSpecies, fields, refs);
 
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
 
@@ -236,12 +236,13 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
     }
 
-    private void addRelatedSpecies(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields) {
+    private void addRelatedSpecies(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
         if (uniprotEntry.getRelatedProteinsId() == uniprotEntry.getPrimaryRelatedProteinsId()) {
             //if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
             relSpecies.add(uniprotEntry.getAccession() + ";" + uniprotEntry.getOrganismName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId());
             addScientificNameFields(uniprotEntry.getScientificName(), fields);
             addCommonNameFields(uniprotEntry.getOrganismName(), fields);
+            addAccessionXrefs(uniprotEntry.getAccession(), refs);
 
         }
     }
