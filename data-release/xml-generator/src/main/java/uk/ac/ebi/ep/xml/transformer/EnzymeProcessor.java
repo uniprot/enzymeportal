@@ -142,7 +142,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
             fields.add(new Field(FieldName.PROTEIN_FAMILY_NAME.getName(), family.getFamilyName()));
             fields.add(new Field(FieldName.PROTEIN_FAMILY_ID.getName(), family.getFamilyGroupId()));
             refs.add(new Ref(family.getFamilyGroupId(), DatabaseName.PROTEIN_FAMILY.getDbName()));
-            fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
+            // fields.add(new Field(FieldName.HAS_PROTEIN_FAMILY.getName(), HAS_PROTEIN_FAMILY));
         }
     }
 
@@ -152,7 +152,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         if (Objects.nonNull(disease.getOmimNumber()) && Objects.nonNull(disease.getDiseaseName())) {
 
             fields.add(new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName()));
-            fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
+            //fields.add(new Field(FieldName.HAS_DISEASE.getName(), HAS_DISEASE));
             refs.add(new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName()));
         }
 
@@ -179,7 +179,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
         if (Objects.nonNull(pathway.getPathwayId())) {
 
-            fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
+            //fields.add(new Field(FieldName.HAS_PATHWAY.getName(), HAS_PATHWAY));
             if (Objects.nonNull(pathway.getPathwayName())) {
                 fields.add(new Field(FieldName.PATHWAY_NAME.getName(), pathway.getPathwayName()));
             }
@@ -213,7 +213,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
         if (Objects.nonNull(compound.getCompoundSource()) && Objects.nonNull(compound.getCompoundId()) && Objects.nonNull(compound.getCompoundName())) {
 
             if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
-                fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
+                //fields.add(new Field(FieldName.HAS_COFACTOR.getName(), HAS_COFACTOR));
                 String cofactorId = compound.getCompoundId().replace(CHEBI_PREFIX, "cofactor");
                 fields.add(new Field(FieldName.COFACTOR.getName(), cofactorId));
 
@@ -242,7 +242,7 @@ public class EnzymeProcessor extends XmlTransformer implements ItemProcessor<Enz
 
     }
 
-   // @Override
+    // @Override
     public void addMetaboliteFieldsAndXrefs(Protein chebiCompound, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.nonNull(chebiCompound.getChebiCompoundRole()) && Objects.nonNull(chebiCompound.getChebiCompoundId()) && Objects.nonNull(chebiCompound.getChebiCompoundName())) {

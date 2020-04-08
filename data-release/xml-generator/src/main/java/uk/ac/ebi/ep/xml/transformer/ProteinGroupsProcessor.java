@@ -146,11 +146,9 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void processEntries(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs, MultiValueMap<String, ProteinMapper> multiValueProteinMapper) {
-//       now in related species addScientificNameFields(uniprotEntry.getScientificName(), fields);
-//       now in related species addCommonNameFields(uniprotEntry.getOrganismName(), fields);
-//       now in related species addAccessionXrefs(uniprotEntry.getAccession(), refs);
-        addRelatedSpecies(uniprotEntry, relSpecies, fields, refs);
 
+        addRelatedSpecies(uniprotEntry, relSpecies, fields, refs);
+        addAccessionAndSpeciesData(uniprotEntry, fields, refs);
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
@@ -237,12 +235,28 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     }
 
     private void addRelatedSpecies(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs) {
-        if (uniprotEntry.getRelatedProteinsId() == uniprotEntry.getPrimaryRelatedProteinsId()) {
-            //if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
+
+        if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
             relSpecies.add(uniprotEntry.getAccession() + ";" + uniprotEntry.getOrganismName() + ";" + uniprotEntry.getScientificName() + ";" + uniprotEntry.getExpEvidenceFlag() + ";" + uniprotEntry.getTaxId());
+
+        }
+    }
+
+    private void addAccessionAndSpeciesData(Protein uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+
+        if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
+
             addScientificNameFields(uniprotEntry.getScientificName(), fields);
             addCommonNameFields(uniprotEntry.getOrganismName(), fields);
             addAccessionXrefs(uniprotEntry.getAccession(), refs);
+            addGroupAccessionFields(uniprotEntry.getAccession(), fields);
+
+        }
+    }
+
+    protected void addGroupAccessionFields(String accession, Set<Field> fields) {
+        if (!StringUtils.isEmpty(accession)) {
+            fields.add(new Field(FieldName.GROUP_ACCESSION.getName(), accession));
 
         }
     }
