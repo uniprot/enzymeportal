@@ -148,7 +148,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
     private void processEntries(Protein uniprotEntry, Set<String> relSpecies, Set<Field> fields, Set<Ref> refs, MultiValueMap<String, ProteinMapper> multiValueProteinMapper) {
 
         addRelatedSpecies(uniprotEntry, relSpecies, fields, refs);
-        addAccessionAndSpeciesData(uniprotEntry, fields, refs);
+        addAccessionTaxonomyAndSpeciesData(uniprotEntry, fields, refs);
         addReactantFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
@@ -159,7 +159,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         addPrimaryEntities(uniprotEntry, fields);
         //now moved to primary entities addEcField(uniprotEntry, fields);
         addEcXrefs(uniprotEntry, refs);
-        addTaxonomyFieldAndXrefs(uniprotEntry, fields, refs);
+        //now moved to primary entities addTaxonomyFieldAndXrefs(uniprotEntry, fields, refs);
 
         addUniprotFamilyFieldsAndXrefs(uniprotEntry, fields, refs);
         addPathwayFieldsAndXrefs(uniprotEntry, fields, refs);
@@ -242,7 +242,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
         }
     }
 
-    private void addAccessionAndSpeciesData(Protein uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+    private void addAccessionTaxonomyAndSpeciesData(Protein uniprotEntry, Set<Field> fields, Set<Ref> refs) {
 
         if (Objects.equals(uniprotEntry.getRelatedProteinsId(), uniprotEntry.getPrimaryRelatedProteinsId())) {
 
@@ -250,6 +250,7 @@ public class ProteinGroupsProcessor extends XmlTransformer implements ItemProces
             addCommonNameFields(uniprotEntry.getOrganismName(), fields);
             addAccessionXrefs(uniprotEntry.getAccession(), refs);
             addGroupAccessionFields(uniprotEntry.getAccession(), fields);
+            addTaxonomyFieldAndXrefs(uniprotEntry, fields, refs);
 
         }
     }
