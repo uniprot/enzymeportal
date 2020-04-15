@@ -11,6 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,11 @@ import uk.ac.ebi.ep.dataservice.dto.WebComponentDto;
  *
  * @author joseph
  */
+@Disabled
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles("uzprel")
+@ActiveProfiles("uzpdev")
 public class WebStatComponentServiceImplIT {
     
     @Autowired
