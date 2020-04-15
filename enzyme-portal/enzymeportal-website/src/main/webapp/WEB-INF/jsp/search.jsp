@@ -136,7 +136,7 @@
             <%@include file="footer.jspf" %>
 
             <c:choose>
-                <c:when test="${keywordType eq 'PATHWAYS'}">
+                <c:when test="${keywordType eq 'METABOLITES' || keywordType eq 'PATHWAYS' || keywordType eq 'FAMILIES'}">
                     <script>
                         $(document).ready(function () {
                             var resourceId = '${searchId}';

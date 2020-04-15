@@ -55,7 +55,8 @@
                         <li> <a href="faq#09">What can do I with enzymes in my basket?</a>  </li>
 
                         <li><a href="faq#10">Can I download the results from the search?</a></li>
-                        <li><a href="faq#11">Where can I find the old Enzyme Portal pages?</a></li>
+                        <li><a href="faq#11">Where can I find reaction parameters such as Michaelis-Menten kinetic parameters?</a></li>
+<!--                        <li><a href="faq#12">Where can I find the old Enzyme Portal pages?</a></li>-->
 
                     </ul>
 
@@ -111,7 +112,7 @@
 
                     <a id="06"></a><h4>How to use the "Browse by" on the home page?</h4>
                     <fieldset>
-                        <p>The "Browse by" section in the home page allows to search for enzymes focusing on specific enzyme-related information. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" "Enzyme families" and "Cofactors" boxes.</p>
+                        <p>The "Browse by" section in the home page allows to search for enzymes focusing on specific enzyme-related information. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" "Enzyme families", "Cofactors" and "Metabolites" boxes.</p>
                     </fieldset>
 
                     <a id="07"><h4>How can I search for a disease or a pathway that is not displayed on the Disease or Pathways pages?</h4></a>
@@ -136,13 +137,17 @@
                     <fieldset>
                         <p>Yes, You can download search results and in several formats. The download will be a zipped file by default but you can de-select this option using the provided checkbox.</p>
                     </fieldset>
+                    <a id="11"><h4>Where can I find reaction parameters such as Michaelis-Menten kinetic parameters?</h4></a>
+                    <fieldset>
+                        <p>In the enzyme page, you can find Km/kcat values as well as information about the pH and temperature that have been extracted from the enzyme database  <a target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a>. For more details follow the link to the corresponding <a target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a> page.</p>
+                        <p>In the protein page, you can find similar information (KM, Vmax, pH and temperature) but related to a specific protein entry. This information is extracted from the UniProt database.</p>
+                    </fieldset>
 
 
-
-                    <a id="11"><h4>Where can I find the old Enzyme Portal pages?</h4></a>
+<!--                    <a id="11"><h4>Where can I find the old Enzyme Portal pages?</h4></a>
                     <fieldset>
                         <p>The old Enzyme Portal pages can be found at <a target="_blank" href="http://www.ebi.ac.uk/enzymeportal/legacy/">http://www.ebi.ac.uk/enzymeportal/legacy/</a>. Please note that these pages are no longer updated and will be phased out at the end of summer 2019.</p>
-                    </fieldset>
+                    </fieldset>-->
                     <a id="12"></a>
                     <fieldset>
 

@@ -27,31 +27,46 @@
                 <%--<form:hidden path="searchparams.previoustext" />--%>
                 <input type="hidden" name="searchparams.previoustext" value="XxX" />
 
-                  <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
+                <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
                 <input type="hidden" name="searchTerm" value="${searchTerm}"/>
                 <input type="hidden" name="keywordType" value="KEYWORD"/>
                 <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}">
                 <fieldset>
                     <div class="input-group margin-bottom-none margin-top-large" >
-       <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="30" maxlength="100" type="text" placeholder="e.g enzyme name, gene name, EC number, UniProt AC, cofactor, Rhea ID, CHEBI ID ...">
+                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="30" maxlength="100" type="text" placeholder="e.g enzyme name, gene name, EC number, UniProt AC, cofactor, Rhea ID, CHEBI ID ...">
+
+                        <!--       
+                               <script type="text/javascript">
+                        $(document).ready(function() {
+                        
+                            var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
+                            "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript",
+                            "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
+                        
+                            $("#local-searchbox").autocomplete({
+                                source: availableTags
+                            });
+                        });
+                        </script>-->
 
                         <script>
+   //                            $(document).ready(function() {
                             var options = {
-                              
+
                                 url: function (phrase) {
                                     return "/enzymeportal/service/auto";
                                 },
-////                                
-//                                 url: function (phrase) {
-//                                    return "/enzymeportal/service/search";
-//                                },    
-//                                
+   ////                                
+   //                                 url: function (phrase) {
+   //                                    return "/enzymeportal/service/search";
+   //                                },    
+   //                                
                                 listLocation: "suggestions",
                                 getValue: function (element) {
-          
+
                                     return element.suggestion;
                                 },
-                                    
+
                                 ajaxSettings: {
                                     dataType: "json",
                                     method: "POST",
@@ -62,7 +77,7 @@
 
                                 preparePostData: function (data) {
                                     data.name = $("#local-searchbox").val();
-                           
+
                                     return data;
                                 },
 
@@ -92,13 +107,17 @@
                                     }
                                 }
                             };
-                            $("#local-searchbox").easyAutocomplete(options);
+                            //$("#local-searchbox").easyAutocomplete(options);
+                            $("#local-searchbox").autocomplete({
+                                source: availableTags
+                            });
+   //                            });
 
                         </script>
 
                         <!--                      <input id="auto-complete-holder" name="searchKey" type="hidden" />  -->
 
-<!--                        <button style="display:none" type="submit" id="submit"></button>-->
+                        <!--                        <button style="display:none" type="submit" id="submit"></button>-->
                         <div class="input-group-button">
                             <input id="search-keyword-submit" class="button icon icon-functional" tabindex="2" type="submit" name="submit" value="1">
                         </div>
@@ -133,6 +152,6 @@
                 </fieldset>
             </form>
         </div>
-</div>
     </div>
+</div>
 <!-- /local-search -->

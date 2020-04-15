@@ -3,7 +3,14 @@
     Created on : 20-Jun-2019, 16:33:23
     Author     : joseph
 --%>
-
+<style>
+    .docs-js.label {
+        background: #08a1b1;
+        color:whitesmoke;
+        margin-left: 10px;
+        /*    vertical-align: sub;*/
+    }
+</style>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="mechanism-box">
@@ -11,7 +18,28 @@
     <div id="featured-entry">
         <div class="row">
 
-            <h3 id="proteinNameTitle"><a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}">${result.enzymeName}</a></h3>
+            <c:choose>
+                <c:when test="${result.reference}">
+                    <c:if test="${null != enzymeModel.accession && (enzymeModel.accession ne result.referenceUniprotId)}">
+                        <h3 id="proteinNameTitle"><a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}">${result.enzymeName}</a> <span class="right docs-js label badge secondary" data-tooltip tabindex="2" title="This protein is homologous to the M-CSA reference protein (Uniprot Accession : ${result.referenceUniprotId})."><a href="${pageContext.request.contextPath}/search/${result.referenceUniprotId}/enzyme">By Reference</a></span></h3>
+
+                    </c:if>
+                    <c:if test="${null != enzymeModel.accession && (enzymeModel.accession eq result.referenceUniprotId)}">
+                        <h3 id="proteinNameTitle"><a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}">${result.enzymeName}</a> <span class="right docs-js label badge secondary" data-tooltip tabindex="2" title="This protein is homologous to the M-CSA reference protein (Uniprot Accession : ${result.referenceUniprotId})."><a href="#">By Reference</a></span></h3>
+
+                    </c:if>
+                    <c:if test="${null == enzymeModel.accession }">
+                        <h3 id="proteinNameTitle"><a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}">${result.enzymeName}</a> <span class="right docs-js label badge secondary" data-tooltip tabindex="2" title="This protein is homologous to the M-CSA reference protein (Uniprot Accession : ${result.referenceUniprotId})."><a href="${pageContext.request.contextPath}/search/${result.referenceUniprotId}/enzyme">By Reference</a></span></h3>
+
+                    </c:if>  
+
+                </c:when>
+                <c:otherwise>
+                    <h3 id="proteinNameTitle"><a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}">${result.enzymeName}</a></h3>
+
+                </c:otherwise>
+            </c:choose>
+
 
         </div> 
 

@@ -11,10 +11,10 @@
         <br/>
         <legend class="tile-text">Activity Charts </legend>
 
-        <object data="https://www.ebi.ac.uk/chembl/beta/embed/#target_report_card/${enzymeModel.chemblTargetId}/activity_charts" width="100%" height="100%"></object>
-
+            <object data="https://www.ebi.ac.uk/chembl/embed/#target_report_card/${enzymeModel.chemblTargetId}/activity_charts" width="100%" height="100%"></object>
+    
     </div>
-
+       
 </fieldset>
 
 

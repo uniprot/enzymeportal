@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.dataservice.common.CompoundRole;
 import uk.ac.ebi.ep.dataservice.common.ModelOrganisms;
@@ -20,14 +21,17 @@ import uk.ac.ebi.ep.dataservice.dto.CompoundView;
 import uk.ac.ebi.ep.dataservice.dto.DiseaseView;
 import uk.ac.ebi.ep.dataservice.dto.EnzymeReactionView;
 import uk.ac.ebi.ep.dataservice.dto.PdbView;
+import uk.ac.ebi.ep.dataservice.dto.ProteinData;
 import uk.ac.ebi.ep.dataservice.dto.ProteinView;
 import uk.ac.ebi.ep.dataservice.dto.Species;
 import uk.ac.ebi.ep.dataservice.service.DataService;
 import uk.ac.ebi.ep.enzymeservice.intenz.dto.EcClass;
 import uk.ac.ebi.ep.enzymeservice.intenz.dto.EnzymeHierarchy;
 import uk.ac.ebi.ep.enzymeservice.intenz.service.IntenzService;
-import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
+import uk.ac.ebi.ep.enzymeservice.uniprot.model.Comment;
+import uk.ac.ebi.ep.enzymeservice.uniprot.service.UniprotService;
 import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
+import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 import uk.ac.ebi.ep.web.model.EnzymeEntryPage;
 import uk.ac.ebi.ep.web.model.EnzymeModel;
 import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
@@ -45,6 +49,10 @@ class EntryPageServiceImpl implements EntryPageService {
     private final IntenzService intenzService;
     private final ReactionMechanismService reactionMechanismService;
     private final LiteratureService literatureService;
+    private static final int MCSA_PAGE_SIZE=2;
+
+    @Autowired
+    private UniprotService uniprotService;
 
     @Autowired
     public EntryPageServiceImpl(DataService dataService, IntenzService intenzService, ReactionMechanismService reactionMechanismService, LiteratureService literatureService) {
@@ -52,26 +60,27 @@ class EntryPageServiceImpl implements EntryPageService {
         this.intenzService = intenzService;
         this.reactionMechanismService = reactionMechanismService;
         this.literatureService = literatureService;
-     
 
     }
 
- 
     private ProteinView findProteinViewByAccession(String accession) {
         return dataService.findProteinViewByAccession(accession);
     }
 
-
+    @Cacheable(cacheNames = "proteinData", key = "#accession", unless = "#result == null")
+    public ProteinData findProteinDataByAccession(String accession) {
+        return dataService.findProteinByAccession(accession);
+    }
 
     @Override
     public EnzymeModel getDefaultEnzymeModel(String accession) {
         EnzymeModel model = null;
-        ProteinView protein = findProteinViewByAccession(accession);
+        ProteinData protein = findProteinDataByAccession(accession);
 
         if (protein != null) {
             model = new EnzymeModel();
             model.setAccession(protein.getAccession());
-  
+
             model.setProteinView(protein);
             model.setProteinName(protein.getProteinName());
             model.setEntryType(protein.getEntryType());
@@ -121,15 +130,25 @@ class EntryPageServiceImpl implements EntryPageService {
         List<String> catalyticActivities = findCatalyticActivitiesByAccession(model.getAccession());
         model.setCatalyticActivities(catalyticActivities);
 
-        MechanismResult mechanismResult = reactionMechanismService.findMechanismResultByAccession(model.getAccession());
+        MechanismResult mechanismResult = reactionMechanismService.findMechanismResultByAccession(model.getAccession(),MCSA_PAGE_SIZE);
         model.setReactionMechanism(mechanismResult);
 
         showRheaReactions(model);
+        addKineticParameters(model);
 
         return model;
     }
 
-   
+    private void addKineticParameters(EnzymeModel model) {
+
+        Comment comment = uniprotService.findKinectParamsCommentByAccession(model.getAccession());
+
+        model.setKinetics(comment.getKinetics());
+        model.setPhDependences(comment.getPhDependence());
+        model.setTemperatureDependences(comment.getTemperatureDependence());
+
+    }
+
     private EnzymeModel showRheaReactions(EnzymeModel model) {
         List<EnzymeReactionView> reactions = findEnzymeReactionByAccession(model.getAccession());
         if (reactions != null && !reactions.isEmpty()) {
@@ -180,7 +199,6 @@ class EntryPageServiceImpl implements EntryPageService {
         return model;
     }
 
-
     @Override
     public EnzymeModel showPathwaysPage(EnzymeModel model) {
 
@@ -196,7 +214,6 @@ class EntryPageServiceImpl implements EntryPageService {
         model.setDisease(diseases);
         return model;
     }
-
 
     @Override
     public EnzymeModel showLiteraturePage(EnzymeModel model, int limit) {
@@ -227,7 +244,9 @@ class EntryPageServiceImpl implements EntryPageService {
         List<ProteinView> relatedProteins = new ArrayList<>();
         if (uniprotEntry.getRelatedProteinsId() != null) {
             Long relProtInternalId = uniprotEntry.getRelatedProteinsId();
-            relatedProteins = dataService.findProteinViewByRelatedProteinId(relProtInternalId);
+            String proteinGroupId = uniprotEntry.getProteinGroupId();
+            //relatedProteins = dataService.findProteinViewByRelatedProteinId(relProtInternalId);
+             relatedProteins = dataService.findProteinViewByRelatedProteinIdAndProteinGroupId(relProtInternalId, proteinGroupId);
 
         }
 
@@ -295,7 +314,5 @@ class EntryPageServiceImpl implements EntryPageService {
         }
         return priorityMapper;
     }
-
-
 
 }

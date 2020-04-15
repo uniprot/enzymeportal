@@ -10,7 +10,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(EnzymeportalWebsiteApplication.class)
                 .bannerMode(Banner.Mode.OFF);
-        //.web(WebApplicationType.REACTIVE);
+    
     }
 
 

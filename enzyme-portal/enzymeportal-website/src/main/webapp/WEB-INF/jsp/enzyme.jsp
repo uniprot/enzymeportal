@@ -133,7 +133,8 @@
     </dl>
 
 
-    <div id="feature-viewer"></div>
+<!--    <div id="feature-viewer"></div>-->
+    <protvista-uniprot accession="${accession}" nostructure="true"></protvista-uniprot>
 
 
     <div class="provenance">
@@ -148,7 +149,7 @@
 </div>
 <%-- Javascript at the bottom for faster loading --%>
 
-<script>
+<!--<script>
     window.onload = function () {
         var fvrDiv = document.getElementById('feature-viewer');
         var ProtVista = require('ProtVista');
@@ -157,6 +158,28 @@
             uniprotacc: '${enzyme.accession}'
         });
     };
-</script>
+</script>-->
+
+<!--see documentation here-->
+<!--https://github.com/ebi-webcomponents/protvista-uniprot#configuration-->
+
+<!-- Fetch polyfill and D3 library -->
+<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0.0/dist/fetch.umd.min.js" defer></script>
+<script src="https://d3js.org/d3.v4.min.js" charset="utf-8" defer></script>
+
+<!-- LiteMol plugin and style -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litemol@2.4.2/dist/css/LiteMol-plugin.min.css" type="text/css"></link>
+<script src="https://cdn.jsdelivr.net/npm/litemol@2.4.2/dist/js/LiteMol-plugin.min.js" defer></script>
+
+<!-- Webcomponents polyfill for IE -->
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.2.10/webcomponents-bundle.js" charset="utf-8" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.2.10/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
+<!-- Babel polyfill / The order between this and webcomponents polyfill is important and means we can't bundle it with the main component -->
+<!-- See https://github.com/babel/babel/issues/9829 -->
+<script src="https://cdn.jsdelivr.net/npm/@babel/polyfill@7.4.4/dist/polyfill.min.js" charset="utf-8" defer></script>
+
+<script src="https://cdn.jsdelivr.net/npm/protvista-uniprot@2.0.9/dist/protvista-uniprot.js" defer></script>
+
 
 

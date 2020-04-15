@@ -1,10 +1,14 @@
 package uk.ac.ebi.ep.web.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import uk.ac.ebi.ep.dataservice.common.ProteinModel;
+import uk.ac.ebi.ep.enzymeservice.uniprot.model.Kinetics;
+import uk.ac.ebi.ep.enzymeservice.uniprot.model.PhDependence;
+import uk.ac.ebi.ep.enzymeservice.uniprot.model.TemperatureDependence;
 import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
 import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 
@@ -13,7 +17,7 @@ import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class EnzymeModel extends ProteinModel {
+public class EnzymeModel extends ProteinModel implements Serializable {
 
     private String requestedfield;
     private MechanismResult reactionMechanism;
@@ -21,6 +25,33 @@ public class EnzymeModel extends ProteinModel {
     private List<LabelledCitation> literature;
     private List<String> pathways;
     protected EnzymeEntryPage enzyme;
+
+    private Kinetics kinetics;
+    private List<PhDependence> phDependences;
+    private List<TemperatureDependence> temperatureDependences;
+
+    public List<PhDependence> getPhDependences() {
+        if (phDependences == null) {
+            phDependences = new ArrayList<>();
+        }
+        return phDependences;
+    }
+
+    public void setPhDependences(List<PhDependence> phDependences) {
+        this.phDependences = phDependences;
+    }
+
+    public List<TemperatureDependence> getTemperatureDependences() {
+        if (temperatureDependences == null) {
+            temperatureDependences = new ArrayList<>();
+        }
+
+        return temperatureDependences;
+    }
+
+    public void setTemperatureDependences(List<TemperatureDependence> temperatureDependences) {
+        this.temperatureDependences = temperatureDependences;
+    }
 
     public List<LabelledCitation> getLiterature() {
         if (literature == null) {

@@ -23,6 +23,7 @@ import uk.ac.ebi.reaction.mechanism.service.ReactionMechanismService;
 class EnzymePageServiceImpl implements EnzymePageService {
 
     private static final int CITATION_LIMIT = 11;
+    private static final int MCSA_PAGE_SIZE = 1;
     protected final LiteratureService literatureService;
 
     private final ReactionMechanismService reactionMechanismService;
@@ -37,7 +38,7 @@ class EnzymePageServiceImpl implements EnzymePageService {
 
     @Override
     public MechanismResult findReactionMechanism(String ec) {
-        return reactionMechanismService.findMechanismResultByEc(ec);
+        return reactionMechanismService.findMechanismResultByEc(ec, MCSA_PAGE_SIZE);
     }
 
     private List<Result> findCitations(String enzymeName, int limit) {

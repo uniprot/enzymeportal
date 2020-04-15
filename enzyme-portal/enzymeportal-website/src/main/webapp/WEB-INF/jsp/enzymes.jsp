@@ -24,12 +24,12 @@
 
     <body class="level2 full-width">
 
-<!--        <script>
-            var speciesAutocompleteDataSource = [];
-            var compoundsAutoCompleteDataSource = [];
-            var diseaseAutoCompleteDataSource = [];
-            var ecAutoCompleteDataSource = [];
-        </script>-->
+        <!--        <script>
+                    var speciesAutocompleteDataSource = [];
+                    var compoundsAutoCompleteDataSource = [];
+                    var diseaseAutoCompleteDataSource = [];
+                    var ecAutoCompleteDataSource = [];
+                </script>-->
         <div id="wrapper">
 
             <%@include file="header.jspf" %>
@@ -97,10 +97,10 @@
                        
                         <form:form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" modelAttribute="searchModel" method="POST">
                             <form:hidden path="searchparams.text" value="${searchKey}" />
-                             --%>
-                            <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
-                                 <input type="hidden" name="searchparams.text" value="${searchKey}"/>
-                                 
+                        --%>
+                        <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
+                            <input type="hidden" name="searchparams.text" value="${searchKey}"/>
+
                             <input type="hidden" id="paginationPage" name="servicePage" value="">
                             <input type="hidden" id="keywordType" name="keywordType" value="${keywordType}">
                             <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
@@ -183,7 +183,7 @@
                            
                              </form:form>
                             --%>
-                         </form>
+                        </form>
                     </section>
 
                     <section class="large-9 columns" id="search-results">
@@ -281,12 +281,12 @@
 
                                                         <h4>Associated Proteins:</h4>
                                                         <ul id="enzymeResultsProteins">
-                                                           
+
                                                             <c:forEach items="${enzyme.proteinGroupEntry}" var="p">
-                                                              
-                                                
-                                                           <c:choose>
-               
+
+
+                                                                <c:choose>
+
 
                                                                     <c:when test="${keywordType eq 'COFACTORS'}">
 
@@ -294,11 +294,19 @@
                                                                         <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.accession}/molecules">${p.proteinName} </a> - (${primaryProtein.commonName})</li>
                                                                         </c:when>
                                                                         <c:when test="${keywordType eq 'METABOLITES'}">
-
-                                                                        <c:set var="primaryProtein" value="${epfn:withMetabolite(p.withMetabolite, searchId, p.primaryAccession, p.primaryOrganism,p.entryType)}"/>
+                                                                            <c:set var="primaryProtein" value="${epfn:withMetabolite(p.withMetabolite, searchId, p.primaryAccession, p.primaryOrganism,p.entryType)}"/>
                                                                         <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.accession}/reactionsMechanisms">${p.proteinName} </a> - (${primaryProtein.commonName})</li>
-                                                                        </c:when>
-                                                                        <c:when test="${keywordType eq 'FAMILIES'}">
+
+                                                                        <%--
+                                                                    <c:set var="primaryProtein" value="${epfn:withMetabolite(p.withMetabolite, searchId, p.primaryAccession, p.primaryOrganism,p.entryType)}"/>
+                                                                         <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.accession}/reactionsMechanisms">${p.proteinName} </a> - (${primaryProtein.commonName})</li>
+                                                                   
+                                                                    
+                                                                    <c:set var="primaryProtein" value="${p}"/>
+                                                                    <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.primaryAccession}/reactionsMechanisms">${p.proteinName} </a> - (${primaryProtein.primaryOrganism})</li>
+                                                                        --%>
+                                                                    </c:when>
+                                                                    <c:when test="${keywordType eq 'FAMILIES'}">
 
                                                                         <c:set var="primaryProtein" value="${epfn:withProteinFamily(p.withProteinFamily, searchId, p.primaryAccession, p.primaryOrganism,p.entryType)}"/>
                                                                         <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.accession}/enzyme">${p.proteinName} </a> - (${primaryProtein.commonName})</li>
@@ -316,13 +324,13 @@
                                                                         <li><a href="${pageContext.request.contextPath}/search/${primaryProtein.accession}/pathways">${p.proteinName} </a> - (${primaryProtein.commonName})</li>
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                        
+
                                                                         <li><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.proteinName} </a> - (${p.primaryOrganism})</li>     
                                                                         </c:otherwise>
                                                                     </c:choose>
-                                                                    
-                                                                </c:forEach>
-                                                                <c:if test="${enzyme.numProteins >= 5}">
+
+                                                            </c:forEach>
+                                                            <c:if test="${enzyme.numProteins >= 5}">
                                                                 <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>
                                                             </c:if>
                                                         </ul>

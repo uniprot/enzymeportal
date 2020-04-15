@@ -35,16 +35,7 @@ public class ProteincentricController extends CommonControllerMethods {
     public ProteincentricController(SearchIndexService searchIndexService) {
         this.searchIndexService = searchIndexService;
     }
-//    public ProteincentricController(EnzymeCentricService enzymeCentricService, ProteinCentricService proteinCentricService) {
-//        super(enzymeCentricService, proteinCentricService);
-//    }
 
-//    private String formatSearchId(String searchId, String searchKey) {
-//        if (StringUtils.isEmpty(searchId) && !StringUtils.isEmpty(searchKey)) {
-//            searchId = searchKey.toUpperCase();
-//        }
-//        return searchId;
-//    }
     @PostMapping(value = SEARCH)
     public String postSearchResult(@RequestParam(required = true, value = "ec") String ec,
             @RequestParam(required = false, value = "searchKey") String searchKey,
@@ -100,16 +91,14 @@ public class ProteincentricController extends CommonControllerMethods {
 
             case COFACTORS:
 
-                //searchId = formatSearchId(searchId, searchKey);
                 return cofactorSearch(ec, searchKey, searchId, keywordType, facetCount, filters, startPage, pageSize, model);
 
             case CHEBI:
 
-                //searchId = formatSearchId(searchId, searchKey);
                 return chebiSearch(ec, searchKey, searchId, keywordType, facetCount, filters, startPage, pageSize, model);
 
             case RHEA:
-                //searchId = formatSearchId(searchId, searchKey);
+
                 return rheaSearch(ec, searchKey, searchId, keywordType, facetCount, filters, startPage, pageSize, model);
 
             case FAMILIES:
@@ -133,16 +122,16 @@ public class ProteincentricController extends CommonControllerMethods {
 
     private String processProteinResult(String query, String ec, String search, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
 
-        ProteinGroupSearchResult proteinSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters);
+        ProteinGroupSearchResult proteinSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters, IndexQueryType.KEYWORD);
 
         if (proteinSearchResult != null) {
             long hitCount = proteinSearchResult.getHitCount();
             if (hitCount == 0) {
 
                 query = String.format("%s%s", IndexQueryType.EC.getQueryType(), ec);
-                proteinSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters);
+                proteinSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters, IndexQueryType.EC);
             }
-            // return processProteinResult(proteinSearchResult, ec, searchTerm, hitCount, keywordType, filters, startPage, pageSize, model);
+
             Page<ProteinGroupEntry> page = buildProteinGroupEntryPage(proteinSearchResult.getEntries(), startPage, pageSize, hitCount);
 
             List<ProteinGroupEntry> proteinView = page.getContent();
@@ -157,7 +146,7 @@ public class ProteincentricController extends CommonControllerMethods {
     protected String processProteinResult(String ec, String resourceId, IndexQueryType resourceQueryType, String searchKey, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
         String query = String.format("%s%s AND %s%s", resourceQueryType.getQueryType(), resourceId, IndexQueryType.EC.getQueryType(), ec);
 
-        ProteinGroupSearchResult ebiSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters);
+        ProteinGroupSearchResult ebiSearchResult = searchIndexService.findProteinResult(query, startPage, pageSize, facetCount, filters, resourceQueryType);
 
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
@@ -166,7 +155,7 @@ public class ProteincentricController extends CommonControllerMethods {
 
                 String xrefQuery = String.format("%s%s AND %s%s", resourceQueryType.getQueryType(), resourceId, IndexQueryType.INTENZ.getQueryType(), ec);
 
-                ebiSearchResult = searchIndexService.findProteinResult(xrefQuery, startPage, pageSize, facetCount, filters);
+                ebiSearchResult = searchIndexService.findProteinResult(xrefQuery, startPage, pageSize, facetCount, filters, resourceQueryType);
 
             }
 
@@ -174,7 +163,6 @@ public class ProteincentricController extends CommonControllerMethods {
 
             List<ProteinGroupEntry> proteinView = page.getContent();
 
-            //return constructModel(ebiSearchResult, proteinView, page, filters, ec, ec, ec, keywordType, model);
             return constructModel(ebiSearchResult, proteinView, page, filters, ec, searchKey, resourceId, keywordType, model);
 
         }
@@ -190,20 +178,17 @@ public class ProteincentricController extends CommonControllerMethods {
 
     private String diseaseSearch(String ec, String searchKey, String searchId, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
 
-        //String query = String.format("%s%s AND %s%s", IndexQueryType.OMIM.getQueryType(), searchId, IndexQueryType.EC.getQueryType(), ec);
         return processProteinResult(ec, searchId, IndexQueryType.OMIM, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
 
     }
 
     private String taxonomySearch(String ec, String searchKey, String searchId, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
-        //String query = String.format("%s%s AND %s%s", IndexQueryType.TAXONOMY.getQueryType(), searchId, IndexQueryType.EC.getQueryType(), ec);
 
         return processProteinResult(ec, searchId, IndexQueryType.TAXONOMY, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
 
     }
 
     private String pathwaysSearch(String ec, String searchKey, String searchId, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
-        // String query = String.format("%s%s AND %s%s", IndexQueryType.REACTOME.getQueryType(), searchId, IndexQueryType.EC.getQueryType(), ec);
 
         return processProteinResult(ec, searchId, IndexQueryType.REACTOME, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
 
@@ -211,14 +196,12 @@ public class ProteincentricController extends CommonControllerMethods {
 
     private String metaboliteSearch(String ec, String searchKey, String searchId, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
 
-        return processProteinResult(ec, searchId, IndexQueryType.METABOLITE, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
+        return processProteinResult(ec, searchId, IndexQueryType.METABOLIGHTS, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
 
     }
 
     private String cofactorSearch(String ec, String searchKey, String searchId, String keywordType, int facetCount, List<String> filters, int startPage, int pageSize, Model model) {
 
-        // String searchIdWithChebiPrefix = String.format("CHEBI:%s", searchId);
-        // String chebiId = SearchUtil.escape(searchIdWithChebiPrefix);
         return processProteinResult(ec, searchId, IndexQueryType.COFACTOR, searchKey, keywordType, facetCount, filters, startPage, pageSize, model);
 
     }

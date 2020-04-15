@@ -225,7 +225,7 @@
                                 })
                                 .attr("dy", 3)
                                 .attr("class", function (d) {
-                                    return d.taxid ? "endnode" : "midnode"
+                                    return d.taxid ? "endnode" : "midnode";
                                 })
                                 .style("text-anchor", function (d) {
                                     return d.children ? "end" : "start";

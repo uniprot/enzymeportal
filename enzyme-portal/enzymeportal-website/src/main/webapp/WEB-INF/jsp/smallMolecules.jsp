@@ -78,7 +78,7 @@
                             Activators that might activate this enzyme.
                         </legend>
                         <p>
-                            The following compound(s) have been classified as activators. They have been associated with this enzyme, but it is uncertain whether they activate this enzyme.
+                           The following compound(s) have been classified as activators. The compound(s) listed has(ve) been approved as treatment drugs in at least one country/area.
                         </p>
                     </fieldset>
 
@@ -123,7 +123,7 @@
                             Inhibitors that might inhibit this enzyme
                         </legend>
                         <p>
-                            The following compound(s) have been classified as inhibitors. They have been associated with this enzyme, but it is uncertain whether they inhibit this enzyme.
+                         The following compound(s) have been classified as inhibitors. The compound(s) listed has(ve) been approved as treatment drugs in at least one country/area.
                         </p>
                     </fieldset>
 

@@ -28,8 +28,4 @@ public class GlobalControllerAdvisor {
         return "error";
     }
 
-//    @InitBinder
-//    public void initBinder(WebDataBinder webDataBinder) {
-//        //webDataBinder.setBindEmptyMultipartFiles(false);configure later
-//    }
 }

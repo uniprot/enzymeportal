@@ -39,7 +39,6 @@ public class ReactomeController {
         List<String> pathwayIds = dataService.findPathwayIdsByAccession(accession);
 
         return reactomeService.findPathwaysByIds(pathwayIds);
-        // .cache(Duration.ofMinutes(5));
 
     }
 

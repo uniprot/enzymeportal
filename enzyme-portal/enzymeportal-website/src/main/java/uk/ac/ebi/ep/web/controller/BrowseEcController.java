@@ -151,11 +151,9 @@ public class BrowseEcController {
         IntenzEnzyme root = new IntenzEnzyme();
 
         String ec = jsonObject.getString(EC_NUMBER);
-        //String name = jsonObject.getString(NAME);
-        String description = null;
 
         if (jsonObject.containsKey(DESCRIPTION)) {
-            description = jsonObject.getString(DESCRIPTION);
+            String description = jsonObject.getString(DESCRIPTION);
 
             root.setDescription(description);
         }
@@ -170,25 +168,8 @@ public class BrowseEcController {
 
             JsonArray jsonArray = jsonObject.getJsonArray(SUBCLASSES);
 
-            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
-                String _ec = null;
-                String _name = null;
-                String _desc = null;
-                _ec = childObject.getString(EC_NUMBER);
-                _name = childObject.getString(NAME);
-
-                EnzymeSubclass subclass = new EnzymeSubclass();
-
-                if (childObject.containsKey(DESCRIPTION)) {
-                    _desc = childObject.getString(DESCRIPTION);
-                    subclass.setDescription(_desc);
-                }
-
-                subclass.setEc(_ec);
-                subclass.setName(_name);
-                root.getChildren().add(subclass);
-
-            }
+            jsonArray.getValuesAs(JsonObject.class)
+                    .forEach(childObject -> processEnzymeSubclass(childObject, root));
             addToSelectedEc(session, root, ROOT);
             model.addAttribute("json", root);
         }
@@ -196,28 +177,8 @@ public class BrowseEcController {
 
             JsonArray jsonArray = jsonObject.getJsonArray(SUBSUBCLASSES);
 
-            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
-                String _ec = null;
-                String _name = null;
-                String _desc = null;
-                _ec = childObject.getString(EC_NUMBER);
-                _name = childObject.getString(NAME);
-
-                EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
-
-                if (childObject.containsKey(DESCRIPTION)) {
-                    _desc = childObject.getString(DESCRIPTION);
-
-                    subsubclass.setDescription(_desc);
-                }
-
-                subsubclass.setEc(_ec);
-                subsubclass.setName(_name);
-
-                root.getSubSubclasses().add(subsubclass);
-
-            }
-
+            jsonArray.getValuesAs(JsonObject.class)
+                    .forEach(childObject -> processEnzymeSubSubclass(childObject, root));
             model.addAttribute("json", root);
             addToSelectedEc(session, root, SUBCLASS);
         }
@@ -225,31 +186,64 @@ public class BrowseEcController {
 
             JsonArray jsonArray = jsonObject.getJsonArray(ENTRIES);
 
-            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
-                String _ec = null;
-                String _name = null;
-                String _desc = null;
-                _ec = childObject.getString(EC_NUMBER);
-                _name = childObject.getString(NAME);
-
-                EnzymeEntry entries = new EnzymeEntry();
-                if (childObject.containsKey(DESCRIPTION)) {
-                    _desc = childObject.getString(DESCRIPTION);
-
-                    entries.setDescription(_desc);
-                }
-
-                entries.setEc(_ec);
-                entries.setName(_name);
-                root.setEc(ecname[4]);
-                root.getEntries().add(entries);
-
-            }
+            jsonArray.getValuesAs(JsonObject.class)
+                    .forEach(childObject -> processEnzymeEntry(childObject, root, ecname));
 
             model.addAttribute("json", root);
             addToSelectedEc(session, root, SUBSUBCLASS);
         }
 
+    }
+
+    private void processEnzymeSubclass(JsonObject childObject, IntenzEnzyme root) {
+        String _ec = childObject.getString(EC_NUMBER);
+        String _name = childObject.getString(NAME);
+
+        EnzymeSubclass subclass = new EnzymeSubclass();
+
+        if (childObject.containsKey(DESCRIPTION)) {
+            String _desc = childObject.getString(DESCRIPTION);
+            subclass.setDescription(_desc);
+        }
+
+        subclass.setEc(_ec);
+        subclass.setName(_name);
+        root.getChildren().add(subclass);
+    }
+
+    private void processEnzymeSubSubclass(JsonObject childObject, IntenzEnzyme root) {
+        String _ec = childObject.getString(EC_NUMBER);
+        String _name = childObject.getString(NAME);
+
+        EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
+
+        if (childObject.containsKey(DESCRIPTION)) {
+            String _desc = childObject.getString(DESCRIPTION);
+
+            subsubclass.setDescription(_desc);
+        }
+
+        subsubclass.setEc(_ec);
+        subsubclass.setName(_name);
+
+        root.getSubSubclasses().add(subsubclass);
+    }
+
+    private void processEnzymeEntry(JsonObject childObject, IntenzEnzyme root, String... ecname) {
+        String _ec = childObject.getString(EC_NUMBER);
+        String _name = childObject.getString(NAME);
+
+        EnzymeEntry entries = new EnzymeEntry();
+        if (childObject.containsKey(DESCRIPTION)) {
+            String _desc = childObject.getString(DESCRIPTION);
+
+            entries.setDescription(_desc);
+        }
+
+        entries.setEc(_ec);
+        entries.setName(_name);
+        root.setEc(ecname[4]);
+        root.getEntries().add(entries);
     }
 
 }

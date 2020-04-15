@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import uk.ac.ebi.ep.enzymeservice.brenda.dto.Brenda;
-import uk.ac.ebi.ep.enzymeservice.brenda.dto.Ph;
-import uk.ac.ebi.ep.enzymeservice.brenda.dto.Temperature;
-import uk.ac.ebi.ep.enzymeservice.brenda.service.BrendaService;
+import uk.ac.ebi.ep.brendaservice.dto.BrendaResult;
+import uk.ac.ebi.ep.brendaservice.service.BrendaService;
 import uk.ac.ebi.ep.indexservice.helper.IndexQueryType;
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeSearchResult;
@@ -50,8 +48,9 @@ public class EnzymecentricController extends CommonControllerMethods {
     private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 10;
     private static final int PAGE_SIZE = 10;
 
-    private static final String CHEBI_PREFIX = "chebi:";
+    private static final String CHEBI_ID_PREFIX = "chebi:";
     private static final String RHEA_PREFIX = "rhea:";
+    private static final String MTBLC = "MTBLC";
 
     private final SearchIndexService searchIndexService;
     private final EnzymePageService enzymePageService;
@@ -88,9 +87,8 @@ public class EnzymecentricController extends CommonControllerMethods {
 
         int pageSize = PAGE_SIZE;
         int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
-        int associatedProteinLimit = 7;// ASSOCIATED_PROTEIN_LIMIT;
+        int associatedProteinLimit = 5;// ASSOCIATED_PROTEIN_LIMIT;
 
-//
         int startPage = refineStartPage(servicePage);
         filters = refineFilters(filters);
         searchKey = getSearchKey(searchText);
@@ -113,7 +111,7 @@ public class EnzymecentricController extends CommonControllerMethods {
 
                     }
 
-                    if (searchTerm.toLowerCase().startsWith(CHEBI_PREFIX)) {
+                    if (searchTerm.toLowerCase().startsWith(CHEBI_ID_PREFIX)) {
 
                         keywordType = KeywordType.CHEBI.getKeywordType();
                         logSearchQuery(SeachType.Keyword, SeachCategory.CHEBI, searchTerm);
@@ -195,29 +193,19 @@ public class EnzymecentricController extends CommonControllerMethods {
 
     }
 
-    private void addKinetics(String ec, Model model) {
-        int limit = 50;
+    public void addKinetics(String ec, Model model) {
+        int limit = 7;
+        boolean addAccession = false;
 
-        List<Brenda> brendaList = brendaService.findKineticsByEc(ec)
-                .distinct()
-                .limit(limit)
-                .collect(Collectors.toList());
+        BrendaResult brendaList = brendaService.findBrendaResultByEc(ec, limit, addAccession);
 
-        model.addAttribute("brendaList", brendaList);
+        boolean isKm = brendaList.isKm();
+        model.addAttribute("isKm", isKm);
 
-        List<Ph> phList = brendaService.findPhByEc(ec)
-                .distinct()
-                .limit(limit)
-                .collect(Collectors.toList());
+        model.addAttribute("brendaList", brendaList.getBrenda());
+        model.addAttribute("phList", brendaList.getPh());
+        model.addAttribute("tempList", brendaList.getTemperature());
 
-        model.addAttribute("phList", phList);
-
-        List<Temperature> tempList = brendaService.findTemperatureByEc(ec)
-                .distinct()
-                .limit(limit)
-                .collect(Collectors.toList());
-
-        model.addAttribute("tempList", tempList);
     }
 
     @GetMapping(value = "/ec/{ec}")
@@ -233,15 +221,12 @@ public class EnzymecentricController extends CommonControllerMethods {
             addKinetics(ec, model);
 
             EnzymeEntry entry = enzymePageService.findEnzymeByEcNumber(ec);
-
             String enzymeName = entry.getEnzymeName();
 
             EnzymePage enzymePage = enzymePageService.buildEnzymePage(ec, enzymeName, resultLimit);
-
             CompletableFuture<MechanismResult> mechanismsFuture = CompletableFuture.supplyAsync(() -> enzymePageService.findReactionMechanism(ec));
 
             MechanismResult reactionMechanism = mechanismsFuture.join();
-
             model.addAttribute("reactionMechanism", reactionMechanism);
 
             model.addAttribute("enzymePage", enzymePage);
@@ -258,7 +243,7 @@ public class EnzymecentricController extends CommonControllerMethods {
             String searchTerm = ec;
             int pageSize = PAGE_SIZE;
             int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
-            int associatedProteinLimit = 7;// ASSOCIATED_PROTEIN_LIMIT;
+            int associatedProteinLimit = 7;
             String keywordType = SeachType.Keyword.name();
             List<String> filters = new ArrayList<>();
             String searchKey = getSearchKey(ec);
@@ -268,7 +253,6 @@ public class EnzymecentricController extends CommonControllerMethods {
             return findEnzymesBySearchTerm(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
         }
 
-        //return ERROR_PAGE;
     }
 
     private String findEnzymesBySearchTerm(String searchTerm, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model) {
@@ -283,7 +267,6 @@ public class EnzymecentricController extends CommonControllerMethods {
 
             Set<EnzymeEntry> enzymeView = page.getContent().stream().collect(Collectors.toSet());
             enzymeView.parallelStream()
-                    //.parallel()
                     .forEach(entry -> processAssociatedProtein(enzymeView, entry, searchTerm, associatedProteinLimit));
 
             return constructModel(enzymeSearchResult, enzymeView, page, filters, searchTerm, searchKey, keywordType, model);
@@ -296,19 +279,19 @@ public class EnzymecentricController extends CommonControllerMethods {
 
         String associatedQuery = String.format("%s AND %s%s", searchTerm, IndexQueryType.EC.getQueryType(), entry.getEc());
 
-        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(associatedQuery, limit);
+        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(associatedQuery, limit, IndexQueryType.KEYWORD);
 
         if (result.getHitCount() == 0) {
             log.debug("No Associated Protein found for " + searchTerm + " With EC: " + entry.getEc());
             int LOWEST_BEST_MATCHED_RESULT_SIZE = 2;//shouldn't happen
             String ecQuery = String.format("%s%s", IndexQueryType.EC.getQueryType(), entry.getEc());
 
-            result = searchIndexService.findAssociatedProtein(ecQuery, LOWEST_BEST_MATCHED_RESULT_SIZE);
+            result = searchIndexService.findAssociatedProtein(ecQuery, LOWEST_BEST_MATCHED_RESULT_SIZE, IndexQueryType.KEYWORD);
 
             if (result.getHitCount() == 0) {
                 String intenzQuery = String.format("%s%s", IndexQueryType.INTENZ.getQueryType(), entry.getEc());
 
-                result = searchIndexService.findAssociatedProtein(intenzQuery, LOWEST_BEST_MATCHED_RESULT_SIZE);
+                result = searchIndexService.findAssociatedProtein(intenzQuery, LOWEST_BEST_MATCHED_RESULT_SIZE, IndexQueryType.EC);
 
             }
 
@@ -339,7 +322,7 @@ public class EnzymecentricController extends CommonControllerMethods {
 
     private String findEnzymesByCofactorId(String chebiId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model) {
 
-        String chebiIdSuffix = chebiId.replace("CHEBI:", "");
+        String chebiIdSuffix = chebiId.replace(CHEBI_ID_PREFIX.toUpperCase(), "");
         String cofactor = String.format("cofactor%s", chebiIdSuffix);
         String query = String.format("%s%s", IndexQueryType.COFACTOR.getQueryType(), cofactor);
 
@@ -349,17 +332,19 @@ public class EnzymecentricController extends CommonControllerMethods {
 
     private String findEnzymesByMetaboliteId(String chebiId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model) {
 
-        String chebiIdSuffix = chebiId.replace("CHEBI:", "");
-        String metabolite = String.format("metabolite%s", chebiIdSuffix);
-        String query = String.format("%s%s", IndexQueryType.METABOLITE.getQueryType(), metabolite);
+        String metaboliteId = chebiId;
+        if (metaboliteId.contains(CHEBI_ID_PREFIX.toUpperCase())) {
+            String chebiIdSuffix = chebiId.replace(CHEBI_ID_PREFIX.toUpperCase(), "");
+            metaboliteId = String.format(MTBLC + "%s", chebiIdSuffix);
+        }
+        String query = String.format("%s%s", IndexQueryType.METABOLIGHTS.getQueryType(), metaboliteId);
 
-        return processEnzymeResult(query, chebiIdSuffix, IndexQueryType.METABOLITE, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
+        return processEnzymeResult(query, metaboliteId, IndexQueryType.METABOLIGHTS, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
     }
 
     private String findEnzymesByOmimId(String omimId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model) {
-        String query = String.format("%s%s AND %s", IndexQueryType.OMIM.getQueryType(), omimId, IndexQueryType.HAS_DISEASE.getQueryType());
-
+        String query = String.format("%s%s", IndexQueryType.OMIM.getQueryType(), omimId);
         return processEnzymeResult(query, omimId, IndexQueryType.OMIM, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
     }
@@ -412,10 +397,10 @@ public class EnzymecentricController extends CommonControllerMethods {
     private void processAssociatedProteinWithEC(EnzymeEntry entry, Set<EnzymeEntry> enzymeView, int associatedProteinLimit) {
         String ecQuery = String.format("%s%s", IndexQueryType.EC.getQueryType(), entry.getEc());
 
-        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(ecQuery, associatedProteinLimit);
+        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(ecQuery, associatedProteinLimit, IndexQueryType.EC);
         if (result.getHitCount() == 0) {
             ecQuery = String.format("%s%s", IndexQueryType.EC.getQueryType(), entry.getEc());
-            result = searchIndexService.findAssociatedProtein(ecQuery, associatedProteinLimit);
+            result = searchIndexService.findAssociatedProtein(ecQuery, associatedProteinLimit, IndexQueryType.EC);
         }
 
         addProteinEntryToEnzymeView(result, entry, enzymeView);
@@ -462,13 +447,12 @@ public class EnzymecentricController extends CommonControllerMethods {
     }
 
     private void processAssociatedProtein(Set<EnzymeEntry> enzymeView, EnzymeEntry entry, String resourceId, IndexQueryType resourceQueryType, int limit) {
-
         String associatedQuery = String.format("%s%s AND %s%s", resourceQueryType.getQueryType(), resourceId, IndexQueryType.EC.getQueryType(), entry.getEc());
-        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(associatedQuery, limit);
+        ProteinGroupSearchResult result = searchIndexService.findAssociatedProtein(associatedQuery, limit, resourceQueryType);
 
         if (result.getHitCount() == 0) {
             associatedQuery = String.format("%s%s AND %s%s", resourceQueryType.getQueryType(), resourceId, IndexQueryType.INTENZ.getQueryType(), entry.getEc());
-            result = searchIndexService.findAssociatedProtein(associatedQuery, limit);
+            result = searchIndexService.findAssociatedProtein(associatedQuery, limit, resourceQueryType);
         }
 
         addProteinEntryToEnzymeView(result, entry, enzymeView);

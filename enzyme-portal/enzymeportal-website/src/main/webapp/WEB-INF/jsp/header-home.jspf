@@ -95,22 +95,26 @@
                                 href="${pageContext.request.contextPath}/faq"
                                 title="Frequently Asked questions">FAQ</a>
                         </li>
-<!--                        <li>
-                            <a target="_blank" href="https://www.youtube.com/watch?v=QuyZFNFO1aM"
-                               class="icon icon-socialmedia" data-icon="Y"   >
-                                Video
-                            </a>
-                        </li>-->
+                        <!--                        <li>
+                                                    <a target="_blank" href="https://www.youtube.com/watch?v=QuyZFNFO1aM"
+                                                       class="icon icon-socialmedia" data-icon="Y"   >
+                                                        Video
+                                                    </a>
+                                                </li>-->
 
 
                         <li class="functional ">
                             <a target="_blank" href="https://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=https://www.ebi.ac.uk/enzymeportal/"
                                class="icon icon-generic" data-icon="f"> Feedback</a>
                         </li>
-                      <li class="functional last">
-                          <a target="_blank" href="https://www.surveymonkey.com/r/EMBL-EBI_EnzymePortal"
+                        <li class="functional last">
+                            <a target="_blank" href="https://www.surveymonkey.com/r/EMBL-EBI_EnzymePortal"
                                class="icon icon-generic has-tip" data-icon="f" data-tooltip aria-haspopup="true" title="We'd like your input in shaping the Enzymeportal. Please, can you spare 2 minutes of your time to fill in a short survey so we know what data is important to you?"> Survey</a>
                         </li>
+                        <li class="${fn:containsIgnoreCase(pageTitle, 'statistics')?
+                                     'active' : ''}"><a
+                                href="${pageContext.request.contextPath}/statistics"
+                                title="Enzyme Portal Data release Statistics">Statistics</a></li>
                         <li class="functional
                             ${fn:containsIgnoreCase(pageTitle, 'compare')?
                               'active' : ''}">
@@ -119,10 +123,10 @@
                                class="icon icon-generic" data-icon="b">Basket
                                 (<span class="basketSize"></span>)</a>
                         </li>
-<!--                         <li class="float-right">
-                            <a target="_blank" href="https://www.ebi.ac.uk/enzymeportal/legacy/"
-                               class="icon icon-socialmedia  " data-icon="w" style="color: #777777"> Old Enzyme Portal</a>
-                        </li>-->
+                        <!--                         <li class="float-right">
+                                                    <a target="_blank" href="https://www.ebi.ac.uk/enzymeportal/legacy/"
+                                                       class="icon icon-socialmedia  " data-icon="w" style="color: #777777"> Old Enzyme Portal</a>
+                                                </li>-->
                         <li class=" float-right">
                             <a target="_blank" href="https://twitter.com/enzymeportal"
                                class="icon icon-socialmedia " data-icon="T"> Twitter</a>

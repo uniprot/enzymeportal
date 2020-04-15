@@ -4,7 +4,7 @@ package uk.ac.ebi.ep.web.tools;
  * Enumeration of attributes (application, session) used in the Enzyme Portal
  * webapp. 
  *
- * @author rafa
+ * @author joseph
  *
  */
 public enum Attribute {

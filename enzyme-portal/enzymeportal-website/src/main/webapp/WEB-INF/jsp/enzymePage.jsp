@@ -127,44 +127,275 @@
 
                         </section>
                         <section>
-                            <h3>Kinetics Parameters </h3>
+
                             <c:choose>
-                                <c:when test="${not empty brendaList }">
-                                    <c:set var="count" value="0" scope="page" />
-                                    <div class="tableFixHead tableFix2">
-                                        <table id="kinetics">
-                                            <thead>
-                                            <tr>
-                                                <th>kcat/KM Value [1/mMs-1]</th>
-                                                <th>Substrate</th>
-                                                <th>Organism</th>
-                                                <!--  <th>ph Range</th>
-                                                  <th>Temp Range</th>-->
-                                                <th>Comment</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <c:forEach items="${brendaList}" var="b" varStatus="brendaCounter">
-                                                <c:if test="${brendaCounter.count <= 50}">
-                                                    <tr>
-                                                        <td>${b.kcatKmValue}</td>
-                                                        <td>${b.substrate}</td>
-                                                        <td>${b.organism}</td>
-                                                        <td>${b.comment}</td>
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
+                                <c:when test="${ reactionMechanism.count == 0}">
+                                    <h3 class="noResults">Reaction Mechanism</h3>
+                                    <p class="noResults"> There are no Reaction Mechanism for this Enzyme</p>     
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="result" value="${reactionMechanism.results[0]}"/>
+
+                                    <c:if test="${reactionMechanism.count == 1}">
+                                        <h3>Reaction Mechanism</h3> 
+                                        <ul class="tabs" data-active-collapse="true"  data-tabs id="mechanism-tabs-ec">
+                                            <%@ include file="mcsa.jsp"%>
+                                            <div style="padding-left: 2em;">
+                                                <a   href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymePage.ec}" target="_blank">
+                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View Reaction Mechanisms in M-CSA</button>
+                                                </a>
+                                            </div>
+                                        </ul>
+                                    </c:if>
+                                    <c:if test="${reactionMechanism.count > 1}">
+                                        <h3>Reaction Mechanisms</h3> 
+                                        <ul class="tabs" data-active-collapse="true"  data-tabs id="mechanism-tabs-ec">
+                                            <%@ include file="mcsa.jsp"%>
+                                            <div style="padding-left: 2em;">
+                                                <a   href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymePage.ec}" target="_blank">
+                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View All ${reactionMechanism.count} Reaction Mechanisms in M-CSA</button>
+                                                </a>
+                                            </div>
+                                        </ul>
+                                    </c:if>
+
+                                </c:otherwise>
+                            </c:choose> 
 
 
-                                            <tr>
 
-                                                <td colspan="3">
-                                                    <c:if test="${fn:length(brendaList) > 50}">
-                                                        <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(brendaList)} in Brenda</button>
-                                                    </c:if>
-                                                </td>
 
-                                            </tr>
+                        </section>            
+
+                        <section>
+                            <c:choose>
+                                <c:when test="${not empty brendaList || not empty tempList || not empty phList}">
+                                    <h3>Reaction Parameters </h3>  
+
+                                    <ul class="accordion" data-accordion data-allow-all-closed="true">
+                                        <li class="accordion-item is-active" style="background-color: #CBE8ECX;" data-accordion-item>
+                                            <a href="#" class="accordion-title" style="font-size: 1em;"><strong>Kinetic Parameters</strong></a>
+                                            <div class="accordion-content" data-tab-content >
+                                                <c:choose>
+                                                    <c:when test="${not empty brendaList}">
+                                                        <c:set var="count" value="0" scope="page" />
+                                                        <div class="tableFixHeadX tableFix2X" style="overflow-x:auto;">
+                                                            <table id="kinetics">
+                                                                <thead>
+                                                                    <tr>
+                                                                          <th>Organism</th>
+                                                                        <c:choose>
+                                                                            <c:when test="${isKm eq true}">
+                                                                                <th>KM Value [mM]</th>    
+                                                                                </c:when> 
+                                                                                <c:otherwise>
+                                                                                <th>kcat/KM Value [1/mMs-1]</th>    
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+
+                                                                        <th>Substrate</th>
+<!--                                                                        <th>Organism</th>-->
+                                                                        <th>Comment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach items="${brendaList}" var="b" varStatus="brendaCounter">
+                                                                        <c:if test="${brendaCounter.count <= 5}">
+                                                                            <tr>
+                                                                                <c:choose>
+                                                                                    <c:when test="${not empty b.accession}">
+                                                                                        <td><a href="${pageContext.request.contextPath}/search/${b.accession}/enzyme">${b.organism}</td>
+                                                                                    </c:when> 
+                                                                                    <c:otherwise>
+                                                                                        <td>${b.organism}</td>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                                <c:choose>
+                                                                                    <c:when test="${ not empty b.kmValue}">
+                                                                                        <td>${b.kmValue}</td>
+                                                                                    </c:when> 
+                                                                                    <c:otherwise>
+                                                                                        <td>${b.kcatKmValue}</td>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+
+                                                                                <td>${b.substrate}</td>
+
+
+                                                                                <td>${b.comment}</td>
+                                                                            </tr>
+                                                                        </c:if>
+                                                                    </c:forEach>
+
+
+                                                                </tbody>
+                                                            </table>
+                                                            <c:if test="${fn:length(brendaList) > 5}">
+
+                                                                <a   href="https://www.brenda-enzymes.org/enzyme.php?ecno=${enzymePage.ec}" target="_blank">
+                                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all in Brenda</button>
+                                                                </a>
+                                                            </c:if>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="noResults">There are no reaction parameters information for this Enzyme.</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </li>
+                                        <li class="accordion-item" data-accordion-item>
+                                            <a href="#" class="accordion-title" style="font-size: 1em;"><strong>Temperature</strong></a>
+                                            <div class="accordion-content" data-tab-content>
+                                                <c:choose>
+                                                    <c:when test="${not empty tempList }">
+                                                        <c:set var="count" value="0" scope="page" />
+                                                        <div class="tableFixHeadX" style="overflow-x:auto;">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Organism</th>
+                                                                        <th>Temperature Range</th>
+                                                                        <th>Comment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach items="${tempList}" var="b" varStatus="brendaCounter">
+                                                                        <c:if test="${brendaCounter.count <= 5}">
+                                                                            <tr>
+                                                                                <c:choose>
+                                                                                    <c:when test="${not empty b.accession}">
+                                                                                        <td><a href="${pageContext.request.contextPath}/search/${b.accession}/enzyme">${b.organism}</td>
+                                                                                    </c:when> 
+                                                                                    <c:otherwise>
+                                                                                        <td>${b.organism}</td>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+
+                                                                                <td>${b.temperatureRange}</td>
+
+                                                                                <td>${b.comment}</td>
+                                                                            </tr>
+                                                                        </c:if>
+                                                                    </c:forEach>
+
+
+                                                                </tbody>
+                                                            </table>
+                                                            <c:if test="${fn:length(tempList) > 5}">
+
+                                                                <a   href="https://www.brenda-enzymes.org/enzyme.php?ecno=${enzymePage.ec}" target="_blank">
+                                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all in Brenda</button>
+                                                                </a>
+                                                            </c:if>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="noResults">There are no reaction parameters information for this Enzyme.</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </li>
+                                        <li class="accordion-item" data-accordion-item>
+                                            <a href="#" class="accordion-title" style="font-size: 1em;"><strong>pH</strong></a>
+                                            <div class="accordion-content" data-tab-content>
+                                                <c:choose>
+                                                    <c:when test="${not empty phList }">
+                                                        <c:set var="count" value="0" scope="page" />
+                                                        <div class="tableFixHeadX" style="overflow-x:auto;">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Organism</th>
+                                                                        <th>pH Range</th>
+                                                                        <th>Comment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach items="${phList}" var="b" varStatus="brendaCounter">
+                                                                        <c:if test="${brendaCounter.count <= 5}">
+                                                                            <tr>
+                                                                                <c:choose>
+                                                                                    <c:when test="${not empty b.accession}">
+                                                                                        <td><a href="${pageContext.request.contextPath}/search/${b.accession}/enzyme">${b.organism}</td>
+                                                                                    </c:when> 
+                                                                                    <c:otherwise>
+                                                                                        <td>${b.organism}</td>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                                <td>${b.phRange}</td>
+                                                                                <td>${b.comment}</td>
+                                                                            </tr>
+                                                                        </c:if>
+                                                                    </c:forEach>
+
+
+                                                                </tbody>
+                                                            </table>
+                                                            <c:if test="${fn:length(phList) > 5}">
+
+                                                                <a   href="https://www.brenda-enzymes.org/enzyme.php?ecno=${enzymePage.ec}" target="_blank">
+                                                                    <button id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all in Brenda</button>
+                                                                </a>
+
+                                                            </c:if>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <p class="noResults">There are no reaction parameters information for this Enzyme.</p>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </c:when>
+                                <c:otherwise>
+                                    <h3 class="noResults">Reaction Parameters</h3>
+                                    <p class="noResults">There are no kinetic parameters information for this Enzyme</p>
+                                </c:otherwise>
+                            </c:choose>
+                        </section>  
+                        <%--
+                <section class="hidden hide">
+                    <h3>Brenda Kinetic Parameters </h3>
+                    <c:choose>
+                        <c:when test="${not empty brendaList }">
+                            <c:set var="count" value="0" scope="page" />
+                            <div class="tableFixHead tableFix2">
+                                <table id="kinetics">
+                                    <thead>
+                                        <tr>
+                                            <th>kcat/KM Value [1/mMs-1]</th>
+                                            <th>Substrate</th>
+                                            <th>Organism</th>
+                                            <!--  <th>ph Range</th>
+                                              <th>Temp Range</th>-->
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${brendaList}" var="b" varStatus="brendaCounter">
+                                            <c:if test="${brendaCounter.count <= 50}">
+                                                <tr>
+                                                    <td>${b.kcatKmValue}</td>
+                                                    <td>${b.substrate}</td>
+                                                    <td>${b.organism}</td>
+                                                    <td>${b.comment}</td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+
+
+                                                <tr>
+
+                                                    <td colspan="3">
+                                                        <c:if test="${fn:length(brendaList) > 50}">
+                                                            <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(brendaList)} in Brenda</button>
+                                                        </c:if>
+                                                    </td>
+
+                                                </tr>
 
                                             </tbody>
                                         </table>
@@ -175,45 +406,45 @@
                                 </c:otherwise>
                             </c:choose>
                         </section>                         
-                        <section>
-                            <h3>Kinetics - Temperature </h3>
+                        <section class="hidden hide">
+                            <h3>Kinetic - Temperature </h3>
                             <c:choose>
                                 <c:when test="${not empty tempList }">
                                     <c:set var="count" value="0" scope="page" />
                                     <div class="tableFixHead">
                                         <table>
-                                             <thead>
-                                            <tr>
-                                                <th>Organism</th>
-                                                <th>TemperatureRange</th>
-                                                <th>temperatureRangeMaximum</th>
-                                                <th>Comment</th>
-                                            </tr>
-                                             </thead>
-                                             <tbody>
-                                            <c:forEach items="${tempList}" var="b" varStatus="brendaCounter">
-                                                <c:if test="${brendaCounter.count <= 50}">
-                                                    <tr>
-                                                        <td>${b.organism}</td>
-                                                        <td>${b.temperatureRange}</td>
-                                                        <td>${b.temperatureRangeMaximum}</td>
-                                                        <td>${b.comment}</td>
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
-
-
-                                            <tr>
-
-                                                <td colspan="3">
-                                                    <c:if test="${fn:length(tempList) > 50}">
-                                                        <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(tempList)} in Brenda</button>
+                                            <thead>
+                                                <tr>
+                                                    <th>Organism</th>
+                                                    <th>TemperatureRange</th>
+                                                    <th>temperatureRangeMaximum</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${tempList}" var="b" varStatus="brendaCounter">
+                                                    <c:if test="${brendaCounter.count <= 50}">
+                                                        <tr>
+                                                            <td>${b.organism}</td>
+                                                            <td>${b.temperatureRange}</td>
+                                                            <td>${b.temperatureRangeMaximum}</td>
+                                                            <td>${b.comment}</td>
+                                                        </tr>
                                                     </c:if>
-                                                </td>
+                                                </c:forEach>
 
-                                            </tr>
 
-                                             </tbody>
+                                                <tr>
+
+                                                    <td colspan="3">
+                                                        <c:if test="${fn:length(tempList) > 50}">
+                                                            <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(tempList)} in Brenda</button>
+                                                        </c:if>
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
                                         </table>
                                     </div>
                                 </c:when>
@@ -222,45 +453,45 @@
                                 </c:otherwise>
                             </c:choose>
                         </section> 
-                        <section>
-                            <h3>Kinetics Ph </h3>
+                        <section class="hidden hide">
+                            <h3>Kinetic pH </h3>
                             <c:choose>
                                 <c:when test="${not empty phList }">
                                     <c:set var="count" value="0" scope="page" />
                                     <div class="tableFixHead">
                                         <table>
-                                             <thead>
-                                            <tr>
-                                                <th>Organism</th>
-                                                <th>PhRange</th>
-                                                <th>PhRangeMaximum</th>
-                                                <th>Comment</th>
-                                            </tr>
-                                             </thead>
-                                             <tbody>
-                                            <c:forEach items="${phList}" var="b" varStatus="brendaCounter">
-                                                <c:if test="${brendaCounter.count <= 50}">
-                                                    <tr>
-                                                        <td>${b.organism}</td>
-                                                        <td>${b.phRange}</td>
-                                                        <td>${b.phRangeMaximum}</td>
-                                                        <td>${b.comment}</td>
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
-
-
-                                            <tr>
-
-                                                <td colspan="3">
-                                                    <c:if test="${fn:length(phList) > 50}">
-                                                        <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(phList)} in Brenda</button>
+                                            <thead>
+                                                <tr>
+                                                    <th>Organism</th>
+                                                    <th>PhRange</th>
+                                                    <th>PhRangeMaximum</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${phList}" var="b" varStatus="brendaCounter">
+                                                    <c:if test="${brendaCounter.count <= 50}">
+                                                        <tr>
+                                                            <td>${b.organism}</td>
+                                                            <td>${b.phRange}</td>
+                                                            <td>${b.phRangeMaximum}</td>
+                                                            <td>${b.comment}</td>
+                                                        </tr>
                                                     </c:if>
-                                                </td>
+                                                </c:forEach>
 
-                                            </tr>
 
-                                             </tbody>
+                                                <tr>
+
+                                                    <td colspan="3">
+                                                        <c:if test="${fn:length(phList) > 50}">
+                                                            <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${fn:length(phList)} in Brenda</button>
+                                                        </c:if>
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
                                         </table>
                                     </div>
                                 </c:when>
@@ -269,7 +500,7 @@
                                 </c:otherwise>
                             </c:choose>
                         </section>               
-
+                        --%>
                         <section>
                             <h3>Associated Proteins </h3>
                             <c:choose>
@@ -333,46 +564,7 @@
                             </c:choose>
                         </section>
 
-                        <section>
 
-                            <c:choose>
-                                <c:when test="${ reactionMechanism.count == 0}">
-                                    <h3 class="noResults">Reaction Mechanism</h3>
-                                    <p class="noResults"> There are no Reaction Mechanism for this Enzyme</p>     
-                                </c:when>
-                                <c:otherwise>
-                                    <c:set var="result" value="${reactionMechanism.results[0]}"/>
-
-                                    <c:if test="${reactionMechanism.count == 1}">
-                                        <h3>Reaction Mechanism</h3> 
-                                        <ul class="tabs" data-active-collapse="true"  data-tabs id="mechanism-tabs-ec">
-                                            <%@ include file="mcsa.jsp"%>
-                                            <div style="padding-left: 2em;">
-                                                <a   href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymePage.ec}" target="_blank">
-                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View Reaction Mechanisms in M-CSA</button>
-                                                </a>
-                                            </div>
-                                        </ul>
-                                    </c:if>
-                                    <c:if test="${reactionMechanism.count > 1}">
-                                        <h3>Reaction Mechanisms</h3> 
-                                        <ul class="tabs" data-active-collapse="true"  data-tabs id="mechanism-tabs-ec">
-                                            <%@ include file="mcsa.jsp"%>
-                                            <div style="padding-left: 2em;">
-                                                <a   href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymePage.ec}" target="_blank">
-                                                    <button style="margin-bottom: 1em;" id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View All ${reactionMechanism.count} Reaction Mechanisms in M-CSA</button>
-                                                </a>
-                                            </div>
-                                        </ul>
-                                    </c:if>
-
-                                </c:otherwise>
-                            </c:choose> 
-
-
-
-
-                        </section> 
                         <%--    
                             <section>
 

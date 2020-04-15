@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.ep.indexservice.model.protein.WithCofactor;
 import uk.ac.ebi.ep.indexservice.model.protein.WithMetabolite;
 import uk.ac.ebi.ep.indexservice.model.protein.WithPathway;
@@ -16,14 +17,14 @@ import uk.ac.ebi.ep.indexservice.model.protein.WithTaxonomy;
  *
  * @author joseph
  */
+@Slf4j
 public final class Functions {
 
     public static WithMetabolite withMetabolite(List<WithMetabolite> metabolites, String metaboliteId, String accession, String commonName, String entryType) {
+        String transformedId = metaboliteId.replace("MTBLC", "");
         return metabolites
-                .parallelStream()
-                .filter(metabolite -> metabolite.getMetaboliteId().equalsIgnoreCase(metaboliteId))
-                .sorted(Comparator.comparing(WithMetabolite::getEntryType))
-                //.findFirst().orElse(new WithMetabolite());
+                .stream()
+                .filter(metabolite -> metabolite.getMetaboliteId().equalsIgnoreCase(transformedId))
                 .findFirst().orElse(new WithMetabolite(metaboliteId, accession, commonName, entryType));
 
     }
@@ -32,7 +33,7 @@ public final class Functions {
         String cid = cofactorId.replaceAll("\"", "").replaceAll("CHEBI:", "");
 
         return cofactors
-                .parallelStream()
+                .stream()
                 .filter(cofactor -> cofactor.getCofactorId().equalsIgnoreCase(cid))
                 .sorted(Comparator.comparing(WithCofactor::getEntryType))
                 .findFirst().orElse(new WithCofactor(cid, accession, commonName, entryType));
@@ -42,7 +43,7 @@ public final class Functions {
     public static WithProteinFamily withProteinFamily(List<WithProteinFamily> proteinFamilies, String familyId, String accession, String commonName, String entryType) {
 
         return proteinFamilies
-                .parallelStream()
+                .stream()
                 .filter(family -> family.getFamilyId().equalsIgnoreCase(familyId))
                 .sorted(Comparator.comparing(WithProteinFamily::getEntryType))
                 .findFirst().orElse(new WithProteinFamily(familyId, accession, commonName, entryType));
@@ -51,7 +52,8 @@ public final class Functions {
 
     public static WithTaxonomy withTaxonomy(List<WithTaxonomy> organisms, String taxId, String accession, String commonName, String entryType) {
 
-        return organisms.parallelStream()
+        return organisms
+                .stream()
                 .filter(organism -> organism.getTaxonomyId().equalsIgnoreCase(taxId))
                 .findFirst().orElse(new WithTaxonomy(taxId, accession, commonName, entryType));
 
