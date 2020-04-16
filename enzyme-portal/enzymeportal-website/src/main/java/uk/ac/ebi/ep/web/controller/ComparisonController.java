@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.comparisonservice.domain.EnzymeComparison;
@@ -50,9 +50,9 @@ public class ComparisonController {
 
     }
 
-    @RequestMapping(value = "/ajax/basket")
+    @GetMapping(value = "/ajax/basket")
     @ResponseBody
-    protected String updateBasket(HttpServletResponse response, @RequestParam String id, @RequestParam Boolean checked, HttpSession session) {
+    public String updateBasket(HttpServletResponse response, @RequestParam String id, @RequestParam Boolean checked, HttpSession session) {
 
         @SuppressWarnings("unchecked")
         Map<String, ComparisonProteinModel> basket = (Map<String, ComparisonProteinModel>) session.getAttribute(Attribute.basket.name());
@@ -76,8 +76,8 @@ public class ComparisonController {
         return String.valueOf(basket.size());
     }
 
-    @RequestMapping(value = "/basket")
-    protected String getBasket(Model model) {
+    @GetMapping(value = "/basket")
+    public String getBasket(Model model) {
         return Attribute.basket.name();
     }
 
@@ -106,8 +106,8 @@ public class ComparisonController {
      * <code>"error"</code> otherwise (less than two enzymes selected to
      * compare, for example).
      */
-    @RequestMapping(value = "/compare")
-    protected String getComparison(Model model, HttpSession session, @RequestParam(value = "acc") String[] accs) {
+    @GetMapping(value = "/compare")
+    public String getComparison(Model model, HttpSession session, @RequestParam(value = "acc") String[] accs) {
 
         // Filter the incoming accessions, keep only two non-empty:
         String[] theAccs = new String[2];

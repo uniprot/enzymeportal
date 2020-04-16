@@ -20,6 +20,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * set to the path to the directory in the file system used as base for the file
  * requests. This directory should be readable for the unix user running the
  * server, and from the machine where it runs.
+ *
  * @author joseph
  * @since 1.0.25
  */
@@ -58,6 +59,8 @@ public class FileProxyServlet extends HttpServlet {
                     resp.getOutputStream().write(buffer, 0, r);
                 }
                 resp.flushBuffer();
+            } catch (IOException e) {
+                log.error("File not found: " + e.getMessage());
             } finally {
                 if (fis != null) {
                     fis.close();

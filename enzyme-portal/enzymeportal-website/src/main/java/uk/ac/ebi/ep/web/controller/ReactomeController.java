@@ -34,7 +34,7 @@ public class ReactomeController {
 
     @ResponseBody
     @GetMapping(value = "/ajax/reactome/{accession}")
-    protected Mono<List<PathWay>> getPathways(@PathVariable String accession) {
+    public Mono<List<PathWay>> getPathways(@PathVariable String accession) {
         //40 pathways found for this entry P30876
         List<String> pathwayIds = dataService.findPathwayIdsByAccession(accession);
 
@@ -43,7 +43,7 @@ public class ReactomeController {
     }
 
     @GetMapping(value = "/ajax/reactomeModel/{reactomePathwayId}")
-    protected String getPathwayModel(Model model, @PathVariable String reactomePathwayId) {
+    public String getPathwayModel(Model model, @PathVariable String reactomePathwayId) {
 
         PathWay pathway = reactomeService.findPathwayById(reactomePathwayId)
                 .block();
@@ -54,7 +54,7 @@ public class ReactomeController {
 
     @ResponseBody
     @GetMapping(value = "/service/reactome/{accession}")
-    protected Mono<List<PathWay>> getPathwaysService(@PathVariable String accession) {
+    public Mono<List<PathWay>> getPathwaysService(@PathVariable String accession) {
 
         List<String> pathwayIds = dataService.findPathwayIdsByAccession(accession);
 

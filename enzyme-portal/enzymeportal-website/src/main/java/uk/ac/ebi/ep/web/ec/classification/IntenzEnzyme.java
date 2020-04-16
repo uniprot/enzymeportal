@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import lombok.Data;
 
 /**
  *
  * @author joseph
  */
+@Data
 public class IntenzEnzyme implements Comparable<IntenzEnzyme>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,30 +31,6 @@ public class IntenzEnzyme implements Comparable<IntenzEnzyme>, Serializable {
         subSubclasses = new LinkedList<>();
         entries = new LinkedList<>();
 
-    }
-
-    public String getEc() {
-        return ec;
-    }
-
-    public void setEc(String ec) {
-        this.ec = ec;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String className) {
-        this.name = className;
     }
 
     public List<EnzymeSubclass> getChildren() {
@@ -77,38 +55,6 @@ public class IntenzEnzyme implements Comparable<IntenzEnzyme>, Serializable {
 
     public void setEntries(List<EnzymeEntry> entries) {
         this.entries = entries;
-    }
-
-    public String getSubclassName() {
-        return subclassName;
-    }
-
-    public void setSubclassName(String subclassName) {
-        this.subclassName = subclassName;
-    }
-
-    public String getSubsubclassName() {
-        return subsubclassName;
-    }
-
-    public void setSubsubclassName(String subsubclassName) {
-        this.subsubclassName = subsubclassName;
-    }
-
-    public String getEntryName() {
-        return entryName;
-    }
-
-    public void setEntryName(String entryName) {
-        this.entryName = entryName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Override

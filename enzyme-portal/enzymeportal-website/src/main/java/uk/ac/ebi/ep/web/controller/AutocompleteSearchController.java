@@ -7,8 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Mono;
@@ -31,7 +31,7 @@ public class AutocompleteSearchController {
     }
 
     @ResponseBody
-    @RequestMapping("/service/search")
+    @GetMapping("/service/search")
     public List<Suggestion> autocompleteSearchJsonResonse(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
             String keyword = name.toLowerCase();

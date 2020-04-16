@@ -69,7 +69,7 @@ public class EntryPageController extends LegacyMethods {
      * @return
      */
     @GetMapping(value = "/search/{accession}/{field}")
-    protected String getEnzymeModel(Model model, @PathVariable(required = true) String accession, @PathVariable(required = false) String field, HttpSession session) {
+    public String getEnzymeModel(Model model, @PathVariable(required = true) String accession, @PathVariable(required = false) String field, HttpSession session) {
 
         EntryPageField requestedField = getEntryPageField(field);
         EnzymeModel enzymeModel = entryPageService.getDefaultEnzymeModel(accession);
@@ -112,7 +112,7 @@ public class EntryPageController extends LegacyMethods {
     }
 
     @GetMapping(value = "/search/{accession}/pathways")
-    protected String getEnzymePathway(Model model, @PathVariable(required = true) String accession, HttpSession session) {
+    public String getEnzymePathway(Model model, @PathVariable(required = true) String accession, HttpSession session) {
         EnzymeModel enzymeModel = entryPageService.getDefaultEnzymeModel(accession);
         enzymeModel = entryPageService.showPathwaysPage(enzymeModel);
 

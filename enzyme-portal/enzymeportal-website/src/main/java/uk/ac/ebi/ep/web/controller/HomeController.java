@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    private String home() {
+    public String home() {
         return "index";
     }
 
     @GetMapping("/about")
-    private String about() {
+    public String about() {
         return "about";
     }
 
     @GetMapping("/faq")
-    private String faq() {
+    public String faq() {
         return "faq";
     }
 

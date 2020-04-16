@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.dataservice.dto.CompoundView;
 import uk.ac.ebi.ep.dataservice.dto.DiseaseView;
 import uk.ac.ebi.ep.dataservice.dto.EnzymeReactionView;
@@ -27,14 +26,7 @@ import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 @Slf4j
 public class EntryPageServiceIT extends EnzymeportalWebsiteApplicationTests {
 
-    @Autowired
-    private EntryPageService entryPageService;
 
-    @Test
-    void injectedComponentsAreNotNull() {
-
-        assertThat(entryPageService).isNotNull();
-    }
 
     /**
      * Test of getDefaultEnzymeModel method, of class EntryPageService.
