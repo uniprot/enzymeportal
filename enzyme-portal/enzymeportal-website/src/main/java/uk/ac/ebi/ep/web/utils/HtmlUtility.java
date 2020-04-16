@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.web.utils;
 
 import java.util.regex.Pattern;
@@ -6,11 +5,15 @@ import org.springframework.web.util.HtmlUtils;
 
 /**
  * This class is for cleaning up invalid input from the browser (particularly to
- * handle viral ? and \\
+ * handle viral ? and \\ e.g when a user query results in viral ?????? and
+ * \\\\\\
  *
  * @author joseph
  */
 public class HtmlUtility {
+
+    private HtmlUtility() {
+    }
 
     public static String cleanText(String text) {
 
@@ -18,11 +21,8 @@ public class HtmlUtility {
 
         String escapeText = HtmlUtils.htmlEscape(removeBackSlash);
 
-        //this method is mainly for ? and \\ when they are repeatedly submitted by a user resulting to ?????? and \\\\\\
-        String cleanText = escapeText.replaceAll("&Acirc;", "").replaceAll("&acirc;", "").replaceAll("&#39;", "")
-                .replaceAll("&Atilde;", "").replaceAll("&atilde;", "").replaceAll("&cent;", "").replaceAll("&pound;", "");
+        return escapeText.replace("&Acirc;", "").replace("&acirc;", "").replace("&#39;", "")
+                .replace("&Atilde;", "").replace("&atilde;", "").replace("&cent;", "").replace("&pound;", "");
 
-
-        return cleanText;
     }
 }

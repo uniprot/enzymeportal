@@ -32,7 +32,7 @@ public class EntryPageController extends LegacyMethods {
     private static final String ERROR = "entryPageError";
     private static final String ENTRY = "entry";
 
-    private final Integer maxCitations = 50;
+    private static final Integer MAX_CITATIONS = 50;
 
     private final EntryPageService entryPageService;
 
@@ -80,7 +80,7 @@ public class EntryPageController extends LegacyMethods {
         switch (requestedField) {
             case ENZYME:
                 enzymeModel = entryPageService.showEntryEnzymePage(enzymeModel);
-                SearchQueryLog.logSearchQuery(SeachType.ProteinPage, SeachCategory.UniprotAccession, accession);
+                SearchQueryLog.logSearchQuery(SeachType.PROTEIN_PAGE, SeachCategory.UNIPROT_ACCESSION, accession);
                 break;
 
             case PROTEINSTRUCTURE:
@@ -99,8 +99,8 @@ public class EntryPageController extends LegacyMethods {
                 break;
             case LITERATURE:
 
-                enzymeModel = entryPageService.showLiteraturePage(enzymeModel, maxCitations);
-                model.addAttribute("maxCitations", maxCitations);
+                enzymeModel = entryPageService.showLiteraturePage(enzymeModel, MAX_CITATIONS);
+                model.addAttribute("maxCitations", MAX_CITATIONS);
                 break;
             default:
                 enzymeModel = entryPageService.showEntryEnzymePage(enzymeModel);

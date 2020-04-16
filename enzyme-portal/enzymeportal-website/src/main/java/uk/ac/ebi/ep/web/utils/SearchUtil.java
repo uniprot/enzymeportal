@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public final class SearchUtil {
 
+    private SearchUtil() {
+    }
+
     //private static final String VALID_EC_REGEX = "[1-7](\\.(\\-|\\d{1,4})){3}n*";
     private static final String VALID_EC_REGEX = "([1-7](\\.n?[\\d\\-]+){3})";
 

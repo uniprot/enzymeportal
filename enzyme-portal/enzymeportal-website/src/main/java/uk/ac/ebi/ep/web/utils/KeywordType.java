@@ -19,14 +19,14 @@ public enum KeywordType {
     RHEA("RHEA"),
     METABOLITES("METABOLITES");
 
-    private final String keywordType;
+    private final String type;
 
     private KeywordType(String keywordType) {
-        this.keywordType = keywordType;
+        this.type = keywordType;
     }
 
-    public String getKeywordType() {
-        return keywordType;
+    public String getType() {
+        return type;
     }
 
 }

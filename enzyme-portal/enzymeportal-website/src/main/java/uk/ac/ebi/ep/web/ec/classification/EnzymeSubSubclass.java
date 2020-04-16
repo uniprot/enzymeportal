@@ -7,11 +7,15 @@ package uk.ac.ebi.ep.web.ec.classification;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author joseph
  */
+@Getter
+@Setter
 public class EnzymeSubSubclass implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,30 +36,6 @@ public class EnzymeSubSubclass implements Serializable {
 
     public void setEntries(List<EnzymeEntry> entries) {
         this.entries = entries;
-    }
-
-    public String getEc() {
-        return ec;
-    }
-
-    public void setEc(String ec) {
-        this.ec = ec;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

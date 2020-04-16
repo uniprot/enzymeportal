@@ -97,7 +97,7 @@ public class CommonControllerMethods {
         if (queryString == null) {
             return searchkey;
         }
-        String data[] = queryString.split("&");
+        String [] data = queryString.split("&");
         List<String> list = Arrays.asList(data);
         String requestString = list
                 .stream()

@@ -87,11 +87,13 @@ public class EnzymecentricController extends CommonControllerMethods {
 
         int pageSize = PAGE_SIZE;
         int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
-        int associatedProteinLimit = 5;// ASSOCIATED_PROTEIN_LIMIT;
+        int associatedProteinLimit = 5;
 
         int startPage = refineStartPage(servicePage);
         filters = refineFilters(filters);
-        searchKey = getSearchKey(searchText);
+        if (searchKey == null && searchText != null) {
+            searchKey = getSearchKey(searchText);
+        }
         String searchTerm = getSearchTerm(searchKey);
 
         KeywordType type = KeywordType.valueOf(keywordType);
@@ -102,88 +104,88 @@ public class EnzymecentricController extends CommonControllerMethods {
                 boolean isEc = SearchUtil.validateEc(searchTerm);
                 if (isEc) {
 
-                    logSearchQuery(SeachType.Keyword, SeachCategory.EC, searchTerm);
+                    logSearchQuery(SeachType.KEYWORD, SeachCategory.EC, searchTerm);
                     return findEnzymesByEC(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
                 } else {
 
                     if (searchTerm.contains("/")) {
-                        searchTerm = searchTerm.replaceAll("/", " ");
+                        searchTerm = searchTerm.replace("/", " ");
 
                     }
 
                     if (searchTerm.toLowerCase().startsWith(CHEBI_ID_PREFIX)) {
 
-                        keywordType = KeywordType.CHEBI.getKeywordType();
-                        logSearchQuery(SeachType.Keyword, SeachCategory.CHEBI, searchTerm);
+                        keywordType = KeywordType.CHEBI.getType();
+                        logSearchQuery(SeachType.KEYWORD, SeachCategory.CHEBI, searchTerm);
                         return findEnzymesByChebiId(searchTerm.toUpperCase(), startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
                     }
                     if (searchTerm.toLowerCase().startsWith(RHEA_PREFIX)) {
-                        keywordType = KeywordType.RHEA.getKeywordType();
+                        keywordType = KeywordType.RHEA.getType();
 
-                        logSearchQuery(SeachType.Keyword, SeachCategory.RHEA, searchTerm);
+                        logSearchQuery(SeachType.KEYWORD, SeachCategory.RHEA, searchTerm);
                         return findEnzymesByRheaId(searchTerm.toUpperCase(), startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
                     }
 
-                    logSearchQuery(SeachType.Keyword, SeachCategory.Fulltext, searchTerm);
+                    logSearchQuery(SeachType.KEYWORD, SeachCategory.FULLTEXT, searchTerm);
                     return findEnzymesBySearchTerm(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
                 }
 
             case DISEASE:
                 String disease = searchKey + "-" + searchId;
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.Diseases, disease);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.DISEASES, disease);
                 return findEnzymesByOmimId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             case FAMILIES:
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.Families, searchKey);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.FAMILIES, searchKey);
                 return findEnzymesByFamilyGroupId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             case COFACTORS:
 
-                searchKey = parseRequestQueryString(request, searchKey);
-                String cofactor = searchKey + "-" + searchId;
+                String cofactorSearchKey = parseRequestQueryString(request, searchKey);
+                String cofactor = cofactorSearchKey + "-" + searchId;
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.cofactors, cofactor);
-                return findEnzymesByCofactorId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.COFACTORS, cofactor);
+                return findEnzymesByCofactorId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, cofactorSearchKey, keywordType, model);
 
             case METABOLITES:
 
-                searchKey = parseRequestQueryString(request, searchKey);
-                String metabolite = searchKey + "-" + searchId;
+                String metaboliteSearchKey = parseRequestQueryString(request, searchKey);
+                String metabolite = metaboliteSearchKey + "-" + searchId;
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.Metabolite, metabolite);
-                return findEnzymesByMetaboliteId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.METABOLITE, metabolite);
+                return findEnzymesByMetaboliteId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, metaboliteSearchKey, keywordType, model);
 
             case CHEBI:
 
-                searchKey = parseRequestQueryString(request, searchKey);
-                String chebi = searchKey + "-" + searchId;
+                String chebiSearchKey = parseRequestQueryString(request, searchKey);
+                String chebi = chebiSearchKey + "-" + searchId;
 
-                logSearchQuery(SeachType.Keyword, SeachCategory.CHEBI, chebi);
-                return findEnzymesByChebiId(searchTerm.toUpperCase(), startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
+                logSearchQuery(SeachType.KEYWORD, SeachCategory.CHEBI, chebi);
+                return findEnzymesByChebiId(searchTerm.toUpperCase(), startPage, pageSize, facetCount, filters, associatedProteinLimit, chebiSearchKey, keywordType, model);
 
             case RHEA:
 
-                logSearchQuery(SeachType.Keyword, SeachCategory.RHEA, searchId);
+                logSearchQuery(SeachType.KEYWORD, SeachCategory.RHEA, searchId);
                 return findEnzymesByRheaId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             case TAXONOMY:
                 String tax = searchKey + "-" + searchId;
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.Taxonomy, tax);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.TAXONOMY, tax);
                 return findEnzymesByTaxId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             case PATHWAYS:
                 String pathway = searchKey + "-" + searchId;
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.Pathways, pathway);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.PATHWAYS, pathway);
                 return findEnzymesByPathwayId(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             case EC:
 
-                logSearchQuery(SeachType.BrowseBy, SeachCategory.EC, searchId);
+                logSearchQuery(SeachType.BROWSE_BY, SeachCategory.EC, searchId);
                 return findEnzymesByEC(searchId, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
 
             default:
@@ -210,13 +212,13 @@ public class EnzymecentricController extends CommonControllerMethods {
 
     @GetMapping(value = "/ec/{ec}")
     public String showEnzyme(@PathVariable("ec") String ec, Model model) {
-        int resultLimit = 7;// ASSOCIATED_PROTEIN_LIMIT;
+        int resultLimit = 7;
 
         boolean isEc = SearchUtil.validateEc(ec);
 
         if (isEc) {
 
-            SearchQueryLog.logSearchQuery(SeachType.Keyword, SeachCategory.EC, ec);
+            SearchQueryLog.logSearchQuery(SeachType.KEYWORD, SeachCategory.EC, ec);
 
             addKinetics(ec, model);
 
@@ -244,12 +246,12 @@ public class EnzymecentricController extends CommonControllerMethods {
             int pageSize = PAGE_SIZE;
             int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
             int associatedProteinLimit = 7;
-            String keywordType = SeachType.Keyword.name();
+            String keywordType = SeachType.KEYWORD.name();
             List<String> filters = new ArrayList<>();
             String searchKey = getSearchKey(ec);
             int startPage = refineStartPage(1);
 
-            logSearchQuery(SeachType.Keyword, SeachCategory.Fulltext, searchTerm);
+            logSearchQuery(SeachType.KEYWORD, SeachCategory.FULLTEXT, searchTerm);
             return findEnzymesBySearchTerm(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model);
         }
 
@@ -283,21 +285,21 @@ public class EnzymecentricController extends CommonControllerMethods {
 
         if (result.getHitCount() == 0) {
             log.debug("No Associated Protein found for " + searchTerm + " With EC: " + entry.getEc());
-            int LOWEST_BEST_MATCHED_RESULT_SIZE = 2;//shouldn't happen
+            int lowestBestMatchedResultSize = 2;
             String ecQuery = String.format("%s%s", IndexQueryType.EC.getQueryType(), entry.getEc());
 
-            result = searchIndexService.findAssociatedProtein(ecQuery, LOWEST_BEST_MATCHED_RESULT_SIZE, IndexQueryType.KEYWORD);
+            result = searchIndexService.findAssociatedProtein(ecQuery, lowestBestMatchedResultSize, IndexQueryType.KEYWORD);
 
             if (result.getHitCount() == 0) {
                 String intenzQuery = String.format("%s%s", IndexQueryType.INTENZ.getQueryType(), entry.getEc());
 
-                result = searchIndexService.findAssociatedProtein(intenzQuery, LOWEST_BEST_MATCHED_RESULT_SIZE, IndexQueryType.EC);
+                result = searchIndexService.findAssociatedProtein(intenzQuery, lowestBestMatchedResultSize, IndexQueryType.EC);
 
             }
 
-            //limit asscoated protein result
-            if (result.getHitCount() > LOWEST_BEST_MATCHED_RESULT_SIZE) {
-                result.setHitCount(LOWEST_BEST_MATCHED_RESULT_SIZE);
+          
+            if (result.getHitCount() > lowestBestMatchedResultSize) {
+                result.setHitCount(lowestBestMatchedResultSize);
             }
 
         }

@@ -20,9 +20,9 @@ public class IntenzEnzyme implements Comparable<IntenzEnzyme>, Serializable {
     private List<EnzymeSubclass> children;
     private List<EnzymeSubSubclass> subSubclasses;
     private List<EnzymeEntry> entries;
-    public String subclassName;
-    public String subsubclassName;
-    public String entryName;
+    private String subclassName;
+    private String subsubclassName;
+    private String entryName;
 
     private String type;
 

@@ -22,11 +22,11 @@ import uk.ac.ebi.ep.dataservice.service.EnzymePortalPathwayService;
 @Controller
 public class BrowsePathwaysController {
 
-    private static final String PATHWAYS = "/browse-pathways";
+    private static final String PATHWAYS = "browse-pathways";
 
-    private static final String BROWSE_PATHWAYS = "/browse/pathways";
+    private static final String BROWSE_PATHWAYS = "browse/pathways";
 
-    private static final String FIND_PATHWAYS_BY_NAME = "/service/pathways";
+    private static final String FIND_PATHWAYS_BY_NAME = "service/pathways";
 
     private final EnzymePortalPathwayService enzymePortalPathwayService;
 
@@ -35,7 +35,7 @@ public class BrowsePathwaysController {
         this.enzymePortalPathwayService = enzymePortalPathwayService;
     }
 
-    @GetMapping(value = BROWSE_PATHWAYS)
+    @GetMapping(value = "/" + BROWSE_PATHWAYS)
     public String showPathways(Model model) {
 
         List<PathwayView> pathwayList = enzymePortalPathwayService.findPathways()
@@ -55,7 +55,7 @@ public class BrowsePathwaysController {
      * @return pathways
      */
     @ResponseBody
-    @GetMapping(value = FIND_PATHWAYS_BY_NAME)
+    @GetMapping(value = "/" + FIND_PATHWAYS_BY_NAME)
     public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
 
@@ -66,6 +66,5 @@ public class BrowsePathwaysController {
         }
         return new ArrayList<>();
     }
-
 
 }

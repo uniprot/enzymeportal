@@ -45,13 +45,16 @@ public class ProteincentricController extends CommonControllerMethods {
             @RequestParam(required = false, value = "searchId") String searchId,
             @RequestParam(required = false, value = "searchparams.text") String searchText, Model model, HttpServletRequest request) {
 
-        //int startPage = 0;
+     
         int pageSize = PAGE_SIZE;
         int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
 
         int startPage = refineStartPage(servicePage);
         List<String> filters = refineFilters(filterFacet);
-        searchKey = getSearchKey(searchText);
+
+        if (searchKey == null && searchText != null) {
+            searchKey = getSearchKey(searchText);
+        }
 
         KeywordType type = KeywordType.valueOf(keywordType);
 
@@ -66,7 +69,7 @@ public class ProteincentricController extends CommonControllerMethods {
                 } else {
 
                     if (searchTerm.contains("/")) {
-                        searchTerm = searchTerm.replaceAll("/", " ");
+                        searchTerm = searchTerm.replace("/", " ");
 
                     }
                     return keywordSearch(ec, searchTerm, keywordType, facetCount, filters, startPage, pageSize, model);

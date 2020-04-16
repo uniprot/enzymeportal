@@ -52,14 +52,5 @@ public class ReactomeController {
         return "pathway";
     }
 
-    @ResponseBody
-    @GetMapping(value = "/service/reactome/{accession}")
-    public Mono<List<PathWay>> getPathwaysService(@PathVariable String accession) {
-
-        List<String> pathwayIds = dataService.findPathwayIdsByAccession(accession);
-
-        return reactomeService.findPathwaysByIds(pathwayIds);
-
-    }
 
 }

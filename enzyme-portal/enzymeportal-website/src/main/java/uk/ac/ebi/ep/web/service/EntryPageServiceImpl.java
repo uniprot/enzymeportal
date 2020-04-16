@@ -63,7 +63,7 @@ class EntryPageServiceImpl implements EntryPageService {
 
     }
 
-    private ProteinView findProteinViewByAccession(String accession) {
+    protected ProteinView findProteinViewByAccession(String accession) {
         return dataService.findProteinViewByAccession(accession);
     }
 
@@ -245,7 +245,6 @@ class EntryPageServiceImpl implements EntryPageService {
         if (uniprotEntry.getRelatedProteinsId() != null) {
             Long relProtInternalId = uniprotEntry.getRelatedProteinsId();
             String proteinGroupId = uniprotEntry.getProteinGroupId();
-            //relatedProteins = dataService.findProteinViewByRelatedProteinId(relProtInternalId);
              relatedProteins = dataService.findProteinViewByRelatedProteinIdAndProteinGroupId(relProtInternalId, proteinGroupId);
 
         }
@@ -262,7 +261,7 @@ class EntryPageServiceImpl implements EntryPageService {
                     .stream()
                     .map(entry -> sortSpecies(entry.getSpecies(), entry, priorityMapper, customKey, key))
                     .map(Map::entrySet)
-                    .flatMap(s -> s.stream())
+                    .flatMap(Set::stream)
                     .map(m -> buildEnzymeAccessionFromProteinView(m.getValue(), relatedspecies))
                     .flatMap(Set::stream)
                     .distinct()

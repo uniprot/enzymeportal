@@ -41,34 +41,23 @@ public class FileProxyServlet extends HttpServlet {
                 req.getPathInfo().substring(1));
         if (f.exists() && f.canRead()) {
             String extension = req.getPathInfo()
-                    .substring(req.getPathInfo().lastIndexOf(".") + 1);
+                    .substring(req.getPathInfo().lastIndexOf('.') + 1);
             String contentType = "text/plain;charset=UTF-8";
             if ("xml".equals(extension)) {
                 contentType = "text/xml;charset=UTF-8";
             }
             // Add here any other content types when (if) we serve them.
             resp.setContentType(contentType);
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            try {
-                fis = new FileInputStream(f);
-                bis = new BufferedInputStream(fis);
+
+            try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f))) {
                 byte[] buffer = new byte[256];
                 int r = -1;
                 while ((r = bis.read(buffer)) != -1) {
                     resp.getOutputStream().write(buffer, 0, r);
                 }
                 resp.flushBuffer();
-            } catch (IOException e) {
-                log.error("File not found: " + e.getMessage());
-            } finally {
-                if (fis != null) {
-                    fis.close();
-                }
-                if (bis != null) {
-                    bis.close();
-                }
             }
+
         } else {
             log.error("File not found: " + f);
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);

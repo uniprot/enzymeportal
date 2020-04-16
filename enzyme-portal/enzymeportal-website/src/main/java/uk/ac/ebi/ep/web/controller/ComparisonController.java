@@ -36,11 +36,11 @@ import uk.ac.ebi.ep.web.tools.Attribute;
 @Controller
 public class ComparisonController {
 
-    private static final String COMPARISON_PAGE = "comparison";
+    private static final String COMPARISON = "comparison";
 
-    private final String pdbStructureCompareUrl = "https://www.ebi.ac.uk/msd-srv/ssm/cgi-bin/ssmserver?";
-    private final String pdbImgUrl = "https://www.ebi.ac.uk/pdbe/static/entry/{0}_deposited_chain_front_image-200x200.png";
-    private final String uniprotAlignUrl = "https://www.uniprot.org/align/?redirect=yes&annotated=false&program=clustalo&query={0}+{1}";
+    private static final String PDB_STRUCTURE_COMPARE_URL = "https://www.ebi.ac.uk/msd-srv/ssm/cgi-bin/ssmserver?";
+    private static final String PDB_IMG_URL = "https://www.ebi.ac.uk/pdbe/static/entry/{0}_deposited_chain_front_image-200x200.png";
+    private static final String UNIPROT_ALIGN_URL = "https://www.uniprot.org/align/?redirect=yes&annotated=false&program=clustalo&query={0}+{1}";
 
     private final ComparisonService comparisonService;
 
@@ -61,7 +61,7 @@ public class ComparisonController {
             session.setAttribute(Attribute.basket.name(), basket);
         }
         for (String basketId : id.split(";")) {
-            if (checked) {
+            if (Boolean.TRUE.equals(checked)) {
 
                 final ComparisonProteinModel summary = comparisonService.getComparisonProteinModel(basketId);
                 if (summary != null) {
@@ -79,20 +79,6 @@ public class ComparisonController {
     @GetMapping(value = "/basket")
     public String getBasket(Model model) {
         return Attribute.basket.name();
-    }
-
-    private ComparisonProteinModel buildModel(String accession) {
-        ComparisonProteinModel model = comparisonService.getComparisonProteinModel(accession);
-        Molecule molecule = comparisonService.getCompareEnzymeMolecule(accession);
-        ReactionPathway reactionPathway = comparisonService.getCompareEnzymeReactionPathay(accession);
-
-        List<Disease> diseases = comparisonService.getCompareEnzymeDisease(accession);
-
-        model.setDiseases(diseases);
-        model.setMolecule(molecule);
-        model.setReactionpathway(Arrays.asList(reactionPathway));
-
-        return model;
     }
 
     /**
@@ -123,7 +109,7 @@ public class ComparisonController {
         }
         ExecutorService pool = null;
         try {
-            ComparisonProteinModel models[] = new ComparisonProteinModel[2];
+            ComparisonProteinModel [] models = new ComparisonProteinModel[2];
             log.debug("Getting enzyme models...");
             pool = Executors.newFixedThreadPool(2);
             CompletionService<ComparisonProteinModel> cs
@@ -143,17 +129,18 @@ public class ComparisonController {
             EnzymeComparison comparison
                     = new EnzymeComparison(models[0], models[1]);
             log.debug("Comparison finished");
-            model.addAttribute("comparison", comparison);
-            model.addAttribute("pdbImgUrl", pdbImgUrl);
-            model.addAttribute("pdbStructureCompareUrl", pdbStructureCompareUrl);
-            model.addAttribute("uniprotAlignUrl", uniprotAlignUrl);
+            model.addAttribute(COMPARISON, comparison);
+            model.addAttribute("pdbImgUrl", PDB_IMG_URL);
+            model.addAttribute("pdbStructureCompareUrl", PDB_STRUCTURE_COMPARE_URL);
+            model.addAttribute("uniprotAlignUrl", UNIPROT_ALIGN_URL);
 
-            return COMPARISON_PAGE;
+            return COMPARISON;
         } catch (InterruptedException | ExecutionException e) {
             String errorParam = theAccs[0] + "," + theAccs[1];
             log.error("Unable to compare enzymes: " + errorParam, e);
-            model.addAttribute("errorCode", "comparison");
+            model.addAttribute("errorCode", COMPARISON);
             model.addAttribute("errorParam", errorParam);
+            Thread.currentThread().interrupt();
             return "error";
         } finally {
             if (pool != null) {
@@ -172,7 +159,17 @@ public class ComparisonController {
 
         @Override
         public ComparisonProteinModel call() throws Exception {
-            return buildModel(acc);
+            ComparisonProteinModel model = comparisonService.getComparisonProteinModel(acc);
+            Molecule molecule = comparisonService.getCompareEnzymeMolecule(acc);
+            ReactionPathway reactionPathway = comparisonService.getCompareEnzymeReactionPathay(acc);
+
+            List<Disease> diseases = comparisonService.getCompareEnzymeDisease(acc);
+
+            model.setDiseases(diseases);
+            model.setMolecule(molecule);
+            model.setReactionpathway(Arrays.asList(reactionPathway));
+
+            return model;
         }
 
     }

@@ -5,14 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * file output of different formats e.g <code> String.format("%s\\%s.xml.gz", userHome,
+ * filename)</code> or
+ * <code>String.format("%s/%s.xml", userHome, FILE_NAME)</code>
+ *
  * @author joseph
  */
 public class FilesConfig implements FilesConfigMBean {
 
     private final String userHome = System.getProperty("user.home");
-    private final String filename = "sitemap_index";
-    //private String output = String.format("%s\\%s.xml.gz", userHome, filename);
-    private final String output = String.format("%s/%s.xml", userHome, filename);
+    private static final String FILE_NAME = "sitemap_index";
+    private final String output = String.format("%s/%s.xml", userHome, FILE_NAME);
     private String sitemapUrl = output;
     private final List<String> sitemapList = new LinkedList<>();
     private String sitemapIndex;
@@ -60,12 +63,10 @@ public class FilesConfig implements FilesConfigMBean {
 
         if (files.length > 0) {
             for (File file : files) {
-                if (file.isFile()) {
+                if (file.isFile() && file.getName().startsWith("SiteMap")) {
 
-                    if (file.getName().startsWith("SiteMap")) {
-                        sitemapList.add(file.getName());
+                    sitemapList.add(file.getName());
 
-                    }
                 }
             }
         }

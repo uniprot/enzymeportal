@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.dataservice.dto.Disease;
@@ -33,7 +32,7 @@ public class BrowseDiseasesController {
         this.diseaseService = diseaseService;
     }
 
-    @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
+    @GetMapping(value = BROWSE_DISEASE)
     public String showDiseases(Model model) {
 
         List<DiseaseView> diseases = diseaseService.findDiseases();
@@ -49,7 +48,7 @@ public class BrowseDiseasesController {
      * @return Diseases
      */
     @ResponseBody
-    @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
+    @GetMapping(value = FIND_DISEASES_BY_NAME)
     public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
             return diseaseService.findDiseasesNameLike(name);

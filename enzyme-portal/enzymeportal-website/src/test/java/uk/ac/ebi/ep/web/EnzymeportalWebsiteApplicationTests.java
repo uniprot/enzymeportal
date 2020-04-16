@@ -19,11 +19,6 @@ public class EnzymeportalWebsiteApplicationTests {
 
     @Test
     public void contextLoads() {
-    }
-
-    @Test
-    void injectedComponentsAreNotNull() {
-
         assertThat(entryPageService).isNotNull();
     }
 

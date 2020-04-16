@@ -20,15 +20,15 @@ import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 public class EnzymeModel extends ProteinModel implements Serializable {
 
     private String requestedfield;
-    private MechanismResult reactionMechanism;
+    private transient MechanismResult reactionMechanism;
 
-    private List<LabelledCitation> literature;
+    private transient List<LabelledCitation> literature;
     private List<String> pathways;
-    protected EnzymeEntryPage enzyme;
+    protected transient EnzymeEntryPage enzyme;
 
-    private Kinetics kinetics;
-    private List<PhDependence> phDependences;
-    private List<TemperatureDependence> temperatureDependences;
+    private transient Kinetics kinetics;
+    private transient List<PhDependence> phDependences;
+    private transient List<TemperatureDependence> temperatureDependences;
 
     public List<PhDependence> getPhDependences() {
         if (phDependences == null) {

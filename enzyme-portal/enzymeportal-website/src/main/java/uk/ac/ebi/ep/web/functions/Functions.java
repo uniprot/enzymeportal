@@ -20,6 +20,10 @@ import uk.ac.ebi.ep.indexservice.model.protein.WithTaxonomy;
 @Slf4j
 public final class Functions {
 
+    private Functions() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static WithMetabolite withMetabolite(List<WithMetabolite> metabolites, String metaboliteId, String accession, String commonName, String entryType) {
         String transformedId = metaboliteId.replace("MTBLC", "");
         return metabolites
@@ -30,7 +34,7 @@ public final class Functions {
     }
 
     public static WithCofactor withCofactor(List<WithCofactor> cofactors, String cofactorId, String accession, String commonName, String entryType) {
-        String cid = cofactorId.replaceAll("\"", "").replaceAll("CHEBI:", "");
+        String cid = cofactorId.replaceAll("\"", "").replace("CHEBI:", "");
 
         return cofactors
                 .stream()
@@ -113,13 +117,18 @@ public final class Functions {
     public static boolean lastInList(List<Object> collection, Object last) {
         boolean eval = false;
         LinkedList<Object> list = new LinkedList<>(collection);
-        if (last != null) {
-            if (last.equals(list.getLast())) {
-                eval = true;
-            }
+        if (last != null && isEqualsToLastInList(list, last)) {
+
+            eval = true;
+
         }
 
         return eval;
+    }
+
+    private static boolean isEqualsToLastInList(LinkedList<Object> list, Object last) {
+
+        return last.equals(list.getLast());
     }
 
     public static String removeSlash(String url) {
@@ -146,10 +155,10 @@ public final class Functions {
             return result;
         } else {
 
-            String data[] = text.split("searchKey=");
+            String[] data = text.split("searchKey=");
 
             if (data.length > 1) {
-                String keyword[] = data[1].split("-");
+                String[] keyword = data[1].split("-");
                 result = keyword[0];
             }
         }

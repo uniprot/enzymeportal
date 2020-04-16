@@ -81,9 +81,7 @@ public class ReleaseStatController {
     @ResponseBody
     @GetMapping(value = "/service/releases")
     public WebStatXrefDto getReleaseStatJson() {
-        WebStatXrefDto view = webStatService.findLatestRelease();
-
-        return view;
+       return  webStatService.findLatestRelease();
     }
 
     @ResponseBody

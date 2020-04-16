@@ -93,7 +93,7 @@ public class AutocompleteSearchController {
                 .distinct()
                 .map(s -> s.getSuggestedKeyword()
                 .replace(" ", ":"))
-                .map(r -> new Suggestion(r))
+                .map(Suggestion::new)
                 .collect(Collectors.toList());
 
     }

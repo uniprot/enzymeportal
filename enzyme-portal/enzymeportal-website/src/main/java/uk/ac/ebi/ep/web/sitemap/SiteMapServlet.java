@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.web.sitemap;
 
 import java.io.IOException;
@@ -20,15 +19,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 @Slf4j
 public class SiteMapServlet extends HttpServlet {
 
-    private FilesConfig sitemapConfig;
-
-    public FilesConfig getSitemapConfig() {
-        return sitemapConfig;
-    }
-
-    public void setSitemapConfig(FilesConfig sitemapConfig) {
-        this.sitemapConfig = sitemapConfig;
-    }
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +28,7 @@ public class SiteMapServlet extends HttpServlet {
         log.info("Getting URL connection to sitemap...");
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 
-        sitemapConfig = (FilesConfig) context.getBean(FilesConfig.class);
+      FilesConfig  sitemapConfig = context.getBean(FilesConfig.class);
 
         String output = String.format("%s/%s", sitemapConfig.getSitemapUrl(), sitemaps);
 

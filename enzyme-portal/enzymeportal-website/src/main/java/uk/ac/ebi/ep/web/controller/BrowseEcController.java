@@ -2,9 +2,9 @@ package uk.ac.ebi.ep.web.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.Objects;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -39,7 +39,7 @@ public class BrowseEcController {
     //abtract url
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
-
+    
     private static final String EC_NUMBER = "ec";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
@@ -51,41 +51,41 @@ public class BrowseEcController {
     private static final String SUBCLASS = "SUBCLASS";
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String SELECTED_EC = "selectedEc";
-
+    
     @GetMapping(value = BROWSE_ENZYME_CLASSIFICATION)
     public String browseEc(Model model, HttpSession session) {
         clearSelectedEc(session);
-
+        
         return BROWSE_ENZYMES;
     }
-
+    
     @GetMapping(value = BROWSE_EC + "/{ec}/{ecname}")
     public String showStaticEc(@PathVariable("ec") String ec, @PathVariable("ecname") String ecname,
-            Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
+            Model model, HttpSession session, HttpServletRequest request) throws IOException {
         clearSelectedEc(session);
         browseEc(model, session, ecname, null, null, null, ec);
         return EC;
-
+        
     }
-
+    
     @GetMapping(value = BROWSE_EC)
     public String browseEcTree(@RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,
             @RequestParam(value = "subecname", required = false) String subecname,
             @RequestParam(value = "subsubecname", required = false) String subsubecname,
-            @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request, Pageable pageable, RedirectAttributes attributes) throws MalformedURLException, IOException {
-
+            @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request, Pageable pageable, RedirectAttributes attributes) throws IOException {
+        
         browseEc(model, session, ecname, subecname, subsubecname, entryecname, ec);
         return EC;
     }
-
-    private void browseEc(Model model, HttpSession session, String ecname, String sub_ecname, String subsub_ecname, String entry_ecname, String ec) throws MalformedURLException, IOException {
-
-        String intenz_url = String.format("%s/%s.json", INTENZ_URL, ec);
-        URL url = new URL(intenz_url);
+    
+    private void browseEc(Model model, HttpSession session, String ecname, String subEcname, String subsubEcname, String entryEcname, String ec) throws IOException {
+        
+        String intenzUrl = String.format("%s/%s.json", INTENZ_URL, ec);
+        URL url = new URL(intenzUrl);
         try (InputStream is = url.openStream();
                 JsonReader rdr = Json.createReader(is)) {
-
-            computeJsonData(rdr, model, session, ecname, sub_ecname, subsub_ecname, entry_ecname, ec);
+            
+            computeJsonData(rdr, model, session, ecname, subEcname, subsubEcname, entryEcname, ec);
         }
     }
 
@@ -100,40 +100,44 @@ public class BrowseEcController {
     private void addToSelectedEc(HttpSession session, IntenzEnzyme s, String type) {
         @SuppressWarnings("unchecked")
         LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute(SELECTED_EC);
-
-        if (history == null) {
-
+        
+        if (Objects.isNull(history)) {
+            
             history = new LinkedList<>();
             session.setAttribute(SELECTED_EC, history);
         }
-
+        
         if (!history.isEmpty() && history.contains(s)) {
-
-            if (type.equalsIgnoreCase(ROOT) && history.size() == 2) {
-                history.removeLast();
-
-            }
-            if (type.equalsIgnoreCase(ROOT) && history.size() == 3) {
-                history.removeLast();
-                history.removeLast();
-
-            }
-            if (type.equalsIgnoreCase(SUBCLASS) && history.size() == 2) {
-                history.removeLast();
-                history.add(s);
-
-            }
-            if (type.equalsIgnoreCase(SUBCLASS) && history.size() == 3) {
-                history.removeLast();
-
-            }
-
+            
+            processHistory(history, s, type);
+            
         } else if ((history.isEmpty() || !history.contains(s)) && (history.size() < 3)) {
             history.add(s);
-
+            
         }
     }
-
+    
+    private void processHistory(LinkedList<IntenzEnzyme> history, IntenzEnzyme selectedEnzyme, String type) {
+        if (type.equalsIgnoreCase(ROOT) && history.size() == 2) {
+            history.removeLast();
+            
+        }
+        if (type.equalsIgnoreCase(ROOT) && history.size() == 3) {
+            history.removeLast();
+            history.removeLast();
+            
+        }
+        if (type.equalsIgnoreCase(SUBCLASS) && history.size() == 2) {
+            history.removeLast();
+            history.add(selectedEnzyme);
+            
+        }
+        if (type.equalsIgnoreCase(SUBCLASS) && history.size() == 3) {
+            history.removeLast();
+            
+        }
+    }
+    
     private void clearSelectedEc(HttpSession session) {
         @SuppressWarnings("unchecked")
         LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute(SELECTED_EC);
@@ -144,17 +148,17 @@ public class BrowseEcController {
             history.clear();
         }
     }
-
+    
     private void computeJsonData(JsonReader jsonReader, Model model, HttpSession session, String... ecname) {
         JsonObject jsonObject = jsonReader.readObject();
-
+        
         IntenzEnzyme root = new IntenzEnzyme();
-
+        
         String ec = jsonObject.getString(EC_NUMBER);
-
+        
         if (jsonObject.containsKey(DESCRIPTION)) {
             String description = jsonObject.getString(DESCRIPTION);
-
+            
             root.setDescription(description);
         }
         root.setEc(ec);
@@ -165,85 +169,85 @@ public class BrowseEcController {
 
         //compute the childObject
         if (jsonObject.containsKey(SUBCLASSES)) {
-
+            
             JsonArray jsonArray = jsonObject.getJsonArray(SUBCLASSES);
-
+            
             jsonArray.getValuesAs(JsonObject.class)
                     .forEach(childObject -> processEnzymeSubclass(childObject, root));
             addToSelectedEc(session, root, ROOT);
             model.addAttribute("json", root);
         }
         if (jsonObject.containsKey(SUBSUBCLASSES)) {
-
+            
             JsonArray jsonArray = jsonObject.getJsonArray(SUBSUBCLASSES);
-
+            
             jsonArray.getValuesAs(JsonObject.class)
                     .forEach(childObject -> processEnzymeSubSubclass(childObject, root));
             model.addAttribute("json", root);
             addToSelectedEc(session, root, SUBCLASS);
         }
         if (jsonObject.containsKey(ENTRIES)) {
-
+            
             JsonArray jsonArray = jsonObject.getJsonArray(ENTRIES);
-
+            
             jsonArray.getValuesAs(JsonObject.class)
                     .forEach(childObject -> processEnzymeEntry(childObject, root, ecname));
-
+            
             model.addAttribute("json", root);
             addToSelectedEc(session, root, SUBSUBCLASS);
         }
-
+        
     }
-
+    
     private void processEnzymeSubclass(JsonObject childObject, IntenzEnzyme root) {
-        String _ec = childObject.getString(EC_NUMBER);
-        String _name = childObject.getString(NAME);
-
+        String ec = childObject.getString(EC_NUMBER);
+        String name = childObject.getString(NAME);
+        
         EnzymeSubclass subclass = new EnzymeSubclass();
-
+        
         if (childObject.containsKey(DESCRIPTION)) {
-            String _desc = childObject.getString(DESCRIPTION);
-            subclass.setDescription(_desc);
+            String desc = childObject.getString(DESCRIPTION);
+            subclass.setDescription(desc);
         }
-
-        subclass.setEc(_ec);
-        subclass.setName(_name);
+        
+        subclass.setEc(ec);
+        subclass.setName(name);
         root.getChildren().add(subclass);
     }
-
+    
     private void processEnzymeSubSubclass(JsonObject childObject, IntenzEnzyme root) {
-        String _ec = childObject.getString(EC_NUMBER);
-        String _name = childObject.getString(NAME);
-
+        String ec = childObject.getString(EC_NUMBER);
+        String name = childObject.getString(NAME);
+        
         EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
-
+        
         if (childObject.containsKey(DESCRIPTION)) {
-            String _desc = childObject.getString(DESCRIPTION);
-
-            subsubclass.setDescription(_desc);
+            String desc = childObject.getString(DESCRIPTION);
+            
+            subsubclass.setDescription(desc);
         }
-
-        subsubclass.setEc(_ec);
-        subsubclass.setName(_name);
-
+        
+        subsubclass.setEc(ec);
+        subsubclass.setName(name);
+        
         root.getSubSubclasses().add(subsubclass);
     }
-
+    
     private void processEnzymeEntry(JsonObject childObject, IntenzEnzyme root, String... ecname) {
-        String _ec = childObject.getString(EC_NUMBER);
-        String _name = childObject.getString(NAME);
-
+        String ec = childObject.getString(EC_NUMBER);
+        String name = childObject.getString(NAME);
+        
         EnzymeEntry entries = new EnzymeEntry();
         if (childObject.containsKey(DESCRIPTION)) {
-            String _desc = childObject.getString(DESCRIPTION);
-
-            entries.setDescription(_desc);
+            String desc = childObject.getString(DESCRIPTION);
+            
+            entries.setDescription(desc);
         }
-
-        entries.setEc(_ec);
-        entries.setName(_name);
+        
+        entries.setEc(ec);
+        entries.setName(name);
         root.setEc(ecname[4]);
         root.getEntries().add(entries);
     }
-
+    
 }

@@ -37,21 +37,22 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         Long maxAge = 2000L;
         TimeUnit unit = TimeUnit.MILLISECONDS;
+        String resources = "/resources/**";
 
         String catalinaHome = System.getenv("CATALINA_HOME");
         registry.addResourceHandler("/resources/**")
                 .addResourceLocations("/WEB-INF/resources/", "file:" + catalinaHome + "/tomcat/");
 
-        registry.addResourceHandler("/resources/**")
+        registry.addResourceHandler(resources)
                 .addResourceLocations("/resources", "classpath:/static/")
                 .setCachePeriod(31556926);
         registry
-                .addResourceHandler("/resources/**")
+                .addResourceHandler(resources)
                 .addResourceLocations("/resources/", "/resources/static/")
                 .setCacheControl(CacheControl.maxAge(maxAge, unit).cachePublic());
 
         registry
-                .addResourceHandler("/resources/**", "/favicon.ico", "/files/**")
+                .addResourceHandler(resources, "/favicon.ico", "/files/**")
                 .addResourceLocations("/resources/", "/", "file:/nfs/public/rw/uniprot/enzyme_portal/sitemap/")
                 .setCachePeriod(3600)
                 .resourceChain(true)
@@ -61,7 +62,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         UrlPathHelper urlPathHelper = new UrlPathHelper();
-        urlPathHelper.setRemoveSemicolonContent(false);//enable mapping in request;
+        urlPathHelper.setRemoveSemicolonContent(false);
         configurer
                 .setUseSuffixPatternMatch(false)
                 .setUrlPathHelper(urlPathHelper);
@@ -72,6 +73,5 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
     }
-
 
 }

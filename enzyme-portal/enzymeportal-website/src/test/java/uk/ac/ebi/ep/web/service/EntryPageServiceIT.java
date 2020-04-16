@@ -26,7 +26,11 @@ import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 @Slf4j
 public class EntryPageServiceIT extends EnzymeportalWebsiteApplicationTests {
 
+    @Test
+    void injectedComponentsAreNotNull() {
 
+        assertThat(entryPageService).isNotNull();
+    }
 
     /**
      * Test of getDefaultEnzymeModel method, of class EntryPageService.
@@ -82,7 +86,7 @@ public class EntryPageServiceIT extends EnzymeportalWebsiteApplicationTests {
         assertNotNull(result);
 
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
-       // assertEquals(pdb.trim(), result.stream().findFirst().get().getName().trim());
+        // assertEquals(pdb.trim(), result.stream().findFirst().get().getName().trim());
         assertThat(result.stream().findFirst().get().getId()).isNotEmpty();
 
     }

@@ -41,10 +41,7 @@ public class BrowseTaxonomyController {
     @ResponseBody
     @GetMapping(value = GET_COUNT_FOR_ORGANISMS)
     public List<Taxonomy> getCountForOrganisms() {
-
-        List<Taxonomy> organisms = enzymePortalTaxonomyService.getModelOrganisms();
-
-        return organisms;
+        return enzymePortalTaxonomyService.getModelOrganisms();
     }
 
     @ResponseBody
