@@ -48,8 +48,7 @@ public class MetabolightServiceImpl implements MetabolightService {
     public Metabolite getMetabolite(String chebiId) {
 
         String serviceUrl = String.format("%s%s%s", METABOLIGHT_URL, ENDPOINT, chebiId);
-        Metabolite metabolite = serviceHttpRequest(serviceUrl);
-        return metabolite;
+        return serviceHttpRequest(serviceUrl);
     }
 
 }
