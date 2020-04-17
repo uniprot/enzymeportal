@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
@@ -60,7 +61,7 @@ public class WebStatService {
     public void loadWebStatXrefToDatabase() {
         WebStatXref webStatXref = computeWebStatXref(null);
         WebStatXrefView statView = webStatXrefRepository.findWebStatXrefViewByReleaseId(webStatXref.getReleaseId());
-        if (statView.getReleaseId() == null) {
+        if (Objects.isNull(statView.getReleaseId())) {
             webStatXrefRepository.saveAndFlush(webStatXref);
         }
 
@@ -71,7 +72,7 @@ public class WebStatService {
     public void loadWebStatComponentToDatabase() {
         WebStatComponent webStatComponent = computeWebStatComponent(null);
         WebStatComponent data = webStatComponentRepository.findByReleaseId(webStatComponent.getReleaseId());
-        if (data.getReleaseId() == null) {
+        if (Objects.isNull(data.getReleaseId())) {
             webStatComponentRepository.saveAndFlush(webStatComponent);
         }
 
