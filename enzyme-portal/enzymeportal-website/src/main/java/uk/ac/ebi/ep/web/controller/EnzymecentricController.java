@@ -91,9 +91,7 @@ public class EnzymecentricController extends CommonControllerMethods {
 
         int startPage = refineStartPage(servicePage);
         filters = refineFilters(filters);
-        if (searchKey == null && searchText != null) {
-            searchKey = getSearchKey(searchText);
-        }
+        searchKey = getSearchKey(searchText);
         String searchTerm = getSearchTerm(searchKey);
 
         KeywordType type = KeywordType.valueOf(keywordType);
@@ -297,7 +295,6 @@ public class EnzymecentricController extends CommonControllerMethods {
 
             }
 
-          
             if (result.getHitCount() > lowestBestMatchedResultSize) {
                 result.setHitCount(lowestBestMatchedResultSize);
             }

@@ -35,22 +35,9 @@
                     <div class="input-group margin-bottom-none margin-top-large" >
                         <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="30" maxlength="100" type="text" placeholder="e.g enzyme name, gene name, EC number, UniProt AC, cofactor, Rhea ID, CHEBI ID ...">
 
-                        <!--       
-                               <script type="text/javascript">
-                        $(document).ready(function() {
-                        
-                            var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
-                            "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript",
-                            "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
-                        
-                            $("#local-searchbox").autocomplete({
-                                source: availableTags
-                            });
-                        });
-                        </script>-->
+
 
                         <script>
-   //                            $(document).ready(function() {
                             var options = {
 
                                 url: function (phrase) {
@@ -90,7 +77,7 @@
                                         var valueOfClickedItem = $("#local-searchbox").getSelectedItemData().suggestion;
                                         var input = jQuery('<input type="hidden" name="searchKey" id="auto-complete-holder">');
                                         input.val(valueOfClickedItem).trigger("change");
-                                        //alert(valueOfClickedItem);
+                  
                                         jQuery('#local-search').append(input);
                                         $("#local-search").submit();
 
@@ -107,11 +94,8 @@
                                     }
                                 }
                             };
-                            //$("#local-searchbox").easyAutocomplete(options);
-                            $("#local-searchbox").autocomplete({
-                                source: availableTags
-                            });
-   //                            });
+                            $("#local-searchbox").easyAutocomplete(options);
+  
 
                         </script>
 

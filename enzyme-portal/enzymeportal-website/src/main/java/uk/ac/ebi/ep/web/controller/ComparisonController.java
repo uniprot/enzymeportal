@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.comparisonservice.domain.EnzymeComparison;
@@ -92,7 +93,7 @@ public class ComparisonController {
      * <code>"error"</code> otherwise (less than two enzymes selected to
      * compare, for example).
      */
-    @GetMapping(value = "/compare")
+    @PostMapping(value = "/compare")
     public String getComparison(Model model, HttpSession session, @RequestParam(value = "acc") String[] accs) {
 
         // Filter the incoming accessions, keep only two non-empty:

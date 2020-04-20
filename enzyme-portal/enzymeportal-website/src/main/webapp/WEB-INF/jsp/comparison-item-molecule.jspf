@@ -15,7 +15,7 @@
     </c:when>
     <c:when test="${molecule.source eq 'ChEMBL'}">
         <c:set var="compoundUrl" value="https://www.ebi.ac.uk/chembl/compound_report_card/${molecule.id}"/>
-        <c:set var="compoundImgUrl" value="https://www.ebi.ac.uk/chembl/api/data/image/${molecule.id}.svg?engine=indigo"/>   
+        <c:set var="compoundImgUrl" value="https://www.ebi.ac.uk/chembl/api/data/image/${molecule.id}.svg"/>   
     </c:when>
 </c:choose>
 

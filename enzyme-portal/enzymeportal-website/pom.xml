@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzymeportal-website</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>enzymeportal-website</name>
     <description>Enzyme Portal website</description>

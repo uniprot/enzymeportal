@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.dataservice.service.DataService;
 public class StatusController {
 
     private static final String STATUS = "status";
-    private static final String STAT = "stat";
+ 
     private static final String ACCESSION = "O76074";
 
     private final DataService dataService;
@@ -70,7 +70,7 @@ public class StatusController {
         log.debug("statusCheck took :  (" + stopWatch.getTotalTimeSeconds() + " secs)");
         processDataForView(entry, model, request, status);
 
-        return STAT;
+        return STATUS;
     }
 
     @ResponseBody

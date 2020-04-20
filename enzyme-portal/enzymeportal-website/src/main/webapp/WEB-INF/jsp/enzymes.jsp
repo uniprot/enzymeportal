@@ -236,7 +236,15 @@
                                       </div>
                                   </td>
                                             --%>
-                                            <td>${enzyme.numProteins}</td>
+                                            <c:choose>
+                                                <c:when test="${enzyme.numProteins > 0}">
+                                                   <td>${enzyme.numProteins}</td>    
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td>-</td>   
+                                                </c:otherwise>
+                                            </c:choose>
+                                         
                                             <td>${enzyme.enzymeFamily}</td>
                                             <td><a href="${pageContext.request.contextPath}/ec/${enzyme.ec}">${enzyme.ec}</a></td>
                                                 <%--

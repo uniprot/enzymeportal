@@ -52,10 +52,7 @@ public class ProteincentricController extends CommonControllerMethods {
         int startPage = refineStartPage(servicePage);
         List<String> filters = refineFilters(filterFacet);
 
-        if (searchKey == null && searchText != null) {
-            searchKey = getSearchKey(searchText);
-        }
-
+        searchKey = getSearchKey(searchText);
         KeywordType type = KeywordType.valueOf(keywordType);
 
         switch (type) {
