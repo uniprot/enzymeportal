@@ -29,7 +29,7 @@
     <developers>
         <developer>
             <id>joseph</id>
-            <name>Joseph Onwubiko</name>
+            <name>Joseph Sampson</name>
             <email>joseph@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
@@ -243,7 +243,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.1.7.RELEASE</version>
+                <version>5.2.2.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -254,15 +254,15 @@
     <modules>
 
         <module>ep-restclient</module>
-                <module>LiteratureService</module>
-
+        <module>LiteratureService</module>
         <module>reaction-mechanism</module>
         <module>data-service</module>
         <module>index-service</module>
         <module>enzyme-service</module>
+        <module>brenda-service</module>
         <module>comparison-service</module>
         <module>enzymeportal-website</module>
-   
+       
     </modules>
     
     <profiles>

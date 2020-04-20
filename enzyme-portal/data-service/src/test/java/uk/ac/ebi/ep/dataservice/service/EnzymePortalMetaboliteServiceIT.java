@@ -9,8 +9,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StopWatch;
 import uk.ac.ebi.ep.dataservice.dto.Metabolite;
 import uk.ac.ebi.ep.dataservice.dto.MetaboliteView;
+import uk.ac.ebi.ep.dataservice.entities.EnzymePortalMetabolite;
 
 /**
  *
@@ -33,8 +35,24 @@ public class EnzymePortalMetaboliteServiceIT extends DataServiceBaseIT {
     @Test
     public void testFindMetabolites() {
         log.info("testFindMetabolites");
-
+        StopWatch w = new StopWatch();
+        w.start();
         List<MetaboliteView> result = enzymePortalMetaboliteService.findMetabolites();
+        w.stop();
+        log.info("testFindMetabolites - time taken : " + w.getTotalTimeSeconds());
+        assertNotNull(result);
+        log.info("Total NUmber of Metabolites found : " + result.size());
+        assertThat(result, hasSize(greaterThanOrEqualTo(1)));
+    }
+
+    @Test
+    public void testMetabolites() {
+        log.info("testMetabolites");
+        StopWatch w = new StopWatch();
+        w.start();
+        List<EnzymePortalMetabolite> result = enzymePortalMetaboliteService.metabolites();
+        w.stop();
+        log.info("testMetabolites-time taken : " + w.getTotalTimeSeconds());
         assertNotNull(result);
         log.info("Total NUmber of Metabolites found : " + result.size());
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
@@ -53,9 +71,9 @@ public class EnzymePortalMetaboliteServiceIT extends DataServiceBaseIT {
 
         assertNotNull(result);
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));
-   
+
         assertThat(result.stream()
-                .filter(x->x.getMetaboliteName().equalsIgnoreCase(metabolite)))
+                .filter(x -> x.getMetaboliteName().equalsIgnoreCase(metabolite)))
                 .containsAnyOf(new Metabolite("CHEBI:30839", metabolite));
     }
 

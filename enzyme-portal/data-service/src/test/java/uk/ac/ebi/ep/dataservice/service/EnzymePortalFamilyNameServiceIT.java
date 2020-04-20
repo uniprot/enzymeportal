@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.dataservice.dto.ProteinFamily;
 import uk.ac.ebi.ep.dataservice.dto.ProteinFamilyView;
+import uk.ac.ebi.ep.dataservice.entities.EnzymePortalFamilyName;
 
 /**
  *
  * @author joseph
  */
-
 @Slf4j
 public class EnzymePortalFamilyNameServiceIT extends DataServiceBaseIT {
 
@@ -37,6 +37,16 @@ public class EnzymePortalFamilyNameServiceIT extends DataServiceBaseIT {
         log.info("findProteinFamilies");
 
         List<ProteinFamilyView> result = enzymePortalFamilyNameService.findProteinFamilies();
+        assertNotNull(result);
+        log.info("Total NUmber of Uniprot families found : " + result.size());
+        assertThat(result, hasSize(greaterThanOrEqualTo(1)));
+    }
+
+    @Test
+    public void testProteinFamilies() {
+        log.info("proteinFamilies");
+
+        List<EnzymePortalFamilyName> result = enzymePortalFamilyNameService.proteinFamilies();
         assertNotNull(result);
         log.info("Total NUmber of Uniprot families found : " + result.size());
         assertThat(result, hasSize(greaterThanOrEqualTo(1)));

@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.dataservice.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
  * @author joseph
  */
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "ENZYME_PORTAL_METABOLITE")
@@ -36,6 +37,7 @@ public class EnzymePortalMetabolite implements Serializable {
     @NotNull
     @Column(name = "METABOLITE_INTERNAL_ID")
     private long metaboliteInternalId;
+    @EqualsAndHashCode.Include
     @Size(max = 50)
     @Column(name = "METABOLITE_ID")
     private String metaboliteId;
@@ -46,26 +48,5 @@ public class EnzymePortalMetabolite implements Serializable {
     @Column(name = "METABOLITE_URL")
     private String metaboliteUrl;
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.metaboliteId);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymePortalMetabolite other = (EnzymePortalMetabolite) obj;
-        return Objects.equals(this.metaboliteId, other.metaboliteId);
-    }
 
 }

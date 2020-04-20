@@ -15,4 +15,7 @@ public interface EnzymePortalMetaboliteRepository extends JpaRepository<EnzymePo
 
     @Query(value = "select m.metaboliteId as metaboliteId, m.metaboliteName as metaboliteName from EnzymePortalMetabolite m group by m.metaboliteId, m.metaboliteName")
     List<MetaboliteView> findMetabolites();
+
+    @Query(value = "SELECT * FROM ENZYME_PORTAL_METABOLITE order by metabolite_name,metabolite_id", nativeQuery = true)
+    List<EnzymePortalMetabolite> metabolites();
 }

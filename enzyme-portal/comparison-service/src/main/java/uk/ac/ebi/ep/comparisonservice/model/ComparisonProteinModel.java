@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.comparisonservice.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -11,8 +12,9 @@ import uk.ac.ebi.ep.dataservice.common.ProteinModel;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ComparisonProteinModel extends ProteinModel {
+public class ComparisonProteinModel extends ProteinModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     private List<String> ec;
     private List<ReactionPathway> reactionpathway;
@@ -26,7 +28,6 @@ public class ComparisonProteinModel extends ProteinModel {
         return ec;
     }
 
-
     public List<ReactionPathway> getReactionpathway() {
         if (reactionpathway == null) {
             reactionpathway = new ArrayList<>();
@@ -34,13 +35,11 @@ public class ComparisonProteinModel extends ProteinModel {
         return reactionpathway;
     }
 
-
     public List<Disease> getDiseases() {
         if (diseases == null) {
             diseases = new ArrayList<>();
         }
         return diseases;
     }
-
 
 }

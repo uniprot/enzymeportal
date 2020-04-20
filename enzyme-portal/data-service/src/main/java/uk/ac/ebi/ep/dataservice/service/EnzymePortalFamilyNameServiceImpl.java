@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.dataservice.dto.ProteinFamily;
 import uk.ac.ebi.ep.dataservice.dto.ProteinFamilyView;
+import uk.ac.ebi.ep.dataservice.entities.EnzymePortalFamilyName;
 import uk.ac.ebi.ep.dataservice.repositories.EnzymePortalFamilyNameRepository;
 
 /**
@@ -27,6 +28,11 @@ class EnzymePortalFamilyNameServiceImpl implements EnzymePortalFamilyNameService
     @Override
     public List<ProteinFamily> findProteinFamiliesWithNamesLike(String name) {
         return enzymePortalFamilyNameRepository.familyNameLike(name);
+    }
+
+    @Override
+    public List<EnzymePortalFamilyName> proteinFamilies() {
+        return enzymePortalFamilyNameRepository.proteinFamilies();
     }
 
 }

@@ -184,7 +184,7 @@ public class ProteinCentricServiceImplIT extends IndexServiceApplicationTests {
                 .filter(h -> h.getLabel().equalsIgnoreCase("Transferases"))
                 .findAny().get().getCount();
 
-        assertEquals(47, taxFacet);
+        assertEquals(40, taxFacet);
 
         //filter by human
         List<String> facetList = Arrays.asList("TAXONOMY:9606");

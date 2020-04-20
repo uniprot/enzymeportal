@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.dataservice.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
@@ -21,6 +22,8 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "ENZYME_PORTAL_FAMILY_NAME")
 @XmlRootElement
@@ -33,42 +36,17 @@ public class EnzymePortalFamilyName implements Serializable {
     private static final long serialVersionUID = 1L;
     @Size(max = 4000)
     @Column(name = "FAMILY_NAME")
+    @ToString.Include
     private String familyName;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "FAMILY_NAME_ID")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private BigDecimal familyNameId;
     @Size(max = 10)
     @Column(name = "FAMILY_GROUP_ID")
     private String familyGroupId;
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.familyNameId);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymePortalFamilyName other = (EnzymePortalFamilyName) obj;
-        return Objects.equals(this.familyNameId, other.familyNameId);
-    }
-    
-    
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.dataservice.entities.EnzymePortalFamilyName[ familyNameId=" + familyNameId + " ]";
-    }
 
 }

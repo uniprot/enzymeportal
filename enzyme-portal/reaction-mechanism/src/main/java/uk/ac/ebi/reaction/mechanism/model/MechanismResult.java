@@ -3,6 +3,7 @@ package uk.ac.ebi.reaction.mechanism.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +21,9 @@ import lombok.ToString;
  *
  * @author Joseph
  */
-public class MechanismResult {
+public class MechanismResult implements Serializable {
 
+    private static final long serialVersionUID = 1905122041950251207L;
     @JsonProperty("count")
     private Integer count;
     @JsonProperty("next")

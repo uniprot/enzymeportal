@@ -18,4 +18,7 @@ public interface EnzymePortalFamilyNameRepository extends JpaRepository<EnzymePo
     @Query(value = "select f.familyName as familyName, f.familyGroupId as familyGroupId from EnzymePortalFamilyName f order by f.familyName, f.familyGroupId")
     List<ProteinFamilyView> findProteinFamilies();
 
+    @Query(value = "select * FROM enzyme_portal_family_name order by family_name, family_group_id", nativeQuery = true)
+    List<EnzymePortalFamilyName> proteinFamilies();
+
 }

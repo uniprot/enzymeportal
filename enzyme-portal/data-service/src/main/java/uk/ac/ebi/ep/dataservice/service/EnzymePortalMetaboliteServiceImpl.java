@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.dataservice.dto.Metabolite;
 import uk.ac.ebi.ep.dataservice.dto.MetaboliteView;
+import uk.ac.ebi.ep.dataservice.entities.EnzymePortalMetabolite;
 import uk.ac.ebi.ep.dataservice.repositories.EnzymePortalMetaboliteRepository;
 
 /**
@@ -31,6 +32,11 @@ public class EnzymePortalMetaboliteServiceImpl implements EnzymePortalMetabolite
     @Override
     public List<Metabolite> findMetaboliteNameLike(String name) {
         return metaboliteRepository.findMetaboliteNameLike(name);
+    }
+
+    @Override
+    public List<EnzymePortalMetabolite> metabolites() {
+        return metaboliteRepository.metabolites();
     }
 
 }
