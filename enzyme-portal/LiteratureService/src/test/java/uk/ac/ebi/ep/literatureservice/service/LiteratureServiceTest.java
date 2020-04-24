@@ -89,7 +89,6 @@ public class LiteratureServiceTest {
         LabelledCitation citation = new LabelledCitation(r, CitationLabel.ENZYME);
         assertNotNull(citation.getCitation());
         assertThat(citation.getLabels(), hasSize(1));
-        citation.getLabels().forEach(s -> System.out.println(" dat " + s.getDisplayText()));
     }
 
 }
