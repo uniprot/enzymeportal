@@ -136,10 +136,13 @@
                             <a target="_blank" href="https://www.surveymonkey.com/r/EMBL-EBI_EnzymePortal"
                                class="icon icon-generic has-tip" data-icon="f" data-tooltip aria-haspopup="true" title="We'd like your input in shaping the Enzymeportal. Please, can you spare 2 minutes of your time to fill in a short survey so we know what data is important to you?"> Survey</a>
                         </li>
+                          <%--
                         <li class="${fn:containsIgnoreCase(pageTitle, 'statistics')?
                                      'active' : ''}"><a
                                 href="${pageContext.request.contextPath}/statistics"
-                                title="Enzyme Portal Data release Statistics">Statistics</a></li>
+                                title="Enzyme Portal Data release Statistics">Statistics</a>
+                        </li>
+                         --%>
                         <li class="functional
                             ${fn:containsIgnoreCase(pageTitle, 'compare')?
                               'active' : ''}">
