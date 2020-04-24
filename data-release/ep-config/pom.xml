@@ -19,7 +19,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <oracle.version>11.2.0.3</oracle.version>
-        <querydsl.version>4.1.4</querydsl.version>
+        <querydsl.version>4.2.2</querydsl.version>
     
         <!-- Plugins -->
       
@@ -98,18 +98,21 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-              <version>2.1.6.RELEASE</version>
+            <version>2.2.6.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-              <version>2.1.6.RELEASE</version>
+            <version>2.2.6.RELEASE</version>
         </dependency>
         
-        <!--        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>c3p0</artifactId>
-        </dependency>-->
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
         
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -161,12 +164,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.9.8</version>
+            <version>2.10.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+            <version>2.10.3</version>
         </dependency>
         <!--        <dependency>
             <groupId>org.glassfish</groupId>
@@ -203,8 +206,8 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.10</version>
-             <optional>true</optional>
-<!--            <scope>provided</scope>-->
+            <optional>true</optional>
+            <!--            <scope>provided</scope>-->
         </dependency>
 
     </dependencies>
@@ -305,20 +308,20 @@
 
     </profiles>
     
-<!--        <repositories>
-        <repository>
-            <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
-            <id>eclipselink</id>
-            <layout>default</layout>
-            <name>Repository for library EclipseLink (JPA 2.0)</name>
-        </repository>
-        <repository>
-            <id>codelds</id>
-            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
-        </repository>
-  
-    </repositories>
-   -->
+    <!--        <repositories>
+         <repository>
+             <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
+             <id>eclipselink</id>
+             <layout>default</layout>
+             <name>Repository for library EclipseLink (JPA 2.0)</name>
+         </repository>
+         <repository>
+             <id>codelds</id>
+             <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+         </repository>
+   
+     </repositories>
+    -->
         
     
 </project>

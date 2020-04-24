@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import uk.ac.ebi.ep.model.repositories.WebStatXrefRepository;
  *
  * @author joseph
  */
+@Slf4j
 @Service
 public class WebStatService {
 
@@ -59,9 +61,10 @@ public class WebStatService {
     @Modifying(clearAutomatically = true)
     @Transactional
     public void loadWebStatXrefToDatabase() {
-        WebStatXref webStatXref = computeWebStatXref(null);
+        Month currentMonth = LocalDate.now().getMonth();
+        WebStatXref webStatXref = computeWebStatXref(currentMonth);
         WebStatXrefView statView = webStatXrefRepository.findWebStatXrefViewByReleaseId(webStatXref.getReleaseId());
-        if (Objects.isNull(statView.getReleaseId())) {
+        if (Objects.isNull(statView)) {
             webStatXrefRepository.saveAndFlush(webStatXref);
         }
 
@@ -70,9 +73,11 @@ public class WebStatService {
     @Modifying(clearAutomatically = true)
     @Transactional
     public void loadWebStatComponentToDatabase() {
-        WebStatComponent webStatComponent = computeWebStatComponent(null);
+        Month currentMonth = LocalDate.now().getMonth();
+        WebStatComponent webStatComponent = computeWebStatComponent(currentMonth);
         WebStatComponent data = webStatComponentRepository.findByReleaseId(webStatComponent.getReleaseId());
-        if (Objects.isNull(data.getReleaseId())) {
+
+        if (Objects.isNull(data)) {
             webStatComponentRepository.saveAndFlush(webStatComponent);
         }
 
