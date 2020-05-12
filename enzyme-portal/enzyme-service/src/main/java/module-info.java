@@ -25,7 +25,6 @@
 module EnzymeService {
     requires EpRestclient;
     requires okhttp3;
-    requires okio;
     requires org.apache.httpcomponents.httpclient;
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.commons.codec;
@@ -36,7 +35,6 @@ module EnzymeService {
     requires spring.boot.starter.logging;
     requires org.apache.logging.slf4j;
     requires org.apache.logging.log4j;
-    requires jul.to.slf4j;
     requires java.annotation;
     requires spring.boot.starter.json;
     requires com.fasterxml.jackson.datatype.jdk8;
@@ -56,7 +54,6 @@ module EnzymeService {
     requires io.netty.codec.socks;
     requires io.netty.transport.epoll;
     requires io.netty.transport.unix.common;
-    requires jakarta.el;
     requires spring.boot.starter.validation;
     requires java.validation;
     requires org.hibernate.validator;
@@ -65,20 +62,13 @@ module EnzymeService {
     requires spring.web;
     requires spring.beans;
     requires spring.webflux;
-    requires nio.multipart.parser;
-    requires nio.stream.storage;
     requires spring.boot;
     requires spring.context;
     requires spring.aop;
     requires spring.expression;
     requires spring.boot.autoconfigure;
     requires lombok;
-    requires logback.classic;
-    requires logback.core;
     requires org.slf4j;
-    requires logback.json.classic;
-    requires logback.json.core;
-    requires logback.jackson;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
@@ -88,8 +78,6 @@ module EnzymeService {
     requires spring.core;
     requires spring.jcl;
     requires org.apache.commons.io;
-    //requires java.activation;
-    //requires activation;
     requires com.sun.xml.bind;
     requires com.sun.xml.txw2;
     requires com.sun.istack.runtime;
