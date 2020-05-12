@@ -11,7 +11,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +29,12 @@ import uk.ac.ebi.ep.dataservice.entities.WebStatXref;
  *
  * @author joseph
  */
-@Disabled
+
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("uzpdev")
-public class WebStatServiceIT { //extends DataServiceBaseIT {
+public class WebStatServiceIT { 
 
     @Autowired
     private WebStatService webStatService;
@@ -69,8 +68,8 @@ public class WebStatServiceIT { //extends DataServiceBaseIT {
         List<String> months = webStatService.findReleaseMonths();
         assertNotNull(months);
 
-        WebStatXrefDto current = webStatService.findCurrentRelease();
-        assertNotNull(current);
+//        WebStatXrefDto current = webStatService.findCurrentRelease();
+//        assertNotNull(current);
 
         WebStatXrefDto latest = webStatService.findLatestRelease();
         assertNotNull(latest);

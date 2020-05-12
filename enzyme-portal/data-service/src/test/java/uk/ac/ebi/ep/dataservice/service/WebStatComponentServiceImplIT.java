@@ -11,7 +11,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import uk.ac.ebi.ep.dataservice.dto.WebComponentDto;
  *
  * @author joseph
  */
-@Disabled
+
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -60,11 +59,12 @@ public class WebStatComponentServiceImplIT {
     /**
      * Test of findCurrentRelease method, of class WebStatComponentServiceImpl.
      */
-    @Test
-    public void testFindCurrentRelease() {
-        WebComponentDto result = webStatComponentService.findCurrentRelease();
-        assertNotNull(result);
-    }
+//    @Disabled
+//    @Test
+//    public void testFindCurrentRelease() {
+//        WebComponentDto result = webStatComponentService.findCurrentRelease();
+//        assertNotNull(result);
+//    }
 
     /**
      * Test of findLatestRelease method, of class WebStatComponentServiceImpl.
