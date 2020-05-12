@@ -24,7 +24,6 @@
 
  module EpRestclient {
     requires okhttp3;
-    requires okio;
     requires org.apache.httpcomponents.httpclient;
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.commons.codec;
@@ -35,7 +34,6 @@
     requires spring.boot.starter.logging;
     requires org.apache.logging.slf4j;
     requires org.apache.logging.log4j;
-    requires jul.to.slf4j;
     requires java.annotation;
     requires spring.boot.starter.json;
     requires com.fasterxml.jackson.datatype.jdk8;
@@ -43,14 +41,11 @@
     requires com.fasterxml.jackson.module.paramnames;
     requires spring.boot.starter.reactor.netty;
     requires reactor.netty;
-    requires jakarta.el;
     requires spring.boot.starter.validation;
     requires java.validation;
     requires org.hibernate.validator;
     requires org.jboss.logging;
     requires com.fasterxml.classmate;
-    requires nio.multipart.parser;
-    requires nio.stream.storage;
     requires reactor.core;
     requires org.reactivestreams;
     requires spring.core;
