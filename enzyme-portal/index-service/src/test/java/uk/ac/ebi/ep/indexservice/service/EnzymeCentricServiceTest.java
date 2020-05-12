@@ -67,7 +67,7 @@ public class EnzymeCentricServiceTest extends IndexServiceApplicationTests {
 
         QueryBuilder queryBuilder = queryBuilder(query);
         EnzymeSearchResult result = enzymeCentricService.searchForEnzymes(queryBuilder);
-        result.getEntries().forEach(x -> System.out.println("OMIM " + x.toString()));
+      
         assertNotNull(result);
         assertThat(result.getEntries(), hasSize(greaterThanOrEqualTo(1)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(1)));
