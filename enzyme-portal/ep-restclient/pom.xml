@@ -41,6 +41,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.synchronoss.cloud</groupId>
+                    <artifactId>nio-stream-storage</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.synchronoss.cloud</groupId>
+                    <artifactId>nio-multipart-parser</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish</groupId>
+                    <artifactId>jakarta.el</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
