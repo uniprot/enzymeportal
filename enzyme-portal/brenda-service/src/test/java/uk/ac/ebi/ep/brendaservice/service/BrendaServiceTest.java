@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class BrendaServiceTest {
         assertThat(brendaService).isNotNull();
     }
 
-    @Disabled
+    //@Disabled
     @Test
     public void testCachedFindBrendaResultByEc() {
         log.info("testCachedFindBrendaResultByEc");
@@ -62,11 +61,11 @@ public class BrendaServiceTest {
         sw.stop();
         double afterCachedElaspedTime = sw.getTotalTimeSeconds();
         assertNotNull(cachedResult);
-        assertThat(cachedResult.getBrenda(), hasSize(greaterThanOrEqualTo(2)));
-        assertThat(cachedResult.getPh(), hasSize(greaterThanOrEqualTo(2)));
+        assertThat(cachedResult.getBrenda(), hasSize(greaterThanOrEqualTo(1)));
+        assertThat(cachedResult.getPh(), hasSize(greaterThanOrEqualTo(1)));
         assertThat(cachedResult.getTemperature(), hasSize(greaterThanOrEqualTo(1)));
 
-        log.info("OoriginalElaspedTime :  " + originalElaspedTime + " afterCachedElaspedTime : " + afterCachedElaspedTime);
+        log.info("OriginalElaspedTime :  " + originalElaspedTime + " afterCachedElaspedTime : " + afterCachedElaspedTime);
         assertThat(originalElaspedTime, greaterThan(afterCachedElaspedTime));
 
     }
