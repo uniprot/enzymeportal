@@ -27,6 +27,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = {"uk.ac.ebi.ep.dataservice.repositories"})
 public class DataConfig {
 
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+
     private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.dataservice.entities";
 
     @Bean
@@ -53,11 +58,10 @@ public class DataConfig {
 
     }
 
-    @Bean//(name = "TransactionManager")
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        return new JpaTransactionManager(emf);
-    }
-
+//    @Bean//(name = "TransactionManager")
+//    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+//        return new JpaTransactionManager(emf);
+//    }
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
