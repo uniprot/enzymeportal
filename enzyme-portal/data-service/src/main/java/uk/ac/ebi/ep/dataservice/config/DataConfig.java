@@ -29,21 +29,6 @@ public class DataConfig {
 
     private static final String PACKAGES_TO_SCAN = "uk.ac.ebi.ep.dataservice.entities";
 
-    @Bean
-    @Autowired
-    public LocalContainerEntityManagerFactoryBean
-            entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
-        return builder
-                .dataSource(dataSource)
-                .packages(PACKAGES_TO_SCAN)
-                .build();
-
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        return new JpaTransactionManager(emf);
-    }
 
     @Bean
     @Primary
@@ -59,20 +44,20 @@ public class DataConfig {
                 .type(HikariDataSource.class).build();
     }
 
-//    @Bean
-//    @Autowired
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
-//        return builder
-//                .dataSource(dataSource)
-//                .packages(PACKAGES_TO_SCAN)
-//                .build();
-//
-//    }
-//
-//    @Bean
-//    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-//        return new JpaTransactionManager(emf);
-//    }
+    @Bean
+    @Autowired
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
+        return builder
+                .dataSource(dataSource)
+                .packages(PACKAGES_TO_SCAN)
+                .build();
+
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
