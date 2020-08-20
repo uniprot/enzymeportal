@@ -23,7 +23,7 @@
     </properties>
     
 
-    <name>LiteratureService</name>
+    <name>literature-service</name>
     <description>Rest client for the Europe PMC service for the enzyme portal.</description>
     
     
@@ -187,7 +187,7 @@
         </plugins>
     </build>
 
-    <repositories>
+<!--    <repositories>
         <repository>
             <id>central</id>
             <name>Maven Repository Switchboard</name>
@@ -216,6 +216,6 @@
                 <updatePolicy>never</updatePolicy>
             </releases>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories>-->
     
 </project>
