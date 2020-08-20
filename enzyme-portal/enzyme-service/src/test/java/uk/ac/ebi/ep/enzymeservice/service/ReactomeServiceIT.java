@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uk.ac.ebi.ep.enzymeservice.reactome.model.ReactomeResult;
 import uk.ac.ebi.ep.enzymeservice.reactome.service.ReactomeService;
@@ -31,7 +32,7 @@ import uk.ac.ebi.ep.restclient.service.RestConfigService;
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ReactomeServiceTest {
+public class ReactomeServiceIT {
 
     @Autowired
     private ReactomeService reactomeService;
@@ -121,7 +122,7 @@ public class ReactomeServiceTest {
                 .block();
 
         assertNotNull(pathways);
-        assertThat(pathways, hasSize(greaterThanOrEqualTo(35)));
+        assertThat(pathways, hasSize(greaterThanOrEqualTo(10)));
         pathways.forEach(d -> log.info(" Pathways : " + d + "\n"));
 
     }
@@ -210,6 +211,22 @@ public class ReactomeServiceTest {
         assertNotNull(pathways);
 
         pathways.subscribe(s -> log.info("Reactome Result : " + s));
+
+    }
+
+    @Test
+    public void testFindPathways_By_simulated_Ids_returns_flux() {
+        log.info("testFindPathways_By_simulated_Ids_returns_flux");
+
+        List<String> pathwayIds = Stream.generate(() -> "R-HSA-2514859")
+                .limit(20)
+                .collect(Collectors.toList());
+
+        Flux<PathWay> pathways = reactomeService.pathwaysByPathwayIds(pathwayIds);
+
+        assertNotNull(pathways);
+
+        pathways.subscribe(s -> log.info("Reactome Results : " + s));
 
     }
 

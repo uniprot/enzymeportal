@@ -22,7 +22,7 @@ import uk.ac.ebi.ep.enzymeservice.intenz.service.IntenzService;
  * @author joseph
  */
 @Slf4j
-public class IntenzServiceTest extends EnzymeServiceBaseTest {
+public class IntenzServiceIT extends EnzymeServiceBaseTest {
 
     @Autowired
     private IntenzService intenzService;

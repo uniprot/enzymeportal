@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.enzymeservice.reactome.service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,20 @@ class ReactomeServiceImpl implements ReactomeService {
 
     }
 
+    Mono<ReactomeResult> contentService(String id) {
+
+        URI uri = buildURI(id);
+        return restConfigService.getWebClient()
+                .get()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .flatMap(response -> response.bodyToMono(ReactomeResult.class))
+                .switchIfEmpty(Mono.empty())
+                .onErrorResume(ex -> Mono.error(ex));
+
+    }
+
     @Override
     public Mono<ReactomeResult> findReactomeResultById(String reactomeId) {
         return reactomeContentService(reactomeId);
@@ -70,19 +85,29 @@ class ReactomeServiceImpl implements ReactomeService {
     @Override
     public Mono<PathWay> findPathwayById(String pathwayId) {
         return reactomeContentService(pathwayId)
+                .filter(data -> Objects.nonNull(data))
                 .map(this::buildPathWay);
     }
 
     @Override
     public Mono<List<PathWay>> findPathwaysByIds(List<String> pathwayIds) {
+        return pathwaysByPathwayIds(pathwayIds)
+                .collectList();
 
-        List< Mono<ReactomeResult>> data = pathwayIds.stream()
+    }
+
+    @Override
+    public Flux<PathWay> pathwaysByPathwayIds(List<String> pathwayIds) {
+
+        List<Mono<ReactomeResult>> data = pathwayIds.stream()
                 .map(this::reactomeContentService)
                 .collect(Collectors.toList());
+        if (Objects.isNull(data)) {
+            return Flux.empty();
+        }
 
         return Flux.merge(data)
-                .map(this::buildPathWay)
-                .collectList();
+                .map(this::buildPathWay);
 
     }
 
