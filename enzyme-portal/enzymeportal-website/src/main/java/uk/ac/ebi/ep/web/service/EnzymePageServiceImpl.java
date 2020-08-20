@@ -11,9 +11,9 @@ import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeFields;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
+import uk.ac.ebi.ep.reaction.mechanism.model.MechanismResult;
+import uk.ac.ebi.ep.reaction.mechanism.service.ReactionMechanismService;
 import uk.ac.ebi.ep.web.model.EnzymePage;
-import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
-import uk.ac.ebi.reaction.mechanism.service.ReactionMechanismService;
 
 /**
  *

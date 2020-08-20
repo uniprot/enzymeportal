@@ -141,6 +141,13 @@ public final class Functions {
         return "#omim" + link;
     }
 
+    public static String formatRheaId(String rheaId) {
+        if (rheaId.toUpperCase().contains("RHEA:")) {
+            return rheaId.replace("RHEA:", "").trim();
+        }
+        return rheaId;
+    }
+
     /**
      * split with = and - to return only the search term
      *

@@ -9,22 +9,30 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.ac.ebi.ep.dataservice.dto.CompoundView;
 import uk.ac.ebi.ep.dataservice.dto.DiseaseView;
 import uk.ac.ebi.ep.dataservice.dto.EnzymeReactionView;
 import uk.ac.ebi.ep.dataservice.dto.PdbView;
 import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
-import uk.ac.ebi.ep.web.EnzymeportalWebsiteApplicationTests;
+import uk.ac.ebi.ep.reaction.mechanism.model.MechanismResult;
 import uk.ac.ebi.ep.web.model.EnzymeEntryPage;
 import uk.ac.ebi.ep.web.model.EnzymeModel;
-import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 
 /**
  *
  * @author joseph
  */
 @Slf4j
-public class EntryPageServiceIT extends EnzymeportalWebsiteApplicationTests {
+@ActiveProfiles("uzpdev")
+@ExtendWith(SpringExtension.class)
+public class EntryPageServiceIT {
+
+    @Autowired
+    protected EntryPageService entryPageService;
 
     @Test
     void injectedComponentsAreNotNull() {

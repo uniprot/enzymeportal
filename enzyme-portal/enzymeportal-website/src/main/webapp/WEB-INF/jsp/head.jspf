@@ -9,9 +9,9 @@
     <meta name="HandheldFriendly" content="true" />
     <meta name="MobileOptimized" content="width" />
     <meta name="theme-color" content="#70BDBD"> <!-- Android Chrome mobile browser tab color -->
-    <meta name="description" content="EMBL-EBI">
+    <meta name="description" content="EMBL-EBI Enzyme Portal">
     <meta name="keywords" content="enzyme database, bioinformatics, europe, institute">
-    <meta name="author" content="EMBL-EBI, Uniprot Team">
+    <meta name="author" content="EMBL-EBI, Enzyme Portal Team">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="google-site-verification" content="b4iTMZj90Y1Kw06d48P6nU9PC-NCHebICZsox09NHPM" /> <!-- for google webtool verification (sitemap) --> 
 

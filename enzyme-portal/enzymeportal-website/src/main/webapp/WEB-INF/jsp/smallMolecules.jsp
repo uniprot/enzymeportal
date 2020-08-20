@@ -169,7 +169,7 @@
             <div class="provenance">
                 <ul>
                     <li class="note_0">Data Source:
-                        <a target="_blank" href="https://www.ebi.ac.uk/chebi/">ChEBI</a> &AMP; <a target="_blank" href="https://www.ebi.ac.uk/chembl/" >ChEMBL</a> </li>
+                        <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/chebi/">ChEBI</a> &AMP; <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/chembl/" >ChEMBL</a> </li>
                     <li class="note_1">ChEBI - (Chemical Entities of Biological Interest) is a freely available dictionary of molecular entities focused on small chemical compounds. </li>
                     <li class="note_2">ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data). </li>
                 </ul>

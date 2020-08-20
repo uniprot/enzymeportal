@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Mono;
+import uk.ac.ebi.ep.brendaservice.dto.Brenda;
 import uk.ac.ebi.ep.brendaservice.dto.BrendaResult;
+import uk.ac.ebi.ep.brendaservice.dto.Ph;
+import uk.ac.ebi.ep.brendaservice.dto.Temperature;
 import uk.ac.ebi.ep.brendaservice.service.BrendaService;
 import uk.ac.ebi.ep.indexservice.helper.IndexQueryType;
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
@@ -32,7 +38,7 @@ import uk.ac.ebi.ep.web.service.EnzymePageService;
 import uk.ac.ebi.ep.web.service.SearchIndexService;
 import uk.ac.ebi.ep.web.utils.KeywordType;
 import uk.ac.ebi.ep.web.utils.SearchUtil;
-import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
+import uk.ac.ebi.ep.reaction.mechanism.model.MechanismResult;
 
 /**
  *
@@ -193,12 +199,31 @@ public class EnzymecentricController extends CommonControllerMethods {
 
     }
 
+    private BrendaResult brenda(String ecNumber, int limit, boolean addAcc) {
+        Mono< List<Ph>> phList = Mono.fromCallable(() -> brendaService.findPhByEc(ecNumber, limit, addAcc));
+        Mono<List<Temperature>> tempList = Mono.fromCallable(() -> brendaService.findTemperatureByEc(ecNumber, limit, addAcc));
+        List<Brenda> kmKcat = brendaService.findKcatKmValueByEc(ecNumber, limit, addAcc);
+        if (kmKcat.isEmpty()) {
+            List<Brenda> kmValue = brendaService.findKmValueByEc(ecNumber, limit, addAcc);
+
+            return new BrendaResult(kmValue, phList.block(), tempList.block(), true);
+
+        }
+        return phList.zipWith(tempList)
+                .map(tuple -> {
+                    List<Ph> ph = tuple.getT1();
+                    List<Temperature> temp = tuple.getT2();
+                    return new BrendaResult(kmKcat, ph, temp, true);
+                }).block();
+
+    }
+
     public void addKinetics(String ec, Model model) {
         int limit = 7;
         boolean addAccession = false;
 
-        BrendaResult brendaList = brendaService.findBrendaResultByEc(ec, limit, addAccession);
-
+        //BrendaResult brendaList = brendaService.findBrendaResultByEc(ec, limit, addAccession);
+        BrendaResult brendaList = brenda(ec, limit, addAccession);
         boolean isKm = brendaList.isKm();
         model.addAttribute("isKm", isKm);
 
@@ -212,6 +237,12 @@ public class EnzymecentricController extends CommonControllerMethods {
     public String showEnzyme(@PathVariable("ec") String ec, Model model) {
         int resultLimit = 7;
 
+        boolean validHtml = Jsoup.isValid(ec, Whitelist.basic());
+        if (!validHtml) {
+
+            model.addAttribute("error", "Invalid input");
+            return ERROR_PAGE;
+        }
         boolean isEc = SearchUtil.validateEc(ec);
 
         if (isEc) {

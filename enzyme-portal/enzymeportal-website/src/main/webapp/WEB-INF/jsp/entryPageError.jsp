@@ -46,7 +46,7 @@
                     <section class="large-12 columns">
 
                         <h4 style="text-align: center">Enzyme Portal Service Error</h4>
-                        <p class="alert">We're sorry but there was an error in your search. Please try again later or  <a target="_blank" href="https://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=https://www.ebi.ac.uk/enzymeportal/"> report this issue here</a></p>
+                        <p class="alert">We're sorry but there was an error in your search. Please try again later or  <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=https://www.ebi.ac.uk/enzymeportal/"> report this issue here</a></p>
 
                     </section>
 

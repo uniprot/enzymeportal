@@ -57,34 +57,34 @@
                                     biochemical pathways and drug compounds. It provides a concise
                                     summary of information from:
                                 <ul>
-                                    <li><a target="_blank" href="http://www.uniprot.org/help/uniprotkb">UniProt
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.uniprot.org/help/uniprotkb">UniProt
                                             Knowledgebase</a></li>
-                                    <li><a target="_blank" href="http://www.ebi.ac.uk/pdbe/">Protein Data Bank in
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.ebi.ac.uk/pdbe/">Protein Data Bank in
                                             Europe</a></li>
-                                    <li><a target="_blank" href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
                                         of enzyme-catalyzed reactions
                                     </li>
-                                    <li><a target="_blank" href="http://www.reactome.org">Reactome</a>, a database
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.reactome.org">Reactome</a>, a database
                                         of biochemical pathways
                                     </li>
                                     <li>
-                                        <a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/">M-CSA</a>, a database of enzyme reaction mechanisms
+                                        <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/">M-CSA</a>, a database of enzyme reaction mechanisms
                                     </li>
-                                    <li><a target="_blank" href="http://www.ebi.ac.uk/intenz">IntEnz</a>, a resource
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.ebi.ac.uk/intenz">IntEnz</a>, a resource
                                         with enzyme nomenclature information
                                     </li>
                                     <li>
-                                        <a target="_blank" href="https://omim.org/">OMIM</a>, An Online Catalog of Human Genes and Genetic Disorders.
+                                        <a rel="noopener noreferrer" target="_blank" href="https://omim.org/">OMIM</a>, An Online Catalog of Human Genes and Genetic Disorders.
                                     </li>
-                                    <li><a target="_blank" href="http://www.ebi.ac.uk/chebi">ChEBI</a> and
-                                        <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>,
+                                    <li><a rel="noopener noreferrer" target="_blank" href="http://www.ebi.ac.uk/chebi">ChEBI</a> and
+                                        <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>,
                                         which contain information about small molecule chemistry and
                                         bioactivity
                                     </li>
                                     <li>
-                                        <a target="_blank" href="https://brenda-enzymes.org/">BRENDA</a>, is the main collection of enzyme functional data available to the scientific community. BRENDA is available at <a target="_blank" href="https://brenda-enzymes.org/">www.brenda-enzymes.org</a>
+                                        <a rel="noopener noreferrer" target="_blank" href="https://brenda-enzymes.org/">BRENDA</a>, is the main collection of enzyme functional data available to the scientific community. BRENDA is available at <a target="_blank" href="https://brenda-enzymes.org/">www.brenda-enzymes.org</a>
                                     </li>
-                                    <li><a target="_blank" href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a>, is a database for Metabolomics experiments and derived information. The database is cross-species, cross-technique and covers metabolite structures and their reference spectra as well as their biological roles, locations and concentrations, and experimental data from metabolic experiments.
+                                    <li><a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/metabolights/">MetaboLights</a>, is a database for Metabolomics experiments and derived information. The database is cross-species, cross-technique and covers metabolite structures and their reference spectra as well as their biological roles, locations and concentrations, and experimental data from metabolic experiments.
 
                                     </li>
                                 </ul>

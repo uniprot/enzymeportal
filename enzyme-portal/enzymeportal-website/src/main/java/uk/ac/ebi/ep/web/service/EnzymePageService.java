@@ -1,8 +1,8 @@
 package uk.ac.ebi.ep.web.service;
 
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.reaction.mechanism.model.MechanismResult;
 import uk.ac.ebi.ep.web.model.EnzymePage;
-import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
 
 /**
  *

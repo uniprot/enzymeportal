@@ -10,7 +10,7 @@ import uk.ac.ebi.ep.enzymeservice.uniprot.model.Kinetics;
 import uk.ac.ebi.ep.enzymeservice.uniprot.model.PhDependence;
 import uk.ac.ebi.ep.enzymeservice.uniprot.model.TemperatureDependence;
 import uk.ac.ebi.ep.literatureservice.dto.LabelledCitation;
-import uk.ac.ebi.reaction.mechanism.model.MechanismResult;
+import uk.ac.ebi.ep.reaction.mechanism.model.MechanismResult;
 
 /**
  * @author joseph

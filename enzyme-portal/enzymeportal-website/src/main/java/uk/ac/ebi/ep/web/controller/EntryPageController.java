@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import uk.ac.ebi.ep.dataservice.dto.ProteinView;
+import static uk.ac.ebi.ep.web.controller.CommonControllerMethods.ERROR_PAGE;
 import uk.ac.ebi.ep.web.logging.SeachCategory;
 import uk.ac.ebi.ep.web.logging.SeachType;
 import uk.ac.ebi.ep.web.logging.SearchQueryLog;
@@ -71,6 +74,12 @@ public class EntryPageController extends LegacyMethods {
     @GetMapping(value = "/search/{accession}/{field}")
     public String getEnzymeModel(Model model, @PathVariable(required = true) String accession, @PathVariable(required = false) String field, HttpSession session) {
 
+        boolean validHtmlInput = Jsoup.isValid(accession, Whitelist.basic());
+        if (!validHtmlInput) {
+
+            model.addAttribute("error", "Invalid input");
+            return ERROR_PAGE;
+        }
         EntryPageField requestedField = getEntryPageField(field);
         EnzymeModel enzymeModel = entryPageService.getDefaultEnzymeModel(accession);
         if (enzymeModel == null) {

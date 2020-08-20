@@ -35,7 +35,7 @@
 
                 <section>
                     <c:set var="errorParam" value=" search request"/>
-                    <h2>Service Error </h2>
+                    <h2>Service Error - ${error}</h2>
 
                     <p class="alert">
                         We are sorry but we couldn't find anything that matches your ${errorParam}. Please try again later

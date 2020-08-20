@@ -65,13 +65,13 @@
                     <a id="01"></a><h4>How is the Enzyme Portal different from BRENDA?</h4>
                     <fieldset>
                         <p>The <a href="/enzymeportal" class="showLink" >EnzymePortal</a>  is a one-stop shop for enzyme-related information in resources developed at the EBI. It accumulated this information and aims to present it to the scientist with a unified user experience. The EnzymePortal team does not curate enzyme information and therefore is a secondary information resource or portal. At some point, a user interested in more detail will always leave the Enzyme Portal pages and refer to the information in the underlying primary database (UniprotKB, PDB, etc.) directly. </p>
-                        <p><a href="http://www.brenda-enzymes.info/" target="_blank" >BRENDA</a>  is the most comprehensive resource about enzymes worldwide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that cannot be found in the EnzymePortal at the moment, such as kinetic, specificity, stability, application, and disease-related data. As a primary resource, BRENDA could be a candidate for an information source for the EnzymePortal in the future.</p>
+                        <p><a rel="noopener noreferrer" href="http://www.brenda-enzymes.info/" target="_blank" >BRENDA</a>  is the most comprehensive resource about enzymes worldwide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that cannot be found in the EnzymePortal at the moment, such as kinetic, specificity, stability, application, and disease-related data. As a primary resource, BRENDA could be a candidate for an information source for the EnzymePortal in the future.</p>
                     </fieldset>
 
 
                     <a id="02"></a><h4>How can I see species-related information for a given enzyme?</h4>
                     <fieldset>
-                        <p>When enzymes have identical name but belong to different species they are grouped into one entry. To see the information related to one particular species use the drop down menu at the top of the enzyme page. Please see <a class="showLink" href="https://www.youtube.com/watch?v=7doCBhF_XrQ" target="_blank">video</a> </p>
+                        <p>When enzymes have identical name but belong to different species they are grouped into one entry. To see the information related to one particular species use the drop down menu at the top of the enzyme page. Please see <a rel="noopener noreferrer" class="showLink" href="https://www.youtube.com/watch?v=7doCBhF_XrQ" target="_blank">video</a> </p>
                     </fieldset>
 
                     <a id="03"><h4>How can I combine search filters?</h4></a>
@@ -139,7 +139,7 @@
                     </fieldset>
                     <a id="11"><h4>Where can I find reaction parameters such as Michaelis-Menten kinetic parameters?</h4></a>
                     <fieldset>
-                        <p>In the enzyme page, you can find Km/kcat values as well as information about the pH and temperature that have been extracted from the enzyme database  <a target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a>. For more details follow the link to the corresponding <a target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a> page.</p>
+                        <p>In the enzyme page, you can find Km/kcat values as well as information about the pH and temperature that have been extracted from the enzyme database  <a rel="noopener noreferrer" target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a>. For more details follow the link to the corresponding <a rel="noopener noreferrer" target="_blank" href="https://www.brenda-enzymes.org/">BRENDA</a> page.</p>
                         <p>In the protein page, you can find similar information (KM, Vmax, pH and temperature) but related to a specific protein entry. This information is extracted from the UniProt database.</p>
                     </fieldset>
 

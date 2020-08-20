@@ -4,6 +4,12 @@
     <short-name>eptaglibray</short-name>
     <uri>/WEB-INF/epTagLibray</uri>
     
+        <function>
+        <name>formatRheaId</name>
+        <function-class>uk.ac.ebi.ep.web.functions.Functions</function-class>
+        <function-signature>java.lang.String formatRheaId(java.lang.String)</function-signature>
+    </function>
+    
     <function>
         <name>withMetabolite</name>
         <description>selects protein with matching metaboliteId</description>

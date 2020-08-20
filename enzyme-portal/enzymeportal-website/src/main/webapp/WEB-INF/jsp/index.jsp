@@ -161,7 +161,7 @@
                     </div>
                     <div class="row highlight-panel large-12">
                         <h1>Analyse data</h1>
-                        <a href="https://www.ebi.ac.uk/thornton-srv/transform-miner/" target="_blank">
+                        <a rel="noopener noreferrer" href="https://www.ebi.ac.uk/thornton-srv/transform-miner/" target="_blank">
                             <div class="primary-tile">
                                 <h2>Transform-MinER</h2>
                                 <div>
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" target="_blank">
+                        <a rel="noopener noreferrer" href="https://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" target="_blank">
                             <div class="primary-tile">
                                 <h2>Sequence search</h2>
                                 <div>
@@ -203,7 +203,7 @@
                             <div class="tile-text">
                                 The Enzyme Portal integrates publicly available information about enzymes, such as reaction mechanism, small-molecule chemistry, biochemical pathways and drug compounds.
                                 <br>
-                                <a target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">
+                                <a rel="noopener noreferrer" target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">
                                     <img class="thumbnail" src="/enzymeportal/resources/images/youtube2.png">
                                 </a>
                                 <p><a href="about">more...</a></p>
@@ -214,7 +214,7 @@
                             <h1>Technical documents</h1>
                             <div>
                                 <div class="tile-text">
-                                    <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>,
+                                    <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank" rel="noopener noreferrer">GitHub</a>,
                                         an online project hosting service.</p>
 
                                     <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
@@ -227,13 +227,13 @@
                             <div>
                                 <div class="tile-text">
                                     <p>To build its reports, the Enzyme Portal uses data from
-                                        <a href="http://www.uniprot.org" target="_blank">UniProtKB</a>,
-                                        <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>,
-                                        <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
-                                        <a href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>,
-                                        <a href="http://www.reactome.org/" target="_blank">REACTOME</a>,
-                                        <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
-                                        <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a>
+                                        <a rel="noopener noreferrer" href="http://www.uniprot.org" target="_blank">UniProtKB</a>,
+                                        <a rel="noopener noreferrer" href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>,
+                                        <a rel="noopener noreferrer" href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
+                                        <a rel="noopener noreferrer" href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>,
+                                        <a rel="noopener noreferrer" href="http://www.reactome.org/" target="_blank">REACTOME</a>,
+                                        <a rel="noopener noreferrer" href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
+                                        <a rel="noopener noreferrer" href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a>
                                         and many more resources.</p>
                                     <p>
                                         <a href="about">more...</a>

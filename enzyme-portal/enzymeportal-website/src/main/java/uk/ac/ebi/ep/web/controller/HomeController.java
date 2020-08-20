@@ -15,6 +15,11 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/rhea")
+    public String rhea() {
+        return "rhea";
+    }
+
     @GetMapping("/about")
     public String about() {
         return "about";

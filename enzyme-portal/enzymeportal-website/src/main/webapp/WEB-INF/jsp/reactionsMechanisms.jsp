@@ -8,6 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.js"></script>
@@ -16,6 +17,10 @@
 
 <link href=" ${pageContext.request.contextPath}/resources/javascript/biojs/biojs.Rheaction.css" rel="stylesheet" type="text/css" />
 <link href=" ${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.css" rel="stylesheet" type="text/css" />
+
+<!--rhea web component-->
+<script src="https://unpkg.com/@webcomponents/custom-elements"></script>
+<script type="module" src="https://unpkg.com/@swissprot/rhea-reaction-visualizer@0.0.16/index.js"></script>
 
 <style>
     td{
@@ -101,12 +106,13 @@
 
         <c:forEach items="${rheaReactions}" var="reaction" varStatus="loop"> 
             <c:set var="rheaEntryUrl" value="${rheaEntryBaseUrl}${reaction.id}"/>
-            <div class="reaction block">            
-                <b>
-                    <c:out value="${reaction.name}" escapeXml="false"/> 
-                </b>
-                <br/>
-                <div id="bjs_${loop.count}" style="margin-top: 10px">
+            <%--
+          <div class="reaction block">            
+              <b>
+                  <c:out value="${reaction.name}" escapeXml="false"/> 
+              </b>
+              <br/>
+              <div id="bjs_${loop.count}" style="margin-top: 10px">
 
                 </div>
 
@@ -119,17 +125,19 @@
                         });
                     });
                 </script>
-                <%--
-                <div id="reactionDesc-${rpVs.index}">
-                    <c:out value="${reaction.description}" escapeXml="false"/>
-                </div>
-                --%>
-                <div id="extLinks-${rpVs.index}">
-                    <c:if test="${not empty reaction.id}">
-                        <div class="rhea inlineLinks">
-                            <a target="blank" href="${rheaEntryUrl}">
-                                View reaction in Rhea
-                            </a>
+            --%>
+            <%--
+            <div id="reactionDesc-${rpVs.index}">
+                <c:out value="${reaction.description}" escapeXml="false"/>
+            </div>
+            --%>
+            <%--
+            <div id="extLinks-${rpVs.index}">
+                <c:if test="${not empty reaction.id}">
+                    <div class="rhea inlineLinks">
+                        <a target="blank" href="${rheaEntryUrl}">
+                            View reaction in Rhea
+                        </a>
 
                         </div>
                     </c:if>
@@ -147,6 +155,35 @@
 
 
             </div>
+            --%>
+           
+            <div class="webPage">
+                <div id="bjs_${loop.count}" style="margin-top: 10px"></div>
+                <hr style="border-color: #08a1b1"/>
+                <rhea-reaction rheaid="${epfn:formatRheaId(reaction.id)}"  showids></rhea-reaction>
+
+            </div>      
+            <div id="extLinks-${rpVs.index}">
+                <c:if test="${not empty reaction.id}">
+                    <div class="rhea inlineLinks">
+                        <a target="blank" href="${rheaEntryUrl}">
+                            View reaction in Rhea
+                        </a>
+
+                    </div>
+                </c:if>
+                <c:if test="${not empty reaction.keggId}">
+                    <div class="rhea inlineLinks">
+                        <a target="blank" href="http://www.genome.jp/dbget-bin/www_bget?rn:${reaction.keggId}">
+                            View Reaction In Kegg
+                        </a>
+
+                    </div>
+                </c:if>
+
+
+            </div>
+             
         </c:forEach>
 
     </c:if>
@@ -166,7 +203,7 @@
     </c:if>
 
     <c:if test="${mechanismSize>0}">
-         <c:set var="result" value="${enzymeModel.reactionMechanism.results[0]}"/>
+        <c:set var="result" value="${enzymeModel.reactionMechanism.results[0]}"/>
         <c:choose>
             <c:when test="${mechanismSize == 1}">
                 <b><a href="https://www.ebi.ac.uk/thornton-srv/m-csa/entry/${result.mcsaId}" target="_blank">${mechanismSize}</a> Reaction Mechanism found for this enzyme</b> 
@@ -186,7 +223,7 @@
         </c:forEach>
         --%>
 
-       
+
 
 
         <ul class="tabs" data-active-collapse="true"  data-tabs id="mechanism-tabs-ec">
@@ -369,7 +406,7 @@
 
                         <td colspan="12">
 
-                            <a   href="https://www.uniprot.org/uniprot/${enzymeModel.accession}" target="_blank">
+                            <a rel="noopener noreferrer"   href="https://www.uniprot.org/uniprot/${enzymeModel.accession}" target="_blank">
                                 <button id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all in Uniprot</button>
                             </a>
 
@@ -392,12 +429,12 @@
         <div class="provenance">
             <ul>
                 <li class="note_0">Data Source:
-                    <a target="_blank" href="https://www.rhea-db.org/searchresults?q=${enzymeModel.accession}" >Rhea</a> &AMP; <a target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymeModel.accession}">M-CSA</a>&AMP; <a target="_blank" href="https://www.genome.jp/kegg/">KEGG</a>&AMP; <a target="_blank" href="https://www.ebi.ac.uk/metabolights/index">MetaboLights</a></li>
+                    <a rel="noopener noreferrer" target="_blank" href="https://www.rhea-db.org/searchresults?q=${enzymeModel.accession}" >Rhea</a> &AMP; <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/thornton-srv/m-csa/search/?s=${enzymeModel.accession}">M-CSA</a>&AMP; <a rel="noopener noreferrer" target="_blank" href="https://www.genome.jp/kegg/">KEGG</a>&AMP; <a rel="noopener noreferrer" target="_blank" href="https://www.ebi.ac.uk/metabolights/index">MetaboLights</a></li>
 
                 <li class="note_2">Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use. </li>
                 <li class="note_1">Mechanism and Catalytic Site Atlas (M-CSA): a database of enzyme reaction mechanisms and active sites. </li>
                 <li class="note_1">KEGG reaction is a database of chemical reactions, mostly enzymatic reactions, containing all reactions that appear in the KEGG metabolic pathway maps and additional reactions that appear only in the Enzyme Nomenclature.</li>
-                   <li class="note_1">MetaboLights is a database for Metabolomics experiments and derived information.</li>
+                <li class="note_1">MetaboLights is a database for Metabolomics experiments and derived information.</li>
 
             </ul>
         </div>
