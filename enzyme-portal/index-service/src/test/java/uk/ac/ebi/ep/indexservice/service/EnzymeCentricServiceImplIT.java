@@ -151,7 +151,7 @@ public class EnzymeCentricServiceImplIT extends IndexServiceApplicationTests {
 
         QueryBuilder queryBuilder = defaultQueryBuilder(searchTerm);
 
-        Mono<EnzymeSearchResult> result = enzymeCentricService.searchForEnzymesNonBlocking(queryBuilder);
+        Mono<EnzymeSearchResult> result = enzymeCentricService.enzymeSearchResult(queryBuilder);
 
         assertNotNull(result);
         result.subscribe(data -> log.info("Result : " + data.getEntries()));

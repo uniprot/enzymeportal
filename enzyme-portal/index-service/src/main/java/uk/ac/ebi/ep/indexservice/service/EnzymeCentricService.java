@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.indexservice.service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
+import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
 import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeSearchResult;
 
 /**
@@ -17,6 +19,8 @@ public interface EnzymeCentricService {
      */
     EnzymeSearchResult searchForEnzymes(QueryBuilder queryBuilder);
 
-    Mono<EnzymeSearchResult> searchForEnzymesNonBlocking(QueryBuilder queryBuilder);
+    Mono<EnzymeSearchResult> enzymeSearchResult(QueryBuilder queryBuilder);
+
+    Flux<EnzymeEntry> findEnzymes(QueryBuilder queryBuilder);
 
 }

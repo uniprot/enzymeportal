@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uk.ac.ebi.ep.indexservice.exceptions.IndexServiceException;
 import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
@@ -46,7 +47,8 @@ public abstract class AbstractIndexService<T> {
 
     }
 
-    protected Mono<T> searchIndex(WebClient webClient, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
+    @Deprecated
+    protected Mono<T> searchIndexXX(WebClient webClient, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
         URI uri = buildURI(queryBuilder, indexUrl);
         log.debug("Request URL : " + uri.toString());
         return webClient
@@ -61,7 +63,33 @@ public abstract class AbstractIndexService<T> {
 
     }
 
-    protected <T> T searchIndexBlocking(RestTemplate restTemplate, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
+    protected Mono<T> searchIndex(WebClient webClient, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
+        URI uri = buildURI(queryBuilder, indexUrl);
+        log.debug("Request URL : " + uri.toString());
+        return webClient
+                .get()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .flatMap(response -> response.bodyToMono(resultType))
+                .switchIfEmpty(Mono.empty());
+
+    }
+
+    protected Flux<T> indexSearch(WebClient webClient, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
+        URI uri = buildURI(queryBuilder, indexUrl);
+        log.debug("Request URL : " + uri.toString());
+        return webClient
+                .get()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .flatMapMany(response -> response.bodyToFlux(resultType))
+                .switchIfEmpty(Flux.empty());
+
+    }
+
+    protected <T> T searchIndex(RestTemplate restTemplate, QueryBuilder queryBuilder, String indexUrl, Class<T> resultType) {
         URI uri = buildURI(queryBuilder, indexUrl);
         log.info("Request URL : " + uri.toString());
 

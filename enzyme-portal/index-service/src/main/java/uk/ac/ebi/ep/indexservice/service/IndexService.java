@@ -13,6 +13,6 @@ public interface IndexService {
 
     Mono<EnzymeEntry> getEnzymePageEntry(QueryBuilder enzymeQueryBuilder);
 
-    Mono<List<EnzymeEntry>> getEnzymeEntries(QueryBuilder enzymeQueryBuilder,String resourceQuery);
-    
+    Mono<List<EnzymeEntry>> getEnzymeEntries(QueryBuilder enzymeQueryBuilder, String resourceQuery);
+
 }

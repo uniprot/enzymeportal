@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.indexservice.service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uk.ac.ebi.ep.indexservice.helper.QueryBuilder;
+import uk.ac.ebi.ep.indexservice.model.protein.ProteinGroupEntry;
 import uk.ac.ebi.ep.indexservice.model.protein.ProteinGroupSearchResult;
 
 /**
@@ -17,5 +19,7 @@ public interface ProteinCentricService {
      */
     ProteinGroupSearchResult searchForProteins(QueryBuilder queryBuilder);
 
-    Mono<ProteinGroupSearchResult> searchForProteinsNonBlocking(QueryBuilder queryBuilder);
+    Mono<ProteinGroupSearchResult> proteinGroupSearchResult(QueryBuilder queryBuilder);
+
+    Flux<ProteinGroupEntry> findProteins(QueryBuilder queryBuilder);
 }

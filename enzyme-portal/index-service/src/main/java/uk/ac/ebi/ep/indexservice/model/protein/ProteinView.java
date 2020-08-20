@@ -41,7 +41,7 @@ public interface ProteinView {
     List<WithProteinFamily> getWithProteinFamily();
 
     List<WithPathway> getWithPathway();
-    
-     List<WithMetabolite> getWithMetabolite();
+
+    List<WithMetabolite> getWithMetabolite();
 
 }

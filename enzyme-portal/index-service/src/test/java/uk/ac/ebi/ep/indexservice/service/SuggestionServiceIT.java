@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import uk.ac.ebi.ep.indexservice.IndexServiceApplicationTests;
@@ -43,7 +44,7 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
     private SuggestionService suggestionService;
     @Autowired
     private IndexProperties indexProperties;
-    private static final String CONTENT_TYPE ="application/json;charset=UTF-8";
+    private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
     private final WebTestClient webTestClient = WebTestClient.bindToServer()
             .baseUrl("https://www.ebi.ac.uk/ebisearch/ws/rest")
@@ -204,6 +205,19 @@ public class SuggestionServiceIT extends IndexServiceApplicationTests {
             assertNotNull(c);
             assertThat(c.getSuggestions(), hasSize(greaterThanOrEqualTo(1)));
         });
+
+    }
+
+    @Test
+    public void testSuggestions_Flux() {
+        log.info("testSuggestions_Flux");
+        String searchTerm = "CANC";
+
+        Flux<Suggestion> result = suggestionService.suggestions(searchTerm);
+
+        assertNotNull(result);
+        assertThat(result.collectList().block(), hasSize(greaterThanOrEqualTo(1)));
+        result.doOnNext(s -> log.info("Suggestions : " + s.getSuggestedKeyword())).blockLast();
 
     }
 

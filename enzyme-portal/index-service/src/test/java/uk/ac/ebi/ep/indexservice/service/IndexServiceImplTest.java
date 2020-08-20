@@ -22,10 +22,10 @@ import uk.ac.ebi.ep.indexservice.model.enzyme.EnzymeEntry;
  */
 @Slf4j
 public class IndexServiceImplTest extends IndexServiceApplicationTests {
-    
+
     @Autowired
     private IndexService indexService;
-    
+
     private QueryBuilder defaultQueryBuilder(String query) {
         List<String> fieldList = Arrays.asList(IndexFields.id.name(), IndexFields.name.name(), IndexFields.alt_names.name(),
                 IndexFields.description.name(), IndexFields.enzyme_family.name(), IndexFields.intenz_cofactors.name(), IndexFields.catalytic_activity.name());
@@ -48,16 +48,15 @@ public class IndexServiceImplTest extends IndexServiceApplicationTests {
     public void testGetEnzymeEntries() {
         String ec = "3.1.4.35";
         String query = String.format("%s%s", IndexQueryType.ID.getQueryType(), ec);
-        
+
         QueryBuilder queryBuilder = defaultQueryBuilder(query);
-        
+
         Mono<EnzymeEntry> entry = indexService.getEnzymePageEntry(queryBuilder);
-        
+
         assertNotNull(entry);
         entry.subscribe(e -> log.info("Enzyme Page  " + e.getEnzymeName() + " Associated Protein : " + e.getProteinGroupEntry()));
         assertThat(entry.blockOptional().orElse(new EnzymeEntry()).getProteinGroupEntry(), hasSize(greaterThanOrEqualTo(1)));
-        
+
     }
-    
 
 }

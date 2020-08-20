@@ -33,7 +33,7 @@ public class IndexServiceImpl implements IndexService {
 
     @Override
     public Mono<List<EnzymeEntry>> getEnzymeEntries(QueryBuilder enzymeQueryBuilder, String resourceQuery) {
-        return enzymeCentricService.searchForEnzymesNonBlocking(enzymeQueryBuilder)
+        return enzymeCentricService.enzymeSearchResult(enzymeQueryBuilder)
                 .map(EnzymeSearchResult::getEntries)
                 .flatMapIterable(entryList -> entryList)
                 .flatMap(data -> addProtein(data, resourceQuery))
@@ -55,14 +55,14 @@ public class IndexServiceImpl implements IndexService {
                 .format(FORMAT)
                 .build();
 
-        return proteinCentricService.searchForProteinsNonBlocking(queryBuilder)
+        return proteinCentricService.proteinGroupSearchResult(queryBuilder)
                 .map(result -> buildEnzymeEntry(result, entry));
 
     }
 
     @Override
     public Mono<EnzymeEntry> getEnzymePageEntry(QueryBuilder enzymeQueryBuilder) {
-        return enzymeCentricService.searchForEnzymesNonBlocking(enzymeQueryBuilder)
+        return enzymeCentricService.enzymeSearchResult(enzymeQueryBuilder)
                 .map(e -> e.getEntries()
                 .stream()
                 .findFirst()
@@ -88,7 +88,7 @@ public class IndexServiceImpl implements IndexService {
                 .format(FORMAT)
                 .build();
 
-        return proteinCentricService.searchForProteinsNonBlocking(queryBuilder)
+        return proteinCentricService.proteinGroupSearchResult(queryBuilder)
                 .map(result -> buildEnzymeEntry(result, entry));
 
     }
