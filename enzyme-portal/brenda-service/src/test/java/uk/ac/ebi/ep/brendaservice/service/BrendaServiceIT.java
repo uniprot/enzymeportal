@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.brendaservice.dto.Temperature;
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class BrendaServiceTest {
+public class BrendaServiceIT {
 
     @Autowired
     private BrendaService brendaService;
@@ -227,7 +227,7 @@ public class BrendaServiceTest {
     @Test
     public void testFindKmValueByEc() {
         log.info("testFindKmValueByEc");
-        String ec = "7.1.1.1";
+        String ec = "6.1.1.1";
 
         int limit = 5;
         boolean addAcc = false;
