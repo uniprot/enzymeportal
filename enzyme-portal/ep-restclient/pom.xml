@@ -5,18 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-restclient</artifactId>
-    <version>0.0.1</version>
-    <name>ep-restclient</name>
-    <description>Rest client config for the enzyme portal</description>
+    <version>1.0.1-SNAPSHOT</version>
+    <name>ep-http-client</name>
+    <description>REST client config for the enzyme portal</description>
 
     <properties>
         <java.version>1.8</java.version>
-        <okhttp3.version>4.4.0</okhttp3.version>
+        <okhttp3.version>4.7.2</okhttp3.version>
         <ebi.maven.repo.deploy.url>
             scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
         </ebi.maven.repo.deploy.url>
@@ -29,8 +29,19 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>${okhttp3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-testing-support</artifactId>
+            <version>3.14.9</version>
+<!--            <scope>test</scope>-->
+        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

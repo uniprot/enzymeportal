@@ -1,6 +1,10 @@
 package uk.ac.ebi.ep.restclient.service;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +109,22 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-Type", "application/json;charset=UTF-8")
-                .expectBody().jsonPath("displayName", "ChREBP activates metabolic gene expression");
+                .expectBody().jsonPath("displayName", "ChREBP activates metabolic gene expression").isNotEmpty();
     }
 
+    @Test
+    public void testOkhttpClient() throws Exception {
+        OkHttpClient client = enzymePortalRestTemplateCustomizer.okHttpClient();
+        Request request = new Request.Builder()
+                .url("https://www.computingfacts.com/")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+
+            assertThat(response.isSuccessful()).isTrue();
+            assertThat(response.protocol()).isEqualTo(Protocol.HTTP_1_1);
+            assertThat(response.message()).isEqualTo("200");
+
+        }
+    }
 }

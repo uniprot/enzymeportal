@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.restclient.config;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class EnzymePortalRestTemplateCustomizer implements RestTemplateCustomizer {
 
-    private static final int TIME_OUT = 360;
+    private static final int TIMEOUT = 120_000;
 
     @Override
     public void customize(RestTemplate restTemplate) {
@@ -30,12 +31,14 @@ public class EnzymePortalRestTemplateCustomizer implements RestTemplateCustomize
         return new OkHttp3ClientHttpRequestFactory(okHttpClient());
     }
 
-    private OkHttpClient okHttpClient() {
+    public OkHttpClient okHttpClient() {
 
         return new OkHttpClient.Builder()
-                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool())//5, 5, TimeUnit.MINUTES
+                .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(true)
+                .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
                 .build();
     }
 
