@@ -25,7 +25,7 @@ import uk.ac.ebi.ep.dataservice.dto.ProteinView;
  * @author joseph
  */
 @Slf4j
-public class DataServiceTest extends DataServiceBaseIT {
+public class DataServiceIT extends DataServiceBaseIT {
     
     @Autowired
     private DataService dataService;

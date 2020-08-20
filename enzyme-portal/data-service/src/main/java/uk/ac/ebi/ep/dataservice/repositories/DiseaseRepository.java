@@ -1,6 +1,8 @@
 package uk.ac.ebi.ep.dataservice.repositories;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -21,5 +23,8 @@ public interface DiseaseRepository extends JpaRepository<EnzymePortalDisease, Lo
 
     @Query(value = "SELECT OMIM_NUMBER as omimNumber, DISEASE_NAME as diseaseName, DEFINITION as description, EVIDENCE as evidence, URL as url FROM ENZYME_PORTAL_DISEASE WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<DiseaseView> findDiseasesViewByAccession(@Param("UNIPROT_ACCESSION") String accession);
+
+    @Query(value = "select d.omimNumber as omimNumber, d.diseaseName as diseaseName from EnzymePortalDisease d group by d.omimNumber, d.diseaseName")
+    Page<DiseaseView> getPageableDiseasesView(Pageable pageable);
 
 }

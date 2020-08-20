@@ -2,6 +2,8 @@ package uk.ac.ebi.ep.dataservice.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.dataservice.dto.Cofactor;
 import uk.ac.ebi.ep.dataservice.entities.EnzymePortalCofactor;
@@ -29,6 +31,11 @@ public class EnzymePortalCofactorServiceImpl implements EnzymePortalCofactorServ
     @Override
     public List<Cofactor> findCofactorsLike(String cofactorName) {
         return enzymePortalCofactorRepository.cofactorsNameLike(cofactorName);
+    }
+
+    @Override
+    public Page<EnzymePortalCofactor> cofactors(Pageable pageable) {
+        return enzymePortalCofactorRepository.getPageableCofactors(pageable);
     }
 
 }

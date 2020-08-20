@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>data-service</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>data-service</name>
     <description>Enzyme Portal data service module.</description>
 
@@ -138,9 +138,13 @@
                 <version>2.22.2</version>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
-            </plugin>      
+                <configuration>
+                    <skipITs>true</skipITs>
+                </configuration>
+            </plugin>
             
             <plugin>
                 <groupId>com.mysema.maven</groupId>
