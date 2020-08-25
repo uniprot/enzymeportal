@@ -36,24 +36,6 @@
                 <role>Lead Developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>mbingley</id>
-            <name>Mark Bingley</name>
-            <email>mbingley@ebi.ac.uk</email>
-            <organization>EMBL-EBI</organization>
-            <roles>
-                <role>Web Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>martin</id>
-            <name>Maria-Jesus Martin</name>
-            <email>martin@ebi.ac.uk</email>
-            <organization>EMBL-EBI</organization>
-            <roles>
-                <role>Team leader</role>
-            </roles>
-        </developer>
     </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,7 +70,13 @@
 
         <!-- Integration test report path-->
         <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
-        <jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</jacoco.itReportPath>    
+        <jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</jacoco.itReportPath>  
+        
+        <!--          sonarcloud  -->
+<!--        <aggregate.report.dir>/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+        -->
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml</sonar.coverage.jacoco.xmlReportPaths>
+  
                    
     </properties>
     <repositories>
@@ -205,28 +193,22 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.6.0.1398</version>
-            </plugin>
+                <version>3.7.0.1746</version>
+            </plugin>          
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
+                <version>0.8.5</version>
                 <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
                     <execution>
                         <id>report</id>
                         <goals>
-                            <goal>report</goal>
+                            <goal>report-aggregate</goal>
                         </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
-
 
         </plugins>
         <extensions>  
@@ -243,7 +225,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.2.5.RELEASE</version>
+                <version>5.2.8.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -252,7 +234,7 @@
     
     
     <modules>
-
+        <module>ep-load-testing</module>
         <module>ep-restclient</module>
         <module>LiteratureService</module>
         <module>reaction-mechanism</module>
@@ -262,10 +244,10 @@
         <module>brenda-service</module>
         <module>comparison-service</module>
         <module>enzymeportal-website</module>
-       
+        <module>../api/ep-rest-api</module>
     </modules>
     
-    <profiles>
+    <profiles>   
         <profile>
             <id>baseProfile</id>
             <repositories>
