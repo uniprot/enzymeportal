@@ -226,17 +226,5 @@ public class EnzymeControllerIT {
         assertThat(result.getResults()).hasSizeGreaterThanOrEqualTo(5);
     }
 
-//    private Gson getGson() {
-//        return new GsonBuilder()
-//                .setPrettyPrinting()
-//                .create();
-//    }
-//
-//    private String getValueFromJsonData(String jsonData, String nodeName) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode nodes = mapper.readTree(jsonData);
-//        return nodes.findValue(nodeName).textValue();
-//
-//    }
 
 }
