@@ -32,15 +32,16 @@ public class RootController {
         RepresentationModel model = new RepresentationModel();
 
         Link self = linkTo(methodOn(RootController.class).root()).withSelfRel();
-        Link ec = linkTo(methodOn(EnzymeController.class).findEnzymeByEcNumber("7.1.1.1")).withRel("Search by EC");
-        Link generic = linkTo(methodOn(SearchController.class).findEnzymesByKeyword(0, 10, "human")).withRel("Generic search");
-        Link protein = linkTo(methodOn(ProteinController.class).findProteinByAccession("O15297")).withRel("Search by Uniprot accession");
+        Link enzymes = linkTo(methodOn(EnzymeController.class).enzymes(0, 10)).withRel("Enzymes");
+        Link ec = linkTo(methodOn(EnzymeController.class).findEnzymeByEcNumber("7.1.1.1")).withRel("Search By EC");
+        Link generic = linkTo(methodOn(SearchController.class).findEnzymesByKeyword(0, 10, "human")).withRel("Generic Search");
+        Link protein = linkTo(methodOn(ProteinController.class).findProteinByAccession("O15297")).withRel("Search By Uniprot Accession");
 
-        Link cofactors = linkTo(methodOn(ResourceController.class).getCofactors(pageable.getPageNumber(),pageable.getPageSize())).withRel("All Cofactors");
-        Link diseases = linkTo(methodOn(ResourceController.class).getDiseases(pageable.getPageNumber(),pageable.getPageSize())).withRel("All Diseases");
-        Link metabolites = linkTo(methodOn(ResourceController.class).getMetabolites(pageable.getPageNumber(),pageable.getPageSize())).withRel("All Metabolites");
-        Link pathways = linkTo(methodOn(ResourceController.class).getPathways(pageable.getPageNumber(),pageable.getPageSize())).withRel("All Pathways");
-        List<Link> links = Arrays.asList(self, cofactors, diseases, metabolites, pathways, ec, generic, protein);
+        Link cofactors = linkTo(methodOn(ResourceController.class).getCofactors(pageable.getPageNumber(), pageable.getPageSize())).withRel("Cofactors");
+        Link diseases = linkTo(methodOn(ResourceController.class).getDiseases(pageable.getPageNumber(), pageable.getPageSize())).withRel("Diseases");
+        Link metabolites = linkTo(methodOn(ResourceController.class).getMetabolites(pageable.getPageNumber(), pageable.getPageSize())).withRel("Metabolites");
+        Link pathways = linkTo(methodOn(ResourceController.class).getPathways(pageable.getPageNumber(), pageable.getPageSize())).withRel("Pathways");
+        List<Link> links = Arrays.asList(self, enzymes, cofactors, diseases, metabolites, pathways, ec, generic, protein);
         model.add(links);
 
         return ResponseEntity.ok(model);
