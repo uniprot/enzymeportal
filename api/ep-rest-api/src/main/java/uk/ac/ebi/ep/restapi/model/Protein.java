@@ -6,9 +6,11 @@ import java.io.Serializable;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 
 /**
@@ -16,8 +18,10 @@ import lombok.Singular;
  */
 @Schema(hidden = true)
 @XmlRootElement
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Builder
-@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Protein implements Serializable {
 

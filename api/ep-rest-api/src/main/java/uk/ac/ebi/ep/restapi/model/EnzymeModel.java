@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
@@ -21,7 +23,9 @@ import org.springframework.hateoas.server.core.Relation;
  */
 @Schema(hidden = true)
 @XmlRootElement
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Builder
 @Relation(collectionRelation = "enzymes", itemRelation = "enzymeModel")
 @JsonPropertyOrder({"enzymeName", "ecNumber", "enzymeFamily", "alternativeNames", "catalyticActivities", "associatedProteins"})
@@ -47,6 +51,6 @@ public class EnzymeModel extends RepresentationModel<EnzymeModel> implements Ser
     private List<String> catalyticActivities;
     @JsonProperty("associatedProteins")
     @Schema(hidden = true)
-    private final CollectionModel<ProteinModel> associatedProteins;
+    private CollectionModel<ProteinModel> associatedProteins;
 
 }
