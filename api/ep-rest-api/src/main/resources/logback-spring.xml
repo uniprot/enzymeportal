@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+   
+    <springProfile name="uzprel,uzpdev,local">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+            <encoder>
+                <pattern> %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable</pattern>
+            </encoder>
+        </appender>       
+
+
+        <appender name="devAndRelLogFile" class="ch.qos.logback.core.FileAppender">
+
+            <file>${catalina.base}/logs/api.json</file>
+ 
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                        class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                        <prettyPrint>true</prettyPrint>
+                    </jsonFormatter>
+                    <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                </layout>
+            </encoder>
+        </appender>
+        <appender name="logFile" class="ch.qos.logback.core.FileAppender">
+            <file>${catalina.base}/logs/api.log</file>
+
+            <encoder>
+                <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="info">
+            <appender-ref ref="devAndRelLogFile" />
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="logFile" />
+        </root>
+    </springProfile>
+
+    <springProfile name="uzppub">
+        <appender name="pgJsonLogFile" class="ch.qos.logback.core.FileAppender">
+            <file>${catalina.base}/logs/api-pg.json</file>
+
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                        class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                        <prettyPrint>true</prettyPrint>
+                    </jsonFormatter>
+                    <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                </layout>
+            </encoder>
+        </appender>
+        <appender name="pgLogFile" class="ch.qos.logback.core.FileAppender">
+            <file>${catalina.base}/logs/api.log</file>
+            <encoder>
+                <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="info">
+            <appender-ref ref="pgLogFile" />
+            <appender-ref ref="pgJsonLogFile" />
+        </root>
+    </springProfile>
+    
+    <springProfile name="uzppubfall1">
+        <appender name="oyJsonLogFile" class="ch.qos.logback.core.FileAppender">
+            <file>${catalina.base}/logs/api-oy.json</file>
+
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter
+                        class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                        <prettyPrint>true</prettyPrint>
+                    </jsonFormatter>
+                    <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                </layout>
+            </encoder>
+        </appender>
+        <appender name="oyLogFile" class="ch.qos.logback.core.FileAppender">
+            <file>${catalina.base}/logs/api.log</file>
+
+            <encoder>
+                <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="info">
+            <appender-ref ref="oyLogFile" />
+            <appender-ref ref="oyJsonLogFile" />
+        </root>
+    </springProfile>
+
+</configuration>
