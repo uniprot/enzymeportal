@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.enzymeservice.service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,7 +12,6 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import uk.ac.ebi.ep.enzymeservice.reactome.model.ReactomeResult;
 import uk.ac.ebi.ep.enzymeservice.reactome.service.ReactomeService;
 import uk.ac.ebi.ep.enzymeservice.reactome.view.PathWay;
@@ -57,11 +58,16 @@ public class ReactomeServiceIT {
         log.info("testFindReactomeResultById");
         String reactomeId = "R-HSA-4086398";
 
-        ReactomeResult result = reactomeService.findReactomeResultById(reactomeId)
-                .block();
-        assertNotNull(result);
-        assertThat(result.getSummation(), hasSize(greaterThanOrEqualTo(1)));
+        Mono<ReactomeResult> result = reactomeService.findReactomeResultById(reactomeId);
+        StepVerifier
+                .create(result)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertEquals(reactomeId, res.getStId());
+                    assertThat(res.getSummation(), hasSize(greaterThanOrEqualTo(1)));
 
+                })
+                .verifyComplete();
     }
 
     /**
@@ -73,10 +79,16 @@ public class ReactomeServiceIT {
         String pathwayId = "R-HSA-4086398";
 
         String expResult = "Ca2+ pathway";
-        PathWay result = reactomeService.findPathwayById(pathwayId)
-                .block();
-        assertNotNull(result);
-        assertEquals(expResult, result.getName());
+        Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
+
+        StepVerifier
+                .create(result)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertEquals(pathwayId, res.getId());
+                    assertEquals(expResult, res.getName());
+                })
+                .verifyComplete();
 
     }
 
@@ -93,14 +105,19 @@ public class ReactomeServiceIT {
         p.setId("R-HSA-2514859");
         p.setName("Inactivation, recovery and regulation of the phototransduction cascade");
         p.setUrl("https://www.reactome.org/content/detail/R-HSA-2514859");
-        p.setImage("image=https://www.reactome.orgnull");
+        p.setImage(null);
         p.setDescription("To terminate the single photon response and restore the system to its basal state, the three activated intermediates in phototransduction, rhodopsin (MII), transducin alpha subunit with GTP bound (GNAT1-GTP) and phosphodiesterase 6 (PDE6) all need to be efficiently deactivated. In addition, the cGMP concentrations must be restored to support reopening of the CNG channels. This section describes the inactivation and recovery events of the activated intermediates involved in phototransduction (Burns & Pugh 2010, Korenbrot 2012).");
 
-        List<PathWay> pathways = reactomeService.findPathwaysByIds(pathwayIds)
-                .block();
+        Mono<List<PathWay>> pathways = reactomeService.findPathwaysByIds(pathwayIds);
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res).isNotEmpty();
+                    assertThat(res).containsAnyOf(p);
 
-        assertNotNull(pathways);
-        assertThat(pathways).isNotEmpty();
+                })
+                .verifyComplete();
 
     }
 
@@ -115,16 +132,22 @@ public class ReactomeServiceIT {
         p.setId("R-HSA-2514859");
         p.setName("Inactivation, recovery and regulation of the phototransduction cascade");
         p.setUrl("https://www.reactome.org/content/detail/R-HSA-2514859");
-        p.setImage("image=https://www.reactome.orgnull");
+        p.setImage(null);
         p.setDescription("To terminate the single photon response and restore the system to its basal state, the three activated intermediates in phototransduction, rhodopsin (MII), transducin alpha subunit with GTP bound (GNAT1-GTP) and phosphodiesterase 6 (PDE6) all need to be efficiently deactivated. In addition, the cGMP concentrations must be restored to support reopening of the CNG channels. This section describes the inactivation and recovery events of the activated intermediates involved in phototransduction (Burns & Pugh 2010, Korenbrot 2012).");
 
-        List<PathWay> pathways = reactomeService.findPathwaysByIds(pathwayIds)
-                .block();
+        Mono<List<PathWay>> pathways = reactomeService.findPathwaysByIds(pathwayIds);
 
-        assertNotNull(pathways);
-        assertThat(pathways, hasSize(greaterThanOrEqualTo(10)));
-        pathways.forEach(d -> log.info(" Pathways : " + d + "\n"));
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res).isNotEmpty();
+                    assertThat(res, hasSize(greaterThanOrEqualTo(10)));
+                    assertThat(res).containsAnyOf(p);
+                    res.forEach(d -> log.info(" Pathways : " + d + "\n"));
 
+                })
+                .verifyComplete();
     }
 
     @Test
@@ -132,12 +155,12 @@ public class ReactomeServiceIT {
         log.info("testFind_Invalid_PathwayById");
         String pathwayId = "INVALID-4086398";
 
-        String expResult = null;
-        PathWay result = reactomeService.findPathwayById(pathwayId)
-                .block();
+        Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
 
-        assertNull(result);
-        assertEquals(expResult, result);
+        StepVerifier
+                .create(result)
+                .expectError()
+                .verify();
 
     }
 
@@ -147,12 +170,12 @@ public class ReactomeServiceIT {
 
         String pathwayId = "R-4086398";
 
-        String expResult = null;
-        PathWay result = reactomeService.findPathwayById(pathwayId)
-                .block();
+        Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
 
-        assertNull(result);
-        assertEquals(expResult, result);
+        StepVerifier
+                .create(result)
+                .expectError()
+                .verify();
 
     }
 
@@ -163,11 +186,17 @@ public class ReactomeServiceIT {
         // pathwayId ="R-HSA-156581";
 
         String expResult = "https://www.reactome.org/figures/ethanol_detox.jpg";
-        PathWay result = reactomeService.findPathwayById(pathwayId)
-                .block();
+        Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
 
-        assertNotNull(result);
-        assertEquals(expResult, result.getImage());
+
+        StepVerifier
+                .create(result)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res.getImage()).isEqualTo(expResult);
+
+                })
+                .verifyComplete();
 
     }
 
@@ -179,9 +208,15 @@ public class ReactomeServiceIT {
         String expResult = "Ca2+ pathway";
         Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
         assertNotNull(result);
-        result.subscribe(r -> log.info("Mono Result : " + r));
-        assertEquals(expResult, result.blockOptional().orElse(new PathWay()).getName());
 
+        StepVerifier
+                .create(result)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res.getName()).isEqualTo(expResult);
+
+                })
+                .verifyComplete();
     }
 
     @Test
@@ -191,10 +226,17 @@ public class ReactomeServiceIT {
 
         String expResult = "Ca2+ pathway";
 
-        Mono<PathWay> mono = reactomeService.findPathwayById(pathwayId);
-        assertNotNull(mono);
-        assertEquals(expResult, mono.blockOptional().orElse(new PathWay()).getName());
-        mono.subscribe(p -> log.info("testFindPathwayById_Mono : " + p));
+        Mono<PathWay> result = reactomeService.findPathwayById(pathwayId);
+        assertNotNull(result);
+
+        StepVerifier
+                .create(result)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res.getName()).isEqualTo(expResult);
+
+                })
+                .verifyComplete();
 
     }
 
@@ -209,8 +251,16 @@ public class ReactomeServiceIT {
         Mono<List<PathWay>> pathways = reactomeService.findPathwaysByIds(pathwayIds);
 
         assertNotNull(pathways);
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res).isNotEmpty();
+                    assertThat(res, hasSize(greaterThanOrEqualTo(10)));
+                    res.forEach(d -> log.info(" Reactome Result : " + d + "\n"));
 
-        pathways.subscribe(s -> log.info("Reactome Result : " + s));
+                })
+                .verifyComplete();
 
     }
 
@@ -226,8 +276,16 @@ public class ReactomeServiceIT {
 
         assertNotNull(pathways);
 
-        pathways.subscribe(s -> log.info("Reactome Results : " + s));
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
 
+                })
+                .expectNextCount(19)
+                .expectComplete()
+                .verifyThenAssertThat()
+                .tookLessThan(Duration.ofSeconds(30));
     }
 
     @Test
@@ -240,9 +298,16 @@ public class ReactomeServiceIT {
 
         Mono<List<PathWay>> pathways = reactomeService.findPathwaysByIds(pathwayIds);
 
-        assertNotNull(pathways);
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res).isNotEmpty();
+                    assertThat(res, hasSize(greaterThanOrEqualTo(10)));
+                    res.forEach(d -> log.info(" Reactome Result : " + d + "\n"));
 
-        pathways.subscribe(s -> log.info("Reactome Result : " + s));
+                })
+                .verifyComplete();
 
     }
 }

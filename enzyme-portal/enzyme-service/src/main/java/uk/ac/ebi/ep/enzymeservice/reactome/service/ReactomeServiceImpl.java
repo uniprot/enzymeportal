@@ -4,14 +4,17 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 import uk.ac.ebi.ep.enzymeservice.reactome.config.EnzymeServiceProperties;
 import uk.ac.ebi.ep.enzymeservice.reactome.model.Figure;
 import uk.ac.ebi.ep.enzymeservice.reactome.model.ReactomeResult;
@@ -48,32 +51,25 @@ class ReactomeServiceImpl implements ReactomeService {
     }
 
     private Mono<ReactomeResult> reactomeContentService(String id) {
+        String baseUrl = String.format("%s", enzymeServiceProperties.getReactomeUrl());
+
+        WebClient client = restConfigService.getWebClient()
+                .mutate()
+                .clientConnector(new ReactorClientHttpConnector(HttpClient.newConnection()
+                        .compress(true)))
+                .baseUrl(baseUrl)
+                .build();
 
         URI uri = buildURI(id);
-        return restConfigService.getWebClient()
-                .get()
-                .uri(uri)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response -> Mono.just(new Exception("client error with status : " + response.rawStatusCode())))
-                .onStatus(HttpStatus::is5xxServerError, response -> Mono.just(new Exception("client error with status : " + response.rawStatusCode())))
-                .bodyToMono(ReactomeResult.class)
-                .switchIfEmpty(Mono.empty())
-                .onErrorResume(ex -> Mono.empty());
 
-    }
-
-    Mono<ReactomeResult> contentService(String id) {
-
-        URI uri = buildURI(id);
-        return restConfigService.getWebClient()
+        return client
                 .get()
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .flatMap(response -> response.bodyToMono(ReactomeResult.class))
-                .switchIfEmpty(Mono.empty())
-                .onErrorResume(ex -> Mono.error(ex));
+                .onErrorResume(ex -> Mono.error(ex))
+                .switchIfEmpty(Mono.empty());
 
     }
 
@@ -91,9 +87,11 @@ class ReactomeServiceImpl implements ReactomeService {
 
     @Override
     public Mono<List<PathWay>> findPathwaysByIds(List<String> pathwayIds) {
-        return pathwaysByPathwayIds(pathwayIds)
+        return Flux.fromIterable(pathwayIds)
+                .flatMap(this::reactomeContentService)
+                .filter(data -> Objects.nonNull(data))
+                .map(this::buildPathWay)
                 .collectList();
-
     }
 
     @Override
@@ -111,7 +109,7 @@ class ReactomeServiceImpl implements ReactomeService {
 
     }
 
-    private PathWay buildPathWay(ReactomeResult result) {
+    private PathWay buildPathWay(@NonNull ReactomeResult result) {
         PathWay pathway = null;
         if (result.getSchemaClass() != null && result.getSpeciesName() != null && (result.getSchemaClass().equalsIgnoreCase(PATHWAY) || result.getSpeciesName().equalsIgnoreCase(PATHWAY))) {
             pathway = new PathWay();
