@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-rest-api</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>enzymeportal-api</name>
     <description>Enzyme Portal Rest API</description>
     <packaging>war</packaging>
