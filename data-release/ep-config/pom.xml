@@ -19,7 +19,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <oracle.version>11.2.0.3</oracle.version>
-        <querydsl.version>4.2.2</querydsl.version>
+<!--        <querydsl.version>4.2.2</querydsl.version>-->
+         <querydsl.version>4.3.1</querydsl.version>
     
         <!-- Plugins -->
       
