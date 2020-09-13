@@ -34,7 +34,6 @@ public class FDA extends SmallMolecules {
     public void loadChEMBL() {
 
         List<String> uniqueTargetedproteins = findUniqueTargetedproteins();
-                //.stream().limit(100).collect(Collectors.toList());
 
         log.info(" Number of unique targeted proteins found for FDA : " + uniqueTargetedproteins.size());
 

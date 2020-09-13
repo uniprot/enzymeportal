@@ -48,16 +48,9 @@ public class EnzymePortalCompoundParser {
 
     }
 
-//    @Deprecated
-//    public void loadUniqueCofactors() {
-//        GenericCompound cofactor = new UniqueCofactor(parserService);
-//        cofactor.loadCompoundToDatabase();
-//    }
     @Transactional
     public void loadCofactorsFromFTPFiles() {
 
-        //ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
-        //compoundParser.loadCofactors();
         GenericCompound cofactor = new CofactorsFtpFiles(parserService);
         cofactor.loadCompoundToDatabase();
 
@@ -70,16 +63,6 @@ public class EnzymePortalCompoundParser {
 
     }
 
-//    @Transactional
-//    @Deprecated
-//    public void loadReactants() {
-//
-//        // ICompoundParser compoundParser = new CofactorsFtpFiles(parserService);
-//        //compoundParser.loadReactants();
-//        GenericCompound reactant = new CompoundReactantParser(parserService);
-//        reactant.loadCompoundToDatabase();
-//
-//    }
     @Transactional
     @Modifying
     public void loadChemblTargets() {
@@ -88,11 +71,4 @@ public class EnzymePortalCompoundParser {
 
     }
 
-//    @Transactional
-//    @Modifying
-//    public void processChemblTargetsAndUpdateDatabase() {
-//        SmallMolecules molecules = new ChemblCompounds(parserService, chemblService);
-//        molecules.loadChEMBL();
-//
-//    }
 }

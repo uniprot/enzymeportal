@@ -34,9 +34,6 @@ public class ChebiCofactorParser {
         ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
         chebiCofactor.loadChebiCofactorToDatabase();
 
-//        log.info("Done Loading Chebi cofactors to ENZYME_PORTAL database ");
-//        chebiCofactor.loadUniqueCofactorsToDatabase();
-//        log.info("Done Loading Unique Chebi cofactors to ENZYME_PORTAL database ");
 
     }
 }

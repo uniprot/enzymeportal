@@ -48,9 +48,6 @@ public class ChebiCofactors {
     protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
     protected final EnzymePortalParserService enzymePortalParserService;
     protected final ChebiService chebiService;
-    //@Deprecated
-    //private CopyOnWriteArrayList<LiteCompound> compounds = null;
-    // AtomicInteger count = new AtomicInteger(0);
 
     @Autowired
     private EnzymePortalSummaryRepository enzymePortalSummaryRepository;
@@ -58,7 +55,7 @@ public class ChebiCofactors {
     public ChebiCofactors(EnzymePortalParserService enzymePortalParserService, ChebiService chebiService) {
         this.enzymePortalParserService = enzymePortalParserService;
         this.chebiService = chebiService;
-        //compounds = new CopyOnWriteArrayList<>();
+
     }
 
     public void loadUniqueCofactorsToDatabase() {
@@ -83,7 +80,7 @@ public class ChebiCofactors {
         }
     }
 
-    private void streamSummaryNatively(AtomicInteger counter) {
+    void streamSummaryNatively(AtomicInteger counter) {
         try (Stream<Summary> summaries = enzymePortalSummaryRepository.streamSummariesByCommentType(COMMENT_TYPE)) {
 
             summaries
@@ -93,7 +90,7 @@ public class ChebiCofactors {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void loadChebiCofactorToDatabase() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -201,7 +198,7 @@ public class ChebiCofactors {
     }
 
     private void processCofactors(String cofactorText, String accession, AtomicInteger counter) {
-        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
+        log.debug("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
 
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
@@ -328,51 +325,4 @@ public class ChebiCofactors {
         return entry;
     }
 
-//        @Deprecated
-//    public void loadChebiCofactorToDatabaseX() {
-//        List<Summary> enzymeSummary = enzymePortalParserService.findSummariesByCommentType(COMMENT_TYPE);
-//        // .stream().limit(200).collect(Collectors.toList());
-//
-//        log.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
-//
-//        parseCofactorText(enzymeSummary);
-//    }
-//    
-//        @Deprecated
-//    private void parseCofactorText(List<Summary> enzymeSummary) {
-//        enzymeSummary.stream().forEach(summary -> processCofactors(summary, count));
-//        //save compounds
-//        log.info("Done parsing regulation data... Number of cofactors per protein found  : " + compounds.size());
-//
-//        List<LiteCompound> data
-//                = compounds.stream()
-//                        .filter(compound -> Objects.nonNull(compound))
-//                        .map(syn -> addChebiSynonym(syn)).collect(Collectors.toList());
-//
-//        log.info("Done adding Synonyms and about to load " + data.size() + " cofactors");
-//        data.forEach(compound -> loadCompound(compound, count));
-////        compounds
-////                .stream()
-////                .filter(compound -> Objects.nonNull(compound))
-////                .map(syn -> addChebiSynonym(syn))
-////                .parallel()
-////                .forEach(compound -> loadCompound(compound, count));
-//        log.info("-------- Done populating the database with cofactors ---------------");
-//        compounds.clear();
-//
-//    }
-//    
-//        @Deprecated
-//    private void loadCompound(LiteCompound compound, AtomicInteger count) {
-////        String synonyms = null;
-////        if (compound.getCompoundId() != null && compound.getCompoundName() != null) {
-////            synonyms = getChebiSynonyms(compound.getCompoundId(), compound.getCompoundName());
-////        }
-//
-//        log.debug("writing cofactor " + compound.getCompoundId() + " count " + count.getAndIncrement());
-//
-//        enzymePortalParserService.createChebiCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getSynonym(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-//        //load Web enzyme_portal compound table
-//        enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-//    }
 }
