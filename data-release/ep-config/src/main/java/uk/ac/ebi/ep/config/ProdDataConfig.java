@@ -35,7 +35,10 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
         config.setUsername(user);
         config.setPassword(password);
         config.setDriverClassName("oracle.jdbc.OracleDriver");
-
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        config.setPoolName("ep-parser-pool");
+      
 //        config.addDataSourceProperty("cachePrepStmts", "true");
 //        config.addDataSourceProperty("prepStmtCacheSize", "250");
 //        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
