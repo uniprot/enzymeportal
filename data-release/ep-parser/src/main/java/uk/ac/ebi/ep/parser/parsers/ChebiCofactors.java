@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,7 @@ public class ChebiCofactors {
         enzymePortalParserService.createCofactor(cofactor.getCompoundId(), cofactor.getCompoundName(), url);
     }
 
+    @Synchronized
     private void streamSummary(AtomicInteger counter) {
         try (Stream<SummaryView> summaries = enzymePortalSummaryRepository.streamSummaryByCommentType(COMMENT_TYPE)) {
 
@@ -77,6 +79,9 @@ public class ChebiCofactors {
                     .parallel()
                     .forEach(summary -> processCofactors(summary.getCommentText(), summary.getAccession(), counter));
 
+        } catch (Exception e) {
+            log.error("Exception while streaming Summary by comment Type.", e.getMessage());
+            throw e;
         }
     }
 
