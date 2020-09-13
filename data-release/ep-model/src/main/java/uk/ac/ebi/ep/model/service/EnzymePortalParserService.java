@@ -129,11 +129,7 @@ public class EnzymePortalParserService {
     public Stream<EnzymeReactionInfo> findUniqueXrefReactionInfoByXrefTypeAndStream(String xrefType) {
 
         return enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType);
-//        try (Stream<EnzymeReactionInfo> reactionInfo = enzymeReactionInfoRepository.findUniqueXrefReactionInfoByXrefTypeAndStream(xrefType)) {
-//            reactionInfo.forEach(data -> System.out.println(" unique " + data));
-//
-//        }
-//        return Stream.empty();
+
     }
 
     @Transactional
@@ -162,14 +158,7 @@ public class EnzymePortalParserService {
 //        return enzymeReactionInfoRepository.loadByPartition( xrefType);
 //    }
 //
-//    @Transactional
-//    public Stream<EnzymeReactionInfoPart> streamReactionInfoByPartitionAndXrefType(String xrefType) {
-//        try (Stream<EnzymeReactionInfoPart> stream = enzymeReactionInfoRepository.streamReactionInfoByPartitionAndXrefType(xrefType)) {
-//            stream.forEach(data -> System.out.println("DATA " + data));
-//        }
-//        return Stream.empty();
-//        // return enzymeReactionInfoRepository.streamReactionInfoByPartitionAndXrefType(xrefType);
-//    }
+
     @Transactional
     public Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(String xrefType) {
 

@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
 import uk.ac.ebi.ep.model.service.SitemapService;
-
 import uk.ac.ebi.ep.sitemap.generator.EnzymePortalSiteMap;
 import uk.ac.ebi.ep.sitemap.generator.SiteMapGenerator;
 
@@ -58,7 +57,7 @@ public class EpSiteMapImplTest {
 
         File output = new File(fileDirectory);
 
-        instance.generateSitemap(inputData, output, filename_prefix, true);
+        instance.generateSitemap(inputData, output, filename_prefix, false);
         assertTrue(output.exists());
 
     }
