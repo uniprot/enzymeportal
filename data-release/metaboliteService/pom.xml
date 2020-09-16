@@ -59,7 +59,7 @@
             <artifactId>jakarta.xml.ws-api</artifactId>
             <version>2.3.3</version>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>-->
@@ -93,7 +93,7 @@
 
     <build>
         <plugins>
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>-->
@@ -143,10 +143,33 @@
             </plugin>
         </plugins>
     </build>
-
+    
     <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-        <!--                 For main Spring releases -->
+    <!--    <repositories>
+
+                         For main Spring releases 
         <repository>
             <id>org.springframework.maven.release</id>
             <name>Spring Maven Release Repository</name>
@@ -159,7 +182,7 @@
             </snapshots>
         </repository>
 
-        <!--                 For testing against latest Spring snapshots -->
+                         For testing against latest Spring snapshots 
         <repository>
             <id>org.springframework.maven.snapshot</id>
             <name>Spring Maven Snapshot Repository</name>
@@ -172,7 +195,7 @@
             </snapshots>
         </repository>
 
-        <!--                 For developing against latest Spring milestones -->
+                         For developing against latest Spring milestones 
         <repository>
             <id>org.springframework.maven.milestone</id>
             <name>Spring Maven Milestone Repository</name>
@@ -182,7 +205,7 @@
             </snapshots>
         </repository>
 
-        <!--                 JBoss repository -->
+                         JBoss repository 
         <repository>
             <id>jboss</id>
             <name>JBoss repository</name>
@@ -201,10 +224,10 @@
         <repository>
             <id>ebi-repo</id>
             <name>ebi-repo</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <url>https://www.ebi.ac.uk/~maven/m2repo</url>
         </repository>
 
 
-    </repositories>
+    </repositories>-->
 
 </project>
