@@ -1,7 +1,7 @@
 
 package uk.ac.ebi.ep.model.dao;
 
-import com.querydsl.core.annotations.QueryProjection;
+//import com.querydsl.core.annotations.QueryProjection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class EcNumber implements Comparable<EcNumber>, Serializable {
 
     }
 
-    @QueryProjection
+    //@QueryProjection
     public EcNumber(Integer ec) {
         this.ec = ec;
         selected = Boolean.FALSE;
