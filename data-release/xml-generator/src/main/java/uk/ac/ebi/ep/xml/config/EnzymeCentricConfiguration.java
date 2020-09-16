@@ -88,7 +88,6 @@ public class EnzymeCentricConfiguration extends AbstractBatchConfig {
     }
 
 
-
     
       @Bean(destroyMethod = "", name = "enzymeXmlWriter")
     @Override
