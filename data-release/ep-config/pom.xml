@@ -67,23 +67,23 @@
         </dependency>
  
         <!--spring data rest-->
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-webmvc</artifactId>
             <version>3.1.6.RELEASE</version>
-        </dependency>
+        </dependency>-->
 
         <!-- Support for Ehcache and others -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <!--		<version>4.1.4.RELEASE</version>-->
+            		<version>4.1.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <exclusions>
-                <!--                 Exclude Commons Logging in favor of SLF4j -->
+ 
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-        </dependency>
+        </dependency>-->
          
         <!--    spring data jpa-->
         <dependency>
@@ -155,7 +155,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.4.2</version>
+            <version>3.4.5</version>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>

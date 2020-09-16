@@ -56,7 +56,7 @@
         </dependency> 
 
 
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
@@ -69,7 +69,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
-        </dependency> 
+        </dependency> -->
  
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
