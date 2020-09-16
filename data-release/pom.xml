@@ -23,7 +23,7 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-        <module>xml-generator</module>
+<!--        <module>xml-generator</module>-->
         <module>ep-config</module>          
         <module>ep-model</module>
         <module>centralService</module>
@@ -40,15 +40,13 @@
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
-        <!--        <repository>
+        <repository>
             <id>io.spring.repo.maven.release</id>
             <url>http://repo.spring.io/release/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
-                         For main Spring releases 
         <repository>
             <id>org.springframework.maven.release</id>
             <name>Spring Maven Release Repository</name>
@@ -60,8 +58,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
-                         For testing against latest Spring snapshots 
         <repository>
             <id>org.springframework.maven.snapshot</id>
             <name>Spring Maven Snapshot Repository</name>
@@ -73,8 +69,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
-                         For developing against latest Spring milestones 
         <repository>
             <id>org.springframework.maven.milestone</id>
             <name>Spring Maven Milestone Repository</name>
@@ -84,7 +78,6 @@
             </snapshots>
         </repository>
 
-                         JBoss repository 
         <repository>
             <id>jboss</id>
             <name>JBoss repository</name>
@@ -99,8 +92,8 @@
         <repository>
             <id>codelds</id>
             <url>https://code.lds.org/nexus/content/groups/main-repo</url>
-        </repository>-->
-                <repository>
+        </repository>
+        <repository>
             <id>ebi-repo</id>
             <name>ebi-repo</name>
             <url>https://www.ebi.ac.uk/~maven/m2repo</url>
