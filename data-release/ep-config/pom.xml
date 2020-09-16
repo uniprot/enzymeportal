@@ -309,7 +309,7 @@
 
     </profiles>
     
-    <!--        <repositories>
+            <repositories>
          <repository>
              <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
              <id>eclipselink</id>
@@ -322,7 +322,7 @@
          </repository>
    
      </repositories>
-    -->
+    
         
     
 </project>
