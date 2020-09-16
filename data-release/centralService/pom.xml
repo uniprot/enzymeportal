@@ -85,10 +85,12 @@
             <artifactId>httpclient</artifactId>
                          <version>4.5.8</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+            <version>5.2.5.RELEASE</version>
         </dependency>
+        <!--
         
 
         <dependency>
