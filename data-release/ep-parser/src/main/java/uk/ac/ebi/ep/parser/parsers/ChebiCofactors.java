@@ -71,11 +71,12 @@ public class ChebiCofactors {
     }
 
     //@Synchronized
-    private void streamSummary(AtomicInteger counter) {
+    @Transactional
+    void streamSummary(AtomicInteger counter) {
         try (Stream<SummaryView> summaries = enzymePortalSummaryRepository.streamSummaryByCommentType(COMMENT_TYPE)) {
 
             summaries
-                   // .parallel()
+                    // .parallel()
                     .forEach(summary -> processCofactors(summary.getCommentText(), summary.getAccession(), counter));
 
         } catch (Exception e) {
