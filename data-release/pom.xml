@@ -34,16 +34,16 @@
         <module>SitemapGenerator</module>
    
     </modules>
-    <repositories>
-<!--        <repository>
+<!--    <repositories>
+        <repository>
             <id>io.spring.repo.maven.release</id>
             <url>http://repo.spring.io/release/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>-->
+        </repository>
 
-        <!--                 For main Spring releases -->
+                         For main Spring releases 
         <repository>
             <id>org.springframework.maven.release</id>
             <name>Spring Maven Release Repository</name>
@@ -56,7 +56,7 @@
             </snapshots>
         </repository>
 
-        <!--                 For testing against latest Spring snapshots -->
+                         For testing against latest Spring snapshots 
         <repository>
             <id>org.springframework.maven.snapshot</id>
             <name>Spring Maven Snapshot Repository</name>
@@ -69,7 +69,7 @@
             </snapshots>
         </repository>
 
-        <!--                 For developing against latest Spring milestones -->
+                         For developing against latest Spring milestones 
         <repository>
             <id>org.springframework.maven.milestone</id>
             <name>Spring Maven Milestone Repository</name>
@@ -79,7 +79,7 @@
             </snapshots>
         </repository>
 
-        <!--                 JBoss repository -->
+                         JBoss repository 
         <repository>
             <id>jboss</id>
             <name>JBoss repository</name>
@@ -102,6 +102,6 @@
         </repository>
 
 
-    </repositories>
+    </repositories>-->
 
 </project>
