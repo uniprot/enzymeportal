@@ -23,7 +23,7 @@
         </dependencies>
     </dependencyManagement>
     <modules>
-<!--        <module>xml-generator</module>-->
+        <module>xml-generator</module>
         <module>ep-config</module>          
         <module>ep-model</module>
         <module>centralService</module>
