@@ -146,6 +146,11 @@
     
     <repositories>
         <repository>
+            <id>ebi-repo</id>
+            <name>ebi-repo</name>
+            <url>https://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+        <repository>
             <id>spring-releases</id>
             <name>Spring Releases</name>
             <url>https://repo.spring.io/libs-release</url>
