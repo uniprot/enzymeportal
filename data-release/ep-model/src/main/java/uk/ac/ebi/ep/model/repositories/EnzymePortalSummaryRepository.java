@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.model.dao.SummaryView;
 public interface EnzymePortalSummaryRepository extends JpaRepository<EnzymePortalSummary, Long>, EnzymePortalSummaryRepositoryCustom {
 
     @Transactional(readOnly = true)
-    @Query("SELECT s.uniprotAccession.accession as accession, s.commentText as commentText FROM EnzymePortalSummary s WHERE s.commentType=:commentType and rownum <= 10")
+    @Query("SELECT s.uniprotAccession.accession as accession, s.commentText as commentText FROM EnzymePortalSummary s WHERE s.commentType=:commentType")
     Stream<SummaryView> streamSummaryByCommentType(@Param("commentType") String commentType);
 
     @Transactional(readOnly = true)

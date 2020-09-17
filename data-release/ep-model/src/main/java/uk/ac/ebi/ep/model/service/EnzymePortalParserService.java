@@ -91,7 +91,7 @@ public class EnzymePortalParserService {
         return enzymePortalMetaboliteRepository.findMetabolites();
     }
 
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Transactional(readOnly = false)
     public void createChebiCompound(String chebiId, String chebiName, String synonyms, String relationship, String accession, String url, String role, String note) {
         enzymePortalChebiCompoundRepository.createChebiCompoundIgnoreDup(chebiId, chebiName, synonyms, relationship, accession, url, role, note);
@@ -158,7 +158,6 @@ public class EnzymePortalParserService {
 //        return enzymeReactionInfoRepository.loadByPartition( xrefType);
 //    }
 //
-
     @Transactional
     public Stream<EnzymeReactionInfo> findAllReactionInfoByXrefTypeAndStream(String xrefType) {
 
