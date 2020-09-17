@@ -36,14 +36,15 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
         config.setPassword(password);
         config.setDriverClassName("oracle.jdbc.OracleDriver");
         config.setMaximumPoolSize(20);
-        config.setMinimumIdle(2);
+        config.setMinimumIdle(1);
         //config.setLeakDetectionThreshold(900000);
         config.setMaxLifetime(345600000);
         config.setPoolName("ep-parser-pool");
+        config.setConnectionTimeout(50_000_000); //~14hrs
       
-//        config.addDataSourceProperty("cachePrepStmts", "true");
-//        config.addDataSourceProperty("prepStmtCacheSize", "250");
-//        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         HikariDataSource ds = new HikariDataSource(config);
         return ds;
