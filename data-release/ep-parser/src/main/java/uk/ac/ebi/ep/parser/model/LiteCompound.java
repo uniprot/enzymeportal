@@ -99,7 +99,7 @@ public class LiteCompound {
 
     @Override
     public String toString() {
-        return compoundId + " " + compoundName + " " + synonym + " " + compoundSource + " " + relationship + " " + uniprotAccession + " " + url + " " + compoundRole + " " + note;
+        return compoundId + "\t" + compoundName + "\t" + synonym + "\t" + compoundSource + "\t" + relationship + "\t" + uniprotAccession + "\t" + url + "\t" + compoundRole + "\t" + note;
     
          //return compoundId + compoundName + synonym + compoundSource + relationship + uniprotAccession + url + compoundRole + note;
     
