@@ -268,7 +268,7 @@ public class ChebiCofactors {
     }
 
     private void processCofactors(String cofactorText, String accession, AtomicInteger counter) {
-        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
+        log.debug("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
 
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
