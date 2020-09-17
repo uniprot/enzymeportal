@@ -31,7 +31,8 @@ public class ChebiCofactorParserCSV {
         context.refresh();
 
         ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
-        String output = args[0];
+        String output = args[1];
+       
         chebiCofactor.writeChebiCofactorToCsvFile(output);
  
 

@@ -5,8 +5,8 @@ MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 DB_CONFIG="$1"
 
-#OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/data/cofactors.csv
-OUTPUT_DIR=/Users/joseph/data/csv/cofactors.csv
+OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/data/cofactors.csv
+#OUTPUT_DIR=/Users/joseph/data/csv/cofactors.csv
 
 echo "[INFO] Request to query & parse UniProt data for ChEBI compounds (Cofactors)  - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
