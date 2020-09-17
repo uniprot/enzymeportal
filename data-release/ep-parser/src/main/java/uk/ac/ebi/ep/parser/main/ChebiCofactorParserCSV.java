@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.ep.parser.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -11,8 +12,8 @@ import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
  *
  * @author joseph
  */
-public class ChebiCofactorParser {
-
+public class ChebiCofactorParserCSV {
+    
     public static void main(String... args) {
         if (args == null || args.length == 0) {
             System.out.println("Please provide required parameters");
@@ -30,7 +31,9 @@ public class ChebiCofactorParser {
         context.refresh();
 
         ChebiCompounds chebiCofactor = context.getBean(ChebiCompounds.class);
-        chebiCofactor.loadChebiCofactorToDatabase();
+        String output = args[0];
+        chebiCofactor.writeChebiCofactorToCsvFile(output);
+ 
 
 
     }

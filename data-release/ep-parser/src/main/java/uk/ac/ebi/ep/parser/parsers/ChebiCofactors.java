@@ -1,14 +1,22 @@
 package uk.ac.ebi.ep.parser.parsers;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
@@ -49,6 +57,9 @@ public class ChebiCofactors {
     protected final EnzymePortalParserService enzymePortalParserService;
     protected final ChebiService chebiService;
 
+    final String[] CSV_HEADER = {"CompoundId", "CompoundName", "Synonym", "CompoundSource", "Relationship", "UniprotAccession", "Url", "CompoundRole", "Note"};
+    final Set<LiteCompound> compounds = new HashSet<>();
+
     @Autowired
     private EnzymePortalSummaryRepository enzymePortalSummaryRepository;
 
@@ -70,13 +81,11 @@ public class ChebiCofactors {
         enzymePortalParserService.createCofactor(cofactor.getCompoundId(), cofactor.getCompoundName(), url);
     }
 
-    //@Synchronized
-    @Transactional
     void streamSummary(AtomicInteger counter) {
         try (Stream<SummaryView> summaries = enzymePortalSummaryRepository.streamSummaryByCommentType(COMMENT_TYPE)) {
 
             summaries
-                    // .parallel()
+                    .parallel()
                     .forEach(summary -> processCofactors(summary.getCommentText(), summary.getAccession(), counter));
 
         } catch (Exception e) {
@@ -105,12 +114,67 @@ public class ChebiCofactors {
         log.info("About to start streaming and processing " + total + " Summary entries.");
 
         streamSummary(counter);
-        //streamSummaryNatively(counter);
 
         stopWatch.stop();
 
-        log.info("Time taken to process " + total + " entries:  " + stopWatch.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch.getTotalTimeSeconds() / 3600 + " hrs");
+        log.info("Time taken to stream and process " + total + " entries:  " + stopWatch.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch.getTotalTimeSeconds() / 3600 + " hrs");
 
+        StopWatch stopWatch2 = new StopWatch();
+        stopWatch2.start();
+        log.info("loading " + compounds.size() + " compounds to database");
+
+        compounds.stream()
+                .parallel()
+                .forEach(c -> loadCompound(c));
+
+        stopWatch2.stop();
+        log.info("Time taken to process " + total + " entries:  " + stopWatch2.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch2.getTotalTimeSeconds() / 3600 + " hrs");
+        compounds.clear();
+
+    }
+
+    @Transactional(readOnly = true)
+    public void writeChebiCofactorToCsvFile(String dir) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        AtomicInteger counter = new AtomicInteger(1);
+        long total = enzymePortalSummaryRepository.countSummaryByCommentType(COMMENT_TYPE);
+
+        log.info("About to start streaming and processing " + total + " Summary entries.");
+
+        streamSummary(counter);
+
+        stopWatch.stop();
+
+        log.info("Time taken to stream and process " + total + " entries:  " + stopWatch.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch.getTotalTimeSeconds() / 3600 + " hrs");
+
+        StopWatch stopWatch2 = new StopWatch();
+        stopWatch2.start();
+        log.info("writing " + compounds.size() + " compounds to File " + dir);
+
+        writeToCSV(compounds, dir);
+        stopWatch2.stop();
+        log.info("Time taken to Write " + total + " entries:  " + stopWatch2.getTotalTimeSeconds() / 60 + " mins" + " Or " + stopWatch2.getTotalTimeSeconds() / 3600 + " hrs");
+        compounds.clear();
+
+    }
+
+    private void writeToCSV(Set<LiteCompound> data, String dir) {
+        try (
+                Writer writer = Files.newBufferedWriter(Paths.get(dir))) {
+
+            CSVPrinter printer = CSVFormat.TDF
+                    .withAutoFlush(true)
+                    .withTrim(true)
+                    .withHeader(CSV_HEADER)
+                    .print(writer);
+
+            printer.printRecords(data);
+
+            printer.flush();
+        } catch (IOException ex) {
+            log.error(ex.getMessage());
+        }
     }
 
     protected ChebiCompound findChebiCompoundById(String chebiId) {
@@ -151,6 +215,7 @@ public class ChebiCofactors {
     protected String getChebiSynonyms(String chebiId, String preferredName) {
         return chebiService.getChebiSynonyms(chebiId)
                 .stream()
+                .distinct()
                 .filter(c -> !c.equalsIgnoreCase(preferredName))
                 .filter(l -> l.length() > 1)
                 .limit(1_000)
@@ -180,8 +245,8 @@ public class ChebiCofactors {
 
                     LiteCompound daoCompound = buildCompoundDao(liteCompound.get(), accession, note);
                     LiteCompound compound = addChebiSynonym(daoCompound);
-                    loadCompound(compound);
-                    //compounds.add(daoCompound);
+                    //loadCompound(compound);
+                    compounds.add(compound);
                     log.debug("added compound for special case " + daoCompound.getCompoundId() + " <> " + daoCompound.getCompoundName());
 
                 }
@@ -203,7 +268,7 @@ public class ChebiCofactors {
     }
 
     private void processCofactors(String cofactorText, String accession, AtomicInteger counter) {
-        log.debug("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
+        log.info("Accession " + accession + " count : " + counter.getAndIncrement() + " Cofactortext " + cofactorText);
 
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
@@ -231,8 +296,8 @@ public class ChebiCofactors {
 
                     LiteCompound daoCompound = buildCompoundDao(liteCompound, accession, note);
                     LiteCompound compound = addChebiSynonym(daoCompound);
-                    loadCompound(compound);
-                    //compounds.add(daoCompound);
+                    // loadCompound(compound);
+                    compounds.add(compound);
 
                 } else {
                     //if (!liteCompound.isPresent()) {

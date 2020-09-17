@@ -1,5 +1,7 @@
 package uk.ac.ebi.ep.parser.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author joseph
@@ -97,7 +99,40 @@ public class LiteCompound {
 
     @Override
     public String toString() {
-        return "LiteCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", synonym=" + synonym + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
+        return compoundId + " " + compoundName + " " + synonym + " " + compoundSource + " " + relationship + " " + uniprotAccession + " " + url + " " + compoundRole + " " + note;
+    
+         //return compoundId + compoundName + synonym + compoundSource + relationship + uniprotAccession + url + compoundRole + note;
+    
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.compoundId);
+        hash = 79 * hash + Objects.hashCode(this.uniprotAccession);
+        hash = 79 * hash + Objects.hashCode(this.compoundRole);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LiteCompound other = (LiteCompound) obj;
+        if (!Objects.equals(this.compoundId, other.compoundId)) {
+            return false;
+        }
+        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+            return false;
+        }
+        return Objects.equals(this.compoundRole, other.compoundRole);
     }
 
 }
