@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.ac.ebi.ep.xml</groupId>
     <artifactId>xml-generator</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>xml-generator</name>
     <description>XML Generator tool for the Enzyme Portal Project</description>
 
@@ -23,7 +23,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
-            <version>5.2.8.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>net.java.dev.stax-utils</groupId>
@@ -36,17 +35,9 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!--        <dependency>
-            <groupId>net.java.dev.stax-utils</groupId>
-            <artifactId>stax-utils</artifactId>
-            <version>20080702</version>
-        </dependency>-->
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version> ${oracle.version}</version>
-
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
