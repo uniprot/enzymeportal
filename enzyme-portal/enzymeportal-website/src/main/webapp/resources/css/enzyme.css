@@ -182,11 +182,11 @@ button#basketDeselectAll, button#basketSelectAll {
     position: fixed;
     z-index: 666;
     width: auto;
-    max-width: 16%;
+    max-width: 14%;
     background-color: white;
     box-shadow: 0 0 1em #ccc;
-    margin-left: 0.5em;
-    padding-top: 1ex;
+    margin-left: 0.1em;
+    padding-top: 0.5ex;
 }
 #comparison-outline ul {
     padding-left: 0.3em !important;
