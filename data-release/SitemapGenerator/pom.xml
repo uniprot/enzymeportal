@@ -28,7 +28,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
-        
 
         <dependency>
             <groupId>org.sitemaps</groupId>
@@ -54,6 +53,7 @@
             <artifactId>ep-model</artifactId>
             <version>2.0.0-SNAPSHOT</version>
         </dependency> 
+
 
 
 <!--        <dependency>
