@@ -122,6 +122,33 @@ public class ReactomeServiceIT {
     }
 
     @Test
+    public void testFindPathwayBy_multiple_Ids2() {
+        log.info("testFindPathwayBy_multiple_Ids");
+
+        List<String> pathwayIds = Lists.list("R-HSA-71384", "R-HSA-5365859", "R-HSA-2161541");
+
+        PathWay p = new PathWay();
+        p.setId("R-HSA-5365859");
+        p.setName("RA biosynthesis pathway");
+        p.setUrl("https://www.reactome.org/content/detail/R-HSA-5365859");
+        p.setImage(null);
+        p.setDescription("The major activated retinoid, all-trans-retinoic acid (atRA) is produced by the dehydrogenation of all-trans-retinol (atROL) by members of the short chain "
+        		+ "dehydrogenase/reductase (SDR) and aldehyde dehydrogenase (RALDH) gene families (Das et al. 2014, Napoli 2012).");
+
+        Mono<List<PathWay>> pathways = reactomeService.findPathwaysByIds(pathwayIds);
+        StepVerifier
+                .create(pathways)
+                .assertNext(res -> {
+                    assertNotNull(res);
+                    assertThat(res).isNotEmpty();
+                    assertThat(res).containsAnyOf(p);
+
+                })
+                .verifyComplete();
+
+    }
+    
+    @Test
     public void testFindPathways_By_simulated_Ids() {
         log.info("testFindPathwayBy_simulated_Ids");
 
