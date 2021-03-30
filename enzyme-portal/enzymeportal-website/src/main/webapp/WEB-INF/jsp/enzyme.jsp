@@ -179,7 +179,8 @@
 <!-- See https://github.com/babel/babel/issues/9829 -->
 <script src="https://cdn.jsdelivr.net/npm/@babel/polyfill@7.4.4/dist/polyfill.min.js" charset="utf-8" defer></script>
 
-<script src="https://cdn.jsdelivr.net/npm/protvista-uniprot@2.0.9/dist/protvista-uniprot.js" defer></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/protvista-uniprot@2.0.9/dist/protvista-uniprot.js" defer></script> -->
+<script src="https://cdn.jsdelivr.net/npm/protvista-uniprot@2.6.0/dist/protvista-uniprot.js" defer></script> 
 
 
 
