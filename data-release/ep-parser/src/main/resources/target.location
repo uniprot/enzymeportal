@@ -1,4 +1,5 @@
-chembl.target=/nfs/production/panda/chembl/CHEMBL_EBEYE/current/chembl-target_component.xml
+chembl.target=/Users/jluo/projects/enzymeportal/data/chembl/chembl-target_component.xml
 chembl.target.OLD=/ebi/extserv/projects/ebinocle/data/chembl-target_component/latest/chembl-target_component.xml
 chembl.target.local=/Users/joseph/chembldata/targets.xml
 chembl.target.local.large=/Users/joseph/chembldata/chembl-target_component.xml
+chembl.target.remote=/nfs/production/panda/chembl/CHEMBL_EBEYE/current/chembl-target_component.xml

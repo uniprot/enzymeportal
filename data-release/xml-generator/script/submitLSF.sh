@@ -21,5 +21,5 @@ read ok
 #bsub -R "rusage[mem=128000]" -M 128000 -q production-rh7 -o $LOG_DIR  $1
 #bsub -R "rusage[mem=128000]" -M 128000 -q production-rh74 -o $LOG_DIR  $1
 #bsub -P bigmem -n 16 -M 200000 -R "rusage[mem=200000]" -o $LOG_DIR  $1
-bsub -P bigmem -n 16 -M 128000 -R "rusage[mem=128000]" -o $LOG_DIR -u joseph  $1
+bsub -P bigmem -n 16 -M 128000 -R "rusage[mem=128000]" -o $LOG_DIR -u jluo  $1
 

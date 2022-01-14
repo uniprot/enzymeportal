@@ -27,7 +27,8 @@ public class Analysis {
     }
 
     public static void main(String[] args) throws Exception {
-
+    	System.out.println("Starting analysis...");
+    	 logger.info("Starting analysis");
         String profile = "";
 
         if (args == null || args.length == 0) {

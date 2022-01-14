@@ -81,7 +81,7 @@ public class DataAnalyzer {
      * write enzymes (with experimental evidence) to enzyme portal database
      */
     public void populateEnzymesWithEvidences() {
-
+   	 logger.info("Run populateEnzymesWithEvidences");
         try {
             List<EnzymeSpExpEvidence> enzymeEvidences = computeAccessionsWithEvidences();
             logger.warn("num evidences written to enzyme portal database " + enzymeEvidences.size());
