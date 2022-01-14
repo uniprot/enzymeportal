@@ -20,7 +20,7 @@
 
 <!--rhea web component-->
 <script src="https://unpkg.com/@webcomponents/custom-elements"></script>
-<script type="module" src="https://unpkg.com/@swissprot/rhea-reaction-visualizer@0.0.16/index.js"></script>
+<script type="module" src="https://unpkg.com/@swissprot/rhea-reaction-visualizer@0.0.21/index.js"></script>
 
 <style>
     td{
