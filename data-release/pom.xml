@@ -482,14 +482,6 @@
 				</production-use-current-dir>
 			</properties>
 		</profile>
-	
-		<profile>
-			<id>publish-to-release-dir</id>
-			<properties>
-				<production-use-current-dir>release
-				</production-use-current-dir>
-			</properties>
-		</profile>
 
 		<!-- active when running on jenkins -->
 		<profile>
