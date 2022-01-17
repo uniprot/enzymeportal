@@ -22,7 +22,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <oracle.version>11.2.0.3</oracle.version>
+        <oracle.version>12.2.0.1</oracle.version>
         <spring.version>2.3.4.RELEASE</spring.version>
         <logback.version>1.2.7</logback.version>
     </properties>
