@@ -103,77 +103,74 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.6.0.1398</version>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enzyme-centric-batch</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass>
-                            <arguments>
-                                <argument>-XX:+UseG1GC</argument>
-                                <argument>-Xms100M</argument>
-                                <argument>-Xmx100G</argument>  
-                                <argument>-XX:-UseGCOverheadLimit</argument> 
-                                <argument>-XX:+UseStringDeduplication</argument>  
-                                <argument>-XX:+OptimizeStringConcat</argument>                                  
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>protein-centric-batch</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>uk.ac.ebi.ep.xml.ProteinCentricBatchJob</mainClass>
-                            <arguments>
-                                <argument>-XX:+UseG1GC</argument>
-                                <argument>-Xms100M</argument>
-                                <argument>-Xmx100G</argument>  
-                                <argument>-XX:-UseGCOverheadLimit</argument> 
-                                <!--                                <argument>-XX:+UseStringDeduplication</argument> 
-                                <argument>-XX:+OptimizeStringConcat</argument>  -->
-                                                               
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+<!--         <plugins> -->
+<!--             <plugin> -->
+<!--                 <groupId>org.springframework.boot</groupId> -->
+<!--                 <artifactId>spring-boot-maven-plugin</artifactId> -->
+<!--             </plugin> -->
+<!--             <plugin> -->
+<!--                 <groupId>org.sonarsource.scanner.maven</groupId> -->
+<!--                 <artifactId>sonar-maven-plugin</artifactId> -->
+<!--                 <version>3.6.0.1398</version> -->
+<!--             </plugin> -->
+<!--             <plugin> -->
+<!--                 <groupId>org.jacoco</groupId> -->
+<!--                 <artifactId>jacoco-maven-plugin</artifactId> -->
+<!--                 <version>0.8.5</version> -->
+<!--                 <executions> -->
+<!--                     <execution> -->
+<!--                         <id>prepare-agent</id> -->
+<!--                         <goals> -->
+<!--                             <goal>prepare-agent</goal> -->
+<!--                         </goals> -->
+<!--                     </execution> -->
+<!--                     <execution> -->
+<!--                         <id>report</id> -->
+<!--                         <goals> -->
+<!--                             <goal>report</goal> -->
+<!--                         </goals> -->
+<!--                     </execution> -->
+<!--                 </executions> -->
+<!--             </plugin> -->
+<!--             <plugin> -->
+<!--                 <groupId>org.codehaus.mojo</groupId> -->
+<!--                 <artifactId>exec-maven-plugin</artifactId> -->
+<!--                 <executions> -->
+<!--                     <execution> -->
+<!--                         <id>enzyme-centric-batch</id> -->
+<!--                         <goals> -->
+<!--                             <goal>java</goal> -->
+<!--                         </goals> -->
+<!--                         <configuration> -->
+<!--                             <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass> -->
+<!--                             <arguments> -->
+<!--                                 <argument>-XX:+UseG1GC</argument> -->
+<!--                                 <argument>-Xms100M</argument> -->
+<!--                                 <argument>-Xmx100G</argument>   -->
+<!--                                 <argument>-XX:-UseGCOverheadLimit</argument>  -->
+<!--                                 <argument>-XX:+UseStringDeduplication</argument>   -->
+<!--                                 <argument>-XX:+OptimizeStringConcat</argument>                                   -->
+<!--                             </arguments> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                     <execution> -->
+<!--                         <id>protein-centric-batch</id> -->
+<!--                         <goals> -->
+<!--                             <goal>java</goal> -->
+<!--                         </goals> -->
+<!--                         <configuration> -->
+<!--                             <mainClass>uk.ac.ebi.ep.xml.ProteinCentricBatchJob</mainClass> -->
+<!--                             <arguments> -->
+<!--                                 <argument>-XX:+UseG1GC</argument> -->
+<!--                                 <argument>-Xms100M</argument> -->
+<!--                                 <argument>-Xmx100G</argument>   -->
+<!--                                 <argument>-XX:-UseGCOverheadLimit</argument>                                                                 -->
+<!--                             </arguments> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                 </executions> -->
+<!--             </plugin> -->
+<!--         </plugins> -->
     </build>
     <repositories>
         <repository>
