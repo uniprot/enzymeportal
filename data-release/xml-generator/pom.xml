@@ -23,7 +23,7 @@
     <properties>
         <java.version>11</java.version>
         <oracle.version>12.2.0.1</oracle.version>
-        <spring.version>2.3.4.RELEASE</spring.version>
+        <spring.version>2.4.6</spring.version>
         <logback.version>1.2.7</logback.version>
     </properties>
 
@@ -191,27 +191,5 @@
 <!--             </plugin> -->
 <!--         </plugins> -->
     </build>
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <name>Spring Releases</name>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <name>Spring Releases</name>
-            <url>https://repo.spring.io/libs-release</url>
-        </pluginRepository>
-    </pluginRepositories>
-
+   
 </project>
