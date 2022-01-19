@@ -66,6 +66,7 @@
 
 		<!-- <repository> <id>central</id> <url>https://repo1.maven.org/maven2/</url> 
 			</repository> -->
+			
 		<repository>
 			<id>io.spring.repo.maven.release</id>
 			<url>http://repo.spring.io/release/</url>
