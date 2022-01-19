@@ -37,6 +37,21 @@
             </roles>
         </developer>
     </developers>
+    
+     <modules>
+        <module>ep-load-testing</module>
+        <module>ep-restclient</module>
+        <module>LiteratureService</module>
+        <module>reaction-mechanism</module>
+        <module>data-service</module>
+        <module>index-service</module>
+        <module>enzyme-service</module>
+        <module>brenda-service</module>
+        <module>comparison-service</module>
+        <module>enzymeportal-website</module>
+        <module>../api/ep-rest-api</module>
+    </modules>
+    
     <properties>
     
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -234,19 +249,7 @@
     </dependencyManagement>
     
     
-    <modules>
-        <module>ep-load-testing</module>
-        <module>ep-restclient</module>
-        <module>LiteratureService</module>
-        <module>reaction-mechanism</module>
-        <module>data-service</module>
-        <module>index-service</module>
-        <module>enzyme-service</module>
-        <module>brenda-service</module>
-        <module>comparison-service</module>
-        <module>enzymeportal-website</module>
-        <module>../api/ep-rest-api</module>
-    </modules>
+
     
   <build>
 
