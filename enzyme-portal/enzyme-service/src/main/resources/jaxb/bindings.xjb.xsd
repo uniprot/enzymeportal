@@ -4,7 +4,7 @@
     xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb
-		http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd">
+		http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"> 
 
     <jaxb:bindings schemaLocation="intenz.xsd">
     	<jaxb:schemaBindings>

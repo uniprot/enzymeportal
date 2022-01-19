@@ -38,23 +38,31 @@
         </developer>
     </developers>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+    
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>11</java.version>
 		<mvn.compile.version>3.8.1</mvn.compile.version>	
-        <github.global.server>github</github.global.server>
-        <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
-        <ebi.maven.repo.deploy.url>
-            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
-        </ebi.maven.repo.deploy.url>
-        <ebi.maven.repo.snapshots.deploy.url>
-            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
-        </ebi.maven.repo.snapshots.deploy.url>
-        <biobabel.maven.repo.url>
-            http://www.ebi.ac.uk/~biobabel/maven2_repo
-        </biobabel.maven.repo.url>
-        <biobabel.maven.repo.deploy.url>
-            scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
-        </biobabel.maven.repo.deploy.url>  
+		<mvn.resources.version>3.1.0</mvn.resources.version>
+		<mvn.shade.version>3.1.1</mvn.shade.version>
+		<mvn.source.version>3.0.1</mvn.source.version>
+		
+		<production-ready-release-dir>
+			/nfs/web-hx/uniprot/production/java/${production-use-current-dir}/${project.version}/${project.artifactId}
+		</production-ready-release-dir>
+		
+		<production-use-current-dir>snapshot</production-use-current-dir>
+		
+		<fs-uniprot-local>${user.home}/.maven-distribution</fs-uniprot-local>
+		<fs-uniprot-local-url>file://${fs-uniprot-local}</fs-uniprot-local-url>
+		<http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
+		
+		<surefire-version>2.22.1</surefire-version>
+		<failsafe-version>2.22.1</failsafe-version>
+		<jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
+		<jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</jacoco.itReportPath>
+		<jacoco.maven.version>0.8.5</jacoco.maven.version>
+    
+
     
         <failsafe-version>2.16</failsafe-version>
 
@@ -62,88 +70,121 @@
         <skipITs>false</skipITs>
         <skipUTs>false</skipUTs>
 
-        <!-- Test coverage -->
        
-        <jacoco.outputDir>${project.basedir}/../target</jacoco.outputDir>
-
-        <!-- Unit test report path -->
-        <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
-        <jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</jacoco.reportPath>
-
-        <!-- Integration test report path-->
-        <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
-        <jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</jacoco.itReportPath>  
-        
-        <!--          sonarcloud  -->
-<!--        <aggregate.report.dir>/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
-        -->
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml</sonar.coverage.jacoco.xmlReportPaths>
-  
-                   
     </properties>
+    
     <repositories>
-        
-        
-        <repository>
-            <releases/>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ebi-repo</id>
-            <name>EBI maven repository</name>
-            <!--            http://www.ebi.ac.uk/~maven/m2repo/uk/ac/ebi/ep/  (enzyme portal repo web view)-->
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-        </repository> 
-        
-        <repository>
-            <id>maven-repo</id>
-            <url>http://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots/>
-            <id>ebi-repo-snapshots</id>
-            <name>EBI maven snapshots repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
-            <!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo_snapshots</url>-->
-        </repository>
-        <repository>
-            <id>biobabel-repo</id>
-            <url>${biobabel.maven.repo.url}</url>
-        </repository>
-        <repository>
-            <id>oss.sonatype.org</id>
-            <name>OSS Sonatype Staging</name>
-            <url>https://oss.sonatype.org/content/groups/staging</url>
-        </repository>
-        
-        <repository>
-            <id>java.net-Public</id>
-            <name>Maven Java Net Snapshots and Releases</name>
-            <url>https://maven.java.net/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
 
-        <repository>
-            <id>maven-nuxeo</id>
-            <name>Maven Nuxeo Repository</name>
-            <url>https://maven.nuxeo.org/nexus/content/groups/public/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
+		<!-- <repository> <id>central</id> <url>https://repo1.maven.org/maven2/</url> 
+			</repository> -->
+			
+		<repository>
+			<id>io.spring.repo.maven.release</id>
+			<url>http://repo.spring.io/release/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>org.springframework.maven.release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://maven.springframework.org/release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>org.springframework.maven.snapshot</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>http://maven.springframework.org/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>jboss</id>
+			<name>JBoss repository</name>
+			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+		</repository>
+		<repository>
+			<url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
+			<id>eclipselink</id>
+			<layout>default</layout>
+			<name>Repository for library EclipseLink (JPA 2.0)</name>
+		</repository>
+		<repository>
+			<id>codelds</id>
+			<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		</repository>
+		<repository>
+			<id>ebi-repo</id>
+			<name>ebi-repo</name>
+			<url>https://www.ebi.ac.uk/~maven/m2repo</url>
+		</repository>
+<repository>
+			<id>uniprot-artifactory-release</id>
+			<name>UniProt Artifactory for Releases</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>${http-uniprot-private-url}/release</url>
+		</repository>
+
+		<repository>
+			<id>uniprot-artifactory-snapshots</id>
+			<name>UniProt Artifactory for Snapshots</name>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<url>${http-uniprot-private-url}/snapshot</url>
+		</repository>
+
+		<repository>
+			<id>uniprot-artifactory-public-thirdparty</id>
+			<name>UniProt Artifactory Public Third-Party Libraries</name>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<url>${http-uniprot-private-url}/public-thirdparty</url>
+		</repository>
+
+		<repository>
+			<id>uniprot-artifactory-private-thirdparty</id>
+			<name>UniProt Artifactory Private Third-Party Libraries</name>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<url>${http-uniprot-private-url}/private-thirdparty</url>
+		</repository>
+
+	</repositories>
+    
     <distributionManagement>
        
         <repository>
@@ -178,52 +219,7 @@
         </developerConnection>
         <url>https://github.com/ebi-cheminf/enzymeportal</url>
     </scm>
-    <build>
-        <plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${mvn.compile.version}</version>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-						<fork>true</fork>
-						<meminitial>128m</meminitial>
-						<maxmem>512m</maxmem>
-						<showDeprecation>true</showDeprecation>
-						<showWarnings>true</showWarnings>
-					</configuration>
-				</plugin>
-            
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.7.0.1746</version>
-            </plugin>          
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
-                <executions>
-                    <execution>
-                        <id>report</id>
-                        <goals>
-                            <goal>report-aggregate</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-        <extensions>  
-            <extension>  
-                <groupId>org.apache.maven.wagon</groupId>  
-                <artifactId>wagon-ssh</artifactId>  
-                <version>3.3.3</version>  
-            </extension>  
-        </extensions>
-    </build>
+   
     
     <dependencyManagement>
         <dependencies>
@@ -252,73 +248,536 @@
         <module>../api/ep-rest-api</module>
     </modules>
     
-    <profiles>   
-        <profile>
-            <id>baseProfile</id>
-            <repositories>
+  <build>
 
-                <!--                 For main Spring releases -->
-                <repository>
-                    <id>org.springframework.maven.release</id>
-                    <name>Spring Maven Release Repository</name>
-                    <url>http://maven.springframework.org/release</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
+		<pluginManagement>
+			<plugins>
 
-                <!--                 For testing against latest Spring snapshots -->
-                <repository>
-                    <id>org.springframework.maven.snapshot</id>
-                    <name>Spring Maven Snapshot Repository</name>
-                    <url>http://maven.springframework.org/snapshot</url>
-                    <releases>
-                        <enabled>false</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${mvn.compile.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<fork>true</fork>
+						<meminitial>128m</meminitial>
+						<maxmem>512m</maxmem>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
 
-                <!--                 For developing against latest Spring milestones -->
-                <repository>
-                    <id>org.springframework.maven.milestone</id>
-                    <name>Spring Maven Milestone Repository</name>
-                    <url>http://maven.springframework.org/milestone</url>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                </repository>
+				<!-- Generate the source jar. -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${mvn.source.version}</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>package</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
 
-                <!--                 JBoss repository -->
-                <repository>
-                    <id>jboss</id>
-                    <name>JBoss repository</name>
-                    <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-                </repository>
-                <repository>
-                    <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
-                    <id>eclipselink</id>
-                    <layout>default</layout>
-                    <name>Repository for library EclipseLink (JPA 2.0)</name>
-                </repository>
-                <repository>
-                    <id>codelds</id>
-                    <url>https://code.lds.org/nexus/content/groups/main-repo</url>
-                </repository>
-                <repository>
-                    <id>ebi-repo</id>
-                    <name>ebi-repo</name>
-                    <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-                </repository>
+				</plugin>
 
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-help-plugin</artifactId>
+					<version>2.2</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>active-profiles</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 
-            </repositories>
-        </profile>
-    </profiles>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${surefire-version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${failsafe-version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${jacoco.maven.version}</version>
+					<configuration>
+						<append>true</append>
+					</configuration>
+					<executions>
+						<!-- Sets up jacaco for unit test coverage analysis (jacoco.agent.ut.arg) -->
+						<execution>
+							<id>prepare-ut-agent</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+							<configuration>
+								<destFile>${jacoco.reportPath}</destFile>
+								<propertyName>jacoco.agent.ut.arg</propertyName>
+							</configuration>
+						</execution>
+						<!-- Sets up jacaco for integration test coverage analysis (jacoco.agent.it.arg) -->
+						<execution>
+							<id>prepare-it-agent</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+							<configuration>
+								<destFile>${jacoco.itReportPath}</destFile>
+								<propertyName>jacoco.agent.it.arg</propertyName>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- This is to create an uber-jar which contains all the dependencies. -->
+				<!-- The artifact generated will have a classifier named "shade". -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>${mvn.shade.version}</version>
+					<configuration>
+						<shadedArtifactAttached>true</shadedArtifactAttached>
+						<shadedClassifierName>shade</shadedClassifierName>
+						<filters>
+							<filter>
+								<artifact>*:*</artifact>
+								<excludes>
+									<exclude>META-INF/*.SF</exclude>
+									<exclude>META-INF/*.DSA</exclude>
+									<exclude>META-INF/*.RSA</exclude>
+								</excludes>
+							</filter>
+						</filters>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>jaxb2-maven-plugin</artifactId>
+					<version>2.5.0</version>
+					<executions>
+						<execution>
+							<id>xjc</id>
+							<goals>
+								<goal>xjc</goal>
+							</goals>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>javax.activation</groupId>
+							<artifactId>javax.activation-api</artifactId>
+							<version>1.2.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.jvnet.ws.wadl</groupId>
+					<artifactId>wadl-client-plugin</artifactId>
+					<version>1.1.6</version>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>javax.xml.bind</groupId>
+							<artifactId>jaxb-api</artifactId>
+							<version>2.3.1</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<!-- Generate the source jar. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- Exclude integration tests from unit test run -->
+					<excludes>
+						<skipITs>${skipUTs}</skipITs>
+						<exclude>**/*IT.java</exclude>
+						<exclude>**/IT*.java</exclude>
+					</excludes>
+					<argLine>${jacoco.agent.ut.arg}</argLine>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<skipITs>${skipITs}</skipITs>
+					<argLine>${jacoco.agent.it.arg}</argLine>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+			</plugin>
+		</plugins>
+
+	</build>
+	<profiles>
+	
+		<profile>
+			<id>update_version</id>
+			<activation>
+				<property>
+					<name>update_version</name>
+				</property>
+			</activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>versions-maven-plugin</artifactId>
+						<version>2.7</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>use-latest-releases</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<includesList>uk.ac.ebi.uniprot</includesList>
+							<generateBackupPoms>false</generateBackupPoms>
+							<allowSnapshots>false</allowSnapshots>
+							<allowMajorUpdates>false</allowMajorUpdates>
+							<allowMinorUpdates>false</allowMinorUpdates>
+							<allowIncrementalUpdates>true</allowIncrementalUpdates>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- active when running on workstation -->
+		<profile>
+			<id>workstation</id>
+			<activation>
+				<property>
+					<name>!env.BUILD_NUMBER</name>
+				</property>
+			</activation>
+
+			<properties>
+				<production-ready-release-dir>
+					${user.home}/.maven-ujdk/${production-use-current-dir}/${project.version}/${project.artifactId}
+				</production-ready-release-dir>
+			</properties>
+
+			<distributionManagement>
+				<repository>
+					<id>local-maven-release</id>
+					<name>Local Repository</name>
+					<url>${fs-uniprot-local-url}/release</url>
+				</repository>
+				<snapshotRepository>
+					<uniqueVersion>false</uniqueVersion>
+					<id>local-maven-snapshot</id>
+					<name>Local Repository Snapshot</name>
+					<url>${fs-uniprot-local-url}/snapshot</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+
+		<!-- active via commandline -P PROFILE_NAME option -->
+		<profile>
+			<id>publish-to-current-dir</id>
+			<properties>
+				<production-use-current-dir>current
+				</production-use-current-dir>
+			</properties>
+		</profile>
+
+		<!-- activated when do release -->
+		<profile>
+			<id>publish-to-release-dir</id>
+			<properties>
+				<production-use-current-dir>release
+				</production-use-current-dir>
+			</properties>
+		</profile>
+
+		<!-- active when running on jenkins -->
+		<profile>
+			<id>jenkins</id>
+			<activation>
+				<property>
+					<name>env.BUILD_NUMBER</name>
+				</property>
+			</activation>
+
+			<properties>
+				<http.proxyHost>hx-wwwcache.ebi.ac.uk</http.proxyHost>
+				<http.proxyPort>3128</http.proxyPort>
+			</properties>
+
+			<distributionManagement>
+				<repository>
+					<id>uniprot-artifactory-deploy-release</id>
+					<name>Deploy Uniprot Maven Release</name>
+					<url>${http-uniprot-private-url}/release</url>
+				</repository>
+				<snapshotRepository>
+					<uniqueVersion>false</uniqueVersion>
+					<id>uniprot-artifactory-deploy-snapshot</id>
+					<name>Deploy Uniprot Maven Snapshot</name>
+					<url>${http-uniprot-private-url}/snapshot</url>
+				</snapshotRepository>
+			</distributionManagement>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${surefire-version}</version>
+						<configuration>
+							<systemProperties>
+								<property>
+									<name>http.proxyHost</name>
+									<value>${http.proxyHost}</value>
+								</property>
+								<property>
+									<name>http.proxyPort</name>
+									<value>${http.proxyPort}</value>
+								</property>
+							</systemProperties>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<systemProperties>
+								<property>
+									<name>http.proxyHost</name>
+									<value>${http.proxyHost}</value>
+								</property>
+								<property>
+									<name>http.proxyPort</name>
+									<value>${http.proxyPort}</value>
+								</property>
+							</systemProperties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	
+		<profile>
+			<id>release_shade</id>
+			<activation>
+				<property>
+					<name>release_shade</name>
+				</property>
+			</activation>
+
+			<build>
+				<plugins>
+
+					<!-- This is to create an uber-jar which contains all the dependencies 
+						required. -->
+					<!-- The artifact generated will have a classifier named "shade" deployed. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- copy shaded jar and run scripts to production's location -->
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>${mvn.resources.version}</version>
+						<executions>
+							<execution>
+								<id>copy-resources-bin</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${production-ready-release-dir}/bin
+									</outputDirectory>
+									<resources>
+										<!-- copy run scripts to location which can see uber jar -->
+										<resource>
+											<directory>${basedir}/src/bin</directory>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-resources-lib</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${production-ready-release-dir}/lib
+									</outputDirectory>
+									<resources>
+										<!-- copy uber jar to central lib location -->
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.artifactId}*shade.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- make the run scripts executable -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>create-prod-dirs</id>
+								<phase>install</phase>
+								<configuration>
+									<target>
+										<echo>creating release lib+bin directories</echo>
+										<mkdir dir="${production-ready-release-dir}/bin" />
+										<mkdir dir="${production-ready-release-dir}/lib" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>process-classes</id>
+								<phase>deploy</phase>
+								<configuration>
+									<target>
+										<chmod perm="755">
+											<fileset dir="${production-ready-release-dir}/bin" />
+										</chmod>
+										<exec executable="sed"
+											inputstring="${production-ready-release-dir}"
+											outputproperty="production-symlink-dir">
+											<arg
+												value="s/^\(.*\)\([0-9]\{4\}\.[0-9]\{1,2\}\)\([^\/]*\)\(.*\)/\1\2-production/" />
+											<!--<arg value="s/\([0-9]\{4\}\.[0-9]\{2\}\)\([^\/]*\)/\1-production\2/"/> -->
+										</exec>
+										<echo>${production-symlink-dir}</echo>
+										<mkdir dir="${production-symlink-dir}" />
+										<symlink link="${production-symlink-dir}"
+											resource="${production-ready-release-dir}" overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!--this profile enables deploying a shaded jar, and not copying it to 
+			production's directory (as with profile, release_shade). -->
+		<profile>
+			<id>deploy_shade</id>
+			<build>
+				<plugins>
+					<!-- This is to create an uber-jar which contains all the dependencies. -->
+					<!-- The artifact generated will have a classifier named "shade". -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
 
