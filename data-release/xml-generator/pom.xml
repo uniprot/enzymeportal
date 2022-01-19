@@ -2,12 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-<!--     <parent> -->
-<!--         <groupId>org.springframework.boot</groupId> -->
-<!--         <artifactId>spring-boot-starter-parent</artifactId> -->
-<!--         <version>2.3.4.RELEASE</version> -->
-<!--         <relativePath/> lookup parent from repository -->
-<!--     </parent> -->
     
     <parent>
         <artifactId>data-release</artifactId>
@@ -23,7 +17,7 @@
     <properties>
         <java.version>11</java.version>
         <oracle.version>12.2.0.1</oracle.version>
-        <spring.version>2.4.6</spring.version>
+        <spring.version>2.3.4.RELEASE</spring.version>
         <logback.version>1.2.7</logback.version>
     </properties>
 
@@ -46,17 +40,14 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>${oracle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
@@ -68,13 +59,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.batch</groupId>
             <artifactId>spring-batch-test</artifactId>
-             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         
@@ -93,12 +82,10 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>${spring.version}</version>
             <optional>true</optional>
         </dependency>
         
@@ -106,90 +93,20 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-             <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
         </dependency>
  
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
+
         </dependency>
     </dependencies>
 
     <build>
-<!--         <plugins> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.springframework.boot</groupId> -->
-<!--                 <artifactId>spring-boot-maven-plugin</artifactId> -->
-<!--             </plugin> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.sonarsource.scanner.maven</groupId> -->
-<!--                 <artifactId>sonar-maven-plugin</artifactId> -->
-<!--                 <version>3.6.0.1398</version> -->
-<!--             </plugin> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.jacoco</groupId> -->
-<!--                 <artifactId>jacoco-maven-plugin</artifactId> -->
-<!--                 <version>0.8.5</version> -->
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <id>prepare-agent</id> -->
-<!--                         <goals> -->
-<!--                             <goal>prepare-agent</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                     <execution> -->
-<!--                         <id>report</id> -->
-<!--                         <goals> -->
-<!--                             <goal>report</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
-<!--             </plugin> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.codehaus.mojo</groupId> -->
-<!--                 <artifactId>exec-maven-plugin</artifactId> -->
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <id>enzyme-centric-batch</id> -->
-<!--                         <goals> -->
-<!--                             <goal>java</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                             <mainClass>uk.ac.ebi.ep.xml.EnzymeCentricBatchJob</mainClass> -->
-<!--                             <arguments> -->
-<!--                                 <argument>-XX:+UseG1GC</argument> -->
-<!--                                 <argument>-Xms100M</argument> -->
-<!--                                 <argument>-Xmx100G</argument>   -->
-<!--                                 <argument>-XX:-UseGCOverheadLimit</argument>  -->
-<!--                                 <argument>-XX:+UseStringDeduplication</argument>   -->
-<!--                                 <argument>-XX:+OptimizeStringConcat</argument>                                   -->
-<!--                             </arguments> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                     <execution> -->
-<!--                         <id>protein-centric-batch</id> -->
-<!--                         <goals> -->
-<!--                             <goal>java</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                             <mainClass>uk.ac.ebi.ep.xml.ProteinCentricBatchJob</mainClass> -->
-<!--                             <arguments> -->
-<!--                                 <argument>-XX:+UseG1GC</argument> -->
-<!--                                 <argument>-Xms100M</argument> -->
-<!--                                 <argument>-Xmx100G</argument>   -->
-<!--                                 <argument>-XX:-UseGCOverheadLimit</argument>                                                                 -->
-<!--                             </arguments> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
-<!--             </plugin> -->
-<!--         </plugins> -->
     </build>
    
 </project>
