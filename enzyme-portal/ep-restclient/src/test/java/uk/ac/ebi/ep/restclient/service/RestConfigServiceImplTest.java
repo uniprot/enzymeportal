@@ -98,7 +98,7 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
                 .isEqualTo(MediaType.APPLICATION_JSON);
 
     }
-
+    @Disabled
     @Test
     public void testwebclient() {
         log.info("testwebclient");
