@@ -6,6 +6,8 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -111,7 +113,7 @@ public class RestConfigServiceImplTest extends EpRestclientApplicationTests {
                 .expectHeader().valueEquals("Content-Type", "application/json;charset=UTF-8")
                 .expectBody().jsonPath("displayName", "ChREBP activates metabolic gene expression").isNotEmpty();
     }
-
+    @Disabled
     @Test
     public void testOkhttpClient() throws Exception {
         OkHttpClient client = enzymePortalRestTemplateCustomizer.okHttpClient();

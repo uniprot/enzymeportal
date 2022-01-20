@@ -14,17 +14,6 @@
     <name>ep-http-client</name>
     <description>REST client config for the enzyme portal</description>
 
-    <properties>
-        <java.version>11</java.version>
-        <okhttp3.version>4.7.2</okhttp3.version>
-        <ebi.maven.repo.deploy.url>
-            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo
-        </ebi.maven.repo.deploy.url>
-        <ebi.maven.repo.snapshots.deploy.url>
-            scp://noah-login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
-        </ebi.maven.repo.snapshots.deploy.url>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
