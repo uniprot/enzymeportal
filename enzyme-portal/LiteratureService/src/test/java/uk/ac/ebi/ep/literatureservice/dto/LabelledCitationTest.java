@@ -110,7 +110,7 @@ public class LabelledCitationTest {
 
         int compare = citation.compareTo(other);
 
-        assertEquals(-3, compare);
+        assertEquals(-1, compare);
 
     }
 

@@ -66,7 +66,7 @@ public class LiteratureServiceTest {
                 .filter(x -> x.getLabels().contains(CitationLabel.DISEASES))
                 .collect(Collectors.toList());
 
-        assertThat(hasDisease, hasSize(greaterThan(1)));
+        assertThat(hasDisease, hasSize(greaterThan(0)));
 
     }
 
