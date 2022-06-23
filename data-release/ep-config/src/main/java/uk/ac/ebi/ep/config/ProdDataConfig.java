@@ -24,8 +24,15 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
     @Bean
     @Override
     public DataSource dataSource() {
-        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
-                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+    	String serviceName = env.getRequiredProperty("ep.db.serviceName");
+    	String instance = env.getRequiredProperty("ep.db.instance");
+    	String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), instance);
+    	if((serviceName !=null) && !serviceName.isEmpty()){
+    		url = String.format("jdbc:oracle:thin:@//%s:%s/%s",
+                    env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), serviceName);
+    	}
+        
 
         String user = env.getRequiredProperty("ep.db.username");
         String password = env.getRequiredProperty("ep.db.password");

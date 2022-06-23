@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -172,6 +172,19 @@ public class DataAnalyzerTest {
         List<EnzymeSpExpEvidence> result = instance.combine(part1, part2, allowDuplicate);
         assertEquals(expResult, result);
 
+    }
+    void testDownAccession() {
+    	String url = "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_function%3AECO_0000269%29";
+    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28%28cc_cofactor_chebi%3A%2A%29%20AND%20%28ccev_cofactor_chebi%3Aexperimental%29%29%20AND%20%28reviewed%3Atrue%29";
+    	url= "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_activity_regulation%3AECO_0000269%29";
+    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_catalytic_activity%3AECO_0000269%29";
+    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_bpcp%3AECO_0000269%29";
+    	List<String>  result =instance.downloadAccessionList(url);
+    	assertNotNull(result);
+    	assertFalse(result.isEmpty());
+    	System.out.println(result.size());
+    	System.out.println(result.get(0));
+    	
     }
 
 }

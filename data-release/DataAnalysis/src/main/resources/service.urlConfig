@@ -1,5 +1,12 @@
-service.url.function=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Afunction+evidence%3AECO_0000269%29&sort=score&format=list
-service.url.cofactor=https://www.uniprot.org/uniprot/?query=cofactor%3A(chebi%3A*%20evidence%3AECO_0000269)%20AND%20reviewed%3Ayes&sort=score&columns=id&format=list
-service.url.regulation=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22enzyme+regulation%22+evidence%3AECO_0000269%29&sort=score&format=list
-service.url.activity=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22catalytic+activity%22+evidence%3AECO_0000269%29&sort=score&format=list
-service.url.biophysio=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Abiophysicochemical_properties+evidence%3AECO_0000269%29&sort=score&format=list
+#service.url.function=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Afunction+evidence%3AECO_0000269%29&sort=score&format=list
+#service.url.cofactor=https://www.uniprot.org/uniprot/?query=cofactor%3A(chebi%3A*%20evidence%3AECO_0000269)%20AND%20reviewed%3Ayes&sort=score&columns=id&format=list
+#service.url.regulation=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22enzyme+regulation%22+evidence%3AECO_0000269%29&sort=score&format=list
+#service.url.activity=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3A%22catalytic+activity%22+evidence%3AECO_0000269%29&sort=score&format=list
+#service.url.biophysio=https://www.uniprot.org/uniprot/?query=annotation%3A%28type%3Abiophysicochemical_properties+evidence%3AECO_0000269%29&sort=score&format=list
+
+
+service.url.function=https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_function%3AECO_0000269%29
+service.url.cofactor=https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28%28cc_cofactor_chebi%3A%2A%29%20AND%20%28ccev_cofactor_chebi%3Aexperimental%29%29%20AND%20%28reviewed%3Atrue%29
+service.url.regulation=https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_activity_regulation%3AECO_0000269%29
+service.url.activity=https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_catalytic_activity%3AECO_0000269%29
+service.url.biophysio=https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_bpcp%3AECO_0000269%29

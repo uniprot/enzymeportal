@@ -23,6 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <httpasyncclient.version>4.1.5</httpasyncclient.version>
+         <httpclient.version>4.5.13</httpclient.version>
     </properties>
     
     <name>centralService</name>
@@ -50,109 +52,58 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
             <scope>provided</scope>
+             <version>1.18.10</version>
 <!--            <optional>true</optional>-->
         </dependency>
+        
+        
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-                         <version>3.9</version>
+            <version>3.11</version>
+        </dependency>
+       
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId> commons-io</artifactId>
+            <version> 2.6</version>
         </dependency>
         
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-                         <version>2.5</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-                         <version>4.1.4</version>
+            <version>${httpasyncclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-                         <version>4.5.8</version>
+            <artifactId>httpclient</artifactId>  
+             <version>${httpclient.version}</version>            
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.2.5.RELEASE</version>
+             <version>${springframework.version}</version>
         </dependency>
-        <!--
         
+        <dependency>
+			<groupId>uk.ac.ebi.biobabel</groupId>
+			<artifactId>biobabel-db</artifactId>
+			<version>1.3.7</version>
+		</dependency>
 
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-                         <version>1.2.17</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-                         <version>1.7.25</version>
-        </dependency> 
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-                     <version>1.7.25</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <type>jar</type>
-            <scope>compile</scope>
-                        <version>1.7.25</version>
-        </dependency>
- 
-
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <exclusions>
-                 Exclude Commons Logging in favor of SLF4j 
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>  
-        
-        
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-                         <version>2.8.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-                          <version>2.8.9</version>
-        </dependency>-->
 
         
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
-            <scope>test</scope>
-                         <version>1.3</version>
+            <scope>test</scope>  
         </dependency>
          
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-                         <version>4.12</version>
             <exclusions>
                 <exclusion>
                     <artifactId>hamcrest-core</artifactId>
@@ -160,12 +111,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
-                         <version>1.10.19</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

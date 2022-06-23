@@ -53,7 +53,7 @@ public class DataAnalyzer {
      * @param file resource location (https://www.uniprot.org/uniprot/)
      * @return evidences
      */
-    private List<String> downloadAccessionList(String file) {
+     List<String> downloadAccessionList(String file) {
 
         List<String> accessionList = new CopyOnWriteArrayList<>();
 

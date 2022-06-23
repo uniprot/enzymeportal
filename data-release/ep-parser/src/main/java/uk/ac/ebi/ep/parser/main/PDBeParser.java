@@ -39,6 +39,7 @@ public class PDBeParser {
             EnzymePortalPDBeParser pdbParser = context.getBean(EnzymePortalPDBeParser.class);
 
             pdbParser.updatePDBeData();
+            System.out.println("PDB Parser is done");
         }
 
     }

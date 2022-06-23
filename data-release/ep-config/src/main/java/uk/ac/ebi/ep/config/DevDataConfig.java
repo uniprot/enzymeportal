@@ -24,9 +24,14 @@ public class DevDataConfig extends AbstractConfig {
     @Bean
     @Override
     public DataSource dataSource() {
+    	String serviceName = env.getRequiredProperty("ep.db.serviceName");
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
+        if((serviceName !=null) && !serviceName.isEmpty()){
+    		url = String.format("jdbc:oracle:thin:@//%s:%s/%s",
+                    env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), serviceName);
+    	}
         String user = env.getRequiredProperty("ep.db.username");
         String password = env.getRequiredProperty("ep.db.password");
 

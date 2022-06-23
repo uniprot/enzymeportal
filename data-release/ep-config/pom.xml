@@ -24,7 +24,11 @@
 
     <dependencies>
         
-
+ 		<dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+           <version>${oracle.version}</version>      
+        </dependency>
         
         <dependency>
             <groupId>log4j</groupId>
@@ -56,35 +60,6 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
- 
-        <!--spring data rest-->
-<!--        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-rest-webmvc</artifactId>
-            <version>3.1.6.RELEASE</version>
-        </dependency>-->
-
-        <!-- Support for Ehcache and others -->
-<!--        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            		<version>4.1.4.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <exclusions>
- 
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-        </dependency>-->
          
         <!--    spring data jpa-->
         <dependency>
@@ -120,29 +95,8 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.4.2.Final</version>
         </dependency>
-        
-<!--        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
-        </dependency>-->
-        
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version> ${oracle.version}</version>
-           
-        </dependency>
-      
-        <!--        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-        </dependency>-->
+       
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
