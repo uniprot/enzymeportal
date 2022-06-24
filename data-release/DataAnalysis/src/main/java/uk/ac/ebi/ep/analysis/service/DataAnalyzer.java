@@ -255,7 +255,7 @@ public class DataAnalyzer {
      * @return enzymes with evidence tags
      */
     private List<EnzymeSpExpEvidence> tagEvidences(String url, String evidenceType, List<String> enzymes) {
-
+    	logger.info(url);
         List<String> accessions = downloadAccessionList(url);
         return splitOperation(accessions, evidenceType, enzymes);
 
@@ -307,7 +307,7 @@ public class DataAnalyzer {
                 .supplyAsync(() -> tagEvidences(serviceUrl.getActivityUrl(), EvidenceType.CATALYTIC_ACTIVITY.getEvidenceName(), enzymes));
 
         CompletableFuture<List<EnzymeSpExpEvidence>> regulationFuture = CompletableFuture
-                .supplyAsync(() -> tagEvidences(serviceUrl.getRegulationUrl(), EvidenceType.ENZYME_REGULATION.getEvidenceName(), enzymes));
+                .supplyAsync(() -> tagEvidences(serviceUrl.getRegulationUrl(), EvidenceType.ACTIVITY_REGULATION.getEvidenceName(), enzymes));
 
         CompletableFuture<List<EnzymeSpExpEvidence>> biophysioFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getBioPhysioUrl(), EvidenceType.BIOPHYSICOCHEMICAL_PROPERTIES.getEvidenceName(), enzymes));

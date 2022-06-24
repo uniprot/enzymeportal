@@ -173,17 +173,21 @@ public class DataAnalyzerTest {
         assertEquals(expResult, result);
 
     }
-    void testDownAccession() {
-    	String url = "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_function%3AECO_0000269%29";
-    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28%28cc_cofactor_chebi%3A%2A%29%20AND%20%28ccev_cofactor_chebi%3Aexperimental%29%29%20AND%20%28reviewed%3Atrue%29";
-    	url= "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_activity_regulation%3AECO_0000269%29";
-    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_catalytic_activity%3AECO_0000269%29";
-    	url ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_bpcp%3AECO_0000269%29";
+    @Test
+    public void testDownAccession() {
+    	String url1 = "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_function%3AECO_0000269%29";
+    	String url2 ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28%28cc_cofactor_chebi%3A%2A%29%20AND%20%28ccev_cofactor_chebi%3Aexperimental%29%29%20AND%20%28reviewed%3Atrue%29";
+    	String url3= "https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_activity_regulation%3AECO_0000269%29";
+    	String url4 ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_catalytic_activity%3AECO_0000269%29";
+    	String url5 ="https://rest.uniprot.org/uniprotkb/stream?format=list&query=%28ccev_bpcp%3AECO_0000269%29";
+    	List<String> urls = List.of(url1, url2, url3,url4, url5);
+    	for(String url:urls) {
     	List<String>  result =instance.downloadAccessionList(url);
     	assertNotNull(result);
     	assertFalse(result.isEmpty());
     	System.out.println(result.size());
     	System.out.println(result.get(0));
+    	}
     	
     }
 
