@@ -22,14 +22,25 @@
 	</properties>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+		  <resources>
+            <resource>
+                <directory>${ep.config.dir}</directory>
+                <includes>
 
+          
+                    <include>ep-db-uzprel.properties</include>
+                    <include>ep-db-uzpdev.properties</include>
+                    <include>ep-db-${ep.db.config}.properties</include>
 
-		</plugins>
+                    <include>ep-web-client.properties</include>
+                    <include>chembl-adapter.properties</include>
+                    <include>ep-xml-config.properties</include>
+                    <include>sitemapProp.properties</include>
+               
+                   
+                </includes>
+            </resource>
+        </resources>
 
 	</build>
 	<dependencies>
