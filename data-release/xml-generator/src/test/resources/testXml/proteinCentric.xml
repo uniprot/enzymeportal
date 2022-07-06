@@ -1,75 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database><name>Enzyme Portal</name><description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description><release>2020_10</release><release_date>19-May-2021</release_date><entry_count>3</entry_count><entries>
-    <entry id="E9JFE1">
-      <name>Probable aldo-keto reductase 2</name>
-      <description>Probable aldo-keto reductase 2</description>
+<database><name>Enzyme Portal</name><description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description><release>2020_10</release><release_date>24-Jun-2022</release_date><entry_count>1</entry_count><entries>
+    <entry id="EGN48C">
+      <name>Aminoglycoside 3-N-acetyltransferase I</name>
+      <description>Aminoglycoside 3-N-acetyltransferase I</description>
       <additional_fields>
-        <field name="entry_type">0</field>
-        <field name="common_name">Mouse-ear cress</field>
-        <field name="protein_family_id">FUQCAT</field>
-        <field name="with_taxonomy">3702;Q84M96;Mouse-ear cress;0</field>
-        <field name="scientific_name">Arabidopsis thaliana</field>
-        <field name="group_accession">Q84M96</field>
-        <field name="protein_family_id">FN4RAH</field>
-        <field name="with_protein_family">FN4RAH;Q84M96;Mouse-ear cress;0</field>
-        <field name="related_species">Q84M96;Mouse-ear cress;Arabidopsis thaliana;0;3702</field>
-        <field name="enzyme_family">Oxidoreductases</field>
-        <field name="with_protein_family">FUQCAT;Q7XT99;Rice;0</field>
-        <field name="primary_organism">primary_Mouse-ear cress</field>
-        <field name="primary_ec">primary_1.1.1.-</field>
-        <field name="with_protein_family">FUQCAT;A2XRZ0;Rice;0</field>
-        <field name="primary_accession">primary_Q84M96</field>
-        <field name="gene_name">AGD2</field>
-        <field name="ec">1.1.1.-</field>
-      </additional_fields>
-      <cross_references>
-        <ref dbkey="1.1.1.-" dbname="INTENZ"></ref>
-        <ref dbkey="FUQCAT" dbname="PROTEIN_FAMILY"></ref>
-        <ref dbkey="3702" dbname="TAXONOMY"></ref>
-        <ref dbkey="Q84M96" dbname="UNIPROTKB"></ref>
-        <ref dbkey="FN4RAH" dbname="PROTEIN_FAMILY"></ref>
-      </cross_references>
-    </entry>
-    <entry id="ETP4O8">
-      <name>Putative cyclopropane-fatty-acyl-phospholipid synthase (Cfa-like)</name>
-      <description>Putative cyclopropane-fatty-acyl-phospholipid synthase (Cfa-like)</description>
-      <additional_fields>
-        <field name="group_accession">A0A085FG10</field>
+        <field name="ec">2.3.1.60</field>
         <field name="enzyme_family">Transferases</field>
-        <field name="related_species">A0A085FG10;Bosea sp. LC85;Bosea sp. LC85;0;1502851</field>
         <field name="entry_type">1</field>
-        <field name="primary_accession">primary_A0A085FG10</field>
-        <field name="with_taxonomy">1502851;A0A085FG10;Bosea sp. LC85;1</field>
-        <field name="primary_ec">primary_2.1.1.79</field>
-        <field name="primary_organism">primary_Bosea sp. LC85</field>
-        <field name="scientific_name">Bosea sp. LC85</field>
-        <field name="ec">2.1.1.79</field>
+        <field name="primary_accession">primary_A0A1P8F861</field>
+        <field name="scientific_name">Dehalogenimonas formicexedens</field>
+        <field name="group_accession">A0A1P8F861</field>
+        <field name="with_taxonomy">1839801;A0A1P8F861;Dehalogenimonas formicexedens;1</field>
+        <field name="related_species">A0A1P8F861;Dehalogenimonas formicexedens;Dehalogenimonas formicexedens;0;1839801</field>
+        <field name="primary_ec">primary_2.3.1.60</field>
+        <field name="gene_name">aac3-I</field>
+        <field name="synonym">N-acetyltransferase domain-containing protein</field>
+        <field name="primary_organism">primary_Dehalogenimonas formicexedens</field>
       </additional_fields>
       <cross_references>
-        <ref dbkey="2.1.1.79" dbname="INTENZ"></ref>
-        <ref dbkey="1502851" dbname="TAXONOMY"></ref>
-        <ref dbkey="A0A085FG10" dbname="UNIPROTKB"></ref>
-      </cross_references>
-    </entry>
-    <entry id="EDUDK7">
-      <name>Putative phosphomannomutase AlgC</name>
-      <description>Putative phosphomannomutase AlgC</description>
-      <additional_fields>
-        <field name="enzyme_family">Isomerases</field>
-        <field name="ec">5.4.2.8</field>
-        <field name="entry_type">1</field>
-        <field name="gene_name">algC</field>
-        <field name="primary_accession">primary_A0A085FHI2</field>
-        <field name="group_accession">A0A085FHI2</field>
-        <field name="related_species">A0A085FHI2;Bosea sp. LC85;Bosea sp. LC85;0;1502851</field>
-        <field name="primary_organism">primary_Bosea sp. LC85</field>
-        <field name="with_taxonomy">1502851;A0A085FHI2;Bosea sp. LC85;1</field>
-        <field name="primary_ec">primary_5.4.2.8</field>
-        <field name="scientific_name">Bosea sp. LC85</field>
-      </additional_fields>
-      <cross_references>
-        <ref dbkey="1502851" dbname="TAXONOMY"></ref>
-        <ref dbkey="A0A085FHI2" dbname="UNIPROTKB"></ref>
-        <ref dbkey="5.4.2.8" dbname="INTENZ"></ref>
+        <ref dbkey="2.3.1.60" dbname="INTENZ"></ref>
+        <ref dbkey="1839801" dbname="TAXONOMY"></ref>
+        <ref dbkey="A0A1P8F861" dbname="UNIPROTKB"></ref>
       </cross_references>
     </entry></entries></database>

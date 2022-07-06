@@ -54,6 +54,7 @@ public class RheaReaction {
     }
 
     private void loadRheaReaction(String rheaId, String uniprotAccession) {
+    	log.info("load rhea reaction: " + rheaId);
         String url = "https://www.rhea-db.org/reaction?id=" + rheaId;
         enzymePortalParserService.addRheaReaction(rheaId, rheaId, RHEA_XREF, null, uniprotAccession, url, null);
     }

@@ -111,6 +111,13 @@ public class EnzymePortalParserService {
         enzymePortalChebiCompoundRepository.createUniqueChebiCompound(chebiId, chebiName, synonyms, relationship, url, role, note);
 
     }
+    
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    public void deleteUniqueChebiCompound(String chebiId) {
+        enzymePortalChebiCompoundRepository.deleteCompound(chebiId);
+
+    }
 
     @Modifying(clearAutomatically = true)
     @Transactional(readOnly = false)

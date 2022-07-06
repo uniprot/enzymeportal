@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.parser.parsers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import uk.ac.ebi.ep.metaboliteService.service.MetabolightService;
 import uk.ac.ebi.ep.model.ChebiCompound;
 import uk.ac.ebi.ep.model.dao.Compound;
 import uk.ac.ebi.ep.model.dao.MetaboliteView;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
@@ -33,10 +36,16 @@ public class ChebiCompounds extends ChebiCofactors {
 
     private final EnzymeReactionInfoRepository enzymeReactionInfoRepository;
 
-    public ChebiCompounds(MetabolightService metabolightService, ChebiService chebiService, EnzymeReactionInfoRepository enzymeReactionInfoRepository, EnzymePortalParserService enzymePortalParserService) {
+    private final EnzymePortalChebiCompoundRepository chebiCompoundRepository;
+    
+    public ChebiCompounds(MetabolightService metabolightService, ChebiService chebiService,
+    		EnzymeReactionInfoRepository enzymeReactionInfoRepository,
+    		EnzymePortalParserService enzymePortalParserService,
+    		 EnzymePortalChebiCompoundRepository chebiCompoundRepository) {
         super(enzymePortalParserService, chebiService);
         this.metabolightService = metabolightService;
         this.enzymeReactionInfoRepository = enzymeReactionInfoRepository;
+        this.chebiCompoundRepository = chebiCompoundRepository;
     }
 
     public void loadUniqueMetabolitesToDatabase() {
@@ -53,7 +62,7 @@ public class ChebiCompounds extends ChebiCofactors {
         enzymePortalParserService.createMetabolite(metabolite.getCompoundId(), metabolite.getCompoundName(), url);
     }
 
-    private void processChebiIdInReactionInfo(String chebi, AtomicInteger counter) {
+    private void processChebiIdInReactionInfo(String chebi, AtomicInteger counter, Set<String> compoundIds) {
         log.debug("Processing CHEBI ID : " + chebi + " Num processed so far : " + counter.getAndIncrement());
 
         ChebiCompound chebiCompound = findChebiCompoundById(chebi);
@@ -94,6 +103,9 @@ public class ChebiCompounds extends ChebiCofactors {
         }
 
         if (Objects.nonNull(chebiId) && !StringUtils.isEmpty(chebiName) && !blackList.contains(chebiName)) {
+        	if(compoundIds.contains(chebiId)) {
+        		enzymePortalParserService.deleteUniqueChebiCompound(chebiId);
+        	}
             enzymePortalParserService.createUniqueChebiCompound(chebiId, chebiName, synonyms, relationship, url, role, note);
         }
 
@@ -107,12 +119,13 @@ public class ChebiCompounds extends ChebiCofactors {
         long total = enzymeReactionInfoRepository.countUniqueChebiIds();
 
         log.info("About to start streaming and processing " + total + " CHEBI entries.");
-
+        List<String> compoundIds = chebiCompoundRepository.getAllCompoundIDs();
+        Set<String> compoundIdsSet = new HashSet<>(compoundIds);
         try (Stream<String> chebiIds = enzymeReactionInfoRepository.streamUniqueChebiIds()) {
 
             chebiIds
                     .parallel()
-                    .forEach(chebiId -> processChebiIdInReactionInfo(chebiId, counter));
+                    .forEach(chebiId -> processChebiIdInReactionInfo(chebiId, counter, compoundIdsSet));
 
         }
 

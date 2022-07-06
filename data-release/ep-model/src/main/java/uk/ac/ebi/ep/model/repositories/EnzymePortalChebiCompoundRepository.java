@@ -1,9 +1,13 @@
 package uk.ac.ebi.ep.model.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
 import uk.ac.ebi.ep.model.EnzymePortalChebiCompound;
 
 /**
@@ -33,5 +37,13 @@ public interface EnzymePortalChebiCompoundRepository extends JpaRepository<Enzym
 
     @Query(value = "SELECT count( compound_id) from unique_chebi_compound", nativeQuery = true)
     long countUniqueChebiIds();
+    
+    @Query(value = "SELECT COMPOUND_ID FROM UNIQUE_CHEBI_COMPOUND", nativeQuery = true)
+    List<String> getAllCompoundIDs();
+    
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = false)
+    @Query(value = "DELETE FROM UNIQUE_CHEBI_COMPOUND WHERE COMPOUND_ID = :COMPOUND_ID", nativeQuery = true)
+    void deleteCompound(@Param("COMPOUND_ID") String  compoundId) ;
 
 }

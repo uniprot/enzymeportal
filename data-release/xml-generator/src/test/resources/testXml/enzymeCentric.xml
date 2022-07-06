@@ -3,33 +3,34 @@
   <name>Enzyme Portal</name>
   <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>
   <release>2020_10</release>
-  <release_date>19-May-2021</release_date>
+  <release_date>24-Jun-2022</release_date>
   <entry_count>1</entry_count>
   <entries>
     <entry id="2.1.1.1">
       <name>Nicotinamide N-methyltransferase</name>
       <description>2.1.1.1 Nicotinamide N-methyltransferase</description>
       <additional_fields>
+        <field name="chebi_synonyms">2-phytylnaphthalene-1,4-diol</field>
         <field name="scientific_name">Roseobacter denitrificans (strain ATCC 33942 / OCh 114)</field>
         <field name="chebi_synonyms">Vitamin pp</field>
         <field name="metabolite">MTBLC36264</field>
         <field name="scientific_name">Prochlorococcus marinus (strain MIT 9211)</field>
+        <field name="chebi_id">CHEBI:87844</field>
         <field name="chebi_synonyms">Moco (dioxyo)</field>
-        <field name="chebi_id">CHEBI:18420</field>
         <field name="common_name">Mouse</field>
+        <field name="chebi_id">CHEBI:18420</field>
         <field name="gene_name">8028005</field>
         <field name="chebi_synonyms">Amp(2-)</field>
         <field name="chebi_synonyms">Beta-pyridinecarboxamide</field>
-        <field name="compound_name">adenylyl-molybdopterin</field>
         <field name="gene_name">NNT1_1</field>
         <field name="common_name">Black-legged tick</field>
+        <field name="compound_name">adenylyl-molybdopterin</field>
         <field name="gene_name">NNT1_2</field>
         <field name="common_name">Red alga</field>
         <field name="chebi_synonyms">Adenosine-5-monophosphate dianion</field>
         <field name="catalytic_activity">mide + S-adenosyl-L-methionine = 1-methylnicotinamide + S-adenosyl-L-homocysteine</field>
         <field name="gene_name">menG</field>
         <field name="chebi_synonyms">Trigonellinamide</field>
-        <field name="protein_name">Mg-por_mtran_C domain-containing protein</field>
         <field name="chebi_synonyms">Nikotinsaeureamid</field>
         <field name="rheaid">rhea23884</field>
         <field name="rhea_id">RHEA:35047</field>
@@ -38,6 +39,7 @@
         <field name="chebi_synonyms">Niacin</field>
         <field name="chebi_synonyms">Mpt-amp(3-)</field>
         <field name="metabolite">MTBLC59789</field>
+        <field name="scientific_name">Chrysosporum ovalisporum</field>
         <field name="scientific_name">Malassezia restricta CBS 7877</field>
         <field name="chebi_id">CHEBI:36264</field>
         <field name="scientific_name">Sus scrofa</field>
@@ -49,18 +51,21 @@
         <field name="chebiid">chebi17154</field>
         <field name="chebi_synonyms">Nikotinamid</field>
         <field name="compound_name">Mo-molybdopterin</field>
+        <field name="rheaid">rhea40551</field>
         <field name="protein_name">Molybdopterin molybdenumtransferase</field>
-        <field name="chebiid">chebi55437</field>
+        <field name="common_name">Sea mussel</field>
         <field name="chebiid">chebi57856</field>
+        <field name="chebiid">chebi55437</field>
         <field name="metabolite">MTBLC71302</field>
         <field name="chebi_synonyms">Nicotinsaeureamid</field>
         <field name="chebi_synonyms">3-(aminocarbonyl)-1-methylpyridinium</field>
         <field name="chebi_id">CHEBI:17154</field>
-        <field name="scientific_name">Candida dubliniensis (strain CD36 / ATCC MYA-646 / CBS 7987 / NCPF 3949 / NRRL Y-17841)</field>
         <field name="compound_name">molybdate</field>
+        <field name="scientific_name">Candida dubliniensis (strain CD36 / ATCC MYA-646 / CBS 7987 / NCPF 3949 / NRRL Y-17841)</field>
         <field name="compound_name">1-methylnicotinamide</field>
         <field name="chebi_synonyms">Nicotinamid</field>
         <field name="chebi_synonyms">Nicotinic acid amide</field>
+        <field name="chebiid">chebi87844</field>
         <field name="cofactor">cofactor18420</field>
         <field name="chebi_id">CHEBI:62727</field>
         <field name="protein_family_name">class I-like SAM-binding methyltransferase superfamily. EFM7 family</field>
@@ -69,40 +74,47 @@
         <field name="chebiid">chebi18151</field>
         <field name="scientific_name">uncultured marine bacterium 581</field>
         <field name="gene_name">chlM</field>
+        <field name="compound_name">phylloquinol</field>
         <field name="scientific_name">Galdieria sulphuraria</field>
-        <field name="synonym">Putative nicotinamide N-methyltransferase</field>
+        <field name="protein_name">2-phytyl-1,4-naphtoquinone methyltransferase</field>
+        <field name="protein_name">Putative nicotinamide N-methyltransferase</field>
         <field name="metabolite">MTBLC16797</field>
         <field name="gene_name">Nnmt</field>
-        <field name="synonym">Nicotinamide N-methyltransferase, putative</field>
         <field name="common_name">Pig</field>
+        <field name="protein_name">Nicotinamide N-methyltransferase, putative</field>
+        <field name="chebi_synonyms">Phytonadiol</field>
         <field name="chebi_synonyms">Adenosine-5-monophosphate(2-)</field>
+        <field name="compound_name">demethylphylloquinol</field>
         <field name="rhea_id">RHEA:42640</field>
         <field name="protein_name">Protein N-terminal and lysine N-methyltransferase EFM7</field>
         <field name="chebi_synonyms">Molybdate ion</field>
+        <field name="chebi_id">CHEBI:28433</field>
         <field name="chebi_synonyms">Niacinamide</field>
+        <field name="chebi_synonyms">Vitamin k1 hydroquinone</field>
         <field name="synonym">Nicotinamide N-methyltransferase Nnt1, putative</field>
         <field name="chebi_id">CHEBI:59789</field>
         <field name="rhea_id">RHEA-COMP:9539</field>
-        <field name="reactant">a 2-demethylmenaquinol</field>
+        <field name="compound_name">a 2-demethylmenaquinol</field>
         <field name="chebi_synonyms">Reduced menaquinone</field>
-        <field name="gene_name">NNMT</field>
+        <field name="protein_name">NNMT</field>
         <field name="chebiid">chebi62727</field>
         <field name="protein_family_id">FKNBBR</field>
         <field name="chebi_id">CHEBI:456215</field>
-        <field name="chebi_synonyms">Menaquinol</field>
+        <field name="rhea_id">RHEA:40551</field>
         <field name="scientific_name">Prochlorococcus marinus (strain AS9601)</field>
+        <field name="chebi_synonyms">Menaquinol</field>
         <field name="rheaid">rhea42640</field>
-        <field name="chebi_synonyms">2-demethylmenaquinols</field>
         <field name="protein_name">Nicotinamide n-methyltransferase</field>
+        <field name="chebi_synonyms">2-demethylmenaquinols</field>
         <field name="scientific_name">Aneurinibacillus migulanus</field>
         <field name="compound_name">AMP</field>
         <field name="scientific_name">Prochlorococcus marinus (strain NATL1A)</field>
         <field name="synonym">Elongation factor methyltransferase 7</field>
         <field name="protein_family_id">FTYDMI</field>
-        <field name="compound_name">a menaquinol</field>
         <field name="chebiid">chebi16797</field>
-        <field name="protein_name">Demethylmenaquinone methyltransferase</field>
+        <field name="reactant">a menaquinol</field>
         <field name="rhea_id">RHEA:23884</field>
+        <field name="protein_name">Demethylmenaquinone methyltransferase</field>
         <field name="chebi_synonyms">Molybdenum cofactor</field>
         <field name="chebi_id">CHEBI:16797</field>
         <field name="scientific_name">Prochlorococcus marinus (strain MIT 9301)</field>
@@ -115,25 +127,27 @@
         <field name="protein_family_name">class I-like SAM-binding methyltransferase superfamily. MenG/UbiE family</field>
         <field name="scientific_name">Prochlorococcus marinus (strain MIT 9515)</field>
         <field name="compound_name">nicotinamide</field>
-        <field name="synonym">Mg-protoporphyrin IX methyltransferase</field>
+        <field name="protein_name">Mg-protoporphyrin IX methyltransferase</field>
         <field name="protein_family_id">FMIIA3</field>
         <field name="metabolite">MTBLC57856</field>
         <field name="metabolite">MTBLC17154</field>
+        <field name="protein_name">Magnesium-protoporphyrin O-methyltransferase</field>
         <field name="gene_name">moeA</field>
         <field name="chebi_synonyms">Adenylated molybdopterin(3-)</field>
-        <field name="synonym">Magnesium-protoporphyrin O-methyltransferase</field>
-        <field name="chebiid">chebi71302</field>
         <field name="scientific_name">Ichthyophthirius multifiliis (strain G5)</field>
+        <field name="chebiid">chebi71302</field>
         <field name="scientific_name">Ogataea parapolymorpha (strain ATCC 26012 / BCRC 20466 / JCM 22074 / NRRL Y-7560 / DL-1)</field>
         <field name="scientific_name">Ixodes scapularis</field>
         <field name="rheaid">rhea35047</field>
+        <field name="scientific_name">Mytilus coruscus</field>
         <field name="chebi_synonyms">3-pyridinecarboxamide</field>
+        <field name="chebiid">chebi28433</field>
         <field name="enzyme_family">Transferases</field>
         <field name="chebiid">chebi456215</field>
         <field name="common_name">Yeast</field>
         <field name="protein_family_id">F37VB4</field>
-        <field name="chebi_id">CHEBI:55437</field>
         <field name="chebi_id">CHEBI:57856</field>
+        <field name="chebi_id">CHEBI:55437</field>
         <field name="common_name">Human</field>
         <field name="chebiid">chebi36264</field>
         <field name="chebi_synonyms">Amp dianion</field>
@@ -143,6 +157,7 @@
         <field name="scientific_name">Wickerhamomyces ciferrii (strain F-60-10 / ATCC 14091 / CBS 111 / JCM 3599 / NBRC 0793 / NRRL Y-1031)</field>
         <field name="metabolite">MTBLC456215</field>
         <field name="chebi_synonyms">Adenylyl-molybdopterin(3-)</field>
+        <field name="synonym">Demethylphylloquinone methyltransferase</field>
         <field name="chebi_id">CHEBI:18151</field>
         <field name="protein_name">S-adenosylmethionine-dependent methyltransferase, putative</field>
         <field name="chebi_synonyms">1-methylnicotinamide cation</field>
@@ -153,6 +168,7 @@
         <field name="chebi_synonyms">Vitamin k2 hydroquinone</field>
         <field name="scientific_name">endosymbiont of Bathymodiolus septemdierum str. Myojin knoll</field>
         <field name="scientific_name">Ceratocystis fimbriata f. sp. platani</field>
+        <field name="chebi_synonyms">Vitamin k hydroquinone</field>
         <field name="scientific_name">Prochlorococcus marinus (strain MIT 9303)</field>
         <field name="compound_name">S-adenosyl-L-homocysteine</field>
         <field name="gene_name">bchM</field>
@@ -164,6 +180,7 @@
         <field name="chebi_synonyms">Moo2(oh)dtpp-mp</field>
       </additional_fields>
       <cross_references>
+        <ref dbkey="A0A654SFC0" dbname="UNIPROTKB"></ref>
         <ref dbkey="Q06AV1" dbname="UNIPROTKB"></ref>
         <ref dbkey="O55239" dbname="UNIPROTKB"></ref>
         <ref dbkey="M2X6A7" dbname="UNIPROTKB"></ref>
@@ -173,10 +190,11 @@
         <ref dbkey="CHEBI:36264" dbname="CHEBI"></ref>
         <ref dbkey="MTBLC17154" dbname="METABOLIGHTS"></ref>
         <ref dbkey="FMIIA3" dbname="PROTEIN_FAMILY"></ref>
+        <ref dbkey="CHEBI:28433" dbname="CHEBI"></ref>
         <ref dbkey="W1Q8E0" dbname="UNIPROTKB"></ref>
+        <ref dbkey="K0KWT0" dbname="UNIPROTKB"></ref>
         <ref dbkey="P40261" dbname="UNIPROTKB"></ref>
         <ref dbkey="A2BZZ7" dbname="UNIPROTKB"></ref>
-        <ref dbkey="K0KWT0" dbname="UNIPROTKB"></ref>
         <ref dbkey="MTBLC57856" dbname="METABOLIGHTS"></ref>
         <ref dbkey="P34254" dbname="UNIPROTKB"></ref>
         <ref dbkey="R-209905" dbname="REACTOME"></ref>
@@ -192,14 +210,15 @@
         <ref dbkey="A2CD85" dbname="UNIPROTKB"></ref>
         <ref dbkey="R-2408508" dbname="REACTOME"></ref>
         <ref dbkey="88771" dbname="TAXONOMY"></ref>
-        <ref dbkey="A0A3G2SA94" dbname="UNIPROTKB"></ref>
         <ref dbkey="9606" dbname="TAXONOMY"></ref>
+        <ref dbkey="A0A3G2SA94" dbname="UNIPROTKB"></ref>
         <ref dbkey="F37VB4" dbname="PROTEIN_FAMILY"></ref>
         <ref dbkey="A2BUE5" dbname="UNIPROTKB"></ref>
+        <ref dbkey="A0A6J8DFR9" dbname="UNIPROTKB"></ref>
         <ref dbkey="2.1.1.1" dbname="INTENZ"></ref>
         <ref dbkey="441959" dbname="TAXONOMY"></ref>
-        <ref dbkey="MTBLC16797" dbname="METABOLIGHTS"></ref>
         <ref dbkey="B8M570" dbname="UNIPROTKB"></ref>
+        <ref dbkey="MTBLC16797" dbname="METABOLIGHTS"></ref>
         <ref dbkey="FTYDMI" dbname="PROTEIN_FAMILY"></ref>
         <ref dbkey="MTBLC456215" dbname="METABOLIGHTS"></ref>
         <ref dbkey="A0A3G2SBI7" dbname="UNIPROTKB"></ref>
@@ -210,11 +229,11 @@
         <ref dbkey="RHEA:42640" dbname="RHEA"></ref>
         <ref dbkey="MTBLC71302" dbname="METABOLIGHTS"></ref>
         <ref dbkey="K0K9B4" dbname="UNIPROTKB"></ref>
-        <ref dbkey="A0A0P0USG6" dbname="UNIPROTKB"></ref>
         <ref dbkey="R-197264" dbname="REACTOME"></ref>
+        <ref dbkey="A0A0P0USG6" dbname="UNIPROTKB"></ref>
         <ref dbkey="6945" dbname="TAXONOMY"></ref>
-        <ref dbkey="573826" dbname="TAXONOMY"></ref>
         <ref dbkey="1206466" dbname="TAXONOMY"></ref>
+        <ref dbkey="573826" dbname="TAXONOMY"></ref>
         <ref dbkey="10090" dbname="TAXONOMY"></ref>
         <ref dbkey="146891" dbname="TAXONOMY"></ref>
         <ref dbkey="Q16DS3" dbname="UNIPROTKB"></ref>
@@ -222,10 +241,15 @@
         <ref dbkey="167555" dbname="TAXONOMY"></ref>
         <ref dbkey="CHEBI:456215" dbname="CHEBI"></ref>
         <ref dbkey="167546" dbname="TAXONOMY"></ref>
+        <ref dbkey="75695" dbname="TAXONOMY"></ref>
+        <ref dbkey="RHEA:40551" dbname="RHEA"></ref>
+        <ref dbkey="CHEBI:87844" dbname="CHEBI"></ref>
         <ref dbkey="MTBLC59789" dbname="METABOLIGHTS"></ref>
         <ref dbkey="871575" dbname="TAXONOMY"></ref>
+        <ref dbkey="42192" dbname="TAXONOMY"></ref>
         <ref dbkey="130081" dbname="TAXONOMY"></ref>
         <ref dbkey="59922" dbname="TAXONOMY"></ref>
+        <ref dbkey="A0A6J8DHD8" dbname="UNIPROTKB"></ref>
         <ref dbkey="A3PAN6" dbname="UNIPROTKB"></ref>
         <ref dbkey="CHEBI:57856" dbname="CHEBI"></ref>
         <ref dbkey="1303921" dbname="TAXONOMY"></ref>
@@ -239,13 +263,14 @@
         <ref dbkey="6239" dbname="TAXONOMY"></ref>
         <ref dbkey="CHEBI:55437" dbname="CHEBI"></ref>
         <ref dbkey="Q6SFG2" dbname="UNIPROTKB"></ref>
-        <ref dbkey="RHEA:35047" dbname="RHEA"></ref>
-        <ref dbkey="R-156581" dbname="REACTOME"></ref>
         <ref dbkey="W1QI92" dbname="UNIPROTKB"></ref>
-        <ref dbkey="A0A0K2WFK8" dbname="UNIPROTKB"></ref>
+        <ref dbkey="R-156581" dbname="REACTOME"></ref>
+        <ref dbkey="RHEA:35047" dbname="RHEA"></ref>
         <ref dbkey="257401" dbname="TAXONOMY"></ref>
+        <ref dbkey="A0A0K2WFK8" dbname="UNIPROTKB"></ref>
         <ref dbkey="167542" dbname="TAXONOMY"></ref>
         <ref dbkey="93059" dbname="TAXONOMY"></ref>
+        <ref dbkey="A0A6J8B8W1" dbname="UNIPROTKB"></ref>
         <ref dbkey="857967" dbname="TAXONOMY"></ref>
       </cross_references>
     </entry>

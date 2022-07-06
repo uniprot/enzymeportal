@@ -12,6 +12,7 @@ import uk.ac.ebi.ep.centralservice.chembl.service.ChemblRestService;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.metaboliteService.service.ChebiService;
 import uk.ac.ebi.ep.metaboliteService.service.MetabolightService;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalChebiCompoundRepository;
 import uk.ac.ebi.ep.model.repositories.EnzymeReactionInfoRepository;
 import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.parsers.ChebiCompounds;
@@ -42,11 +43,13 @@ public class GlobalDataConfig {
     private MetabolightService metabolightService;
     @Autowired
     private EnzymePortalParserService enzymePortalParserService;
-    
+    @Autowired
+    private EnzymePortalChebiCompoundRepository enzymePortalChebiCompoundRepository;
 
     @Bean
     public ChebiCompounds chebiCompounds() {
-        return new ChebiCompounds(metabolightService, chebiService, enzymeReactionInfoRepository, enzymePortalParserService);
+        return new ChebiCompounds(metabolightService, chebiService, enzymeReactionInfoRepository,
+        		enzymePortalParserService, enzymePortalChebiCompoundRepository);
     }
 
     @Bean
